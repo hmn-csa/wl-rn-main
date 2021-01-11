@@ -24,17 +24,17 @@ function ContractDetailMap(props) {
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
-  const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? '#fff5f5': 'white')
+  const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.secondary : 'white')
   const [todoIconColor, setTodoIconColor] = useState(props.data[contractId].todo_flag === 1 ? colors.secondary : 'black')
-  
-  
+
+
   // useEffect(() => {
   //   setContent(props.data[contractId])
   //   setTodoContent(props.data[contractId].todo_flag)
   //   setTodoColor(props.data[contractId].todo_flag === 1 ? 'white' : '#f7f7f7')
   //   setTodoIconColor(props.data[contractId].todo_flag === 1 ? colors.secondary : 'black')
   // }, []);
-  
+
   //const [token, setToken] = useState(props.token)
   //console.log(token.token.access)
 
@@ -55,15 +55,15 @@ function ContractDetailMap(props) {
     try {
       const response = await axios(config);
       const responseTodo = response.data.todo_flag
-  
+
       setTodoContent(responseTodo)
       props.changeTodo({ appl_id: content.appl_id, todo_flag: responseTodo })
-      setTodoColor(responseTodo === 1 ? '#fff5f5': 'white')
+      setTodoColor(responseTodo === 1 ? colors.secondary : 'white')
       setTodoIconColor(responseTodo === 1 ? colors.secondary : 'black')
       props.calTodoDash(props.data)
-      } catch (error) {
-        console.error(error);
-      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const handleGetVsf = () => {
@@ -117,53 +117,57 @@ function ContractDetailMap(props) {
       />
   }
   const paidIcon = (paid) => {
-    if (paid > 0){
+    if (paid > 0) {
       //const value = paid.toLocaleString().split(".")[0]
-      const valuex =  parseFloat(paid, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
-      const value = valuex.substring(0, valuex.length -2)
+      const valuex = parseFloat(paid, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
+      const value = valuex.substring(0, valuex.length - 2)
 
-      return <Text style={[showstyles.nameTxt,{color:colors.green}]}>{value}</Text>
+      return <Text style={[showstyles.nameTxt, { color: colors.green }]}>{value}</Text>
     }
-    else return <Text style={[showstyles.nameTxt,{color:colors.secondary,}]}>{paid}</Text>
-    
+    else return <Text style={[showstyles.nameTxt, { color: colors.secondary, }]}>{paid}</Text>
   }
 
   const ptpIcon = (lastCode) => {
     if (['PTP', 'OBT', 'WFP', 'TER'].includes(lastCode))
-      return <Text 
+      return <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 15,
+          color: colors.green,
+          textAlign: 'right'
+        }}>{lastCode}</Text>
+    else return <Text
       style={{
-        fontWeight:"bold",
-        fontSize:15,
-        color: colors.green,
-        textAlign: 'right'}}>{lastCode}</Text>
-    else return <Text 
-      style={{
-        fontWeight:"bold",
-        fontSize:15,
+        fontWeight: "bold",
+        fontSize: 15,
         color: colors.secondary,
-        textAlign: 'right'}}>{lastCode}</Text>
+        textAlign: 'right'
+      }}>{lastCode}</Text>
   }
 
   const followIcon = (isFollowed) => {
     if (isFollowed == 1)
-      return <Text 
-      style={{
-        fontWeight:"bold",
-        fontSize:9,
-        color:'orange',
-        textAlign: 'right'}}>Followed</Text>
+      return <Text
+        style={{
+          fontWeight: "bold",
+          fontSize: 9,
+          color: 'orange',
+          textAlign: 'right'
+        }}>Followed</Text>
   }
-  if (props.data[contractId] === undefined) 
+  if (props.data[contractId] === undefined)
     return <View></View>
   return (
     <View
-      
+
       style={{
-        backgroundColor: todoColor,
+        backgroundColor: 'white',
         padding: 5,
-        borderWidth: 1,
-        borderColor:colors.lightGray,
-        borderRadius:10,
+        //borderWidth: 1,
+        borderLeftWidth: 5,
+        //borderColor: colors.lightGray,
+        borderLeftColor: todoColor,
+        borderRadius: 10,
         height: CARD_HEIGHT,
       }}
     >
@@ -187,7 +191,7 @@ function ContractDetailMap(props) {
         <View style={styles.box}>
           <Text style={showstyles.msgTxt}>Tên KH:</Text>
         </View>
-        <View style={[styles.box, { flex:3.5 }]}>
+        <View style={[styles.box, { flex: 3.5 }]}>
           <View style={[styles.row]}>
             <View style={[styles.box, { flex: 3 }]}>
               <Text style={showstyles.nameTxt}>{content.cust_name}</Text>
@@ -198,12 +202,12 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
-      
+
       <View style={[styles.row]}>
         <View style={styles.box}>
-            <Text style={showstyles.msgTxt}>Thanh toán:</Text>
+          <Text style={showstyles.msgTxt}>Thanh toán:</Text>
         </View>
-        <View style={[styles.box, { flex:3.5 }]}>
+        <View style={[styles.box, { flex: 3.5 }]}>
           <View style={[styles.row]}>
             <View style={[styles.box, { flex: 3 }]}>
               {paidIcon(content.total_pay_amount)}
@@ -214,7 +218,7 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
-      
+
       <View style={[styles.row]}>
         <View style={styles.box}>
           <Text style={showstyles.msgTxt}>Đư nợ gốc:</Text>
@@ -223,7 +227,7 @@ function ContractDetailMap(props) {
           <Text style={showstyles.msgTxt} >{moneyFormat(content.principle_outstanding)}</Text>
         </View>
       </View>
-      
+
       <View style={[styles.row]}>
         <View style={styles.box}>
           <Text style={showstyles.msgTxt}>Địa chỉ:</Text>
@@ -333,7 +337,7 @@ const showstyles = StyleSheet.create({
     fontWeight: '600',
     color: '#222',
     fontSize: 13,
-    width:190,
+    width: 190,
   },
   msgTxt: {
     fontWeight: '400',

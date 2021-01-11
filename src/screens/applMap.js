@@ -62,11 +62,11 @@ function applMap(props) {
     return sum = sum + pay;
   }, 0) / listAppls.length
 
-  const [appl_id, setAppl_id] = useState(listAppls[0].appl_id);
+  //const [appl_id, setAppl_id] = useState(listAppls[0].appl_id);
   const [activeIndex, setActivateIndex] = useState(0);
 
 
-
+  if (listAppls.length > 0)
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -89,7 +89,7 @@ function applMap(props) {
                 key={appl.appl_id}
                 description={appl.appl_id}
                 onPress={() => {
-                  setAppl_id(appl.appl_id)
+                  //setAppl_id(appl.appl_id)
                   setActivateIndex(index)
                   carouselRef.current.snapToItem(index)
                 }}
@@ -122,6 +122,10 @@ function applMap(props) {
 
     </View>
   );
+  else 
+    return(
+      <View><Text>Không có hợp đồng</Text></View>
+    )
 }
 
 const styles = StyleSheet.create({

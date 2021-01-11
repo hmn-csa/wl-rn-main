@@ -17,7 +17,7 @@ import CheckinMap from './CheckinMap2'
 
 // import CheckinMap from './CheckinMap'
 import ListUptrail from './ListUptrail'
-import{ styles, colors } from '../styles'
+import { styles, colors } from '../styles'
 
 
 
@@ -29,11 +29,11 @@ const Stack = createStackNavigator()
 function UserStack(props) {
   return (
     <Stack.Navigator
-    screenOptions={{ headerShown: true,}}
+      screenOptions={{ headerShown: true, }}
     >
-     <Stack.Screen 
-        name="User" 
-        component={User} 
+      <Stack.Screen
+        name="User"
+        component={User}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -41,13 +41,13 @@ function UserStack(props) {
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
-          }, 
+          },
           headerRight: () => (
             <View style={buttonStyles.buttons}>
               <Button
                 mode="contained"
                 icon="map"
-                onPress={() => props.navigation.navigate('User', { screen: 'checkinMap' })}
+                onPress={() => props.navigation.navigate('Dashboard', { screen: 'checkinMap' })}
                 style={buttonStyles.button}
               >
               </Button>
@@ -55,34 +55,19 @@ function UserStack(props) {
               <Button
                 mode="contained"
                 icon="map"
-                onPress={() => props.navigation.navigate('User', { screen: 'ListPayment' })}
+                onPress={() => props.navigation.navigate('Dashboard', { screen: 'ListPayment' })}
                 style={buttonStyles.button}
               >
               </Button>
-  
-          </View>
+
+            </View>
           )
         }}
       />
 
-    <Stack.Screen 
-      name="ListPayment" 
-      component={ListPayment} 
-      options={{
-        headerStyle: {
-          backgroundColor: colors.secondary,
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        }
-      }}
-    />
-    
-
-     <Stack.Screen 
-        name="checkinMap" 
-        component={CheckinMap} 
+      <Stack.Screen
+        name="ListPayment"
+        component={ListPayment}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -93,20 +78,35 @@ function UserStack(props) {
           }
         }}
       />
-    
 
-   </Stack.Navigator>
+
+      <Stack.Screen
+        name="checkinMap"
+        component={CheckinMap}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.secondary,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          }
+        }}
+      />
+
+
+    </Stack.Navigator>
   )
 }
 
 function DashboardStack(props) {
   return (
     <Stack.Navigator
-    screenOptions={{ headerShown: true,}}
+      screenOptions={{ headerShown: true, }}
     >
-     <Stack.Screen 
-        name="Dashboard" 
-        component={Dashboard} 
+      <Stack.Screen
+        name="Dashboard"
+        component={Dashboard}
 
         options={{
           headerStyle: {
@@ -115,31 +115,68 @@ function DashboardStack(props) {
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
-          }, 
-         
-        }}
+          },
 
-        
+        }}
       />
 
-    
-    
+      <Stack.Screen
+        name="ListPayment"
+        component={ListPayment}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.secondary,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          }
+        }}
+      />
 
-   </Stack.Navigator>
+      <Stack.Screen
+        name="checkinMap"
+        component={CheckinMap}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.secondary,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          }
+        }}
+      />
+    
+      <Stack.Screen
+        name="Uptrail"
+        component={ListUptrail}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.secondary,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          }
+        }}
+      />
+
+    </Stack.Navigator>
   )
 }
 
 
 function StafflistStack(props) {
-  
+
   return (
     <Stack.Navigator
-    screenOptions={{ headerShown: true,}}
-    initialRouteName="ManageStaff"
+      screenOptions={{ headerShown: true, }}
+      initialRouteName="ManageStaff"
     >
-     <Stack.Screen 
-        name="ManageStaff" 
-        component={ManagerStaff} 
+      <Stack.Screen
+        name="ManageStaff"
+        component={ManagerStaff}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -151,9 +188,9 @@ function StafflistStack(props) {
         }}
       />
 
-      <Stack.Screen 
-        name="CheckinMap" 
-        component={CheckinMap} 
+      <Stack.Screen
+        name="CheckinMap"
+        component={CheckinMap}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -163,24 +200,24 @@ function StafflistStack(props) {
             fontWeight: 'bold',
           }
         }}
-      />    
+      />
 
-      
-   </Stack.Navigator>
+
+    </Stack.Navigator>
   )
 }
 
 function CategorieStack(props) {
-  
+
   return (
     <Stack.Navigator
       initialRouteName="Tree"
-      screenOptions={{ headerShown: true,}}
+      screenOptions={{ headerShown: true, }}
     >
-      <Stack.Screen 
-        name="Tree" 
-        component={Tree} 
-        
+      <Stack.Screen
+        name="Tree"
+        component={Tree}
+
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -188,7 +225,7 @@ function CategorieStack(props) {
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
-          }, 
+          },
           //headerRight: CategorieStackMenu,
           headerRight: () => (
             <View style={buttonStyles.buttons}>
@@ -206,13 +243,13 @@ function CategorieStack(props) {
               >
                 Score
               </Button>
-          </View>
+            </View>
           )
         }}
-        
+
       />
-      <Stack.Screen 
-        name="Product" 
+      <Stack.Screen
+        name="Product"
         component={ProductCategories}
         options={{
           headerStyle: {
@@ -226,9 +263,9 @@ function CategorieStack(props) {
           headerRight: () => (
             <View style={buttonStyles.buttons}>
               <Button
-                  mode="contained"
-                  onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
-                  style={buttonStyles.button}
+                mode="contained"
+                onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
+                style={buttonStyles.button}
               >
                 Tree
               </Button>
@@ -239,13 +276,13 @@ function CategorieStack(props) {
               >
                 Score
               </Button>
-           
-          </View>
+
+            </View>
           )
         }}
       />
-       <Stack.Screen 
-        name="Score" 
+      <Stack.Screen
+        name="Score"
         component={ScoreCategories}
         options={{
           headerStyle: {
@@ -259,9 +296,9 @@ function CategorieStack(props) {
           headerRight: () => (
             <View style={buttonStyles.buttons}>
               <Button
-                  mode="contained"
-                  onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
-                  style={buttonStyles.button}
+                mode="contained"
+                onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
+                style={buttonStyles.button}
               >
                 Tree
               </Button>
@@ -272,7 +309,7 @@ function CategorieStack(props) {
               >
                 Product
               </Button>
-          </View>
+            </View>
           )
         }}
       />
@@ -283,11 +320,11 @@ function CategorieStack(props) {
 
 function PortStack(props) {
   return (
-    
-      <Stack.Navigator >
-      <Stack.Screen 
-        name="List" 
-        component={ListAppls}  
+
+    <Stack.Navigator >
+      <Stack.Screen
+        name="List"
+        component={ListAppls}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -296,25 +333,25 @@ function PortStack(props) {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          
+
           headerRight: () => (
             <View style={buttonStyles.buttons}>
-               <Button
-                  mode="contained"
-                  onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}
-                  style={buttonStyles.button}
+              <Button
+                mode="contained"
+                onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}
+                style={buttonStyles.button}
               >
                 Uptrail
               </Button>
 
               <Button
-                  icon="account-search"
-                  mode="contained"
-                  onPress={() => props.navigation.navigate('Portfolio', { screen: 'Search' })}
-                  style={buttonStyles.button}
+                icon="account-search"
+                mode="contained"
+                onPress={() => props.navigation.navigate('Portfolio', { screen: 'Search' })}
+                style={buttonStyles.button}
               >
               </Button>
-              
+
               <Button
                 icon="map"
                 mode="contained"
@@ -323,14 +360,14 @@ function PortStack(props) {
               >
               </Button>
             </View>
-           
+
           )
         }}
       />
 
-      <Stack.Screen 
-        name="Uptrail" 
-        component={ListUptrail} 
+      <Stack.Screen
+        name="Uptrail"
+        component={ListUptrail}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -342,9 +379,9 @@ function PortStack(props) {
         }}
       />
 
-      <Stack.Screen 
-        name="Remark" 
-        component={Remark} 
+      <Stack.Screen
+        name="Remark"
+        component={Remark}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -355,9 +392,9 @@ function PortStack(props) {
           }
         }}
       />
-      <Stack.Screen 
-        name="Vsf" 
-        component={Vsf} 
+      <Stack.Screen
+        name="Vsf"
+        component={Vsf}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -368,8 +405,8 @@ function PortStack(props) {
           }
         }}
       />
-      <Stack.Screen 
-        name="Skip" 
+      <Stack.Screen
+        name="Skip"
         component={Skip}
         options={{
           headerStyle: {
@@ -382,9 +419,9 @@ function PortStack(props) {
         }}
       />
 
-      <Stack.Screen 
-        name="Search" 
-        component={Search} 
+      <Stack.Screen
+        name="Search"
+        component={Search}
         options={{
           headerStyle: {
             backgroundColor: colors.secondary,
@@ -395,9 +432,9 @@ function PortStack(props) {
           }
         }}
       />
-      
-      <Stack.Screen 
-        name="Maps" 
+
+      <Stack.Screen
+        name="Maps"
         component={applMap}
         options={{
           headerStyle: {
@@ -408,22 +445,22 @@ function PortStack(props) {
             fontWeight: 'bold',
           }
         }}
-      /> 
-    </Stack.Navigator> 
-    
+      />
+    </Stack.Navigator>
+
   );
 }
 const buttonStyles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     padding: 2,
-    
+
   },
   button: {
     marginLeft: 1,
     borderRadius: 10,
     fontSize: 50,
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
     backgroundColor: colors.secondary,
     // borderColor:colors.white,
   },
@@ -433,13 +470,13 @@ const buttonStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#222',
     fontSize: 13,
-    width:190,
+    width: 190,
   },
 
 });
 
 
-export {  
+export {
   DashboardStack,
   CategorieStack,
   PortStack,

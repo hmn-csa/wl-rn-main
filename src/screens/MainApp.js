@@ -54,34 +54,32 @@ function MainApp (props) {
   const [oldlon, setOldlon] = useState(props.token.lon)
 
   const upLocation = async() => {
-    if (props.token.token !== undefined|| props.token.token !== null) {
+    if (props.token.token) {
 
       setOldlat(props.token.lat)
       setOldlon(props.token.lon)
       await getLocation()
-      if (props.token.lat !== oldlat || props.token.lon !== oldlon) {
-        let data = { 
-          lat: props.token.lat, 
-          lon: props.token.lon,
-          device_brand: Device.brand,
-          device_os: Device.osName,
-          device_name: Device.modelName,
+      //if (props.token.lat !== oldlat || props.token.lon !== oldlon) {
+      let data = { 
+        lat: props.token.lat, 
+        lon: props.token.lon,
+        device_brand: Device.brand,
+        device_os: Device.osName,
+        device_name: Device.modelName,
+      }
+      try {
+        let config = {
+          method: 'post',
+          url: `${constAction.WORKLIST_API}/checkin`,
+          headers: { 
+            'Authorization': `Bearer ${props.token.token.access}`
+          },
+          data : data
         }
-        try {
-          let config = {
-            method: 'post',
-            url: `${constAction.WORKLIST_API}/checkin`,
-            headers: { 
-              'Authorization': `Bearer ${props.token.token.access}`
-            },
-            data : data
-          }
-          
-          const response =  await axios(config);
-          //console.log(response.data)
-        } catch (error) {
-          console.log(error)
-        }
+        const response =  await axios(config);
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
       }
     }
   }
@@ -89,7 +87,7 @@ function MainApp (props) {
   useEffect(() => {
     const interval = setInterval(() => {
       upLocation()
-    }, 5 * 60 * 1000);
+    }, 1 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 

@@ -8,16 +8,10 @@ import * as constAction from '../consts'
 
 import Timeline from 'react-native-timeline-flatlist'
 
+import {  actUpdateShowlist } from "../actions/index"
 
 import { moneyFormat } from '../functions'
 
-const data = [ 
-  {time: '09:00', title: 'Archery Training', description: 'The Beginner Archery and Beginner Crossbow course does not require you to bring any equipment, since everything you need will be provided for the course. ', circleColor: '#009688',lineColor:'#009688'},
-  {time: '10:45', title: 'Play Badminton', description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.'},
-  {time: '12:00', title: 'Lunch'},
-  {time: '14:00', title: 'Watch Soccer', description: 'Team sport played between two teams of eleven players with a spherical ball. ',lineColor:'#009688'},
-  {time: '16:30', title: 'Go to Fitness center', description: 'Look out for the Best Gym & Fitness Centers around me :)', circleColor: '#009688'}
-]
 
 function ListPayment(props) {
   useEffect(() => {
@@ -36,6 +30,7 @@ function ListPayment(props) {
       timeline.push({
         time: arr[i].rundate.substring(5, 10),
         title: arr[i].cust_name,
+        appl_id: arr[i].appl_id,
         description: 'Hợp đồng : '+arr[i].appl_id + '\n' + 'Tiền đóng : ' + moneyFormat(arr[i].receipt_amt),
         // circleColor: '#009688',
         // lineColor:'#009688'
@@ -49,21 +44,49 @@ function ListPayment(props) {
     console.log('timelinePayment: ', timelinePayment)
   }, [props.payments]);
 
+  renderDetail = (rowData, sectionID, rowID) => {
+    let title = <Text style={[styles.title]}>{rowData.title}</Text>
+    var desc = null
+    if(rowData.description )
+      desc = (
+        <View style={styles.descriptionContainer}>   
+          <Text style={[styles.textDescription]}>{rowData.description}</Text>
+        </View>
+      )
+    
+    return (
+      <View style={{flex:1}}>
+        {title}
+        {desc}
+      </View>
+    )
+  }
+
+  const onEventPress = (rowData) => {
+    console.log(rowData)
+    props.updateShowlist([{appl_id: rowData.appl_id, cust_name: rowData.title}])
+    props.navigation.navigate('Portfolio', { screen: 'List' })
+  
+  }
+
   return(
-    <View style={style.container}>
+    <View style={styles.container}>
         <Timeline 
-          style={style.list}
+          style={styles.list}
           data={timelinePayment}
           separator={true}
           circleSize={20}
+          innerCircle={'dot'}
           circleColor='rgb(45,156,219)'
           lineColor='rgb(45,156,219)'
           timeContainerStyle={{minWidth:52, marginTop: -5}}
-          timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13, overflow: 'hidden'}}
+          timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13}}
           descriptionStyle={{color:'green'}}
-          // options={{
-          //   style:{paddingTop:5}
-          // }}
+          options={{
+            style:{paddingTop:5}
+          }}
+          renderDetail={renderDetail}
+          onEventPress={onEventPress}
         />
       </View>
   )
@@ -90,18 +113,40 @@ const mapDispatchToProps = (dispatch) => {
         }
       )
     },
+    updateShowlist: (content) => {
+      dispatch(actUpdateShowlist(content))
+    },
   }
 }
 
-const style = StyleSheet.create({
+
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
     backgroundColor:'white'
   },
   list: {
     flex: 1,
-    marginTop:5,
   },
+  title:{
+    fontSize:16,
+    fontWeight: 'bold'
+  },
+  descriptionContainer:{
+    flexDirection: 'row',
+    paddingRight: 10
+  },
+  image:{
+    width: 50,
+    height: 50,
+    borderRadius: 25
+  },
+  textDescription: {
+    marginLeft: 10,
+    color: 'gray'
+  }
 });
 
 

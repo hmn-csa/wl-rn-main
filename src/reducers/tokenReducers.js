@@ -59,19 +59,18 @@ export function tokenReducers(state = initialState, action) {
         return d ;
       }
       // id distance > 100 m
-      const distance = calcCrow(state.lat, state.lon, action.content.latitude, action.content.longitude).toFixed(3)
+      ///const distance = calcCrow(state.lat, state.lon, action.content.latitude, action.content.longitude).toFixed(3)
       //console.log('distance ', distance, distance > 1)
-      if (distance > 100)
-        return { 
-          ...state, 
-          lat: action.content.latitude, 
-          lon: action.content.longitude ,
-          device_brand: action.content.device_brand,
-          device_os: action.content.device_os,
-          device_name: action.content.device_name
-        }
-      else 
-        return state;
+      //if (distance > 100)
+      return { 
+        ...state, 
+        lat: action.content.latitude, 
+        lon: action.content.longitude ,
+        device_brand: action.content.device_brand,
+        device_os: action.content.device_os,
+        device_name: action.content.device_name
+      }
+      
 
     default:
       return state;

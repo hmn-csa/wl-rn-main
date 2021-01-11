@@ -6,9 +6,9 @@ import {
 import { Button } from 'react-native-paper';
 
 import { connect } from "react-redux"
-import Ionicons from 'react-native-vector-icons/Ionicons';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons, Entypo, MaterialIcons} from '@expo/vector-icons';
 import { actUpdateShowlist, actSetTodoShowlist, actGetUptrails, actSetActiveStaff } from "../actions"
-
 import { styles, colors } from '../styles'
 import { color } from 'react-native-reanimated';
 import { SHOWLIST_CLEAR } from '../consts';
@@ -19,13 +19,6 @@ import { moneyFormat } from '../functions'
 function Dashboard(props) {
   //const navigation = useNavigation()
 
-  // useEffect(() => {
-  //   if (props.uptrails.justFetching === false) {
-  //     props.setActiveStaff({'staff_id':1})
-  //     props.getUptrails({ token: props.token, start: "", end: "" })
-  //   }
-  //   else console.log('ddax tai')
-  // }, [props.uptrails.active_staff]);
 
   const [loading, setLoading] = useState(false)
 
@@ -34,7 +27,7 @@ function Dashboard(props) {
     const list_todo = Object.values(props.data).filter(appl => appl.todo_flag == 1).map(a => a.appl_id);
     props.navigation.navigate('Portfolio', { screen: 'List' });
     props.updateShowlist(list_todo)
-    
+
     console.log('show list:', list_todo)
     //navigation.navigate('ListAppls')
     //props.navigation.navigate('List');
@@ -45,256 +38,286 @@ function Dashboard(props) {
     props.navigation.navigate('Portfolio', { screen: 'List' })
     props.updateShowlist(list)
   }
-  
-  if (props.fetching || props.data === null) 
-  return (
-    <View style={[styles.container, {alignItems: 'center'}]}>
-      <Text>Loading data... </Text>
-      <ActivityIndicator size={100} color={colors.primary}/> 
-    </View>
-  )
-  
-  else 
-  return (
-    <View style={[styles.container, { paddingTop: 20 }]}>
-      <View style={{ flex: 3 }}>
-        {/* BEGIN Todos */}
-        {/* <Text style={styles.header}>Todos</Text> */}
 
-      
+  if (props.fetching || props.data === null)
+    return (
+      <View style={[styles.container, { alignItems: 'center' }]}>
+        <Text>Loading data... </Text>
+        <ActivityIndicator size={100} color={colors.primary} />
+      </View>
+    )
 
-        <TouchableOpacity
-          style={[cardStyles.container, { flex: 2.5}]}>
-          <View style={[styles.row, { flex: 0.4 }]}>
-            <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-            {props.token.active_staff} - {props.token.active_infos.fc_name}
+  else
+    return (
+      <View style={[styles.container, { paddingTop: 20 }]}>
+        <View style={{ flex: 3 }}>
+          {/* BEGIN Todos */}
+          {/* <Text style={styles.header}>Todos</Text> */}
+
+
+
+          <TouchableOpacity
+            style={[cardStyles.container, { flex: 2.5 }]}>
+            {/* <View style={[styles.row, { flex: 0.4 }]}>
+              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
+                {props.token.active_staff} - {props.token.active_infos.fc_name}
+              </Text>
+            </View> */}
+
+
+            <View style={[styles.row, { flex: 0.8 }]}>
+              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
+                Danh mục tự chọn | {props.token.active_staff} - {props.token.active_infos.fc_name}
             </Text>
-          </View>
+            </View>
 
+            <View style={[styles.row, { flex: 1.618, }]}>
+              <View style={[styles.box]}>
+                <TouchableOpacity
+                  //style={{ borderBottomWidth: 1, borderBottomColor: colors.lightGray }}
+                  onPress={() => handleShow(props.todoCal.todoCase.applIds, true)}>
+                  <Text style={styles.indexLabel}>Số HĐ tự chọn</Text>
+                  <Text
+                    style={styles.indexValueSmall}
+                  >
+                    {props.todoCal.todoCase.case}
+                  </Text>
 
-          <View style={[styles.row, { flex: 0.4 }]}>
-            <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-              Danh mục tự chọn
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.box]}>
+                <TouchableOpacity
+                  //style={{ borderBottomWidth: 1, borderBottomColor: colors.lightGray }}
+                  onPress={() => handleShow(props.todoCal.todoFollowed.applIds, true)}>
+                  <Text style={styles.indexLabel}>HĐ đã viếng thăm</Text>
+                  <Text
+                    style={styles.indexValueSmall}
+                  >{props.todoCal.todoFollowed.case}
+                  </Text>
+
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={[styles.row, { flex: 0.8 }]}>
+              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
+                chi tiết
             </Text>
-          </View>
-
-          <View style={[styles.row, { flex: 1.618, }]}>
-            <View style={[styles.box]}>
+            </View>
+            <View style={[styles.row, { flex: 1.618, }]}>
               <TouchableOpacity
-                //style={{ borderBottomWidth: 1, borderBottomColor: colors.lightGray }}
-                onPress={() => handleShow(props.todoCal.todoCase.applIds, true)}>
-                <Text style={styles.indexLabel}>Số HĐ tự chọn</Text>
+                style={[cardStyles.container, styles.box]}
+                onPress={() => handleShow(props.todoCal.todoPaid.applIds, true)}>
+                <Text style={styles.indexLabel}>
+                  <Ionicons name='ios-checkmark-circle' style={[styles.logo, { color: colors.green }]} />
+              Đã thu
+            </Text>
                 <Text
                   style={styles.indexValueSmall}
                 >
-                  {props.todoCal.todoCase.case}
+                  {props.todoCal.todoPaid.case}
                 </Text>
-
               </TouchableOpacity>
-            </View>
-            <View style={[styles.box]}>
+
               <TouchableOpacity
-                //style={{ borderBottomWidth: 1, borderBottomColor: colors.lightGray }}
-                onPress={() => handleShow(props.todoCal.todoFollowed.applIds, true)}>
-                <Text style={styles.indexLabel}>HĐ đã viếng thăm</Text>
-                <Text
-                  style={styles.indexValueSmall}
-                >{props.todoCal.todoFollowed.case}
-                </Text>
-
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={[styles.row, { flex: 0.4 }]}>
-            <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-              chi tiết
-            </Text>
-          </View>
-          <View style={[styles.row, { flex: 1.618, }]}>
-            <TouchableOpacity
-              style={[cardStyles.container, styles.box]}
-              onPress={() => handleShow(props.todoCal.todoPaid.applIds, true)}>
-              <Text style={styles.indexLabel}>
-                <Ionicons name='ios-checkmark-circle' style={[styles.logo, { color: colors.green }]} />
-              Đã thu
-            </Text>
-              <Text
-                style={styles.indexValueSmall}
-              >
-                {props.todoCal.todoPaid.case}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[cardStyles.container, styles.box]}
-              onPress={() => handleShow(props.todoCal.todoPtp.applIds, true)}>
-              <Text style={styles.indexLabel}>
-                <Ionicons name='ios-heart' style={[styles.logo, { color: colors.green }]} />
+                style={[cardStyles.container, styles.box]}
+                onPress={() => handleShow(props.todoCal.todoPtp.applIds, true)}>
+                <Text style={styles.indexLabel}>
+                  <Ionicons name='ios-heart' style={[styles.logo, { color: colors.green }]} />
               PTP
             </Text>
-              <Text
-                style={styles.indexValueSmall}
-              >
-                {props.todoCal.todoPtp.case}
-              </Text>
+                <Text
+                  style={styles.indexValueSmall}
+                >
+                  {props.todoCal.todoPtp.case}
+                </Text>
 
-            </TouchableOpacity>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[cardStyles.container, styles.box]}
-              onPress={() => handleShow(props.todoCal.todoBptp.applIds, true)}>
+              <TouchableOpacity
+                style={[cardStyles.container, styles.box]}
+                onPress={() => handleShow(props.todoCal.todoBptp.applIds, true)}>
 
-              <Text style={styles.indexLabel}>
-                <Ionicons name='ios-close-circle' style={[styles.logo, { color: colors.secondary }]} />
+                <Text style={styles.indexLabel}>
+                  <Ionicons name='ios-close-circle' style={[styles.logo, { color: colors.secondary }]} />
               Hủy-PTP
             </Text>
-              <Text
-                style={styles.indexValueSmall}
-              >
-                {props.todoCal.todoBptp.case}
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={styles.indexValueSmall}
+                >
+                  {props.todoCal.todoBptp.case}
+                </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[cardStyles.container, styles.box]}
-              onPress={() => handleShow(props.todoCal.todoRevisit.applIds, true)}>
+              <TouchableOpacity
+                style={[cardStyles.container, styles.box]}
+                onPress={() => handleShow(props.todoCal.todoRevisit.applIds, true)}>
 
-              <Text style={styles.indexLabel}>
-                <Ionicons name='ios-cash' style={[styles.logo, { color: colors.secondary }]} />
+                <Text style={styles.indexLabel}>
+                  <Ionicons name='ios-cash' style={[styles.logo, { color: colors.secondary }]} />
               Thăm lại
             </Text>
-              <Text
-                style={styles.indexValueSmall}
-              >
-                {props.todoCal.todoRevisit.case}
-              </Text>
+                <Text
+                  style={styles.indexValueSmall}
+                >
+                  {props.todoCal.todoRevisit.case}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+          </TouchableOpacity>
+
+
+
+          {/* BEGIN ToTal */}
+          <TouchableOpacity
+            style={[cardStyles.container, { flex: 1.328 }]}
+          >
+            <View style={[styles.row, { flex: 0.5 }]}>
+              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
+                Thông tin danh mục
+            </Text>
+            </View>
+
+            <View style={[styles.row, { flex: 1.618 }]}>
+              <View style={[styles.box]}>
+                <TouchableOpacity
+                  style={[cardStyles.container, styles.box]}
+                  onPress={() => handleShow(props.totalCal.totalCase.applIds, false)}>
+                  <Text style={styles.indexLabel}>Tổng số HĐ</Text>
+                  <Text
+                    style={styles.indexValue}
+                  >{props.totalCal.totalCase.case}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={[styles.box]}>
+                <TouchableOpacity
+                  style={[cardStyles.container, styles.box]}
+                  onPress={() => handleShow(props.treeCal[1].applIds, true)}>
+                  <Text style={styles.indexLabel}>Đã viếng thăm</Text>
+                  <Text
+                    style={styles.indexValue}
+                  >{props.treeCal[1].case}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={[styles.box]}>
+                <TouchableOpacity
+                  style={[cardStyles.container, styles.box]}
+                  onPress={() => handleShow(props.totalCal.ptpCase.applIds, true)}>
+                  <Text style={styles.indexLabel}>PTP</Text>
+                  <Text
+                    style={styles.indexValue}
+                  >{props.totalCal.ptpCase.case}
+                  </Text>
+
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
+          {/* END ToTal */}
+
+          {/* BEGIN Paid */}
+          <TouchableOpacity
+            style={[cardStyles.container, { flex: 1 }]}
+            onPress={() => handleShow(props.totalCal.paidAll.applIds, true)}>
+            <View style={[styles.row, { flex: 0.618 }]}>
+              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
+                Tổng số thu trong tháng
+            </Text>
+            </View>
+            <View style={[styles.row, { flex: 1.618 }]}>
+              <View style={[styles.box]}>
+                <Text style={styles.indexLabel}>HĐ đã thu</Text>
+                <Text
+                  style={[styles.indexValueSmall, { color: colors.green }]}
+                >{props.totalCal.paidMtd.case}
+                </Text>
+
+              </View>
+              <View style={[styles.box]}>
+                <Text style={styles.indexLabel}>Số tiền thu</Text>
+                <Text
+                  style={[styles.indexValueSmall, { color: colors.green }]}
+                >{moneyFormat(props.totalCal.paidMtd.value)}
+                </Text>
+
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[cardStyles.container, { flex: 1 }]}
+            onPress={() => handleShow(props.totalCal.paidToday.applIds, true)}>
+            <View style={[styles.row, { flex: 0.618 }]}>
+              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
+                Tổng số thu trong ngày
+            </Text>
+            </View>
+            <View style={[styles.row, { flex: 1.618 }]}>
+              <View style={[styles.box]}>
+                <Text style={styles.indexLabel}>HĐ đã thu</Text>
+                <Text
+                  style={[styles.indexValueSmall, { color: colors.green }]}
+                >{props.totalCal.paidToday.case}
+                </Text>
+
+              </View>
+              <View style={[styles.box]}>
+                <Text style={styles.indexLabel}>Số tiền thu</Text>
+                <Text
+                  style={[styles.indexValueSmall, { color: colors.green }]}
+                >{moneyFormat(props.totalCal.paidToday.value)}
+                </Text>
+
+              </View>
+            </View>
+          </TouchableOpacity>
+          {/* END Paid */}
+
+
+        </View>
+
+        <View style={{ flex: 0.8 }}>
+          {/* BEGIN Payment */}
+          <View style={[styles.row, {padding: 10, }]}>
+            <TouchableOpacity style={[styles.box, cardStyles.iconContainer ]} 
+            onPress={() => props.navigation.navigate('ListPayment')}>
+              <MaterialIcons
+                name='attach-money'
+                style={cardStyles.icon}
+                
+              />
             </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.box, cardStyles.iconContainer ]}
+            onPress={() => props.navigation.navigate( 'Uptrail')}>
+              <MaterialIcons
+                name='contacts'
+                style={cardStyles.icon}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.box, cardStyles.iconContainer ]} 
+            onPress={() => props.navigation.navigate( 'checkinMap')}>
+              <Entypo
+                name='location'
+                style={cardStyles.icon}
+                
+              />
+              
+            </TouchableOpacity>
+            
           </View>
-
-        </TouchableOpacity>
-
-
-
-        {/* BEGIN ToTal */}
-        <TouchableOpacity
-          style={[cardStyles.container, { flex: 1.328 }]}
-        >
-          <View style={[styles.row, { flex: 0.5 }]}>
-            <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-              Thông tin danh mục
-            </Text>
-          </View>
-
-          <View style={[styles.row, { flex: 1.618 }]}>
-            <View style={[styles.box]}>
-              <TouchableOpacity
-                style={[cardStyles.container, styles.box]}
-                onPress={() => handleShow(props.totalCal.totalCase.applIds, false)}>
-                <Text style={styles.indexLabel}>Tổng số HĐ</Text>
-                <Text
-                  style={styles.indexValue}
-                >{props.totalCal.totalCase.case}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={[styles.box]}>
-              <TouchableOpacity
-                style={[cardStyles.container, styles.box]}
-                onPress={() => handleShow(props.treeCal[1].applIds, true)}>
-                <Text style={styles.indexLabel}>Đã viếng thăm</Text>
-                <Text
-                  style={styles.indexValue}
-                >{props.treeCal[1].case}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={[styles.box]}>
-              <TouchableOpacity
-                style={[cardStyles.container, styles.box]}
-                onPress={() => handleShow(props.totalCal.ptpCase.applIds, true)}>
-                <Text style={styles.indexLabel}>PTP</Text>
-                <Text
-                  style={styles.indexValue}
-                >{props.totalCal.ptpCase.case}
-                </Text>
-
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableOpacity>
-        {/* END ToTal */}
-
-        {/* BEGIN Paid */}
-        <TouchableOpacity
-          style={[cardStyles.container, { flex: 1 }]}
-          onPress={() => handleShow(props.totalCal.paidAll.applIds, true)}>
-          <View style={[styles.row, { flex: 0.618 }]}>
-            <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-              Tổng số thu trong tháng
-            </Text>
-          </View>
-          <View style={[styles.row, { flex: 1.618 }]}>
-            <View style={[styles.box]}>
-              <Text style={styles.indexLabel}>HĐ đã thu</Text>
-              <Text
-                style={[styles.indexValueSmall, { color: colors.green }]}
-              >{props.totalCal.paidMtd.case}
-              </Text>
-
-            </View>
-            <View style={[styles.box]}>
-              <Text style={styles.indexLabel}>Số tiền thu</Text>
-              <Text
-                style={[styles.indexValueSmall, { color: colors.green }]}
-              >{moneyFormat(props.totalCal.paidMtd.value)}
-              </Text>
-
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[cardStyles.container, { flex: 1 }]}
-          onPress={() => handleShow(props.totalCal.paidToday.applIds, true)}>
-          <View style={[styles.row, { flex: 0.618 }]}>
-            <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-              Tổng số thu trong ngày
-            </Text>
-          </View>
-          <View style={[styles.row, { flex: 1.618 }]}>
-            <View style={[styles.box]}>
-              <Text style={styles.indexLabel}>HĐ đã thu</Text>
-              <Text
-                style={[styles.indexValueSmall, { color: colors.green }]}
-              >{props.totalCal.paidToday.case}
-              </Text>
-
-            </View>
-            <View style={[styles.box]}>
-              <Text style={styles.indexLabel}>Số tiền thu</Text>
-              <Text
-                style={[styles.indexValueSmall, { color: colors.green }]}
-              >{moneyFormat(props.totalCal.paidToday.value)}
-              </Text>
-
-            </View>
-          </View>
-        </TouchableOpacity>
-        {/* END Paid */}
-
+          {/* END ToTal */}
+        </View>
 
       </View>
 
-      <View style={{ flex: 0.138}}>
 
-      </View>
-
-    </View>
-
-
-  )
+    )
 }
 
 const cardStyles = StyleSheet.create({
@@ -318,11 +341,7 @@ const cardStyles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
   },
-  icon: {
-    flex: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   content: {
     flex: 0.7,
     justifyContent: 'center',
@@ -336,7 +355,7 @@ const cardStyles = StyleSheet.create({
   },
   text: {
     color: '#FFF',
-    fontSize: 12,
+    fontSize: 7,
     letterSpacing: 0.29,
     paddingBottom: 15,
     paddingLeft: 20,
@@ -346,6 +365,21 @@ const cardStyles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 0.29,
     paddingTop: 5,
+  },
+
+  icon: {
+    fontWeight: "bold",
+    fontSize: 40,
+    padding: 5,
+    color: colors.grey
+  },
+
+  iconContainer: {
+    backgroundColor: 'white', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    borderRadius: 15,
+    margin: 15,
   },
 
 })

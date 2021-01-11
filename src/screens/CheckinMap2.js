@@ -16,7 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 4;
+const CARD_HEIGHT = height / 8;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 import Carousel from 'react-native-snap-carousel';
@@ -29,11 +29,12 @@ function CheckinMap(props) {
   //const listAppls = props.data.data.filter((appl) => {
   //  return props.showlists.includes(appl.appl_id)
   //})
+  
+
+  const [listAppls, setListappls] = useState(Object.values(props.map.checkin))
+  const [activeIndex, setActivateIndex] = useState(0); 
   const mapRef = useRef(null);
-
-
-  const listAppls = Object.values(props.map.checkin)
-
+  const carouselRef = useRef(null);
     
 
   const listLat = listAppls.map(appl => appl.lat)
@@ -42,8 +43,6 @@ function CheckinMap(props) {
     return sum = sum+pay;
   },0) / listAppls.length
 
-
-  //const latDetal = (Math.max(listAppls.map(appl => appl.lat)) - Math.min(listAppls.map(appl => appl.lat))) / 2
   const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat)  +0.05
   const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) +0.05
 
@@ -54,19 +53,31 @@ function CheckinMap(props) {
 
 
 
-
-  const [activeIndex, setActivateIndex] = useState(0); 
+  
   const _renderItem = ({ item, index }) => {
+
+    const _renTime = (item) => {
+      if (item.time)
+        return (
+          <View>
+            <Text style={{ fontSize: 10 }}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
+            <Text style={{ fontSize: 10 }}>đã ở tại khu vực này khoảng {item.time}</Text>
+          </View>
+        )
+    }
     return (
       <TouchableOpacity
         style={{
           backgroundColor: 'white',
           borderRadius: 20,
-          height: 100,
+          height: CARD_HEIGHT,
+          padding: 10
         }}>
-        <Text style={{ fontSize: 10 }}>{item.runtime}</Text>
-        <Text style={{ fontSize: 10 }}>{item.device_brand} - {item.device_name}  </Text>
-        <Text style={{ fontSize: 10 }}>{item.lat} - {item.lon}</Text>
+        <Text style={{ fontSize: 10 }}>{item.endtime.substring(0, 10)}  {item.endtime.substring(11, 16)} </Text>
+        {
+          _renTime(item)
+        }
+       
       </TouchableOpacity>
       
     );
@@ -74,12 +85,10 @@ function CheckinMap(props) {
 
   
   const renMarker = (index, length, appl) => {
-    const showTime = (time) => {
-      if (time > 15) return <Text style={styles.msgTxt}>{"khoảng " +time+ " phút"}</Text>
-    }
+    
     if(index===0) {
       return <View>
-      <Text style={styles.msgTxt}>Start {appl.runtime.substring(11, 16)}
+      <Text style={styles.msgTxt}>Start {appl.endtime.substring(11, 16)}
       <Ionicons name='ios-disc' 
         style={[styles.logo, {color: colors.secondaryGradientEnd}]}/> </Text>
       {/* {showTime(appl.time)} */}
@@ -87,14 +96,14 @@ function CheckinMap(props) {
     } 
     if (index===length-1) {
       return <View>
-      <Text style={styles.msgTxt}>Finish {appl.runtime.substring(11, 16)}
+      <Text style={styles.msgTxt}>Finish {appl.endtime.substring(11, 16)}
       <Ionicons name='ios-pin' 
         style={[styles.logo, {fontSize:45}]}/> </Text>
       {/* {showTime(appl.time)} */}
     </View>
     } 
     return <View>
-    <Text style={styles.msgTxt}>{index} | {appl.runtime.substring(11, 16)}
+    <Text style={styles.msgTxt}>{index} | {appl.endtime.substring(11, 16)}
     <Ionicons name='ios-disc' 
        style={[styles.logo, {color: colors.primary}]}/> </Text>
   </View>
@@ -121,6 +130,10 @@ function CheckinMap(props) {
             <Marker
               coordinate = {{latitude:marker.lat, longitude: marker.lon}}
               key={index}
+              onPress={() => {
+                setActivateIndex(index)
+                carouselRef.current.snapToItem(index)
+              }}
             >
           
               <View>
@@ -134,14 +147,16 @@ function CheckinMap(props) {
       
     </MapView>
     </View>
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 500 }}>
+    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 400 }}>
       <Carousel
         layout={'default'}
+        ref={carouselRef}
         data={listAppls}
         sliderWidth={SliderWidth}
-        itemWidth={300}
+        itemWidth={SliderWidth * 0.6}
+        itemHeight={CARD_HEIGHT}
         renderItem={_renderItem}
-        useScrollView={true}
+        useScrollView={false}
         onSnapToItem={(index) => {
           setActivateIndex(index)
           mapRef.current.animateToCoordinate(

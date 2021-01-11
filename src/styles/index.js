@@ -51,14 +51,14 @@ const styles = StyleSheet.create({
   indexValue: {
     textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    fontSize: 35,
+    fontSize: 30,
     paddingTop: 2,
     color: colors.black,
   },
   indexValueSmall: {
     textAlign: 'center', // <-- the magic
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 25,
     paddingTop: 2,
     color: colors.black
   },
