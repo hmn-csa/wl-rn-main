@@ -246,11 +246,9 @@ function ManagerStaff(props) {
 
     if (avatar == null || avatar === "")
       return (
-        // {uri:"https://bootdey.com/img/Content/avatar/avatar1.png"}
         EMPTYAVATAR
       )
     else return (
-      //{uri:"data:image/png;base64,"+avatar}
       { uri: avatar }
     )
   }

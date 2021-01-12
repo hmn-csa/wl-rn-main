@@ -28,11 +28,10 @@ https://developer.aliyun.com/mirror/npm/package/react-native-select-awesome
 
 # config map
 https://docs.expo.io/versions/latest/sdk/map-view/
+https://github.com/react-native-maps/react-native-maps/blob/master/docs/installation.md
 
 
 expo build:android -t apk
-
-https://github.com/react-native-maps/react-native-maps/blob/master/docs/installation.md
 
 
 # redux keys index
@@ -41,12 +40,10 @@ https://kipalog.com/posts/Su-dung-Redux-store-nhu-1-database
 
 # Icons
 https://ionicons.com/v4/cheatsheet.html
-
 https://materialdesignicons.com/
 
 **Xài hàng expo cho khoẻ**
 https://icons.expo.fyi/MaterialIcons/contacts
 
 # list 
-
 https://github.com/archriss/react-native-snap-carousel/#showcase

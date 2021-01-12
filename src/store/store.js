@@ -17,7 +17,7 @@ const store = createStore(
   rootReducer,
   applyMiddleware(
     sagaMiddleware,
-    //createLogger(),
+    createLogger(),
   ),
 );
 

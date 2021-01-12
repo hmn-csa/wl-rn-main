@@ -23,12 +23,9 @@ export function* workerGetCheckin(request) {
       },
     };
 
-    // console.log(config)
-
     const response = yield call(axios, config);
     const data = response.data;
     // console.log(data)
-    // dispatch a success action to the store with the new dog
     yield put({ type: constAction.API_GETCHECKIN_SUCCESS, content: data});
 
   } catch (error) {

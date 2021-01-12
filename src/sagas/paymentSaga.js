@@ -9,15 +9,15 @@ export function* watcherSagaPayment() {
   yield takeLatest(constAction.API_PAYMENT_REQUEST, workerGetPayment);
 }
 
-
 // function that makes the api request and returns a Promise for response
-
 // worker saga: makes the api call when watcher saga sees the action ${request.config.start}
+
+
 export function* workerGetPayment(request) {
   try {
     const config = {
       method: 'post',
-      url: `${constAction.WORKLIST_API}/portfolio-list/?type=payments&applids=${request.config.applids}`,
+      url: `${constAction.WORKLIST_API}/portfolio-list/?type=payments&applids=${request.config.applids}&staff_id=${request.config.staff_id}`,
       headers: {
         'Authorization': `Bearer ${request.config.token}`,
       },

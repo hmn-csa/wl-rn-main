@@ -12,6 +12,7 @@ import uptrailReducers from './uptrailReducers'
 import managerReducers from './managerReducers'
 import mapReducers from './mapReducers'
 import paymentReducers from './paymentReducers'
+import staffReducers from './staffreducers'
 
 const rootReducer  = combineReducers({
     token: tokenReducers,
@@ -26,6 +27,7 @@ const rootReducer  = combineReducers({
     payments: paymentReducers,
     manager: managerReducers,
     map: mapReducers,
+    staff: staffReducers,
 })
 
 export default rootReducer

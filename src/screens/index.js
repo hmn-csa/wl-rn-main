@@ -7,8 +7,9 @@ import { View, StyleSheet} from 'react-native';
 //import ContainerShow from './containers/ContainerShow'
 
 import Login from './Login'
-import MainApp from './MainApp'
-import ManagerApp from './ManagerApp'
+// import MainApp from './MainApp'
+// import ManagerApp from './ManagerApp'
+import ManagerApp from '../screens-manager/ManagerApp'
 
 
 function MyApp(props) {

@@ -7,9 +7,7 @@ import { connect } from "react-redux"
 import * as constAction from '../consts'
 
 import Timeline from 'react-native-timeline-flatlist'
-
 import {  actUpdateShowlist } from "../actions/index"
-
 import { moneyFormat } from '../functions'
 
 
@@ -17,10 +15,10 @@ function ListPayment(props) {
   useEffect(() => {
     props.getPayments({
       token: props.token.token.access, 
+      staff_id: props.token.active_staff,
       applids: ''.concat(props.totalCal.paidAll.applIds.map(item => item.appl_id))
     })
   }, []);
-
 
   const [timelinePayment, setTimeline] = useState([])
 
