@@ -172,6 +172,15 @@ const staffReducers = (state = initialState, action) => {
         last_pull: action.content.last_pull,
         fetchingCheckin: false,
       }
+    
+    case constAction.STAFF_CHECKIN_UPDATE:
+      return {...state, 
+        checkin: [...action.content.checkin, ...state.checkin], 
+        uptrail: [...action.content.uptrail, ...state.uptrail], 
+        last_pull: action.content.last_pull,
+        fetchingCheckin: false,
+      }
+      
 
     case constAction.STAFF_CAL_DASH:
 
@@ -197,7 +206,11 @@ const staffReducers = (state = initialState, action) => {
         lastCheckin: renLastMarker(staffCook),
         pullcnt: state.pullcnt + 1,
       }
-
+    
+    case constAction.STAFF_CHECKIN_COUNT:
+      return {...state,  
+        pullcnt: state.pullcnt + 1,
+      }
     default:
       return state;
   }

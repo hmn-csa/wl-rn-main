@@ -20,59 +20,25 @@ import { EMPTYAVATAR } from '../images';
 function ManagerStaff(props) {
 
 
-  const getStaffData = async () => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('This will run every second!')
+      props.countManager()
+    }, 0.5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, []);
 
+
+  useEffect(() => {
     let config = {
-      method: 'post',
-      url: `${constAction.WORKLIST_API}/manager-view?type=info`,
-      headers: {
-        'Authorization': `Bearer ${props.token.token.access}`
-      },
+      token: props.token,
+      last_pull: props.staff.last_pull
     }
-    try {
-      const response = await axios(config);
-      props.getStaffData(response.data);
+    console.log(config)
+    if (config.last_pull !== null)
+    props.pullManager(config)
+  }, [props.staff.pullcnt])
 
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const getStaffCheckin = async () => {
-
-    let config = {
-      method: 'post',
-      url: `${constAction.WORKLIST_API}/manager-view?type=checkin`,
-      headers: {
-        'Authorization': `Bearer ${props.token.token.access}`
-      },
-    }
-    try {
-      const response = await axios(config);
-      props.getStaffCheckin(response.data);
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-
-  // useEffect(() => {
-  //   (async () => {
-  //     await getStaffData();
-  //     await getStaffCheckin();
-  //     props.calStaffData()
-  //   })();
-  // }, []);
-
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     console.log('This will run every second!')
-  //     props.pullManager()
-  //   }, 1 * 60 * 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   // =========== render ============== //
 
@@ -96,7 +62,6 @@ function ManagerStaff(props) {
               uptrail: item.uptrail,
               checkin: item.checkin,
               staff_id: item.staff_id,
-              username: 'aaa'
             })
             props.navigation.navigate('Manager', { screen: 'CheckinMap' })
           }
@@ -268,7 +233,7 @@ function ManagerStaff(props) {
   </TouchableOpacity>
   }
 
-  if (props.staffs.length == 0)
+  if (props.staff.staffs.length == 0)
     return (
       <View style={[masterStyles.container, { alignItems: 'center' }]}>
         <ActivityIndicator size={100} color={colors.primary} />
@@ -279,7 +244,7 @@ function ManagerStaff(props) {
   else return (
     <View style={styles.container} >
       <FlatList
-        data={props.staffs}
+        data={props.staff.staffs}
         horizontal={false}
         numColumns={1}
         renderItem={renderItem} />
@@ -289,31 +254,25 @@ function ManagerStaff(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    token: state.token,
-    staffs: state.staff.staffs
+    token: state.token.token.access,
+    // staffs: state.staff.staffs,
+    staff: state.staff,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getStaffData: (content) => {
+    countManager: () => {
       dispatch({
-        type: constAction.STAFF_INFO_SUCCESS,
-        content
+        type: constAction.STAFF_CHECKIN_COUNT,
       })
     },
-    getStaffCheckin: (content) => {
+    pullManager: (config) => {
       dispatch({
-        type: constAction.STAFF_CHECKIN_SUCCESS,
-        content
-      })
-    },
-    calStaffData: () => {
-      dispatch({
-        type: constAction.STAFF_CAL_DASH,
+        type: constAction.STAFF_CHECKIN_PULL,
+        config
       })
     }
-
   }
 }
 

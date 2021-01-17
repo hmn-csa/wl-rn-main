@@ -7,7 +7,7 @@ import {decode as atob, encode as btoa} from 'base-64'
 // watcher saga: watches for actions dispatched to the store, starts worker saga
 export function* watcherSaga() {
   yield takeLatest(constAction.API_TOKEN_REQUEST, workerGetToken);
-  // yield takeLatest(constAction.MANAGER_DATA_REQUEST, workerManagerGetData);
+  yield takeLatest(constAction.STAFF_CHECKIN_PULL, workerGetStaffCheckinUpdate);
   // yield takeLatest(constAction.MANAGER_CLEAR_STATE, workerManagerClearState);
 }
 
@@ -50,7 +50,6 @@ export function* workerGetToken(request) {
     else {
       yield call(workerGetStaffInfo, data.access);
       yield call(workerGetStaffCheckin, data.access);
-
       yield put({type: constAction.STAFF_CAL_DASH});
     }
   } catch (error) {
@@ -59,6 +58,12 @@ export function* workerGetToken(request) {
   }
 }
 
+
+export function* workerManagerUpdate(token) {
+  yield call(workerGetStaffInfo, token);
+  yield call(workerGetStaffCheckin, token);
+  yield put({type: constAction.STAFF_CAL_DASH});
+}
 
 export function* workerGetData(token) {
   try {
@@ -136,6 +141,32 @@ export function* workerGetStaffCheckin(token) {
     const response = yield call(axios, config);
     const data = response.data
     yield put({ type: constAction.STAFF_CHECKIN_SUCCESS, content: data});
+
+  } catch (error) {
+    // dispatch a failure action to the store with the error
+    console.log(error)
+    //yield put({ type: constAction.API_PAYMENT_FAILURE, error: error });
+  }
+}
+
+export function* workerGetStaffCheckinUpdate(request) {
+  try {
+    const config = {
+      method: 'post',
+      url: `${constAction.WORKLIST_API}/manager-view?type=update-checkin`,
+      headers: {
+        'Authorization': `Bearer ${request.config.token}`,
+      },
+      data: {
+        last_pull: request.config.last_pull
+      }
+    }
+
+    const response = yield call(axios, config)
+    const data = response.data
+    yield put({ type: constAction.STAFF_CHECKIN_UPDATE, content: data});
+    yield call(workerGetStaffInfo, request.config.token);
+    yield put({type: constAction.STAFF_CAL_DASH});
 
   } catch (error) {
     // dispatch a failure action to the store with the error
