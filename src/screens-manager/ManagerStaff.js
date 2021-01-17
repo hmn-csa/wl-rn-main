@@ -57,14 +57,24 @@ function ManagerStaff(props) {
   }
 
 
-  useEffect(() => {
-    (async () => {
-      await getStaffData();
-      await getStaffCheckin();
-      props.calStaffData()
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     await getStaffData();
+  //     await getStaffCheckin();
+  //     props.calStaffData()
+  //   })();
+  // }, []);
 
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log('This will run every second!')
+  //     props.pullManager()
+  //   }, 1 * 60 * 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  // =========== render ============== //
 
   const renColor = (checkinData, today) => {
     if (checkinData.length == 0)

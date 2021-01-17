@@ -4,7 +4,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Dialog, Portal, } from 'react-native-paper';
 import {
   StyleSheet, Text, View, Dimensions, TouchableOpacity,
-  Image, ImageBackground, FlatList,
+  Image, ImageBackground, FlatList, ActivityIndicator
 } from 'react-native'
 
 import { connect } from "react-redux";
@@ -21,6 +21,8 @@ import Carousel from 'react-native-snap-carousel';
 import ManagerStaff from '../screens/ManagerStaff';
 const SliderWidth = Dimensions.get('screen').width;
 
+import {calInitialRegion} from '../functions'
+
 
 const renListMarker = (staff) => {
   const listMap2d = []
@@ -35,35 +37,68 @@ const renLastMarker = (staff) => {
   let listMap = []
   for (let i = 0; i < staff.staffs.length; i++) {
     let checkin = staff.staffs[i].checkin
-    if (checkin.length > 0)
-      listMap.push(checkin[checkin.length - 1])
+    if (checkin !== undefined) {
+      if (checkin.length > 0)
+        listMap.push(checkin[checkin.length - 1])
+    }
   }
   return listMap
 }
 
+// const calInitialRegion = (listAppls) => {
+//   const listLat = listAppls.map(appl => appl.lat)
+//   const listLon = listAppls.map(appl => appl.lon)
+//   const meanLat = listLat.reduce(function (sum, pay) {
+//     return sum = sum + pay;
+//   }, 0) / listAppls.length
+//   const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
+//   const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
+
+//   const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
+//     return sum = sum + pay;
+//   }, 0) / listAppls.length
+
+//   return {
+//     latitude: meanLat,
+//     longitude: meanLon,
+//     latitudeDelta: latDetal,
+//     longitudeDelta: lonDetal,
+//   }
+// }
+
 
 function ManagerMap(props) {
 
-
-  const [listAppls, setListappls] = useState(renListMarker(props.staff))
-  //const [listAppls, setListappls] = useState(renLastMarker(props.staff))
-  //setListappls(renListMarker(props.staff.staffs))
-
+  const [listAppls, setListappls] = useState(null)
   const [activeIndex, setActivateIndex] = useState(0);
+  const [initialRegion, setInitialRegion] = useState(null);
   const mapRef = useRef(null);
   const carouselRef = useRef(null);
-  const listLat = listAppls.map(appl => appl.lat)
-  const listLon = listAppls.map(appl => appl.lon)
-  const meanLat = listLat.reduce(function (sum, pay) {
-    return sum = sum + pay;
-  }, 0) / listAppls.length
-  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
 
-  const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-    return sum = sum + pay;
-  }, 0) / listAppls.length
 
+  useEffect(() => {
+    if (props.staff.data_done) {
+      setListappls(props.staff.lastCheckin)
+      mapRef.current.animateToCoordinate(
+        { latitude: listAppls[0].lat, longitude: listAppls[0].lon }, 0
+      )
+    }
+  }, [props.staff.pullcnt]);
+
+
+
+
+  // const listLat = listAppls.map(appl => appl.lat)
+  // const listLon = listAppls.map(appl => appl.lon)
+  // const meanLat = listLat.reduce(function (sum, pay) {
+  //   return sum = sum + pay;
+  // }, 0) / listAppls.length
+  // const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
+  // const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
+
+  // const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
+  //   return sum = sum + pay;
+  // }, 0) / listAppls.length
 
 
 
@@ -73,11 +108,17 @@ function ManagerMap(props) {
       if (item.time)
         return (
           <View>
-            <Text style={{ fontSize: 12 }}>User: {item.staff_id} - {item.endtime.substring(11, 16)}</Text>
+            <Text style={{ fontSize: 12 }}>User: {item.staff_id} - {item.cust_name}</Text>
             <Text style={{ fontSize: 10 }}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
             <Text style={{ fontSize: 10 }}>đã ở tại khu vực này khoảng {item.time}</Text>
           </View>
         )
+      else return (
+        <View>
+          <Text style={{ fontSize: 12 }}>User: {item.staff_id} - {item.cust_name}</Text>
+          <Text style={{ fontSize: 10 }}>{item.endtime.substring(11, 16)} </Text>
+        </View>
+      )
     }
     return (
       <TouchableOpacity
@@ -145,6 +186,13 @@ function ManagerMap(props) {
           style={[styles.logo, { color: colors.primary }]} /> </Text>
     </View>
   }
+  if (!listAppls)
+    return (
+    <View style={[styles.container, {alignItems: 'center'}]}>
+      <Text>Loading ... </Text>
+      <ActivityIndicator size={100} color={colors.primary}/> 
+    </View>
+    )
 
   return (
     <View style={styles.container}>
@@ -152,12 +200,7 @@ function ManagerMap(props) {
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: meanLat,
-            longitude: meanLon,
-            latitudeDelta: latDetal,
-            longitudeDelta: lonDetal,
-          }}
+          initialRegion={initialRegion}
           ref={mapRef}
         >
           {
@@ -193,6 +236,7 @@ function ManagerMap(props) {
           itemHeight={CARD_HEIGHT}
           renderItem={_renderItem}
           useScrollView={false}
+          
           onSnapToItem={(index) => {
             setActivateIndex(index)
             mapRef.current.animateToCoordinate(

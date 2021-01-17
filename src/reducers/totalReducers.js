@@ -2,27 +2,27 @@ import * as constAction from "../consts/index";
 
 
 const initialState = {
-  'totalCase':{
-    'case': 0,
-    'applIds': []
+  totalCase:{
+    case: 0,
+    applIds: []
   },
-  'paidAll':{
-    'value': 0,
-    'applIds': []
+  paidAll:{
+    value: 0,
+    applIds: []
   },
-  'paidMtd': {
-    'case': 0,
-    'value': 0,
-    'applIds': []
+  paidMtd: {
+    case: 0,
+    value: 0,
+    applIds: []
   },
-  'ptpCase': {
-    'case': 0,
-    'applIds': []
+  ptpCase: {
+    case: 0,
+    applIds: []
   },
-  'paidToday': {
-    'case': 0,
-    'value': 0,
-    'applIds': []
+  paidToday: {
+    case: 0,
+    value: 0,
+    applIds: []
   },
 }
 
@@ -64,27 +64,27 @@ const totalReducers = (state = initialState, action) => {
       })
       state = {
         ...state, 
-        'totalCase':{
-          'case': totalCase,
-          'applIds': appls//.map(appl => appl.appl_id)
+        totalCase:{
+          case: totalCase,
+          applIds: appls//.map(appl => appl.appl_id)
         },
-        'paidAll': {
-          'value': initPaidMtd.length,
-          'applIds':  initPaidMtd//.map(appl => appl.appl_id)
+        paidAll: {
+          value: initPaidMtd.length,
+          applIds:  initPaidMtd//.map(appl => appl.appl_id)
         }, 
-        'paidMtd': {
-          'case': initPaidMtd.length,
-          'value': paidMtdValue,
-          'applIds':  initPaidMtd//.map(appl => appl.appl_id)
+        paidMtd: {
+          case: initPaidMtd.length,
+          value: paidMtdValue,
+          applIds:  initPaidMtd//.map(appl => appl.appl_id)
         },
-        'ptpCase':{
-          'case': initPtp.length,
-          'applIds': initPtp//.map(appl => appl.appl_id)
+        ptpCase:{
+          case: initPtp.length,
+          applIds: initPtp//.map(appl => appl.appl_id)
         },
-        'paidToday': {
-          'case': initPaidTodayAppls.length,
-          'value': paidTodayValue,
-          'applIds':  initPaidTodayAppls//.map(appl => appl.appl_id)
+        paidToday: {
+          case: initPaidTodayAppls.length,
+          value: paidTodayValue,
+          applIds:  initPaidTodayAppls//.map(appl => appl.appl_id)
         },
       }
       return state;

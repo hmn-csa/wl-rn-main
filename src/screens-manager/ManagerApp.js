@@ -11,9 +11,9 @@ import { Button } from 'react-native-paper';
 
 import{ styles, colors } from '../styles'
 
-
+import ManagerDash from './ManagerDash'
 import ManagerStaff from './ManagerStaff'
-import ManagerMap from './ManagerMap'
+// import ManagerMap from './ManagerMap'
 
 
 enableScreens()
@@ -43,20 +43,20 @@ function MagagerApp () {
               iconName = focused ? 'ios-folder' : 'ios-folder';
             } 
    
-            // You can return any component that you like here! <ion-icon name="folder-open-outline"></ion-icon>
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           
         })
         }
         tabBarOptions={{
-          activeTintColor: colors.secondary, //'tomato',
+          activeTintColor: colors.secondary, 
           inactiveTintColor: 'gray',
         }}
       >
-        
         <Tab.Screen name="ManagerStaff" component={ManagerStaff} />
-        <Tab.Screen name="ManagerMap" component={ManagerMap} />
+        <Tab.Screen name="ManagerDash" component={ManagerDash} />
+        
+        {/* <Tab.Screen name="ManagerMap" component={ManagerMap} /> */}
 
       </Tab.Navigator>
     </NavigationContainer>

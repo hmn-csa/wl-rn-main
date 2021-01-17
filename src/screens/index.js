@@ -7,7 +7,7 @@ import { View, StyleSheet} from 'react-native';
 //import ContainerShow from './containers/ContainerShow'
 
 import Login from './Login'
-// import MainApp from './MainApp'
+//import MainApp from './MainApp'
 // import ManagerApp from './ManagerApp'
 import ManagerApp from '../screens-manager/ManagerApp'
 
@@ -20,12 +20,12 @@ function MyApp(props) {
         <Login />
       </View>
     )
-  else if (props.token.token.role === 'FC')
-    return (
-      <View style={styles.container}>
-        <MainApp />
-      </View>
-    )
+  // else if (props.token.token.role === 'FC')
+  //   return (
+  //     <View style={styles.container}>
+  //       <MainApp />
+  //     </View>
+  //   )
   else if(props.token.token.role === 'manager_lv1')
     return (
       <View style={styles.container}>

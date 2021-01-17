@@ -7,8 +7,8 @@ import {decode as atob, encode as btoa} from 'base-64'
 // watcher saga: watches for actions dispatched to the store, starts worker saga
 export function* watcherSaga() {
   yield takeLatest(constAction.API_TOKEN_REQUEST, workerGetToken);
-  yield takeLatest(constAction.MANAGER_DATA_REQUEST, workerManagerGetData);
-  yield takeLatest(constAction.MANAGER_CLEAR_STATE, workerManagerClearState);
+  // yield takeLatest(constAction.MANAGER_DATA_REQUEST, workerManagerGetData);
+  // yield takeLatest(constAction.MANAGER_CLEAR_STATE, workerManagerClearState);
 }
 
 // function that makes the api request and returns a Promise for response
@@ -44,8 +44,15 @@ export function* workerGetToken(request) {
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
 
     // get appls data
-    yield call(workerGetData, data.access);
+    if (data.role === 'FC') {
+      yield call(workerGetData, data.access);
+    } 
+    else {
+      yield call(workerGetStaffInfo, data.access);
+      yield call(workerGetStaffCheckin, data.access);
 
+      yield put({type: constAction.STAFF_CAL_DASH});
+    }
   } catch (error) {
     // dispatch a failure action to the store with the error
     yield put({ type: constAction.API_TOKEN_FAILURE, error });
@@ -73,6 +80,7 @@ export function* workerGetData(token) {
     //yield put({ type: constAction.INIT_DASHBOARD, content: data });
     // yield put({ type: constAction.DATA_INIT_DASHBOARD });
 
+    
     // dispatch CAL-DASH
     yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data});
     yield put({ type: constAction.CAL_TODO_DASH, data: response.data});
@@ -90,45 +98,91 @@ export function* workerGetData(token) {
   }
 }
 
-
-
-export function* workerManagerGetData(request) {
+export function* workerGetStaffInfo(token) {
   try {
-    let config = {
+    const config = {
       method: 'post',
-      url: `${constAction.WORKLIST_API}/portfolio-list/?staff_id=${request.config.staff_id}`,
-      headers: { 
-        'Authorization': `Bearer ${request.config.token}`
-      }
-    }
+      url: `${constAction.WORKLIST_API}/manager-view?type=info`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    };
     
+    yield put({ type: constAction.STAFF_INFO_REQUEST});
     const response = yield call(axios, config);
-    const data = response.data;
-    
-    // dispatch a success action to the store with the new content
-    yield put({ type: constAction.API_DATA_SUCCESS, content: response.data });
+    const data = response.data
+    yield put({ type: constAction.STAFF_INFO_SUCCESS, content: data});
 
-    // dispatch INIT_DASHBOARD
-    //yield put({ type: constAction.INIT_DASHBOARD, content: data });
-    // yield put({ type: constAction.DATA_INIT_DASHBOARD });
-
-    // dispatch CAL-DASH
-    yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data});
-    yield put({ type: constAction.CAL_TODO_DASH, data: response.data});
-    yield put({ type: constAction.CAL_CATE_DASH, data: response.data});
-    yield put({ type: constAction.CAL_TREE_DASH, data: response.data});
-    
-    // dispatch UPDATE_SHOWLIST
-    // const allAppls =  Object.values(data).map(appl => appl.appl_id)
-    // yield put({ type: constAction.UPDATE_SHOWLIST, content: allAppls});
-    yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data)});
+    //yield call(workerGetCheckin, request.config.token);
 
   } catch (error) {
-    console.log(error)
     // dispatch a failure action to the store with the error
-    yield put({ type: constAction.API_DATA_FAILURE, error });
+    console.log(error)
+    //yield put({ type: constAction.API_PAYMENT_FAILURE, error: error });
   }
 }
+
+export function* workerGetStaffCheckin(token) {
+  try {
+    const config = {
+      method: 'post',
+      url: `${constAction.WORKLIST_API}/manager-view?type=checkin`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    };
+    
+    yield put({ type: constAction.STAFF_CHECKIN_REQUEST});
+    const response = yield call(axios, config);
+    const data = response.data
+    yield put({ type: constAction.STAFF_CHECKIN_SUCCESS, content: data});
+
+  } catch (error) {
+    // dispatch a failure action to the store with the error
+    console.log(error)
+    //yield put({ type: constAction.API_PAYMENT_FAILURE, error: error });
+  }
+}
+
+
+
+// export function* workerManagerGetData(request) {
+//   try {
+//     let config = {
+//       method: 'post',
+//       url: `${constAction.WORKLIST_API}/portfolio-list/?staff_id=${request.config.staff_id}`,
+//       headers: { 
+//         'Authorization': `Bearer ${request.config.token}`
+//       }
+//     }
+    
+//     const response = yield call(axios, config);
+//     const data = response.data;
+    
+//     // dispatch a success action to the store with the new content
+//     yield put({ type: constAction.API_DATA_SUCCESS, content: response.data });
+
+//     // dispatch INIT_DASHBOARD
+//     //yield put({ type: constAction.INIT_DASHBOARD, content: data });
+//     // yield put({ type: constAction.DATA_INIT_DASHBOARD });
+
+//     // dispatch CAL-DASH
+//     yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data});
+//     yield put({ type: constAction.CAL_TODO_DASH, data: response.data});
+//     yield put({ type: constAction.CAL_CATE_DASH, data: response.data});
+//     yield put({ type: constAction.CAL_TREE_DASH, data: response.data});
+    
+//     // dispatch UPDATE_SHOWLIST
+//     // const allAppls =  Object.values(data).map(appl => appl.appl_id)
+//     // yield put({ type: constAction.UPDATE_SHOWLIST, content: allAppls});
+//     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data)});
+
+//   } catch (error) {
+//     console.log(error)
+//     // dispatch a failure action to the store with the error
+//     yield put({ type: constAction.API_DATA_FAILURE, error });
+//   }
+// }
 
 
 export function* workerManagerClearState(request) {

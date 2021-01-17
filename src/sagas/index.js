@@ -13,7 +13,6 @@ import { watcherSagaUptrail} from './uptrailSaga'
 import { watcherSagaCheckin } from './checkinSaga'
 import { watcherSagaPayment } from './paymentSaga'
 
-
 // Redux Saga: Root Saga
 export function* rootSaga () {
   yield all([
