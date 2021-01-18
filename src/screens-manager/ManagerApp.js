@@ -13,8 +13,7 @@ import{ styles, colors } from '../styles'
 
 import ManagerDash from './ManagerDash'
 import ManagerStaff from './ManagerStaff'
-// import ManagerMap from './ManagerMap'
-
+import ManagerMap from './ManagerMap'
 
 enableScreens()
 
@@ -53,10 +52,9 @@ function MagagerApp () {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="ManagerStaff" component={ManagerStaff} />
         <Tab.Screen name="ManagerDash" component={ManagerDash} />
-        
-        {/* <Tab.Screen name="ManagerMap" component={ManagerMap} /> */}
+        <Tab.Screen name="ManagerStaff" component={ManagerStaff} />
+        <Tab.Screen name="ManagerMap" component={ManagerMap} />
 
       </Tab.Navigator>
     </NavigationContainer>

@@ -26,8 +26,6 @@ export function* workerGetToken(request) {
         'Authorization': 'Basic '+btoa(request.config.username+ ":" + request.config.password)
       },  
       data : {
-        //"username": request.config.username,
-        //"password": request.config.password,
         "lat": request.config.lat,
         "lon": request.config.lon,
         "device_brand": request.config.device_brand,
@@ -39,13 +37,11 @@ export function* workerGetToken(request) {
     const response = yield call(axios, config);
     const data = response.data;
 
-    // dispatch a success action to the store with the new dog
-
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
 
     // get appls data
     if (data.role === 'FC') {
-      yield call(workerGetData, data.access);
+      yield call(workerGetDataFC, data.access);
     } 
     else {
       yield call(workerGetStaffInfo, data.access);
@@ -59,13 +55,8 @@ export function* workerGetToken(request) {
 }
 
 
-export function* workerManagerUpdate(token) {
-  yield call(workerGetStaffInfo, token);
-  yield call(workerGetStaffCheckin, token);
-  yield put({type: constAction.STAFF_CAL_DASH});
-}
-
-export function* workerGetData(token) {
+/* ------------------ FC App ------------------ */
+export function* workerGetDataFC(token) {
   try {
     let config = {
       method: 'post',
@@ -81,11 +72,6 @@ export function* workerGetData(token) {
     // dispatch a success action to the store with the new content
     yield put({ type: constAction.API_DATA_SUCCESS, content: response.data });
 
-    // dispatch INIT_DASHBOARD
-    //yield put({ type: constAction.INIT_DASHBOARD, content: data });
-    // yield put({ type: constAction.DATA_INIT_DASHBOARD });
-
-    
     // dispatch CAL-DASH
     yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data});
     yield put({ type: constAction.CAL_TODO_DASH, data: response.data});
@@ -93,7 +79,6 @@ export function* workerGetData(token) {
     yield put({ type: constAction.CAL_TREE_DASH, data: response.data});
     
     // dispatch UPDATE_SHOWLIST
-    // const allAppls =  Object.values(data).map(appl => appl.appl_id)
     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data)});
 
   } catch (error) {
@@ -103,6 +88,8 @@ export function* workerGetData(token) {
   }
 }
 
+
+/* ------------------ Manager App ------------------ */
 export function* workerGetStaffInfo(token) {
   try {
     const config = {
@@ -118,12 +105,10 @@ export function* workerGetStaffInfo(token) {
     const data = response.data
     yield put({ type: constAction.STAFF_INFO_SUCCESS, content: data});
 
-    //yield call(workerGetCheckin, request.config.token);
 
   } catch (error) {
     // dispatch a failure action to the store with the error
     console.log(error)
-    //yield put({ type: constAction.API_PAYMENT_FAILURE, error: error });
   }
 }
 
@@ -174,6 +159,8 @@ export function* workerGetStaffCheckinUpdate(request) {
     //yield put({ type: constAction.API_PAYMENT_FAILURE, error: error });
   }
 }
+
+
 
 
 

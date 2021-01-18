@@ -3,7 +3,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 // import MapView from 'react-native-map-clustering';
 import { Button, Dialog, Portal, } from 'react-native-paper';
 import {
-  StyleSheet, Text, View, Dimensions, TouchableOpacity,
+  StyleSheet, Text, View, Dimensions, TouchableOpacity, Animated,
   Image, ImageBackground, FlatList, ActivityIndicator
 } from 'react-native'
 
@@ -14,14 +14,14 @@ import { EMPTYAVATAR } from '../images';
 
 
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 8;
+const CARD_HEIGHT = height / 8.5;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 import Carousel from 'react-native-snap-carousel';
 import ManagerStaff from '../screens/ManagerStaff';
 const SliderWidth = Dimensions.get('screen').width;
 
-import {calInitialRegion} from '../functions'
+// import {calInitialRegion} from '../functions'
 
 
 const renListMarker = (staff) => {
@@ -45,79 +45,121 @@ const renLastMarker = (staff) => {
   return listMap
 }
 
-// const calInitialRegion = (listAppls) => {
-//   const listLat = listAppls.map(appl => appl.lat)
-//   const listLon = listAppls.map(appl => appl.lon)
-//   const meanLat = listLat.reduce(function (sum, pay) {
-//     return sum = sum + pay;
-//   }, 0) / listAppls.length
-//   const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-//   const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
+const calInitialRegion = (listAppls) => {
+  const listLat = listAppls.map(appl => appl.lat)
+  const listLon = listAppls.map(appl => appl.lon)
+  const meanLat = listLat.reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0) / listAppls.length
+  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
+  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
 
-//   const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-//     return sum = sum + pay;
-//   }, 0) / listAppls.length
+  const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0) / listAppls.length
 
-//   return {
-//     latitude: meanLat,
-//     longitude: meanLon,
-//     latitudeDelta: latDetal,
-//     longitudeDelta: lonDetal,
-//   }
-// }
+  return {
+    latitude: meanLat,
+    longitude: meanLon,
+    latitudeDelta: latDetal,
+    longitudeDelta: lonDetal,
+  }
+}
 
+const usePulse = (startDelay = 500) => {
+  const opacity = useRef(new Animated.Value(1)).current;
+
+  const pulse = () => {
+    Animated.sequence([
+      Animated.timing(opacity, { toValue: 1, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0.6, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0.3, useNativeDriver: true }),
+    ]).start(() => pulse());
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => pulse(), startDelay);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return opacity;
+};
 
 function ManagerMap(props) {
 
   const [listAppls, setListappls] = useState(null)
   const [activeIndex, setActivateIndex] = useState(0);
-  const [initialRegion, setInitialRegion] = useState(null);
+  const [initialRegion, setInitialRegion] = useState({
+    latitude: null,
+    longitude: null,
+    latitudeDelta: null,
+    longitudeDelta: null,
+  });
   const mapRef = useRef(null);
+  const makerRef = useRef(null);
   const carouselRef = useRef(null);
+
+  
 
 
   useEffect(() => {
     if (props.staff.data_done) {
       setListappls(props.staff.lastCheckin)
-      mapRef.current.animateToCoordinate(
-        { latitude: listAppls[0].lat, longitude: listAppls[0].lon }, 0
-      )
+      setInitialRegion(calInitialRegion(props.staff.lastCheckin))
+      // if (mapRef !== null && listAppls !== null) {
+      //   mapRef.current.animateToCoordinate(
+      //     { latitude: listAppls[0].lat, longitude: listAppls[0].lon }, 0
+      //   )
+      // }
     }
   }, [props.staff.pullcnt]);
 
-
-
-
-  // const listLat = listAppls.map(appl => appl.lat)
-  // const listLon = listAppls.map(appl => appl.lon)
-  // const meanLat = listLat.reduce(function (sum, pay) {
-  //   return sum = sum + pay;
-  // }, 0) / listAppls.length
-  // const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-  // const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
-
-  // const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-  //   return sum = sum + pay;
-  // }, 0) / listAppls.length
+  const opacity = usePulse();
 
 
 
   const _renderItem = ({ item, index }) => {
 
+    let avatar = { uri: Object.values(props.staff.staffs).filter((staff) => {
+      return staff.staff_id == item.staff_id
+    })[0].info.avatar}
+    if (!avatar.uri) 
+      avatar = EMPTYAVATAR
     const _renTime = (item) => {
       if (item.time)
         return (
           <View>
-            <Text style={{ fontSize: 12 }}>User: {item.staff_id} - {item.cust_name}</Text>
-            <Text style={{ fontSize: 10 }}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
-            <Text style={{ fontSize: 10 }}>đã ở tại khu vực này khoảng {item.time}</Text>
+            <View style={styles.row}>
+              <View  style={[styles.box, { flex: 0.3 }]}>
+                <Image source={avatar}  
+                imageStyle={{ borderRadius: 50 }} 
+                style={[{ height: 30, width: 30, borderRadius: 50, resizeMode: "cover" }]} />
+              </View>
+              <View style={[styles.box]}>
+                <Text style={{ fontSize: 12 }}>{item.staff_id} - {item.fc_name}</Text>
+                <Text style={{ fontSize: 11}}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
+              </View>
+            </View>
+            <View style={[styles.row, {padding: 10}]}>
+              <Text style={{ fontSize: 10 }}>Đã ở khu vực này khoảng {item.time}</Text>
+            </View>
           </View>
         )
       else return (
+
         <View>
-          <Text style={{ fontSize: 12 }}>User: {item.staff_id} - {item.cust_name}</Text>
-          <Text style={{ fontSize: 10 }}>{item.endtime.substring(11, 16)} </Text>
-        </View>
+            <View style={styles.row}>
+              <View style={[styles.box, { flex: 0.3 }]}>
+                <Image source={avatar}  
+                imageStyle={{ borderRadius: 50 }} 
+                style={{ height: 30, width: 30, borderRadius: 50, resizeMode: "cover" }} />
+              </View>
+              <View style={[styles.box]}>
+                <Text style={{ fontSize: 12 }}>{item.staff_id} - {item.fc_name}</Text>
+                <Text style={{ fontSize: 11 }}>{item.endtime.substring(11, 16)} </Text>
+              </View>
+            </View>
+          </View>
       )
     }
     return (
@@ -141,59 +183,42 @@ function ManagerMap(props) {
 
   const renMarkerAvatar = (appl, staffs) => {
 
-
-    let avatar = Object.values(staffs).filter((staff) => {
+    let avatar =  { uri: Object.values(staffs).filter((staff) => {
       return staff.staff_id == appl.staff_id
-    })[0].info.avatar
-
+    })[0].info.avatar }
+    if (!avatar.uri) 
+      avatar = EMPTYAVATAR
+    
     if (!avatar)
       return <View style={{ borderRadius: 50 }}>
-        <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text>
-        <View style={{ borderRadius: 50 }}>
-          <ImageBackground source={EMPTYAVATAR}  imageStyle={{ borderRadius: 50 }} style={{ height: 20, width: 20, borderRadius: 50, resizeMode: "cover" }} />
-        </View>
+        {/* <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text> */}
+        <Animated.View style={{ borderRadius: 50 }}>
+          <Animated.Image source={avatar}  
+          opacity={opacity}
+          imageStyle={{ borderRadius: 50 }} 
+          style={{ height: 25, width: 25, borderRadius: 50, resizeMode: "cover" }} />
+        </Animated.View>
       </View>
 
     return <View style={{ borderRadius: 50 }}>
-      <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text>
-      <View style={{ borderRadius: 50 }}>
-        <ImageBackground source={{ uri: avatar }} imageStyle={{ borderRadius: 50 }} style={{ height: 20, width: 20, borderRadius: 20, resizeMode: "cover" }} />
-      </View>
+      {/* <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text> */}
+      <Animated.View style={{ borderRadius: 50 }}>
+        <Animated.Image source={avatar}  
+        opacity={opacity}
+        imageStyle={{ borderRadius: 50 }} 
+        style={{ height: 25, width: 25, borderRadius: 50, resizeMode: "cover" }} />
+      </Animated.View>
     </View>
 
   }
 
-  const renMarker = (index, length, appl) => {
-    if (index === 0) {
-      return <View>
-        <Text style={styles.msgTxt}>Start {appl.endtime.substring(11, 16)}
-          <Ionicons name='ios-disc'
-            style={[styles.logo, { color: colors.secondaryGradientEnd }]} /> </Text>
-        {/* {showTime(appl.time)} */}
-      </View>
-    }
-    if (index === length - 1) {
-      return <View>
-        <Text style={styles.msgTxt}>Finish {appl.endtime.substring(11, 16)}
-          <Ionicons name='ios-pin'
-            style={[styles.logo, { fontSize: 45 }]} /> </Text>
-        {/* {showTime(appl.time)} */}
-      </View>
-    }
-    return <View>
-      <Text style={styles.msgTxt}>{index} | {appl.endtime.substring(11, 16)}
-        <Ionicons name='ios-disc'
-          style={[styles.logo, { color: colors.primary }]} /> </Text>
-    </View>
-  }
-  if (!listAppls)
-    return (
-    <View style={[styles.container, {alignItems: 'center'}]}>
+  if (!listAppls) 
+  return (
+    <View style={[{ alignItems: 'center' }]}>
+      <ActivityIndicator size={100} color={colors.primary} />
       <Text>Loading ... </Text>
-      <ActivityIndicator size={100} color={colors.primary}/> 
     </View>
-    )
-
+)
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -214,7 +239,6 @@ function ManagerMap(props) {
                     carouselRef.current.snapToItem(index)
                   }}
                 >
-
                   <View>
                     {renMarkerAvatar(marker, props.staff.staffs)}
                   </View>
@@ -226,13 +250,13 @@ function ManagerMap(props) {
 
         </MapView>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 400 }}>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: height - CARD_HEIGHT - 150 }}>
         <Carousel
           layout={'default'}
           ref={carouselRef}
           data={listAppls}
           sliderWidth={SliderWidth}
-          itemWidth={SliderWidth * 0.6}
+          itemWidth={SliderWidth * 0.5}
           itemHeight={CARD_HEIGHT}
           renderItem={_renderItem}
           useScrollView={false}
@@ -260,6 +284,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderColor: '#DCDCDC',
+    backgroundColor: '#fff',
+  },
+  box: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
@@ -269,13 +306,7 @@ const styles = StyleSheet.create({
     color: colors.green,
     padding: 3,
   },
-  nameTxt: {
-    marginLeft: 10,
-    fontWeight: '900',
-    color: '#222',
-    fontSize: 15,
-    width: 190,
-  },
+
   msgTxt: {
     fontWeight: '400',
     color: colors.textcolor,
@@ -284,16 +315,6 @@ const styles = StyleSheet.create({
   },
   //================
 
-  scrollView: {
-    position: "absolute",
-    bottom: 30,
-    left: 0,
-    right: 0,
-    paddingVertical: 10,
-  },
-  endPadding: {
-    paddingRight: width - CARD_WIDTH,
-  },
   card: {
     padding: 10,
     elevation: 2,
@@ -307,43 +328,7 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     overflow: "hidden",
   },
-  cardImage: {
-    flex: 3,
-    width: "100%",
-    height: "100%",
-    alignSelf: "center",
-  },
-  textContent: {
-    flex: 1,
-  },
-  cardtitle: {
-    fontSize: 12,
-    marginTop: 5,
-    fontWeight: "bold",
-  },
-  cardDescription: {
-    fontSize: 12,
-    color: "#444",
-  },
-  markerWrap: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  marker: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "rgba(130,4,150, 0.9)",
-  },
-  ring: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "rgba(130,4,150, 0.3)",
-    position: "absolute",
-    borderWidth: 1,
-    borderColor: "rgba(130,4,150, 0.5)",
-  },
+
 })
 
 const mapStateToProps = (state, ownProps) => {

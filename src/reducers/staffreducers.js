@@ -174,6 +174,7 @@ const staffReducers = (state = initialState, action) => {
       }
     
     case constAction.STAFF_CHECKIN_UPDATE:
+ 
       return {...state, 
         checkin: [...action.content.checkin, ...state.checkin], 
         uptrail: [...action.content.uptrail, ...state.uptrail], 

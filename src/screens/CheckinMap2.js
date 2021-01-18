@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import  { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
+import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import MapView from 'react-native-map-clustering';
 //import MapView from 'react-native-map-clustering';
 //import { MapView, Marker, PROVIDER_GOOGLE  } from 'expo'
 import { Button, Dialog, Portal, } from 'react-native-paper';
-import { 
+import {
   StyleSheet, Text, View, Dimensions, TouchableOpacity,
-  Animated, ScrollView, FlatList,  
+  Animated, ScrollView, FlatList,
 } from 'react-native'
 
 import { connect } from "react-redux";
@@ -29,31 +29,31 @@ function CheckinMap(props) {
   //const listAppls = props.data.data.filter((appl) => {
   //  return props.showlists.includes(appl.appl_id)
   //})
-  
+
 
   const [listAppls, setListappls] = useState(Object.values(props.map.checkin))
-  const [activeIndex, setActivateIndex] = useState(0); 
+  const [activeIndex, setActivateIndex] = useState(0);
   const mapRef = useRef(null);
   const carouselRef = useRef(null);
-    
+
 
   const listLat = listAppls.map(appl => appl.lat)
   const listLon = listAppls.map(appl => appl.lon)
-  const meanLat = listLat.reduce(function(sum, pay){
-    return sum = sum+pay;
-  },0) / listAppls.length
+  const meanLat = listLat.reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0) / listAppls.length
 
-  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat)  +0.05
-  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) +0.05
+  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
+  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
 
-  const meanLon = listAppls.map(appl => appl.lon).reduce(function(sum, pay){
-    return sum = sum+pay;
-  },0) / listAppls.length
-
-
+  const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0) / listAppls.length
 
 
-  
+
+
+
   const _renderItem = ({ item, index }) => {
 
     const _renTime = (item) => {
@@ -77,96 +77,96 @@ function CheckinMap(props) {
         {
           _renTime(item)
         }
-       
+
       </TouchableOpacity>
-      
+
     );
   };
 
-  
+
   const renMarker = (index, length, appl) => {
-    
-    if(index===0) {
+
+    if (index === 0) {
       return <View>
-      <Text style={styles.msgTxt}>Start {appl.endtime.substring(11, 16)}
-      <Ionicons name='ios-disc' 
-        style={[styles.logo, {color: colors.secondaryGradientEnd}]}/> </Text>
-      {/* {showTime(appl.time)} */}
-    </View>
-    } 
-    if (index===length-1) {
+        <Text style={styles.msgTxt}>Start {appl.endtime.substring(11, 16)}
+          <Ionicons name='ios-disc'
+            style={[styles.logo, { color: colors.secondaryGradientEnd }]} /> </Text>
+        {/* {showTime(appl.time)} */}
+      </View>
+    }
+    if (index === length - 1) {
       return <View>
-      <Text style={styles.msgTxt}>Finish {appl.endtime.substring(11, 16)}
-      <Ionicons name='ios-pin' 
-        style={[styles.logo, {fontSize:45}]}/> </Text>
-      {/* {showTime(appl.time)} */}
-    </View>
-    } 
+        <Text style={styles.msgTxt}>Finish {appl.endtime.substring(11, 16)}
+          <Ionicons name='ios-pin'
+            style={[styles.logo, { fontSize: 45 }]} /> </Text>
+        {/* {showTime(appl.time)} */}
+      </View>
+    }
     return <View>
-    <Text style={styles.msgTxt}>{index} | {appl.endtime.substring(11, 16)}
-    <Ionicons name='ios-disc' 
-       style={[styles.logo, {color: colors.primary}]}/> </Text>
-  </View>
-  } 
+      <Text style={styles.msgTxt}>{index} | {appl.endtime.substring(11, 16)}
+        <Ionicons name='ios-disc'
+          style={[styles.logo, { color: colors.primary }]} /> </Text>
+    </View>
+  }
 
 
   return (
     <View style={styles.container}>
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-      <MapView  
-        style={styles.mapStyle} 
-        provider={PROVIDER_GOOGLE} 
-        initialRegion={{
-          latitude: meanLat,
-          longitude: meanLon,
-          latitudeDelta: latDetal,
-          longitudeDelta: lonDetal,
-        }}
-        ref={mapRef}
-      >
-      {
-        listAppls.map((marker, index) => {
-          return (
-            <Marker
-              coordinate = {{latitude:marker.lat, longitude: marker.lon}}
-              key={index}
-              onPress={() => {
-                setActivateIndex(index)
-                carouselRef.current.snapToItem(index)
-              }}
-            >
-          
-              <View>
-                {renMarker(index, listAppls.length, marker)}
-              </View>
-            </Marker>
-          )
-        }
-        )
-      }
-      
-    </MapView>
-    </View>
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 400 }}>
-      <Carousel
-        layout={'default'}
-        ref={carouselRef}
-        data={listAppls}
-        sliderWidth={SliderWidth}
-        itemWidth={SliderWidth * 0.6}
-        itemHeight={CARD_HEIGHT}
-        renderItem={_renderItem}
-        useScrollView={false}
-        onSnapToItem={(index) => {
-          setActivateIndex(index)
-          mapRef.current.animateToCoordinate(
-            {latitude: listAppls[index].lat, longitude: listAppls[index].lon}, 0
-          )
-        }}
-        activeSlideAlignment="center"
-      />
-    </View>
-   
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+        <MapView
+          style={styles.mapStyle}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: meanLat,
+            longitude: meanLon,
+            latitudeDelta: latDetal,
+            longitudeDelta: lonDetal,
+          }}
+          ref={mapRef}
+        >
+          {
+            listAppls.map((marker, index) => {
+              return (
+                <Marker
+                  coordinate={{ latitude: marker.lat, longitude: marker.lon }}
+                  key={index}
+                  onPress={() => {
+                    setActivateIndex(index)
+                    carouselRef.current.snapToItem(index)
+                  }}
+                >
+
+                  <View>
+                    {renMarker(index, listAppls.length, marker)}
+                  </View>
+                </Marker>
+              )
+            }
+            )
+          }
+
+        </MapView>
+      </View>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 400 }}>
+        <Carousel
+          layout={'default'}
+          ref={carouselRef}
+          data={listAppls}
+          sliderWidth={SliderWidth}
+          itemWidth={SliderWidth * 0.6}
+          itemHeight={CARD_HEIGHT}
+          renderItem={_renderItem}
+          useScrollView={false}
+          onSnapToItem={(index) => {
+            setActivateIndex(index)
+            mapRef.current.animateToCoordinate(
+              { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
+            )
+          }}
+          activeSlideAlignment="center"
+        />
+      </View>
+
     </View>
   );
 }
@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  logo:{
-    fontSize:25,
+  logo: {
+    fontSize: 25,
     color: colors.green,
     padding: 3,
   },
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#222',
     fontSize: 15,
-    width:190,
+    width: 190,
   },
   msgTxt: {
     fontWeight: '400',

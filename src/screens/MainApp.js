@@ -15,7 +15,7 @@ import axios from "axios"
 // import User from './User'
 // import Test2 from './test2'
 // import Test from './test'
-// // import Maps from './Maps'
+// import Maps from './Maps'
 // import CheckinMap from './CheckinMap2'
 import { actLocationSet,  actGetUptrails, actSetActiveStaff } from "../actions"
 import * as constAction from '../consts'

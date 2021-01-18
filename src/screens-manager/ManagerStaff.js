@@ -19,22 +19,19 @@ import { EMPTYAVATAR } from '../images';
 
 function ManagerStaff(props) {
 
-
+  // =========== hooks ============== //
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('This will run every second!')
       props.countManager()
-    }, 0.5 * 60 * 1000)
+    }, 2 * 60 * 1000)
     return () => clearInterval(interval)
   }, []);
-
 
   useEffect(() => {
     let config = {
       token: props.token,
       last_pull: props.staff.last_pull
     }
-    console.log(config)
     if (config.last_pull !== null)
     props.pullManager(config)
   }, [props.staff.pullcnt])
