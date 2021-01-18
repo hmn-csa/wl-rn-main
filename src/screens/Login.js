@@ -61,7 +61,7 @@ function Login(props) {
       getLocation()
     }
     else {
-      await props.login(data)
+      props.login(data)
       if (props.token.token === undefined) 
         Alert.alert('username hoặc password không đúng')
     }
@@ -86,7 +86,7 @@ function Login(props) {
     <View style={[styles.container, 
       {alignItems: 'center', backgroundColor: BACKGROUND_LOGIN}]}>
 
-      <Text style={styles.sologan}>HMN APP</Text>
+      <Text style={styles.sologan}>WORKLIST</Text>
       <View style={styles.inputView} >
         <Controller
           control={control}
