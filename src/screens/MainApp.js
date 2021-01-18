@@ -102,23 +102,7 @@ function MainApp (props) {
           }
         }
       )
-      
-      props.getUptrails(
-        {
-          staff_id: props.token.token.staff_id, 
-          token: props.token.token.access, 
-          start: "", 
-          end: "" 
-        }
-      )
 
-      props.getCheckins(
-        {
-          staff_id: props.token.token.staff_id, 
-          token: props.token.token.access, 
-          date: "", 
-        }
-      )
     }
   }, []);
 
@@ -176,24 +160,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     locationSet: (content) => {
-      
       dispatch(actLocationSet(content))
     }, 
     setActiveStaff: (content) => {
       dispatch(actSetActiveStaff(content))
     },
-    getUptrails: (config) => {
-      dispatch(actGetUptrails(config))
-    },
-
-    getCheckins: (config) => {
-      dispatch(
-        {
-          type: constAction.API_GETCHECKIN_REQUEST,
-          config
-        }
-      )
-    },
+   
   }
 }
 

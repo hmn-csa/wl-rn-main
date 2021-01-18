@@ -3,11 +3,12 @@ import * as constAction from '../consts'
 import { takeLatest, call, put, take } from "redux-saga/effects";
 import axios from "axios";
 import {decode as atob, encode as btoa} from 'base-64'
-
 // watcher saga: watches for actions dispatched to the store, starts worker saga
 export function* watcherSaga() {
   yield takeLatest(constAction.API_TOKEN_REQUEST, workerGetToken);
   yield takeLatest(constAction.STAFF_CHECKIN_PULL, workerGetStaffCheckinUpdate);
+
+  yield takeLatest(constAction.SET_STAFF_MODE, workerGetDataFCMode);
   // yield takeLatest(constAction.MANAGER_CLEAR_STATE, workerManagerClearState);
 }
 
@@ -41,7 +42,7 @@ export function* workerGetToken(request) {
 
     // get appls data
     if (data.role === 'FC') {
-      yield call(workerGetDataFC, data.access);
+      yield call(workerGetDataFC, {token: data.access, staff_id: data.staff_id, fc_name: data.fc_name});
     } 
     else {
       yield call(workerGetStaffInfo, data.access);
@@ -62,8 +63,8 @@ export function* workerGetDataFC(token) {
       method: 'post',
       url: `${constAction.WORKLIST_API}/portfolio-list/`,
       headers: { 
-        'Authorization': `Bearer ${token}`
-      }
+        'Authorization': `Bearer ${token.token}`
+      }, 
     }
     
     const response = yield call(axios, config);
@@ -71,6 +72,16 @@ export function* workerGetDataFC(token) {
     
     // dispatch a success action to the store with the new content
     yield put({ type: constAction.API_DATA_SUCCESS, content: response.data });
+
+    // set active FC
+    yield put({ type: constAction.SET_ACTIVE_STAFF, content: {
+      staff_id: token.staff_id, 
+      info: {
+        fc_name: token.fc_name
+      }
+    }})
+    // type: constAction.SET_ACTIVE_STAFF,
+    // content
 
     // dispatch CAL-DASH
     yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data});
@@ -81,6 +92,29 @@ export function* workerGetDataFC(token) {
     // dispatch UPDATE_SHOWLIST
     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data)});
 
+    // Get Checkin
+    yield put({
+      type: constAction.API_GETCHECKIN_REQUEST, 
+      config: {
+        staff_id: token.staff_id, 
+        token: token.token,
+        date: "",
+      }
+    });
+
+    // Get Uptrail
+    yield put({
+      type: constAction.API_UPTRAIL_REQUEST, 
+      config: {
+        staff_id: token.staff_id, 
+        token: token.token,
+        start: '',
+        end: ''
+      }
+    });
+
+   
+    
   } catch (error) {
     console.log(error)
     // dispatch a failure action to the store with the error
@@ -90,6 +124,68 @@ export function* workerGetDataFC(token) {
 
 
 /* ------------------ Manager App ------------------ */
+export function* workerGetDataFCMode(request) {
+  try {
+    let config = {
+      method: 'post',
+      url: `${constAction.WORKLIST_API}/portfolio-list/?staff_id=${request.token.staff_id}`,
+      headers: { 
+        'Authorization': `Bearer ${request.token.token}`
+      }, 
+    }
+
+   
+    const response = yield call(axios, config);
+    const data = response.data;
+    console.log(data)
+    // dispatch a success action to the store with the new content
+    yield put({ type: constAction.API_DATA_SUCCESS, content: response.data });
+
+    // set active FC
+    yield put({ type: constAction.SET_ACTIVE_STAFF, content: {
+      staff_id: request.token.staff_id, 
+      info: {
+        fc_name: request.token.fc_name
+      }
+    }})
+
+    // dispatch CAL-DASH
+    yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data});
+    yield put({ type: constAction.CAL_TODO_DASH, data: response.data});
+    yield put({ type: constAction.CAL_CATE_DASH, data: response.data});
+    yield put({ type: constAction.CAL_TREE_DASH, data: response.data});
+    
+    // dispatch UPDATE_SHOWLIST
+    yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data)});
+    
+     // Get Checkin
+     yield put({
+      type: constAction.API_GETCHECKIN_REQUEST, 
+      config: {
+        staff_id: request.token.staff_id, 
+        token: request.token.token,
+        date: "",
+      }
+    });
+
+    // Get Uptrail
+    yield put({
+      type: constAction.API_UPTRAIL_REQUEST, 
+      config: {
+        staff_id: request.token.staff_id, 
+        token: request.token.token,
+        start: '',
+        end: ''
+      }
+    });
+  } catch (error) {
+    console.log(error)
+    // dispatch a failure action to the store with the error
+    yield put({ type: constAction.API_DATA_FAILURE, error });
+  }
+}
+
+
 export function* workerGetStaffInfo(token) {
   try {
     const config = {

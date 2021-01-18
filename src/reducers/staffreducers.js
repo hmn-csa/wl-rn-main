@@ -11,6 +11,8 @@ const initialState = {
   lastCheckin: [],
   fetchingInfo: false,
   fetchingCheckin: false,
+  mode_staff: false,
+  active_staff: null,
   dash: {
     totalCase:{
       case: 0,
@@ -212,6 +214,20 @@ const staffReducers = (state = initialState, action) => {
       return {...state,  
         pullcnt: state.pullcnt + 1,
       }
+    
+
+    case constAction.SET_STAFF_MODE:
+      return {...state,  
+        mode_staff: true,
+        active_staff: action.token.staff_id
+      }
+
+    case constAction.OUT_STAFF_MODE:
+      return {...state,  
+        mode_staff: false,
+        active_staff: null
+      }
+
     default:
       return state;
   }

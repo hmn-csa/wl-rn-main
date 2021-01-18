@@ -16,16 +16,16 @@ import Uptrail from '../components/Uptrail'
 
 function ListUptrail(props) {
 
-  useEffect(() => {
-    if (props.uptrails.justFetching === false)
-    props.getUptrails({
-      staff_id: props.token.active_staff, 
-      token: props.token.token.access,
-      start: '',
-      end: ''
-    })
-    else console.log('ddax tai')
-  }, []);
+  // useEffect(() => {
+  //   if (props.uptrails.justFetching === false)
+  //   props.getUptrails({
+  //     staff_id: props.token.active_staff, 
+  //     token: props.token.token.access,
+  //     start: '',
+  //     end: ''
+  //   })
+  //   else console.log('ddax tai')
+  // }, []);
 
   // await props.getUptrails(
     //   {

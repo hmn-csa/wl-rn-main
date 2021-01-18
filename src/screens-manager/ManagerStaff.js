@@ -4,15 +4,12 @@ import {
   TouchableOpacity, Alert, Image, ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-import { Button, TextInput, Dialog, Portal } from 'react-native-paper';
 import { connect } from "react-redux";
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as constAction from '../consts'
-import axios from "axios";
-import { colors, styles as masterStyles } from '../styles'
-
 import TimeAgo from 'react-native-timeago'
+
+import { colors, styles as masterStyles } from '../styles'
+import * as constAction from '../consts'
 import { moneyFormat } from '../functions'
 import { EMPTYAVATAR } from '../images';
 
@@ -23,7 +20,7 @@ function ManagerStaff(props) {
   useEffect(() => {
     const interval = setInterval(() => {
       props.countManager()
-    }, 2 * 60 * 1000)
+    }, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, []);
 
@@ -38,35 +35,6 @@ function ManagerStaff(props) {
 
 
   // =========== render ============== //
-
-  const renColor = (checkinData, today) => {
-    if (checkinData.length == 0)
-      return colors.secondary
-    if (checkinData[0].runtime.substring(0, 10) === today)
-      return colors.green
-    return 'orange'
-  }
-
-
-  const renIconMap = (item) => {
-    if (props.manager.data_done & item.checkin.length > 0)
-      return <Ionicons
-        name="ios-pin"
-        style={[masterStyles.logo, { fontSize: 25 }]}
-        onPress={
-          () => {
-            props.setMap({
-              uptrail: item.uptrail,
-              checkin: item.checkin,
-              staff_id: item.staff_id,
-            })
-            props.navigation.navigate('Manager', { screen: 'CheckinMap' })
-          }
-        }
-      />
-  }
-
-
   const renIcon = (checkinData) => {
     if (!checkinData || checkinData.length == 0)
       return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary }]} />
@@ -94,12 +62,10 @@ function ManagerStaff(props) {
       const lastUptrail = uptrailData[uptrailData.length - 1].runtime
       return <Text>{uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
     }
-
   }
 
 
   const renAvatar = (avatar) => {
-
     if (avatar == null || avatar === "")
       return (
         EMPTYAVATAR
@@ -109,24 +75,15 @@ function ManagerStaff(props) {
     )
   }
 
-  const renContent = (content) => {
-    // const moneyFormat = (n) => {
-    //   const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
-    //   return money.substring(0, money.length - 2)
-    // }
-    if (content !== undefined)
-      return { ...content, todayamt: moneyFormat(content.todayamt), paidamt: moneyFormat(content.paidamt) }
-    else return {
-      visited: 0, // <ActivityIndicator size={10} color='black' /> ,
-      paidamt: 0, //<ActivityIndicator size={10} color='black' /> ,
-      paidcase: 0, //<ActivityIndicator size={10} color='black' /> ,
-      todayamt: 0, //<ActivityIndicator size={10} color='black' /> ,
-      todaycase: 0, //<ActivityIndicator size={10} color='black' /> ,
-    }
-  }
-
+  
   const renderItem = ({ item, index })  => { 
-    return <TouchableOpacity key={item.staff_id} >
+    return <TouchableOpacity 
+    key={item.staff_id}
+    onPress={() => props.toStaffMode({
+      staff_id:item.staff_id, 
+      token: props.token, 
+      fc_name: item.info.fc_name,
+    })} >
 
     <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>
       <View style={[styles.box, { flex: 0.35, borderRadius: 30, }]}>
@@ -147,13 +104,6 @@ function ManagerStaff(props) {
               {item.info.fc_name} - {item.info.staff_id}
             </Text>
           </View>
-          {/* <View style={styles.msgContainer}>
-            <Text
-              style={[styles.msgTxt,]}>
-              last checkin: {renCheckin(item.checkin)}
-            </Text>
-           
-          </View> */}
 
           <View style={[styles.msgContainer, { marginTop: 5 }]}>
             <View style={[styles.row, { flex: 1 }]}>
@@ -180,8 +130,6 @@ function ManagerStaff(props) {
               </View>
             </View>
           </View>
-
-
 
           <View style={[styles.msgContainer, { marginTop: 5 }]}>
             <View style={[styles.row, { flex: 1 }]}>
@@ -252,7 +200,6 @@ function ManagerStaff(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token.token.access,
-    // staffs: state.staff.staffs,
     staff: state.staff,
   }
 }
@@ -268,6 +215,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({
         type: constAction.STAFF_CHECKIN_PULL,
         config
+      })
+    }, 
+    toStaffMode : (token) => {
+      dispatch({
+        type: constAction.SET_STAFF_MODE,
+        token
       })
     }
   }

@@ -22,9 +22,7 @@ function MagagerApp () {
 
 
   return (
-   
     <NavigationContainer style={styles.container}>
-      
       <Tab.Navigator
         screenOptions={
           ({ route }) => ({
@@ -41,10 +39,8 @@ function MagagerApp () {
             } else if (route.name === 'Categories') {
               iconName = focused ? 'ios-folder' : 'ios-folder';
             } 
-   
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          
         })
         }
         tabBarOptions={{

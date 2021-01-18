@@ -9,11 +9,11 @@ import ScoreCategories from './ScoreCategories'
 import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
 import User from './User'
-import ManagerStaff from './ManagerStaff'
+// import ManagerStaff from '../screens-manager/ManagerStaff'
 
 import ListPayment from './ListPayment'
 import applMap from './applMap'
-import CheckinMap from './CheckinMap2'
+import CheckinMap from './CheckinMap'
 
 // import CheckinMap from './CheckinMap'
 import ListUptrail from './ListUptrail'
@@ -167,45 +167,45 @@ function DashboardStack(props) {
 }
 
 
-function StafflistStack(props) {
+// function StafflistStack(props) {
 
-  return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: true, }}
-      initialRouteName="ManageStaff"
-    >
-      <Stack.Screen
-        name="ManageStaff"
-        component={ManagerStaff}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.secondary,
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          }
-        }}
-      />
+//   return (
+//     <Stack.Navigator
+//       screenOptions={{ headerShown: true, }}
+//       initialRouteName="ManageStaff"
+//     >
+//       <Stack.Screen
+//         name="ManageStaff"
+//         component={ManagerStaff}
+//         options={{
+//           headerStyle: {
+//             backgroundColor: colors.secondary,
+//           },
+//           headerTintColor: '#fff',
+//           headerTitleStyle: {
+//             fontWeight: 'bold',
+//           }
+//         }}
+//       />
 
-      <Stack.Screen
-        name="CheckinMap"
-        component={CheckinMap}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.secondary,
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          }
-        }}
-      />
+//       <Stack.Screen
+//         name="CheckinMap"
+//         component={CheckinMap}
+//         options={{
+//           headerStyle: {
+//             backgroundColor: colors.secondary,
+//           },
+//           headerTintColor: '#fff',
+//           headerTitleStyle: {
+//             fontWeight: 'bold',
+//           }
+//         }}
+//       />
 
 
-    </Stack.Navigator>
-  )
-}
+//     </Stack.Navigator>
+//   )
+// }
 
 function CategorieStack(props) {
 
@@ -481,6 +481,5 @@ export {
   CategorieStack,
   PortStack,
   UserStack,
-  StafflistStack,
 
 }

@@ -30,16 +30,19 @@ const SliderWidth = Dimensions.get('screen').width;
 function ListAppls(props) {
 
 
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState("")
   const [filtered, setFiltered] = useState(props.showlists.applIds)
   const hangleSearch = (value) => {
     try {
+      
       setSearchTerm(value)
-      if (value != null || value != '') {
+      console.log(searchTerm)
+      if (value != null && value != "" && value != undefined) {
         setFiltered(
           Object.values(props.data).filter(createFilter(searchTerm, KEYS_TO_FILTERS))
         )
-      }
+      } else 
+        setFiltered(props.showlists.applIds)
     } catch (err) {
       setFiltered(props.showlists.applIds)
     }
@@ -56,15 +59,15 @@ function ListAppls(props) {
     );
   };
 
-  if (searchTerm)
+  if (searchTerm  !== null && searchTerm !== "" )
     return (
       <View >
         <Searchbar
           onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên (có dấu) hoặc appl_id"
+          placeholder="Nhập tên có dấu hoặc appl_id "
           onSubmitEditing={(value) => hangleSearch(value)}
-        />
-
+        >
+        </Searchbar>
         <View style={{ flexDirection: 'row' }}>
           <Carousel
             layout={'default'}
@@ -89,8 +92,9 @@ function ListAppls(props) {
       <View >
         <Searchbar
           onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên (có dấu) hoặc appl_id"
+          placeholder="Nhập tên (có dấu) hoặc appl_id" 
           onSubmitEditing={(value) => hangleSearch(value)}
+          clearIcon={'default'}
         />
         <View style={{ flexDirection: 'row' }}>
           <Carousel
@@ -110,29 +114,6 @@ function ListAppls(props) {
       </View>
     )
 
-
-  // if (props.showlists.isTodoClass & props.data !== null)
-  //   return (
-  //   <ScrollView >
-  //     {
-  //       showappls.map( appl => 
-  //         <ContractDetailMap 
-  //           key={appl}
-  //           contractId={appl}
-  //           navigation={props.navigation}
-  //         />
-  //       )
-  //     }
-  //   </ScrollView>
-  // )
-  // if (props.data !== null)
-  //   return (
-  //     <FlatList 
-  //     data = {showappls}
-  //     keyExtractor={(appl) => appl}
-  //     renderItem={_renderItem}
-  //     />
-  //   )  
 
 
   else return (

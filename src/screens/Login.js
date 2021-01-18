@@ -39,47 +39,6 @@ function Login(props) {
       let locationC = await Location.getCurrentPositionAsync({});
       props.locationSet(locationC.coords)
       
-      // try {
-      //   const update = await Updates.checkForUpdateAsync();
-      //   if (update.isAvailable) {
-      //     await Updates.fetchUpdateAsync();
-      //     // ... notify user of update ...
-      //     await Updates.reloadAsync();
-      //   }
-      // } catch (e) {
-      //   // handle or log error
-      // }
-      // test   =======================
-      // const things = [
-      //   {place:"here",name:"stuff", value:1},
-      //   {place:"there",name:"morestuff", value:2},
-      //   {place:"there",name:"morestuff", value:3},
-      //   {place:"there",name:"stuff", value:4},
-      //   {place:"here",name:"morestuff", value:5},
-      //   {place:"here",name:"morestuff", value:6}
-      // ];
-      // const filtered = things.filter(function({place, name}) {
-      //   const key =`${place}${name}`;
-      //   return !this.has(key) && this.add(key);
-      // }, new Set);
-      
-      // console.log(filtered);
-      
-      // let obj = {};
-      // for ( let i=0; i <things.length; i++ ) {
-
-      //   let item = things[i]
-      //   const key =`${item.place}${item.name}`;
-      //   if (obj[key]===undefined) obj[key] = {min: item.value, max: item.value}
-      //   else if(item.value < obj[key].min)
-      //     obj[key].min = item.value
-      //   else if(item.value > obj[key].max)
-      //     obj[key].max = item.value
-      //   obj[key].time = obj[key].max - obj[key].min
-      // }
-      // console.log(Object.values(obj))
-      // =======================
-
     })();
   }, []);
 

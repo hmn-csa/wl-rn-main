@@ -127,6 +127,10 @@ export const STAFF_CHECKIN_PULL = "STAFF_CHECKIN_PULL"
 export const STAFF_CHECKIN_UPDATE = "STAFF_CHECKIN_UPDATE"
 export const STAFF_CAL_DASH = "STAFF_CAL_DASH"
 
+export const SET_STAFF_MODE = "SET_STAFF_MODE"
+export const OUT_STAFF_MODE = "OUT_STAFF_MODE"
+
+
 // map checkin uptrail 
 
 export const SET_MAP_STAFF = "SET_MAP_STAFF"

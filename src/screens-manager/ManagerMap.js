@@ -7,6 +7,7 @@ import {
   Image, ImageBackground, FlatList, ActivityIndicator
 } from 'react-native'
 
+import Carousel from 'react-native-snap-carousel';
 import { connect } from "react-redux";
 import { styles as masterStyle, colors } from '../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,55 +17,32 @@ import { EMPTYAVATAR } from '../images';
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 8.5;
 const CARD_WIDTH = CARD_HEIGHT - 50;
-
-import Carousel from 'react-native-snap-carousel';
-import ManagerStaff from '../screens/ManagerStaff';
 const SliderWidth = Dimensions.get('screen').width;
 
-// import {calInitialRegion} from '../functions'
+import {calInitialRegion} from '../functions'
 
 
-const renListMarker = (staff) => {
-  const listMap2d = []
-  for (let i = 0; i < staff.staffs.length; i++) {
-    listMap2d.push(staff.staffs[i].checkin)
-  }
-  const listMap = Array.prototype.concat(...listMap2d);
-  return listMap
-}
 
-const renLastMarker = (staff) => {
-  let listMap = []
-  for (let i = 0; i < staff.staffs.length; i++) {
-    let checkin = staff.staffs[i].checkin
-    if (checkin !== undefined) {
-      if (checkin.length > 0)
-        listMap.push(checkin[checkin.length - 1])
-    }
-  }
-  return listMap
-}
+// const calInitialRegion = (listAppls) => {
+//   const listLat = listAppls.map(appl => appl.lat)
+//   const listLon = listAppls.map(appl => appl.lon)
+//   const meanLat = listLat.reduce(function (sum, pay) {
+//     return sum = sum + pay;
+//   }, 0) / listAppls.length
+//   const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
+//   const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
 
-const calInitialRegion = (listAppls) => {
-  const listLat = listAppls.map(appl => appl.lat)
-  const listLon = listAppls.map(appl => appl.lon)
-  const meanLat = listLat.reduce(function (sum, pay) {
-    return sum = sum + pay;
-  }, 0) / listAppls.length
-  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
+//   const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
+//     return sum = sum + pay;
+//   }, 0) / listAppls.length
 
-  const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-    return sum = sum + pay;
-  }, 0) / listAppls.length
-
-  return {
-    latitude: meanLat,
-    longitude: meanLon,
-    latitudeDelta: latDetal,
-    longitudeDelta: lonDetal,
-  }
-}
+//   return {
+//     latitude: meanLat,
+//     longitude: meanLon,
+//     latitudeDelta: latDetal,
+//     longitudeDelta: lonDetal,
+//   }
+// }
 
 const usePulse = (startDelay = 500) => {
   const opacity = useRef(new Animated.Value(1)).current;
