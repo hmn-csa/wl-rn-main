@@ -66,6 +66,7 @@ function ListAppls(props) {
           onChangeText={(value) => hangleSearch(value)}
           placeholder="Nhập tên có dấu hoặc appl_id "
           onSubmitEditing={(value) => hangleSearch(value)}
+          clearIcon={'alpha-x-box-outline'}
         >
         </Searchbar>
         <View style={{ flexDirection: 'row' }}>
@@ -94,7 +95,7 @@ function ListAppls(props) {
           onChangeText={(value) => hangleSearch(value)}
           placeholder="Nhập tên (có dấu) hoặc appl_id" 
           onSubmitEditing={(value) => hangleSearch(value)}
-          clearIcon={'default'}
+          clearIcon={'alpha-x-box-outline'}
         />
         <View style={{ flexDirection: 'row' }}>
           <Carousel
