@@ -38,24 +38,6 @@ function CheckinMap(props) {
   const carouselRef = useRef(null)
 
 
-  // const listLat = listAppls.map(appl => appl.lat)
-  // const listLon = listAppls.map(appl => appl.lon)
-  // const meanLat = listLat.reduce(function (sum, pay) {
-  //   return sum = sum + pay;
-  // }, 0) / listAppls.length
-
-  // const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-  // const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
-
-  // const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-  //   return sum = sum + pay;
-  // }, 0) / listAppls.length
-
-
-
-
-
-
   const _renderItem = ({ item, index }) => {
 
     const _renTime = (item) => {

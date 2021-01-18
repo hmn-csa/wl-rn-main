@@ -8,6 +8,7 @@ import axios from "axios";
 export function* watcherSagaUptrail() {
   yield takeLatest(constAction.API_UPTRAIL_REQUEST, workerGetUptrail);
   yield takeLatest(constAction.USER_UPTRAIL_REQUEST, workerUserUptrail);
+  yield takeLatest(constAction.MORE_UPTRAIL_REQUEST, workerGetMoreUptrail);
 }
 
 
@@ -32,6 +33,28 @@ export function* workerGetUptrail(request) {
     const response = yield call(axios, config);
     //const data = response.data;
 
+    // dispatch a success action to the store with the new dog
+    yield put({ type: constAction.API_UPTRAIL_SUCCESS, content: response.data});
+
+  } catch (error) {
+    // dispatch a failure action to the store with the error
+    yield put({ type: constAction.API_UPTRAIL_FAILURE, error });
+  }
+}
+
+
+export function* workerGetMoreUptrail(request) {
+  try {
+    const config = {
+      method: 'get',
+      url: `${constAction.WORKLIST_API}/uptrail?staff_id=${request.config.staff_id}&loadfrom=${request.config.loadfrom}`,
+      headers: {
+        'Authorization': `Bearer ${request.config.token}`,
+      },
+    };
+
+    const response = yield call(axios, config);
+    //const data = response.data;
     // dispatch a success action to the store with the new dog
     yield put({ type: constAction.API_UPTRAIL_SUCCESS, content: response.data});
 

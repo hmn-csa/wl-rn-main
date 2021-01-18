@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { View, Text, StyleSheet } from 'react-native'
-import { Remark, Vsf, Skip, Search } from '../components'
+import { Remark, Vsf, Skip } from '../components'
 import { Button } from 'react-native-paper';
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
@@ -345,14 +345,6 @@ function PortStack(props) {
               </Button>
 
               <Button
-                icon="account-search"
-                mode="contained"
-                onPress={() => props.navigation.navigate('Portfolio', { screen: 'Search' })}
-                style={buttonStyles.button}
-              >
-              </Button>
-
-              <Button
                 icon="map"
                 mode="contained"
                 onPress={() => props.navigation.navigate('Portfolio', { screen: 'Maps' })}
@@ -419,19 +411,6 @@ function PortStack(props) {
         }}
       />
 
-      <Stack.Screen
-        name="Search"
-        component={Search}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.secondary,
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          }
-        }}
-      />
 
       <Stack.Screen
         name="Maps"

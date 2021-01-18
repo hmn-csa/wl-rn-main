@@ -66,13 +66,9 @@ function ManagerStaff(props) {
 
 
   const renAvatar = (avatar) => {
-    if (avatar == null || avatar === "")
-      return (
-        EMPTYAVATAR
-      )
-    else return (
-      { uri: avatar }
-    )
+    if (!avatar)
+      return EMPTYAVATAR 
+    else return { uri: avatar }
   }
 
   

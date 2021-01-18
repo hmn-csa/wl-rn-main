@@ -11,35 +11,17 @@ import DatePicker from 'react-native-datepicker'
 import { actGetUptrails, actUpdateShowlist } from "../actions/index"
 
 import Uptrail from '../components/Uptrail'
-
+import * as constAction from '../consts'
 // function Uptrail
 
 function ListUptrail(props) {
 
-  // useEffect(() => {
-  //   if (props.uptrails.justFetching === false)
-  //   props.getUptrails({
-  //     staff_id: props.token.active_staff, 
-  //     token: props.token.token.access,
-  //     start: '',
-  //     end: ''
-  //   })
-  //   else console.log('ddax tai')
-  // }, []);
-
-  // await props.getUptrails(
-    //   {
-    //     staff_id: staff_id, 
-    //     token: props.token.token.access, 
-    //     start: "", 
-    //     end: "" 
-    //   }
-    // )
+ 
     
   const [reDate, setRedate] = useState(null)
   const [uptrailStatus, setUptrailStatus] = useState(false);
 
-  const getMoreUptrails =  async () => {
+  const getMoreUptrails = async () => {
     if (props.uptrails.uptrails.length > 0) {
       const lastE = props.uptrails.uptrails[props.uptrails.uptrails.length -1]
       if (reDate !== null) {
@@ -64,6 +46,28 @@ function ListUptrail(props) {
         )
     }
     setUptrailStatus(false)
+  }
+
+  const renMoreLoading = () => {
+    if (props.uptrails.moreFetching) 
+      return (
+        <View style={[styles.container, {alignItems: 'center'}]}>
+          <Text>Loading ... </Text>
+          <ActivityIndicator size={5} color={colors.primary}/> 
+      </View> 
+      )
+    return<View></View>
+  }
+  // ---------------------------------------
+  const getMoreUptrails2 = () => {
+    let loadfrom = props.uptrails.uptrails[props.uptrails.uptrails.length - 1].runtime
+    let config = {
+      staff_id: props.token.active_staff, 
+      token: props.token.token.access,
+      loadfrom: loadfrom
+    }
+    console.log(config)
+    props.getMoreUptrails(config)
   }
   
   
@@ -94,6 +98,7 @@ function ListUptrail(props) {
       navigation={props.navigation}
       />)
     }
+    {renMoreLoading()}
     <View style={[styles.row, {marginTop: 10}]}>
       <DatePicker
         style={[styles.box, {backgroundColor: colors.secondary, borderRadius: 10,}]}
@@ -121,7 +126,7 @@ function ListUptrail(props) {
 
       <Button 
         mode="contained"
-        onPress={getMoreUptrails} 
+        onPress={getMoreUptrails2} 
         style={[styles.box, buttonStyles.button]}>
         lấy thêm 
       </Button>
@@ -154,6 +159,12 @@ const mapDispatchToProps = (dispatch) => {
     updateShowlist: (content) => {
       dispatch(actUpdateShowlist(content))
     },
+    getMoreUptrails : (config) => {
+      dispatch({
+        type: constAction.MORE_UPTRAIL_REQUEST,
+        config
+      })
+    } 
   }
 }
 
