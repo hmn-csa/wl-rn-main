@@ -4,7 +4,7 @@ import {
   TextInput, Button, AsyncStorage,
   ImageBackground, Image,
 } from 'react-native'
-import CheckBox from '@react-native-community/checkbox';
+// import CheckBox from '@react-native-community/checkbox';
 import { useForm, Controller } from 'react-hook-form'
 import * as Location from 'expo-location';
 import * as Device from 'expo-device';
@@ -13,6 +13,7 @@ import { actloginUser, actLocationSet } from "../actions/index"
 import { styles, colors } from '../styles'
 import { Ionicons } from '@expo/vector-icons';
 import Loader from '../components/elements/Loader'
+
 
 
 function Login(props) {
@@ -41,11 +42,22 @@ function Login(props) {
     getIP();
     getToken();
   }, []);
+
+  // useEffect(() => {
+  //   if (!props.token.fetching && props.token.token === undefined)
+  //     Alert.alert('username hoặc password không đúng')
+  //   else if (props.token.token) {
+  //     // if ({ isSelected }.isSelected == true)
+
+  //     // else removeToken('userData')
+  //   }
+  // }, [props.token.fetching]);
+
   //==========================
   //======== Submit login
-  const [isSelected, setSelection] = useState(false);
+  // const [isSelected, setSelection] = useState(false);
   const { register, setValue, handleSubmit, control, errors } = useForm();
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     data = {
       ...data,
       lat: props.token.lat,
@@ -54,17 +66,11 @@ function Login(props) {
       device_os: Device.osName,
       device_name: Device.modelName,
     }
-    if (data.lat == null || data.lon == null) {
+    if (data.lat == null || data.lon == null)
       getLocation()
-    }
     else {
-      await props.login(data)
-      if ({ isSelected }.isSelected == true) {
-        storeToken(data)
-      }
-      else {
-        removeToken('userData')
-      }
+      props.login(data)
+      storeToken(data)
     }
   };
   const storeToken = async (data) => {
@@ -81,7 +87,7 @@ function Login(props) {
       if (data !== null) {
         setValue("username", data.username)
         setValue("password", data.password)
-        setSelection(true)
+        //setSelection(true)
       }
     } catch (error) {
       alert(error);
@@ -97,14 +103,11 @@ function Login(props) {
     }
   }
   if (props.token.fetching)
-    return (
-      <Loader />
-    )
+    return <Loader />
+
   if (props.data.fetching)
-    return (
-      <Loader />
-    )
-  // behavior={Platform.OS === "ios" ? "padding" : ""}
+    return <Loader />
+
   return (
     <ImageBackground source={require('../images/bg-login.jpg')} style={styles.bglogin}>
       <KeyboardAvoidingView
@@ -160,7 +163,7 @@ function Login(props) {
               />
             </View>
             {errors.password && <Text style={styles.alertlogin}>Mật khẩu không được để trống</Text>}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'row', marginLeft: '5%' }}>
                 <CheckBox
                   value={isSelected}
@@ -170,7 +173,7 @@ function Login(props) {
                 <Text style={{ marginTop: 8, fontSize: 12 }}>Lưu mật khẩu</Text>
               </View>
               <Text style={{ marginTop: 8, fontSize: 12, marginRight: '5%' }}>Quên mật khẩu ?</Text>
-            </View>
+            </View> */}
             <View style={styles.loginBtn}>
               <Button
                 onPress={handleSubmit(onSubmit)}

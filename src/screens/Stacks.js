@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { View, Text, StyleSheet } from 'react-native'
-import { Remark, Vsf, Skip, Search } from '../components'
+import { Remark, Vsf, Skip } from '../components'
 import { Button } from 'react-native-paper';
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
@@ -9,10 +9,9 @@ import ScoreCategories from './ScoreCategories'
 import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
 import User from './User'
-import ManagerStaff from './ManagerStaff'
 import ListPayment from './ListPayment'
 import applMap from './applMap'
-import CheckinMap from './CheckinMap2'
+import CheckinMap from './CheckinMap'
 import { MaterialIcons } from '@expo/vector-icons';
 import ListUptrail from './ListUptrail'
 import { colors } from '../styles'
@@ -248,76 +247,6 @@ function DashboardStack(props) {
   )
 }
 
-
-function StafflistStack(props) {
-
-  return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: true, }}
-      initialRouteName="ManageStaff"
-    >
-      <Stack.Screen
-        name="ManageStaff"
-        component={ManagerStaff}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.primary,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 18,
-            alignSelf: 'center'
-          },
-          headerLeft: () => (
-            <View style={{ paddingLeft: 15 }}>
-              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
-                <MaterialIcons name="menu" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
-          headerRight: () => (
-            <View style={{ paddingRight: 20 }}>
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          )
-        }}
-      />
-
-      <Stack.Screen
-        name="CheckinMap"
-        component={CheckinMap}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.primary,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 18,
-            alignSelf: 'center'
-          },
-          headerLeft: () => (
-            <View style={{ paddingLeft: 15 }}>
-              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
-                <MaterialIcons name="menu" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
-          headerRight: () => (
-            <View style={{ paddingRight: 20 }}>
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          )
-        }}
-      />
-    </Stack.Navigator>
-  )
-}
 
 function TreeStack(props) {
   return (
@@ -583,37 +512,6 @@ function PortStack(props) {
           )
         }}
       />
-
-      <Stack.Screen
-        name="Search"
-        component={Search}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.primary,
-          },
-          headerTintColor: colors.white,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 18,
-            alignSelf: 'center'
-          },
-          headerLeft: () => (
-            <View style={{ paddingLeft: 15 }}>
-              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
-                <MaterialIcons name="menu" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
-          headerRight: () => (
-            <View style={{ paddingRight: 20 }}>
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          )
-        }}
-      />
-
       <Stack.Screen
         name="Maps"
         component={applMap}
@@ -783,6 +681,5 @@ export {
   SegmentStack,
   PortStack,
   UserStack,
-  StafflistStack,
   CategorieStack
 }

@@ -10,23 +10,31 @@ import {
 import { connect } from "react-redux"
 import Carousel from 'react-native-snap-carousel'
 
-import { styles as masterStyle, BACKGROUND_LOGIN } from '../styles'
+
 import ContractDetailMap from '../components/ContractDetailMap'
 
+import {calInitialRegion} from '../functions'
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
-
-
 const SliderWidth = Dimensions.get('screen').width;
 
 
 function applMap(props) {
 
-  //const listAppls = props.data.data.filter((appl) => {
-  //  return props.showlists.includes(appl.appl_id)
-  //})
+  const mapRef = useRef(null);
+  const carouselRef = useRef(null);
 
+  const [showlists, setShowlists] = useState(
+    props.showlists.applIds.map(appl => appl.appl_id)
+  )
+  const [listAppls, setListAppls] = useState(
+    Object.values(props.data).filter((appl) => {
+      return showlists.includes(appl.appl_id)
+    })
+  )
+  const [initialRegion, setInitialRegion] = useState(calInitialRegion(listAppls));
+  const [activeIndex, setActivateIndex] = useState(0);
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -40,32 +48,6 @@ function applMap(props) {
   };
 
 
-  const mapRef = useRef(null);
-  const carouselRef = useRef(null);
-
-  const showlists = props.showlists.applIds.map(appl => appl.appl_id)
-  const listAppls = Object.values(props.data).filter((appl) => {
-    return showlists.includes(appl.appl_id)
-  })
-
-  const listLat = listAppls.map(appl => appl.lat)
-  const listLon = listAppls.map(appl => appl.lon)
-  const meanLat = listLat.reduce(function (sum, pay) {
-    return sum = sum + pay;
-  }, 0) / listAppls.length
-
-  //const latDetal = (Math.max(listAppls.map(appl => appl.lat)) - Math.min(listAppls.map(appl => appl.lat))) / 2
-  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
-
-  const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-    return sum = sum + pay;
-  }, 0) / listAppls.length
-
-  //const [appl_id, setAppl_id] = useState(listAppls[0].appl_id);
-  const [activeIndex, setActivateIndex] = useState(0);
-
-
   if (listAppls.length > 0)
   return (
     <View style={styles.container}>
@@ -74,13 +56,7 @@ function applMap(props) {
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
           ref={mapRef}
-          initialRegion={{
-            latitude: meanLat,
-            longitude: meanLon,
-            latitudeDelta: latDetal,
-            longitudeDelta: lonDetal,
-          }}
-
+          initialRegion={initialRegion}
         >
           {
             listAppls.map((appl, index) =>
@@ -89,7 +65,6 @@ function applMap(props) {
                 key={appl.appl_id}
                 description={appl.appl_id}
                 onPress={() => {
-                  //setAppl_id(appl.appl_id)
                   setActivateIndex(index)
                   carouselRef.current.snapToItem(index)
                 }}

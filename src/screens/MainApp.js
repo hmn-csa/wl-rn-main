@@ -81,35 +81,6 @@ function MainApp(props) {
   // }, []);
 
 
-  useEffect(() => {
-    if (props.uptrails.justFetching === false) {
-      props.setActiveStaff(
-        {
-          staff_id: props.token.token.staff_id,
-          info: {
-            fc_name: props.token.token.fc_name
-          }
-        }
-      )
-
-      props.getUptrails(
-        {
-          staff_id: props.token.token.staff_id,
-          token: props.token.token.access,
-          start: "",
-          end: ""
-        }
-      )
-
-      props.getCheckins(
-        {
-          staff_id: props.token.token.staff_id,
-          token: props.token.token.access,
-          date: "",
-        }
-      )
-    }
-  }, []);
 
   return (
     <NavigationContainer>
@@ -130,23 +101,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     locationSet: (content) => {
-
       dispatch(actLocationSet(content))
-    },
-    setActiveStaff: (content) => {
-      dispatch(actSetActiveStaff(content))
-    },
-    getUptrails: (config) => {
-      dispatch(actGetUptrails(config))
-    },
-
-    getCheckins: (config) => {
-      dispatch(
-        {
-          type: constAction.API_GETCHECKIN_REQUEST,
-          config
-        }
-      )
     },
   }
 }

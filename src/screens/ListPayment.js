@@ -15,7 +15,7 @@ function ListPayment(props) {
   useEffect(() => {
     props.getPayments({
       token: props.token.token.access,
-      staff_id: props.token.active_staff,
+      // staff_id: props.token.active_staff,
       applids: ''.concat(props.totalCal.paidAll.applIds.map(item => item.appl_id))
     })
   }, []);
@@ -30,8 +30,6 @@ function ListPayment(props) {
         title: arr[i].cust_name,
         appl_id: arr[i].appl_id,
         description: 'Hợp đồng : ' + arr[i].appl_id + '\n' + 'Tiền đóng : ' + moneyFormat(arr[i].receipt_amt),
-        // circleColor: '#009688',
-        // lineColor:'#009688'
       })
     }
     return timeline

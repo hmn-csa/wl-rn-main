@@ -3,7 +3,7 @@ import * as constAction from "../consts/index";
 
 // reducer with initial state
 const initialState = {
-  fetching: false,
+  fetching: null,
   error: null,
   lat: null,
   lon: null,

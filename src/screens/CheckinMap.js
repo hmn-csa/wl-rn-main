@@ -1,144 +1,156 @@
-import React, { useState, useEffect } from 'react';
-import MapView, { Marker, PROVIDER_GOOGLE  } from 'react-native-maps';
+import React, { useState, useEffect, useRef } from 'react';
+import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
 //import MapView from 'react-native-map-clustering';
 //import { MapView, Marker, PROVIDER_GOOGLE  } from 'expo'
 import { Button, Dialog, Portal, } from 'react-native-paper';
-import { 
-  StyleSheet, Text, View, Dimensions,
-  Animated, ScrollView, FlatList,  
+import {
+  StyleSheet, Text, View, Dimensions, TouchableOpacity,
+  Animated, ScrollView, FlatList,
 } from 'react-native'
 
 import { connect } from "react-redux";
-import { styles as masterStyle, colors } from '../styles'
-import ContractDetail from '../components/ContractDetail'
+import { colors } from '../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
+import {calInitialRegion} from '../functions'
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 4;
+const CARD_HEIGHT = height / 8;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
+import Carousel from 'react-native-snap-carousel';
+const SliderWidth = Dimensions.get('screen').width;
 
-function Animation() {
-  const opacity = new Animated.Value(0);
 
-  useEffect(() => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 500
-    }).start();
-  }, []);
-
-  return (
-    <Animated.Text style={{ opacity }}>Example text</Animated.Text>
-  );
-}
 
 function CheckinMap(props) {
 
   //const listAppls = props.data.data.filter((appl) => {
   //  return props.showlists.includes(appl.appl_id)
   //})
- 
-
-  const listAppls = Object.values(props.map.checkin)
-    
-
-  const listLat = listAppls.map(appl => appl.lat)
-  const listLon = listAppls.map(appl => appl.lon)
-  const meanLat = listLat.reduce(function(sum, pay){
-    return sum = sum+pay;
-  },0) / listAppls.length
-
-  //const latDetal = (Math.max(listAppls.map(appl => appl.lat)) - Math.min(listAppls.map(appl => appl.lat))) / 2
-  const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat)  + 0.05
-  const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
-
-  const meanLon = listAppls.map(appl => appl.lon).reduce(function(sum, pay){
-    return sum = sum+pay;
-  },0) / listAppls.length
-
-  const [ thisLat , setThisLat] = useState(meanLat)
-  const [ thisLon , setThisLon] = useState(meanLon)
 
 
-  
+  const [listAppls, setListappls] = useState(Object.values(props.map.checkin))
+  const [initialRegion, setInitialRegion] = useState(calInitialRegion(listAppls))
+  const [activeIndex, setActivateIndex] = useState(0)
+
+  const mapRef = useRef(null)
+  const carouselRef = useRef(null)
+
+
+  const _renderItem = ({ item, index }) => {
+
+    const _renTime = (item) => {
+      if (item.time)
+        return (
+          <View>
+            <Text style={{ fontSize: 10 }}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
+            <Text style={{ fontSize: 10 }}>đã ở tại khu vực này khoảng {item.time}</Text>
+          </View>
+        )
+    }
+    return (
+      <TouchableOpacity
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 20,
+          height: CARD_HEIGHT,
+          padding: 10
+        }}>
+        <Text style={{ fontSize: 10 }}>{item.endtime.substring(0, 10)}  {item.endtime.substring(11, 16)} </Text>
+        {
+          _renTime(item)
+        }
+
+      </TouchableOpacity>
+
+    );
+  };
 
 
   const renMarker = (index, length, appl) => {
-    const showTime = (time) => {
-      if (time > 15) return <Text style={styles.msgTxt}>{"khoảng " +time+ " phút"}</Text>
+
+    if (index === 0) {
+      return <View>
+        <Text style={styles.msgTxt}>Start {appl.endtime.substring(11, 16)}
+          <Ionicons name='ios-disc'
+            style={[styles.logo, { color: colors.secondaryGradientEnd }]} /> </Text>
+        {/* {showTime(appl.time)} */}
+      </View>
     }
-    if(index===0) {
+    if (index === length - 1) {
       return <View>
-      <Text style={styles.msgTxt}>Start {appl.runtime.substring(11, 16)}
-      <Ionicons name='ios-disc' 
-        style={[styles.logo, {color: colors.secondaryGradientEnd}]}/> </Text>
-      {/* {showTime(appl.time)} */}
-    </View>
-    } 
-    if (index===length-1) {
-      return <View>
-      <Text style={styles.msgTxt}>Finish {appl.runtime.substring(11, 16)}
-      <Ionicons name='ios-pin' 
-        style={[styles.logo, {fontSize:45}]}/> </Text>
-      {/* {showTime(appl.time)} */}
-    </View>
-    } 
+        <Text style={styles.msgTxt}>Finish {appl.endtime.substring(11, 16)}
+          <Ionicons name='ios-pin'
+            style={[styles.logo, { fontSize: 45 }]} /> </Text>
+        {/* {showTime(appl.time)} */}
+      </View>
+    }
     return <View>
-    <Text style={styles.msgTxt}>{index} | {appl.runtime.substring(11, 16)}
-    <Ionicons name='ios-disc' 
-       style={[styles.logo, {color: colors.primary}]}/> </Text>
-  </View>
-  } 
+      <Text style={styles.msgTxt}>{index} | {appl.endtime.substring(11, 16)}
+        <Ionicons name='ios-disc'
+          style={[styles.logo, { color: colors.primary }]} /> </Text>
+    </View>
+  }
 
 
   return (
     <View style={styles.container}>
-      <MapView  
-        style={styles.mapStyle} 
-        provider={PROVIDER_GOOGLE} 
-        initialRegion={{
-          latitude: meanLat,
-          longitude: meanLon,
-          latitudeDelta: latDetal,
-          longitudeDelta: lonDetal,
-        }}
-      >
-      {
-        listAppls.map((marker, index) => {
-          return (
-            <Marker
-              coordinate = {{latitude:marker.lat, longitude: marker.lon}}
-              key={index}
-            >
-              {/* <Animated.View style={[styles.markerWrap, ]}>
-                <Animated.View style={[styles.ring]} />
-                  <View style={styles.marker}>
-              </Animated.View> */}
-              <View>
-                {renMarker(index, listAppls.length, marker)}
-                {/* <Text style={styles.nameTxt}>
-                  <Ionicons name='ios-walk' 
-                  style={styles.logo}/> 
-                  {index}
-                </Text> 
-                <Text style={styles.msgTxt}>{appl.time}</Text>*/}
-                
-              </View>
-            </Marker>
-          )
-        }
-          
-        )
-      }
-      
-    </MapView>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+        <MapView
+          style={styles.mapStyle}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={initialRegion}
+          ref={mapRef}
+        >
+          {
+            listAppls.map((marker, index) => {
+              return (
+                <Marker
+                  coordinate={{ latitude: marker.lat, longitude: marker.lon }}
+                  key={index}
+                  onPress={() => {
+                    setActivateIndex(index)
+                    carouselRef.current.snapToItem(index)
+                  }}
+                >
 
-   
+                  <View>
+                    {renMarker(index, listAppls.length, marker)}
+                  </View>
+                </Marker>
+              )
+            }
+            )
+          }
+
+        </MapView>
+      </View>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 400 }}>
+        <Carousel
+          layout={'default'}
+          ref={carouselRef}
+          data={listAppls}
+          sliderWidth={SliderWidth}
+          itemWidth={SliderWidth * 0.6}
+          itemHeight={CARD_HEIGHT}
+          renderItem={_renderItem}
+          useScrollView={false}
+          onSnapToItem={(index) => {
+            setActivateIndex(index)
+            mapRef.current.animateToCoordinate(
+              { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
+            )
+          }}
+          activeSlideAlignment="center"
+        />
+      </View>
+
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -151,8 +163,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  logo:{
-    fontSize:25,
+  logo: {
+    fontSize: 25,
     color: colors.green,
     padding: 3,
   },
@@ -161,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#222',
     fontSize: 15,
-    width:190,
+    width: 190,
   },
   msgTxt: {
     fontWeight: '400',
