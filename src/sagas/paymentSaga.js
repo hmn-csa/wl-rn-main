@@ -22,11 +22,11 @@ export function* workerGetPayment(request) {
         'Authorization': `Bearer ${request.config.token}`,
       },
     };
-    
+
     const response = yield call(axios, config);
     const data = response.data
-    console.log(data)
-    yield put({ type: constAction.API_PAYMENT_SUCCESS, content: data});
+    //console.log(data)
+    yield put({ type: constAction.API_PAYMENT_SUCCESS, content: data });
 
   } catch (error) {
     // dispatch a failure action to the store with the error

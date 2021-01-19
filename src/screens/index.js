@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 
 //Kết nối vơi redux
 import { connect } from "react-redux";
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 //import ContainerShow from './containers/ContainerShow'
 
 import Login from './Login'
@@ -16,7 +16,7 @@ import ManagerView from '../screens-manager'
 import * as constAction from "../consts/index";
 
 function MyApp(props) {
-  console.log(props.token.token)
+  //console.log(props.token.token)
   if (props.token.token === null || props.token.token === undefined)
     return (
       <View style={styles.container}>
@@ -29,19 +29,19 @@ function MyApp(props) {
         <MainApp />
       </View>
     )
-  else if(props.token.token.role === 'manager_lv1') {
+  else if (props.token.token.role === 'manager_lv1') {
     if (props.staff.mode_staff)
       return (
-      <View style={styles.container}>
-        <Button onPress={() => props.outStaffMode()}>
-          X
+        <View style={styles.container}>
+          <Button onPress={() => props.outStaffMode()}>
+            X
         </Button>
-        <MainApp />
-      </View>
-    )
+          <MainApp />
+        </View>
+      )
     else return <ManagerApp />
   }
-    
+
 }
 
 const mapStateToProps = (state, ownProps) => {

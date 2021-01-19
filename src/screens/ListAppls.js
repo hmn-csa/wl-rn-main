@@ -1,31 +1,18 @@
 import {
-  View, Text, Image, ScrollView, Alert, FlatList, ActivityIndicator, Dimensions
+  View, Text, ActivityIndicator, Dimensions
 } from 'react-native'
-import { Button } from 'react-native-paper';
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-
 import ContractDetailMap from '../components/ContractDetailMap'
-
 import Carousel from 'react-native-snap-carousel'
 import { styles, colors } from '../styles'
-
-import SearchInput, { createFilter } from 'react-native-search-filter';
-
+import { createFilter } from 'react-native-search-filter';
 import { Searchbar } from 'react-native-paper';
 
-
 const KEYS_TO_FILTERS = ['appl_id', 'cust_name'];
-
-
-
-
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
 const SliderWidth = Dimensions.get('screen').width;
-
-
-
 
 function ListAppls(props) {
 
@@ -34,14 +21,14 @@ function ListAppls(props) {
   const [filtered, setFiltered] = useState(props.showlists.applIds)
   const hangleSearch = (value) => {
     try {
-      
+
       setSearchTerm(value)
       console.log(searchTerm)
       if (value != null && value != "" && value != undefined) {
         setFiltered(
           Object.values(props.data).filter(createFilter(searchTerm, KEYS_TO_FILTERS))
         )
-      } else 
+      } else
         setFiltered(props.showlists.applIds)
     } catch (err) {
       setFiltered(props.showlists.applIds)
@@ -59,7 +46,7 @@ function ListAppls(props) {
     );
   };
 
-  if (searchTerm  !== null && searchTerm !== "" )
+  if (searchTerm !== null && searchTerm !== "")
     return (
       <View >
         <Searchbar
@@ -93,7 +80,7 @@ function ListAppls(props) {
       <View >
         <Searchbar
           onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên (có dấu) hoặc appl_id" 
+          placeholder="Nhập tên (có dấu) hoặc appl_id"
           onSubmitEditing={(value) => hangleSearch(value)}
           clearIcon={'alpha-x-box-outline'}
         />

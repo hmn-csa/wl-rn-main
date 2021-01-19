@@ -115,7 +115,7 @@ function Remark(props) {
   const pickImage2 = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      
+
       allowsEditing: true,
       aspect: [3, 4],
       base64: true,
@@ -132,7 +132,7 @@ function Remark(props) {
 
     }
   };
-  
+
   // const pickImage3 = async () => {
   //   let result = await ImagePicker.launchImageLibraryAsync({
   //     mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -193,11 +193,11 @@ function Remark(props) {
 
     let imageSet = {}
     for (let j = 0; j < images.length; j++) {
-      imageSet[`image${j+1}`] = "data:image/png;base64," + images[j].base64
+      imageSet[`image${j + 1}`] = "data:image/png;base64," + images[j].base64
       //imageSet = {...imageSet , ...newImage}
     }
     let config = {
-      ...imageSet, 
+      ...imageSet,
       'token_value': props.token.token.access,
       'appl_id': props.vsf.activeApplId.appl_id,
       'cust_name': cust_name,
@@ -214,7 +214,7 @@ function Remark(props) {
       // 'image3': image3 === null ? null : "data:image/png;base64," + image3.base64,
     }
     try {
-      console.log(config)
+      //console.log(config)
       await props.userUptrails(config);
 
       await props.actChangeFollow({
@@ -246,16 +246,16 @@ function Remark(props) {
 
   const renImages = () => {
     let showImages = [...images]
-    for (let j = 0; j < 3-images.length; j++) {
+    for (let j = 0; j < 3 - images.length; j++) {
       showImages.push(EMPTYIMAGE)
     }
-    console.log(showImages)
-    return <View 
+    //console.log(showImages)
+    return <View
       style={[masterStyle.row, styles.container, buttonStyles.buttons, { height: 120 }]}>
       {
         showImages.map((image, index) =>
           <TouchableOpacity
-            style={[buttonStyles.button, {backgroundColor:null}]}
+            style={[buttonStyles.button, { backgroundColor: null }]}
             key={index}
             onPress={() => {
               setActivateImage(image)
@@ -263,18 +263,18 @@ function Remark(props) {
             }}>
             <Image
               source={image}
-              style={{  
+              style={{
                 width: 90,
-                height: 120 
+                height: 120
               }}
-              onLoadStart={() => <ActivityIndicator size={10} color='black' /> }
+              onLoadStart={() => <ActivityIndicator size={10} color='black' />}
             />
           </TouchableOpacity>
         )
       }
-        
-        
-      </View>
+
+
+    </View>
   }
 
   const loading = (status) => {
@@ -324,11 +324,11 @@ function Remark(props) {
           <Text>Số tiền hứa/đã thanh toán: {moneyFormat(payAmount)}</Text>
         </View>
 
-        <Portal style={[masterStyle.container, {  height: height }]}>
-          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height}}>
-            <Dialog.Content style={{ width: null, height: height -60}}>
+        <Portal style={[masterStyle.container, { height: height }]}>
+          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height }}>
+            <Dialog.Content style={{ width: null, height: height - 60 }}>
               {/* <Button onPress={hideDialog}>Done</Button> */}
-              <ScrollView style={{ marginTop: 10}}>
+              <ScrollView style={{ marginTop: 10 }}>
                 <RadioButton.Group
                   onValueChange={
                     newValue => {
@@ -484,26 +484,26 @@ function Remark(props) {
             </View>
           </View>
         </View> */}
-        
+
         <View style={[buttonStyles.buttons]}>
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage2}>
-              chọn hình
+          <Button
+            icon="camera"
+            mode="contained"
+            style={buttonStyles.button}
+            onPress={pickImage2}>
+            chọn hình
           </Button>
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage3}>
-              chụp mới
+          <Button
+            icon="camera"
+            mode="contained"
+            style={buttonStyles.button}
+            onPress={pickImage3}>
+            chụp mới
           </Button>
         </View>
 
         {renImages()}
-      
+
         <Button
           mode="contained"
           style={[buttonStyles.button,]}
