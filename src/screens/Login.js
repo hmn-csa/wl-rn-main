@@ -45,6 +45,7 @@ function Login(props) {
   const { register, setValue, handleSubmit, control } = useForm();
 
   const onSubmit = (data) => {
+    // console.log(data)
 
     data = {...data, 
       lat: props.token.lat, 
@@ -65,7 +66,7 @@ function Login(props) {
   };
 
   useEffect(() => {
-    if (!props.token.fetching && props.token.token === undefined) 
+    if (props.token.fetching !== null && props.token.token === undefined) 
       Alert.alert('username hoặc password không đúng')
   }, [props.token.fetching]);
 
