@@ -3,19 +3,19 @@ import * as constAction from "../consts/index";
 
 
 export const actUpdateShowlist = (content) => {
-	//console.log(`actInitSHOWLIST`)
-	return {
-		type: constAction.UPDATE_SHOWLIST,
-		content,
-	}
+  //console.log(`actInitSHOWLIST`)
+  return {
+    type: constAction.UPDATE_SHOWLIST,
+    content,
+  }
 };
 
 export const actSetTodoShowlist = (content) => {
-	//console.log(`actInitSHOWLIST`)
-	return {
-		type: constAction.SET_TODO_SHOWLIST,
-		content,
-	}
+  //console.log(`actInitSHOWLIST`)
+  return {
+    type: constAction.SET_TODO_SHOWLIST,
+    content,
+  }
 };
 
 
@@ -84,7 +84,7 @@ export const actGetVsfSaga = (config) => {
   }
 };
 
-export const actSetActiveApplId= (content) => {
+export const actSetActiveApplId = (content) => {
   return {
     type: constAction.APPLID_VSF_ACTIVE,
     content
@@ -124,17 +124,17 @@ export const calCateDash = (data) => {
 
 //change status
 export const actChangeToDo = (content) => {
-	return {
-		type: constAction.CHANGE_TODO,
-		content,
-	};
+  return {
+    type: constAction.CHANGE_TODO,
+    content,
+  };
 };
 
 export const actChangeFollow = (content) => {
-	return {
-		type: constAction.CHANGE_FOLLOW,
-		content,
-	};
+  return {
+    type: constAction.CHANGE_FOLLOW,
+    content,
+  };
 };
 
 // =============== manager ================//
@@ -167,14 +167,14 @@ export const updateManagerDash = (data) => {
 };
 
 
-export const pullManagercount= () => {
+export const pullManagercount = () => {
   return {
     type: constAction.COUNT_MANAGER_PULL,
   }
 };
 
 
-export const managerClearState= () => {
+export const managerClearState = () => {
   return {
     type: constAction.MANAGER_CLEAR_STATE,
   }

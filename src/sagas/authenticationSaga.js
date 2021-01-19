@@ -19,23 +19,23 @@ function* loginSaga(request) {
     const config = {
       method: 'post',
       url: `${consts.WORKLIST_API}/token`,
-      data : {
+      data: {
         "username": user,
         "password": pw
       }
     };
-  
-    console.log(`fetch: ${ user}, ${pw}`)
+
+    //console.log(`fetch: ${ user}, ${pw}`)
 
     //user =  JSON.stringify(request)
-    
+
     const response = yield call(fetchUser, config);
 
 
-    yield [ 
+    yield [
       put({ type: "LOGIN_USER_SUCCESS", response })
     ];
-  } catch(error) {
+  } catch (error) {
     yield put({ type: "LOGIN_USER_ERROR", error })
   }
 }

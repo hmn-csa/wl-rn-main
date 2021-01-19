@@ -1,91 +1,90 @@
 import React from 'react'
-import { Text, View, StyleSheet,  ScrollView } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Text, View, StyleSheet, ScrollView, ImageBackground } from 'react-native'
 import TreeView from 'react-native-final-tree-view'
-import { Button } from 'react-native-paper';
+import { FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { connect } from "react-redux"
-import { actUpdateShowlist, actSetTodoShowlist} from "../actions"
+import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { styles, MAIN_COLOR2, colors } from '../styles'
 
 //ion-md-remove
-function getIndicator(isExpanded, hasChildrenNodes) {
+function getIndicator(isExpanded, hasChildrenNodes, type, level) {
   if (!hasChildrenNodes) {
-    return <Ionicons name='ios-remove' />
+    if (type == 'good') {
+      return <AntDesign name="like2" size={15} color={colors.success} />
+    }
+    if (type == 'bad') {
+      return <MaterialCommunityIcons name="cancel" size={15} color={colors.danger} />
+    }
   } else if (isExpanded) {
-    return  <Ionicons 
-      style={{
-        fontWeight:"bold",
-        fontSize:20,
-        color:colors.green}}
-      name='ios-arrow-dropdown-circle' />
+    if (type == 'good') {
+      return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} /> <AntDesign name="like2" size={15} color={colors.success} /></Text>
+    }
+    else if (type == 'bad') {
+      return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /> <MaterialCommunityIcons name="cancel" size={15} color={colors.danger} /></Text>
+    }
+    else {
+      return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /></Text>
+    }
   } else {
-    return <Ionicons  
-      style={{
-      fontWeight:"bold",
-      fontSize:20,
-      color:colors.green}}
-      name='ios-arrow-dropright' />
+    if (type == 'good') {
+      return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <AntDesign name="like2" size={15} color={colors.success} /></Text>
+    }
+    else if (type == 'bad') {
+      return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <MaterialCommunityIcons name="cancel" size={15} color={colors.danger} /></Text>
+    }
+    else {
+      return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /></Text>
+    }
   }
+
 }
 
 function Tree(props) {
 
   const handleShow = list => {
     props.setTodoShowlist(true)
-    props.navigation.navigate('Portfolio',  { screen: 'List' });
+    props.navigation.navigate('Portfolio', { screen: 'List' });
     props.updateShowlist(list)
   }
-
+  function getstyle_txttree(name) {
+    if (name == 'Total') {
+      return { fontWeight: 'bold', fontSize: 20 }
+    }
+    return ":123"
+  }
   return (
-    <ScrollView 
-    style={{backgroundColor: '#edeff3', marginTop:5 }}
-    > 
-      {/* <View style={buttonStyles.buttons}>
-        <Button
-            mode="contained"
-            onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
-            style={buttonStyles.button}
-        >
-          Tree
-        </Button>
-        
-        <Button
-          mode="outlined"
-          onPress={() => props.navigation.navigate('Categories', { screen: 'Product' })}
-          style={buttonStyles.button}
-        >
-          Product
-        </Button>
-      </View> */}
+    <ScrollView style={{ padding: 20 }} >
       <TreeView
-        data={props.tree} 
+        data={props.tree}
         initialExpanded={true}
-        onNodeLongPress={({ node, level }) => {
-          handleShow(node.applIds)
-        }}
-
+        getCollapsedNodeHeight={() => { 40 }}
         renderNode={({ node, level, isExpanded, hasChildrenNodes }) => {
           return (
-            <View style={{
-              height:40,
-              backgroundColor:colors.white, 
-              marginBottom: 4,
-              paddingBottom: 5,
-              flexDirection: 'row',
+            <View
+              style={{
+                height: 40,
+                marginLeft: 25 * level,
+                fontSize: 15,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                flex: 1
               }}
-              >
-              <Text
-                style={{
-                  height:40,
-                  marginLeft: 25 * level,
-                  fontSize: 15,
-                  fontWeight:"bold",
-                  //height:30,
-                }}
-              >
-                {getIndicator(isExpanded, hasChildrenNodes)} {node.name} | {node.case} | {node.share}% 
+            >
+              <View>
+                <Text style={getstyle_txttree(node.name)}>
+                  {getIndicator(isExpanded, hasChildrenNodes, node.type, level)} {node.name}
+                </Text>
+              </View>
+              <Text style={{ fontWeight: 'bold' }}>
+                <Text style={{ color: colors.black }}>
+                  {node.case}
+                </Text>{"\t"}
+                <Text style={{ color: colors.info }}>
+                  {node.share} %
+                  </Text>
               </Text>
-            
             </View>
           )
         }}
@@ -94,7 +93,7 @@ function Tree(props) {
   )
 }
 
- 
+
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -126,7 +125,7 @@ const buttonStyles = StyleSheet.create({
 
 
 
- 
+
 export default connect(mapStateToProps, mapDispatchToProps)(Tree);
 
 

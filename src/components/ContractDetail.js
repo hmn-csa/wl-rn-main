@@ -311,7 +311,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const showstyles = StyleSheet.create({
   logo: {
-    fontWeight: "bold",
+    fontWeight: "normal",
     fontSize: 25,
     paddingRight: 8,
     paddingLeft: 8,

@@ -1,35 +1,20 @@
 import {
-  View, Text, Image, ScrollView, Alert, FlatList, ActivityIndicator, Dimensions
+  View, Text, ActivityIndicator, Dimensions
 } from 'react-native'
-import { Button } from 'react-native-paper';
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-
 import ContractDetailMap from '../components/ContractDetailMap'
-
 import Carousel from 'react-native-snap-carousel'
 import { styles, colors } from '../styles'
-
-import SearchInput, { createFilter } from 'react-native-search-filter';
-
+import { createFilter } from 'react-native-search-filter';
 import { Searchbar } from 'react-native-paper';
 
-
 const KEYS_TO_FILTERS = ['appl_id', 'cust_name'];
-
-
-
-
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
 const SliderWidth = Dimensions.get('screen').width;
 
-
-
-
 function ListAppls(props) {
-
-
   const [searchTerm, setSearchTerm] = useState('')
   const [filtered, setFiltered] = useState(props.showlists.applIds)
   const hangleSearch = (value) => {
@@ -64,7 +49,6 @@ function ListAppls(props) {
           placeholder="Nhập tên (có dấu) hoặc appl_id"
           onSubmitEditing={(value) => hangleSearch(value)}
         />
-
         <View style={{ flexDirection: 'row' }}>
           <Carousel
             layout={'default'}
@@ -110,29 +94,6 @@ function ListAppls(props) {
       </View>
     )
 
-
-  // if (props.showlists.isTodoClass & props.data !== null)
-  //   return (
-  //   <ScrollView >
-  //     {
-  //       showappls.map( appl => 
-  //         <ContractDetailMap 
-  //           key={appl}
-  //           contractId={appl}
-  //           navigation={props.navigation}
-  //         />
-  //       )
-  //     }
-  //   </ScrollView>
-  // )
-  // if (props.data !== null)
-  //   return (
-  //     <FlatList 
-  //     data = {showappls}
-  //     keyExtractor={(appl) => appl}
-  //     renderItem={_renderItem}
-  //     />
-  //   )  
 
 
   else return (

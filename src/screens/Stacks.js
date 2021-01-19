@@ -10,18 +10,14 @@ import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
 import User from './User'
 import ManagerStaff from './ManagerStaff'
-
 import ListPayment from './ListPayment'
 import applMap from './applMap'
 import CheckinMap from './CheckinMap2'
-
-// import CheckinMap from './CheckinMap'
+import { MaterialIcons } from '@expo/vector-icons';
 import ListUptrail from './ListUptrail'
-import { styles, colors } from '../styles'
-
-
-
-// navigation.openDrawer();
+import { colors } from '../styles'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { DrawerActions } from '@react-navigation/native';
 const Stack = createStackNavigator()
 
 
@@ -36,30 +32,26 @@ function UserStack(props) {
         component={User}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
           },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
           headerRight: () => (
-            <View style={buttonStyles.buttons}>
-              <Button
-                mode="contained"
-                icon="map"
-                onPress={() => props.navigation.navigate('Dashboard', { screen: 'checkinMap' })}
-                style={buttonStyles.button}
-              >
-              </Button>
-
-              <Button
-                mode="contained"
-                icon="map"
-                onPress={() => props.navigation.navigate('Dashboard', { screen: 'ListPayment' })}
-                style={buttonStyles.button}
-              >
-              </Button>
-
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
             </View>
           )
         }}
@@ -70,27 +62,57 @@ function UserStack(props) {
         component={ListPayment}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
-
-
       <Stack.Screen
         name="checkinMap"
         component={CheckinMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
 
@@ -107,30 +129,59 @@ function DashboardStack(props) {
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
-
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
           },
-
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
-
       <Stack.Screen
         name="ListPayment"
         component={ListPayment}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
 
@@ -139,29 +190,60 @@ function DashboardStack(props) {
         component={CheckinMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
-    
+
       <Stack.Screen
         name="Uptrail"
         component={ListUptrail}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
-
     </Stack.Navigator>
   )
 }
@@ -179,12 +261,28 @@ function StafflistStack(props) {
         component={ManagerStaff}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
 
@@ -193,189 +291,208 @@ function StafflistStack(props) {
         component={CheckinMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
-
-
     </Stack.Navigator>
   )
 }
 
-function CategorieStack(props) {
-
+function TreeStack(props) {
   return (
     <Stack.Navigator
       initialRouteName="Tree"
-      screenOptions={{ headerShown: true, }}
+      screenOptions={{ headerShown: true, headerTransparent: false }}
     >
       <Stack.Screen
-        name="Tree"
+        name="Tree Follow"
         component={Tree}
-
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
           },
-          //headerRight: CategorieStackMenu,
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
           headerRight: () => (
-            <View style={buttonStyles.buttons}>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Categories', { screen: 'Product' })}
-                style={buttonStyles.button}
-              >
-                Product
-              </Button>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Categories', { screen: 'Score' })}
-                style={buttonStyles.button}
-              >
-                Score
-              </Button>
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
             </View>
           )
         }}
-
       />
+    </Stack.Navigator>
+  )
+}
+function ProductStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Tree"
+      screenOptions={{ headerShown: true, headerTransparent: false }}
+    >
       <Stack.Screen
         name="Product"
         component={ProductCategories}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
           },
-          screenOptions: false,
-          headerRight: () => (
-            <View style={buttonStyles.buttons}>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
-                style={buttonStyles.button}
-              >
-                Tree
-              </Button>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Categories', { screen: 'Score' })}
-                style={buttonStyles.button}
-              >
-                Score
-              </Button>
-
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
             </View>
-          )
-        }}
-      />
-      <Stack.Screen
-        name="Score"
-        component={ScoreCategories}
-        options={{
-          headerStyle: {
-            backgroundColor: colors.secondary,
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          screenOptions: false,
+          ),
           headerRight: () => (
-            <View style={buttonStyles.buttons}>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Categories', { screen: 'Tree' })}
-                style={buttonStyles.button}
-              >
-                Tree
-              </Button>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Categories', { screen: 'Product' })}
-                style={buttonStyles.button}
-              >
-                Product
-              </Button>
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
             </View>
           )
         }}
       />
     </Stack.Navigator>
-  );
+  )
 }
-
+function SegmentStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Tree"
+      screenOptions={{ headerShown: true, headerTransparent: false }}
+    >
+      <Stack.Screen
+        name="Score"
+        component={ScoreCategories}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
 
 function PortStack(props) {
   return (
-
     <Stack.Navigator >
       <Stack.Screen
         name="List"
         component={ListAppls}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
           },
-
-          headerRight: () => (
-            <View style={buttonStyles.buttons}>
-              <Button
-                mode="contained"
-                onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}
-                style={buttonStyles.button}
-              >
-                Uptrail
-              </Button>
-
-              <Button
-                icon="account-search"
-                mode="contained"
-                onPress={() => props.navigation.navigate('Portfolio', { screen: 'Search' })}
-                style={buttonStyles.button}
-              >
-              </Button>
-
-              <Button
-                icon="map"
-                mode="contained"
-                onPress={() => props.navigation.navigate('Portfolio', { screen: 'Maps' })}
-                style={buttonStyles.button}
-              >
-              </Button>
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
             </View>
-
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
           )
         }}
       />
-
       <Stack.Screen
         name="Uptrail"
         component={ListUptrail}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
 
@@ -384,12 +501,28 @@ function PortStack(props) {
         component={Remark}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
       <Stack.Screen
@@ -397,12 +530,28 @@ function PortStack(props) {
         component={Vsf}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
       <Stack.Screen
@@ -410,12 +559,28 @@ function PortStack(props) {
         component={Skip}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
 
@@ -424,12 +589,28 @@ function PortStack(props) {
         component={Search}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
 
@@ -438,33 +619,152 @@ function PortStack(props) {
         component={applMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.secondary,
+            backgroundColor: colors.primary,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
     </Stack.Navigator>
 
   );
 }
+
+function CategorieStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Tree"
+      screenOptions={{ headerShown: true, headerTransparent: false }}
+    >
+      <Stack.Screen
+        name="Tree Follow"
+        component={Tree}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Product"
+        component={ProductCategories}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+
+      <Stack.Screen
+        name="Score"
+        component={ScoreCategories}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerLeft: () => (
+            <View style={{ paddingLeft: 15 }}>
+              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.openDrawer())} >
+                <MaterialIcons name="menu" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+
 const buttonStyles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
-    padding: 2,
-
   },
   button: {
-    marginLeft: 1,
-    borderRadius: 10,
-    fontSize: 50,
-    fontWeight: 'bold',
-    backgroundColor: colors.secondary,
-    // borderColor:colors.white,
+    fontSize: 14,
+    backgroundColor: 'transparent',
+    shadowColor: 'transparent',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
+    height: '100%',
+    backgroundColor: 'green'
   },
-
   nameTxt: {
     marginLeft: 5,
     fontWeight: '600',
@@ -478,9 +778,11 @@ const buttonStyles = StyleSheet.create({
 
 export {
   DashboardStack,
-  CategorieStack,
+  TreeStack,
+  ProductStack,
+  SegmentStack,
   PortStack,
   UserStack,
   StafflistStack,
-
+  CategorieStack
 }

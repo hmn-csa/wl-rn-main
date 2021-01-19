@@ -3,17 +3,17 @@ import React, { useState, useEffect } from "react";
 
 //Kết nối vơi redux
 import { connect } from "react-redux";
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 //import ContainerShow from './containers/ContainerShow'
 
 import Login from './Login'
-// import MainApp from './MainApp'
+import MainApp from './MainApp'
 // import ManagerApp from './ManagerApp'
 import ManagerApp from '../screens-manager/ManagerApp'
 
 
 function MyApp(props) {
-  console.log(props.token.token)
+  //console.log(props.token.token)
   if (props.token.token === null || props.token.token === undefined)
     return (
       <View style={styles.container}>
@@ -26,7 +26,7 @@ function MyApp(props) {
         <MainApp />
       </View>
     )
-  else if(props.token.token.role === 'manager_lv1')
+  else if (props.token.token.role === 'manager_lv1')
     return (
       <View style={styles.container}>
         <ManagerApp />

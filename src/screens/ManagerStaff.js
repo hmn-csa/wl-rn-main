@@ -8,8 +8,8 @@ import { Button, TextInput, Dialog, Portal } from 'react-native-paper';
 import { connect } from "react-redux";
 import {
   calManagerDash, setManagerDash, pullManagercount,
-  apiStaffData, updateManagerDash, setMapStaff, 
-  actGetUptrails, actSetActiveStaff, clearUptrail, 
+  apiStaffData, updateManagerDash, setMapStaff,
+  actGetUptrails, actSetActiveStaff, clearUptrail,
   clearData, clearShowlist
 } from "../actions"
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -53,7 +53,7 @@ function ManagerStaff(props) {
       last_checkin: props.manager.last_checkin,
       last_uptrail: props.manager.last_uptrail,
     }
-    console.log('last data', data)
+    //console.log('last data', data)
 
     if (props.manager.pullcnt > 1)
       updateStaffData(data)
@@ -89,7 +89,7 @@ function ManagerStaff(props) {
     //   last_checkin: useRef(last_checkin),
     //   last_uptrail: last_uptrail
     // }
-    console.log(props.manager)
+    //console.log(props.manager)
 
     let config = {
       method: 'post',
@@ -99,7 +99,7 @@ function ManagerStaff(props) {
       },
       data: data
     }
-    console.log(config)
+    //console.log(config)
     try {
       const response = await axios(config);
       props.updateManager(response.data);
@@ -151,7 +151,7 @@ function ManagerStaff(props) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('This will run every second!')
+      //console.log('This will run every second!')
       //getStaffData()
       //getStaffDetail()
 
@@ -164,7 +164,7 @@ function ManagerStaff(props) {
 
   // pull update data
 
-  
+
   const renColor = (checkinData, today) => {
     if (checkinData.length == 0)
       return colors.secondary
@@ -201,7 +201,7 @@ function ManagerStaff(props) {
     if (props.manager.data_done & item.checkin.length > 0)
       return <Ionicons
         name="ios-pin"
-        style={[masterStyles.logo, {fontSize: 25}]}
+        style={[masterStyles.logo, { fontSize: 25 }]}
         onPress={
           () => {
             props.setMap({
@@ -272,19 +272,19 @@ function ManagerStaff(props) {
   // set map 
 
   const handlePressStaff = async (item) => {
-    
+
     props.clearData()
     props.clearUptrail()
     props.clearShowlist()
     props.setActiveStaff(
       {
-        staff_id: item.staff_id, 
+        staff_id: item.staff_id,
         info: {
           fc_name: item.info.fc_name
         }
       }
     )
-    await props.getStaffData({token: props.token.token.access, staff_id: item.staff_id})
+    await props.getStaffData({ token: props.token.token.access, staff_id: item.staff_id })
     // await props.getUptrails(
     //   {
     //     staff_id: staff_id, 
@@ -293,7 +293,7 @@ function ManagerStaff(props) {
     //     end: "" 
     //   }
     // )
-    
+
     props.navigation.navigate('Dashboard')
   }
 
@@ -317,7 +317,7 @@ function ManagerStaff(props) {
           const content = renContent(item.content)
 
           return (
-            <TouchableOpacity key={item.staff_id} 
+            <TouchableOpacity key={item.staff_id}
               onLongPress={() => handlePressStaff(item)}>
 
               <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>
@@ -414,9 +414,9 @@ function ManagerStaff(props) {
                     </View>
                   </View>
 
-                  <View style={[styles.msgContainer, {marginTop:1}]}>
-                    <View style={[styles.row, {flex:1}]}>
-                      <View style={[styles.box, {flex:0.8}]}>
+                  <View style={[styles.msgContainer, { marginTop: 1 }]}>
+                    <View style={[styles.row, { flex: 1 }]}>
+                      <View style={[styles.box, { flex: 0.8 }]}>
                         <Text style={[styles.msgTxt,]}>{renIconMap(item)}</Text>
                       </View>
                       <View style={styles.box}>
@@ -479,7 +479,7 @@ const mapDispatchToProps = (dispatch) => {
     clearShowlist: () => {
       dispatch(clearShowlist())
     },
-    
+
   }
 }
 

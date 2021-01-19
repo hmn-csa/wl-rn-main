@@ -2,23 +2,16 @@ import React, { useState, useEffect } from 'react'
 import {
   View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView, ActivityIndicator
 } from 'react-native'
-
-import { Button } from 'react-native-paper';
-
 import { connect } from "react-redux"
-// import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Ionicons, Entypo, MaterialIcons} from '@expo/vector-icons';
 import { actUpdateShowlist, actSetTodoShowlist, actGetUptrails, actSetActiveStaff } from "../actions"
 import { styles, colors } from '../styles'
 import { color } from 'react-native-reanimated';
 import { SHOWLIST_CLEAR } from '../consts';
-//import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-
-import { moneyFormat } from '../functions'
+import { moneyFormat } from '../functions';
+import Loader from '../components/elements/Loader'
 
 function Dashboard(props) {
-  //const navigation = useNavigation()
-
 
   const [loading, setLoading] = useState(false)
 
@@ -27,10 +20,6 @@ function Dashboard(props) {
     const list_todo = Object.values(props.data).filter(appl => appl.todo_flag == 1).map(a => a.appl_id);
     props.navigation.navigate('Portfolio', { screen: 'List' });
     props.updateShowlist(list_todo)
-
-    console.log('show list:', list_todo)
-    //navigation.navigate('ListAppls')
-    //props.navigation.navigate('List');
   }
 
   const handleShow = (list, isTodo) => {
@@ -41,30 +30,15 @@ function Dashboard(props) {
 
   if (props.fetching || props.data === null)
     return (
-      <View style={[styles.container, { alignItems: 'center' }]}>
-        <Text>Loading data... </Text>
-        <ActivityIndicator size={100} color={colors.primary} />
-      </View>
+        <Loader/>
     )
 
   else
     return (
-      <View style={[styles.container, { paddingTop: 20 }]}>
-        <View style={{ flex: 3 }}>
-          {/* BEGIN Todos */}
-          {/* <Text style={styles.header}>Todos</Text> */}
-
-
-
+      <View style={[styles.container]}>
+        < View style={{ flex: 3 }}>
           <TouchableOpacity
             style={[cardStyles.container, { flex: 2.5 }]}>
-            {/* <View style={[styles.row, { flex: 0.4 }]}>
-              <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
-                {props.token.active_staff} - {props.token.active_infos.fc_name}
-              </Text>
-            </View> */}
-
-
             <View style={[styles.row, { flex: 0.8 }]}>
               <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
                 Danh mục tự chọn | {props.token.active_staff} - {props.token.active_infos.fc_name}
@@ -74,7 +48,6 @@ function Dashboard(props) {
             <View style={[styles.row, { flex: 1.618, }]}>
               <View style={[styles.box]}>
                 <TouchableOpacity
-                  //style={{ borderBottomWidth: 1, borderBottomColor: colors.lightGray }}
                   onPress={() => handleShow(props.todoCal.todoCase.applIds, true)}>
                   <Text style={styles.indexLabel}>Số HĐ tự chọn</Text>
                   <Text
@@ -82,7 +55,6 @@ function Dashboard(props) {
                   >
                     {props.todoCal.todoCase.case}
                   </Text>
-
                 </TouchableOpacity>
               </View>
               <View style={[styles.box]}>
@@ -94,7 +66,6 @@ function Dashboard(props) {
                     style={styles.indexValueSmall}
                   >{props.todoCal.todoFollowed.case}
                   </Text>
-
                 </TouchableOpacity>
               </View>
             </View>
