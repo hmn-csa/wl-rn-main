@@ -25,6 +25,7 @@
     },
     "android": {
       "package": "com.lgm.wlapp", 
+      "useNextNotificationsApi": true,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBziEaKJvR3y3Z6pxzX54vTSCcPpFsr8f0"

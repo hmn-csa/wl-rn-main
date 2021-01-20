@@ -30,7 +30,8 @@ const initialState = {
       value: 0,
     },
   },
-  pullcnt: 0
+  pullcnt: 0,
+  notCheckin: null,
 }
 
 function calcDistance(lat1, lon1, lat2, lon2) {
@@ -97,12 +98,20 @@ const renListMarker = (staffs) => {
   const listMap2d = []
   for (let i = 0; i < staffs.length; i++) {
     if (staffs[i].checkin.length > 0) {
-      let checpoint = {...staffs[i].checkin, fc_name: staffs[i].info.fc_name}
-      listMap2d.push(checpoint)
+      let checkins = staffs[i].checkin
+      let fcName = staffs[i].info.fc_name
+      for (let j = 0; j < checkins.length; j++) {
+        
+        let checpoint = {...checkins[j], 
+          fc_name: fcName, 
+          index: j,
+          isLast: j === checkins.length-1? true : false
+        }
+        listMap2d.push(checpoint)
+      }
     }
   }
-  const listMap = Array.prototype.concat(...listMap2d);
-  return listMap
+  return listMap2d
 }
 
 const renLastMarker = (staffs) => {
@@ -111,11 +120,17 @@ const renLastMarker = (staffs) => {
     let checkin = staffs[i].checkin
     if (checkin !== undefined) {
       if (checkin.length > 0) {
-        let checpoint = {...checkin[checkin.length - 1], fc_name: staffs[i].info.fc_name}
+        let checpoint = {...checkin[checkin.length - 1], 
+          fc_name: staffs[i].info.fc_name, 
+          isLast: true
+        }
         listMap.push(checpoint)
       }
     }
   }
+  listMap.sort(function(a,b){
+    return Date.parse(a.endtime)  - Date.parse(b.endtime);
+  })
   return listMap
 }
 
@@ -199,7 +214,8 @@ const staffReducers = (state = initialState, action) => {
       staffCook.sort(function(a,b){
         return b.paidamt - a.paidamt;
       })
-
+      
+      let notCheckin = staffCook.filter(staff => staff.checkin.length === 0).length
       // call dash 
 
       return {...state, 
@@ -207,7 +223,7 @@ const staffReducers = (state = initialState, action) => {
         data_done: true,
         listCheckin: renListMarker(staffCook),
         lastCheckin: renLastMarker(staffCook),
-        pullcnt: state.pullcnt + 1,
+        notCheckin: notCheckin,
       }
     
     case constAction.STAFF_CHECKIN_COUNT:

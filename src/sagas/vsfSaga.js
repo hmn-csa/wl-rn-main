@@ -9,6 +9,7 @@ import axios from "axios";
 // watcher saga: watches for actions dispatched to the store, starts worker saga
 export function* watcherGetVsf() {
   yield takeLatest(constAction.API_VSF_REQUEST, workerGetVsf);
+  yield takeLatest(constAction.API_SKIP_REQUEST, workerGetSkip);
 }
 
 
@@ -30,17 +31,31 @@ export function* workerGetVsf(request) {
     const response = yield call(axios, config);
     const data = response.data;
     
-    // console.log('API_VSF_SUCCESS')
-    // console.log(data[0])
-    
     yield put({ type: constAction.API_VSF_SUCCESS, content: data });
 
-    //yield call(workerSaveStorage);
-  
+
+
   } catch (error) {
-    console.log(error)
-    // dispatch a failure action to the store with the error
-    yield put({ type: constAction.API_VSF_FAILURE, error });
+    yield put({ type: constAction.API_VSF_FAILURE, error: error });
+  }
+}
+
+export function* workerGetSkip(request) {
+  
+  try {
+    let config = {
+      method: 'get',
+      url: `https://skip.lgm.com.vn/api?id_no=${request.config.id_no}`,
+    }
+
+    const response = yield call(axios, config);
+    const data = response.data;
+    
+    yield put({ type: constAction.API_SKIP_SUCCESS, content: data });
+    
+
+  } catch (error) {
+    yield put({ type: constAction.API_SKIP_FAILURE, error:error });
   }
 }
 

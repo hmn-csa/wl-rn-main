@@ -9,11 +9,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper';
 
+import {UserStack} from '../screens/Stacks'
+
+
 import{ styles, colors } from '../styles'
 
-import ManagerDash from './ManagerDash'
+// import ManagerDash from './ManagerDash'
 import ManagerStaff from './ManagerStaff'
 import ManagerMap from './ManagerMap'
+import Notify from './Notifications'
+
 
 enableScreens()
 
@@ -22,6 +27,7 @@ function MagagerApp () {
 
 
   return (
+
     <NavigationContainer style={styles.container}>
       <Tab.Navigator
         screenOptions={
@@ -48,11 +54,13 @@ function MagagerApp () {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="ManagerDash" component={ManagerDash} />
+        {/* <Tab.Screen name="ManagerDash" component={ManagerDash} /> */}
         <Tab.Screen name="ManagerStaff" component={ManagerStaff} />
         <Tab.Screen name="ManagerMap" component={ManagerMap} />
+        <Tab.Screen name="UserStack" component={UserStack} />
 
       </Tab.Navigator>
+      <Notify/>
     </NavigationContainer>
   );
 }

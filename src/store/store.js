@@ -20,10 +20,18 @@ const store = createStore(
   rootReducer, composeWithDevTools(
     applyMiddleware(
       sagaMiddleware,
-      //createLogger(),
+      createLogger(),
     ),
   )
 );
+
+// const store = createStore(
+//   rootReducer,
+//   applyMiddleware(
+//     sagaMiddleware,
+//     createLogger(),
+//   ),
+// );
 
 // Middleware: Redux Saga
 sagaMiddleware.run(rootSaga);

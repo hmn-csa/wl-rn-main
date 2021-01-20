@@ -5,6 +5,15 @@ export const moneyFormat = n => {
 }
 
 export const calInitialRegion = (listAppls) => {
+
+  if (listAppls.length === 0)
+    return {
+      latitude: null,
+      longitude: null,
+      latitudeDelta: null,
+      longitudeDelta: null,
+    }
+    
   const listLat = listAppls.map(appl => appl.lat)
   const listLon = listAppls.map(appl => appl.lon)
   const meanLat = listLat.reduce(function (sum, pay) {
