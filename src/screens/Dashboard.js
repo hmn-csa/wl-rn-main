@@ -3,7 +3,7 @@ import {
   View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, ScrollView, ActivityIndicator
 } from 'react-native'
 import { connect } from "react-redux"
-import { Ionicons, Entypo, MaterialIcons} from '@expo/vector-icons';
+import { Ionicons, Entypo, MaterialIcons } from '@expo/vector-icons';
 import { actUpdateShowlist, actSetTodoShowlist, actGetUptrails, actSetActiveStaff } from "../actions"
 import { styles, colors } from '../styles'
 import { color } from 'react-native-reanimated';
@@ -30,7 +30,7 @@ function Dashboard(props) {
 
   if (props.fetching || props.data === null)
     return (
-        <Loader/>
+      <Loader />
     )
 
   else
@@ -42,7 +42,7 @@ function Dashboard(props) {
             <View style={[styles.row, { flex: 0.8 }]}>
               <Text style={[cardStyles.Text, { color: colors.lightGray }]}>
                 Danh mục tự chọn | {props.token.active_staff} - {props.token.active_infos.fc_name}
-            </Text>
+              </Text>
             </View>
 
             <View style={[styles.row, { flex: 1.618, }]}>
@@ -253,34 +253,34 @@ function Dashboard(props) {
 
         <View style={{ flex: 0.8 }}>
           {/* BEGIN Payment */}
-          <View style={[styles.row, {padding: 10, }]}>
-            <TouchableOpacity style={[styles.box, cardStyles.iconContainer ]} 
-            onPress={() => props.navigation.navigate('ListPayment')}>
+          <View style={[styles.row, { padding: 10, }]}>
+            <TouchableOpacity style={[styles.box, cardStyles.iconContainer]}
+              onPress={() => props.navigation.navigate('ListPayment')}>
               <MaterialIcons
                 name='attach-money'
                 style={cardStyles.icon}
-                
+
               />
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.box, cardStyles.iconContainer ]}
-            onPress={() => props.navigation.navigate( 'Uptrail')}>
+            <TouchableOpacity style={[styles.box, cardStyles.iconContainer]}
+              onPress={() => props.navigation.navigate('Uptrail')}>
               <MaterialIcons
                 name='contacts'
                 style={cardStyles.icon}
               />
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.box, cardStyles.iconContainer ]} 
-            onPress={() => props.navigation.navigate( 'checkinMap')}>
+            <TouchableOpacity style={[styles.box, cardStyles.iconContainer]}
+              onPress={() => props.navigation.navigate('checkinMap')}>
               <Entypo
                 name='location'
                 style={cardStyles.icon}
-                
+
               />
-              
+
             </TouchableOpacity>
-            
+
           </View>
           {/* END ToTal */}
         </View>
@@ -346,9 +346,9 @@ const cardStyles = StyleSheet.create({
   },
 
   iconContainer: {
-    backgroundColor: 'white', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 15,
     margin: 15,
   },

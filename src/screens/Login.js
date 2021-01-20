@@ -109,6 +109,7 @@ function Login(props) {
     return <Loader />
 
   return (
+
     <ImageBackground source={require('../images/bg-login.jpg')} style={styles.bglogin}>
       <KeyboardAvoidingView
         behavior="height"
@@ -163,17 +164,6 @@ function Login(props) {
               />
             </View>
             {errors.password && <Text style={styles.alertlogin}>Mật khẩu không được để trống</Text>}
-            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View style={{ flexDirection: 'row', marginLeft: '5%' }}>
-                <CheckBox
-                  value={isSelected}
-                  onValueChange={setSelection}
-                  style={styles.checkbox}
-                />
-                <Text style={{ marginTop: 8, fontSize: 12 }}>Lưu mật khẩu</Text>
-              </View>
-              <Text style={{ marginTop: 8, fontSize: 12, marginRight: '5%' }}>Quên mật khẩu ?</Text>
-            </View> */}
             <View style={styles.loginBtn}>
               <Button
                 onPress={handleSubmit(onSubmit)}
@@ -181,6 +171,17 @@ function Login(props) {
                 color={colors.info}
               >
               </Button>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              {/* <View style={{ flexDirection: 'row', marginLeft: '5%' }}>
+                <CheckBox
+                  value={isSelected}
+                  onValueChange={setSelection}
+                  style={styles.checkbox}
+                />
+                <Text style={{ marginTop: 8, fontSize: 12 }}>Lưu mật khẩu</Text>
+              </View> */}
+              <Text style={{ marginBottom: 8, fontSize: 12, marginRight: '5%' }}>Quên mật khẩu ?</Text>
             </View>
           </View>
           <View style={styles.boxinfodevice}>

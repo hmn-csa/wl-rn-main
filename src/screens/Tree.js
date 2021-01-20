@@ -6,7 +6,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { connect } from "react-redux"
 import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
-import { styles, MAIN_COLOR2, colors } from '../styles'
+import { colors } from '../styles'
+
 
 //ion-md-remove
 function getIndicator(isExpanded, hasChildrenNodes, type, level) {

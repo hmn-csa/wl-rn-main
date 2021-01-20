@@ -79,9 +79,6 @@ function MainApp(props) {
   //   }, 1 * 60 * 1000);
   //   return () => clearInterval(interval);
   // }, []);
-
-
-
   return (
     <NavigationContainer>
       <DrawerNavigator />
