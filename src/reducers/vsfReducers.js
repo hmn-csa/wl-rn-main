@@ -8,7 +8,7 @@ const initialState = {
   vsfs: [],
   skips: [],
   activeIdno: {
-    idno: ''
+    idno: null
   },
   activeApplId: {
     appl_id: '',
@@ -30,7 +30,7 @@ export function vsfReducers(state = initialState, action) {
       return { ...state, fetching: false, activeApplId: action.content[0] };
 
     case constAction.API_VSF_FAILURE:
-      return { ...state, fetching: false, error: action.error };
+      return { ...state, fetching: false, error: true };
 
     // skip
     case constAction.API_SKIP_REQUEST:
@@ -41,7 +41,11 @@ export function vsfReducers(state = initialState, action) {
       return { ...state, fetching: false};
 
     case constAction.API_SKIP_FAILURE:
-      return { ...state, fetching: false,  error: action.error };
+      return { ...state, 
+        fetching: false,  
+        error: true, 
+        activeIdno: {id_no: null}
+      };
 
     case constAction.APPLID_VSF_ACTIVE:
       const cur_active = state.vsfs.filter(
@@ -53,13 +57,44 @@ export function vsfReducers(state = initialState, action) {
         return { ...state, activeApplId: action.content };
     
     case constAction.IDNO_SKIP_ACTIVE:
-      const idno_active = state.skips.filter(
-        item => item.id_no === action.content.idno
-      )[0]
-      if (idno_active)
-        return { ...state, activeIdno: idno_active };
-      else
-        return { ...state, activeIdno: action.content};
+      // if (action.content.main_ref) {
+      //   const mainRef = []
+      //   for (let i=0; i< action.content.main_ref.length; i++ )
+      //     mainRef.push({
+      //       id: action.content.main_ref[i].ref_phone, 
+      //       name: action.content.main_ref[i].ref_name, 
+      //       ref_nid_no: action.content.main_ref[i].ref_nid_no, 
+      //     })
+
+      //   const fatherRef = []
+      //   for (let i=0; i< action.content.father_ref.length; i++ )
+      //     fatherRef.push({
+      //       id: action.content.main_ref[i].ref_phone,
+      //       name: action.content.father_ref[i].ref_name, 
+      //       ref_nid_no: action.content.father_ref[i].ref_nid_no, 
+      //     })
+          
+      //   let phoneBook = [
+      //     {
+      //       id: 'mainRef',
+      //       name: 'mainRef',
+      //       children: mainRef
+      //     }, 
+      //     {
+      //       id: 'fatherRef',
+      //       name: 'fatherRef',
+      //       // children: fatherRef,
+      //     }, 
+      //   ]
+      //   return { ...state, 
+      //     activeIdno: action.content,
+      //     phoneBook: phoneBook
+      //   };
+      // }
+      
+      return { ...state, 
+        activeIdno: action.content,
+      };
 
     default:
       return state;

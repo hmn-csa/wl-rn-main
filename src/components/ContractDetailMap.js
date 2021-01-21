@@ -86,7 +86,9 @@ function ContractDetailMap(props) {
   const handleGetSkip = () => {
 
     if (props.vsf.skips.map(appl => appl.id_no).includes(content.id_no)) {
-      props.setActiveSkip(content)
+      props.setActiveSkip(
+        props.vsf.skips.filter(appl => appl.id_no === content.id_no)[0]
+        )
       props.navigation.navigate('Skip')
     }
     else {

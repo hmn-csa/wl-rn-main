@@ -83,21 +83,13 @@ function MainApp (props) {
     return () => clearInterval(interval);
   }, []);
 
-
-  useEffect(() => {
-    if (props.uptrails.justFetching === false) {
-      props.setActiveStaff(
-        { 
-          staff_id:props.token.token.staff_id, 
-          info: {
-            fc_name: props.token.token.fc_name
-          }
-        }
-      )
-
-    }
-  }, []);
-
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     upLocation()
+  //   }, 1 * 60 * 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
+  
   return (
    
     <NavigationContainer style={styles.container}>

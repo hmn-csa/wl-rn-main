@@ -52,7 +52,8 @@ export function* workerGetSkip(request) {
     const data = response.data;
     
     yield put({ type: constAction.API_SKIP_SUCCESS, content: data });
-    
+
+    yield put({ type: constAction.IDNO_SKIP_ACTIVE, content: data });
 
   } catch (error) {
     yield put({ type: constAction.API_SKIP_FAILURE, error:error });

@@ -83,10 +83,10 @@ function ListPayment(props) {
         }}
         renderDetail={renderDetail}
         onEventPress={onEventPress}
+        showTime={true}
       />
     </View>
   )
-
 
 };
 
