@@ -52,48 +52,15 @@ export function vsfReducers(state = initialState, action) {
         item => item.appl_id === action.content.appl_id
       )[0]
       if (cur_active)
-        return { ...state, activeApplId: cur_active };
+        return { ...state, activeApplId: cur_active,fetching: false,  };
       else
-        return { ...state, activeApplId: action.content };
+        return { ...state, activeApplId: action.content, fetching: false,   };
     
     case constAction.IDNO_SKIP_ACTIVE:
-      // if (action.content.main_ref) {
-      //   const mainRef = []
-      //   for (let i=0; i< action.content.main_ref.length; i++ )
-      //     mainRef.push({
-      //       id: action.content.main_ref[i].ref_phone, 
-      //       name: action.content.main_ref[i].ref_name, 
-      //       ref_nid_no: action.content.main_ref[i].ref_nid_no, 
-      //     })
-
-      //   const fatherRef = []
-      //   for (let i=0; i< action.content.father_ref.length; i++ )
-      //     fatherRef.push({
-      //       id: action.content.main_ref[i].ref_phone,
-      //       name: action.content.father_ref[i].ref_name, 
-      //       ref_nid_no: action.content.father_ref[i].ref_nid_no, 
-      //     })
-          
-      //   let phoneBook = [
-      //     {
-      //       id: 'mainRef',
-      //       name: 'mainRef',
-      //       children: mainRef
-      //     }, 
-      //     {
-      //       id: 'fatherRef',
-      //       name: 'fatherRef',
-      //       // children: fatherRef,
-      //     }, 
-      //   ]
-      //   return { ...state, 
-      //     activeIdno: action.content,
-      //     phoneBook: phoneBook
-      //   };
-      // }
-      
+     
       return { ...state, 
         activeIdno: action.content,
+        fetching: false,  
       };
 
     default:

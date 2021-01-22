@@ -50,6 +50,7 @@ export function* workerGetSkip(request) {
 
     const response = yield call(axios, config);
     const data = response.data;
+    console.log(data)
     
     yield put({ type: constAction.API_SKIP_SUCCESS, content: data });
 
