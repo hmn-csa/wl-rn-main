@@ -43,13 +43,13 @@ function getIndicator(isExpanded, hasChildrenNodes) {
 
 const BOOK = [
   {
-    id: 'mainRef',
-    name: 'mainRef',
-    children: []
+    id: 'mainPhone',
+    name: 'Thông tin liên lạc',
+    children:  []
   },
   {
-    id: 'fatherRef',
-    name: 'fatherRef',
+    id: 'mainRef',
+    name: 'Người tham chiếu',
     children: []
   },
 ]
@@ -62,7 +62,8 @@ function Skip(props) {
       mainRef.push({
         id: info.main_ref[i].ref_phone,
         name: info.main_ref[i].ref_name,
-        ref_nid_no: info.main_ref[i].ref_nid_no,
+        phone: info.main_ref[i].ref_phone,
+        ref_relation: info.main_ref[i].ref_relation
       })
 
     const fatherRef = []
@@ -70,48 +71,92 @@ function Skip(props) {
       fatherRef.push({
         id: info.main_ref[i].ref_phone,
         name: info.father_ref[i].ref_name,
-        ref_nid_no: info.father_ref[i].ref_nid_no,
+        phone: info.father_ref[i].ref_phone,
+        ref_relation: info.father_ref[i].ref_relation
+      })
+    
+    const mainPhone = []
+
+    if (info.main_infos.s37_phone !== null && info.main_infos.s37_phone !== undefined && info.main_infos.s37_phone !== "")
+      mainPhone.push({
+        id: "s37_phone",
+        name: "s37_phone",
+        phone: info.main_infos.s37_phone
+      })
+    
+    if (info.main_infos.cash24_phone !== null && info.main_infos.cash24_phone !== undefined && info.main_infos.cash24_phone !== "")
+      mainPhone.push({
+        id: "cash24_phone",
+        name: "cash24_phone",
+        phone: info.main_infos.cash24_phone
       })
 
+    if (info.main_infos.pcb_phone !== null && info.main_infos.pcb_phone !== undefined && info.main_infos.pcb_phone !== "")
+      mainPhone.push({
+        id: "pcb_phone",
+        name: "pcb_phone",
+        phone: info.main_infos.pcb_phone
+      })
+
+    if (info.main_infos.vmg_phone !== null && info.main_infos.vmg_phone !== undefined && info.main_infos.vmg_phone !== "")
+      mainPhone.push({
+        id: "vmg_phone",
+        name: "vmg_phone",
+        phone: info.main_infos.vmg_phone
+      })
+
+    if (mainPhone.length > 0 ) 
+      return [
+        {
+          id: 'mainPhone',
+          name: 'Thông tin liên lạc',
+          children: mainPhone
+        },
+        {
+          id: 'mainRef',
+          name: 'Người tham chiếu',
+          children: [...mainRef, ...fatherRef]
+        },
+      ]
     return [
       {
         id: 'mainRef',
-        name: 'mainRef',
-        children: mainRef
+        name: 'Người tham chiếu',
+        children: [...mainRef, ...fatherRef]
       },
-      {
-        id: 'fatherRef',
-        name: 'fatherRef',
-        children: fatherRef
-      },
+      // {
+      //   id: 'fatherRef',
+      //   name: 'fatherRef',
+      //   children: fatherRef
+      // },
     ]
   }
 
   const renMainInfo = (maininfo) => {
     return (
-      <DataTable >
+      <DataTable style={{backgroundColor: 'white', margin: 10,  borderRadius: 10}} >
         <DataTable.Header>
           <DataTable.Title>Thông tin cơ bản: {maininfo.client_name}</DataTable.Title>
         </DataTable.Header>
 
         <DataTable.Row>
-          <DataTable.Cell>CMND: {maininfo.id_no}</DataTable.Cell>
-          <DataTable.Cell>Chủ hộ khẩu: {maininfo.fb_no}</DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>CMND: {maininfo.id_no}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Chủ hộ khẩu: {maininfo.fb_no}</Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</DataTable.Cell>
-          <DataTable.Cell>Ngày sinh: {maininfo.birthday}</DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Ngày sinh: {maininfo.birthday}</Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Học vấn: {maininfo.education}</DataTable.Cell>
-          <DataTable.Cell>Hôn nhân: {maininfo.marital_status}</DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Học vấn: {maininfo.education}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Hôn nhân: {maininfo.marital_status}</Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Nghề nghiệp: {maininfo.job_description}</DataTable.Cell>
-          <DataTable.Cell>Thu nhập: {moneyFormat(maininfo.personal_income)}</DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Nghề nghiệp: {maininfo.job_description}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 11 }}>Thu nhập: {moneyFormat(maininfo.personal_income)} </Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
@@ -136,99 +181,7 @@ function Skip(props) {
     )
   }
 
-
-  const renPaymentInfo = (appl_id) => {
-
-    const paymentsF = props.vsf.activeIdno.payment_infos.filter(pay => pay.appl_id === appl_id)
-    const dpdsF = props.vsf.activeIdno.dpd_infos.filter(item => item.appl_id === appl_id)
-    const followF = props.vsf.activeIdno.follow_infos.filter(follow => follow.appl_id === appl_id)
-
-    if (dpdsF.length == 0)
-      return <View></View>
-
-    const payments = paymentsF.length > 0 ? paymentsF[0].value : []
-    const follows = followF.length > 0 ? followF[0].value : []
-    const dpds = dpdsF[0].value
-
-    const data = []
-    for (let i = 0; i < dpds.length; i++) {
-      data.push(
-        {
-          ...dpds[i],
-          payment: payments.filter(pay => pay.pay_date.substring(0, 7) === dpds[i].month_dt),
-          follow: follows.filter(follow => follow.contact_time.substring(0, 7) === dpds[i].month_dt),
-        }
-      )
-    }
-
-
-    const renPay = (payment) => {
-      return (
-        <View>
-          {
-            payment.map(pay => {
-              return (
-                <Text style={{ fontSize: 10, backgroundColor: colors.green }}>
-                  Ngày-{pay.pay_date.substring(8, 10)} {moneyFormat(pay.receipt_amt)}
-                </Text>
-              )
-            })
-          }
-        </View>
-      )
-    }
-
-    const renFollow = (follow) => {
-      return (
-        <View>
-          {
-            follow.map(fol => {
-              return (
-                <Text style={{ fontSize: 10, }}>
-                  Ngày-{fol.contact_time.substring(8, 10)} {fol.response_code}
-                </Text>
-              )
-            })
-          }
-        </View>
-      )
-    }
-
-    return (
-      <View style={{ margin: 10, backgroundColor: 'white', borderRadius: 10, }}>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Tháng</DataTable.Title>
-            <DataTable.Title>Dư nợ gốc</DataTable.Title>
-            <DataTable.Title>Tổng nợ</DataTable.Title>
-            <DataTable.Title>DPD</DataTable.Title>
-            <DataTable.Title>Payment</DataTable.Title>
-            <DataTable.Title>Follow</DataTable.Title>
-          </DataTable.Header>
-          {
-            data.map(
-              item => {
-                return (
-                  <DataTable.Row>
-                    <DataTable.Cell><Text style={{ fontSize: 10 }}>{item.month_dt}</Text></DataTable.Cell>
-                    <DataTable.Cell><Text style={{ fontSize: 10 }}>{moneyFormat(item.balance_amt)}</Text></DataTable.Cell>
-                    <DataTable.Cell><Text style={{ fontSize: 10 }}>{moneyFormat(item.debt_amt)}</Text></DataTable.Cell>
-                    <DataTable.Cell><Text style={{ fontSize: 10 }}>{moneyFormat(item.dpd)}</Text></DataTable.Cell>
-                    <DataTable.Cell><Text style={{ fontSize: 10 }}>{renPay(item.payment)}</Text></DataTable.Cell>
-                    <DataTable.Cell><Text style={{ fontSize: 10 }}>{renFollow(item.follow)}</Text></DataTable.Cell>
-                  </DataTable.Row>
-                )
-              }
-            )
-          }
-        </DataTable>
-      </View>
-    )
-  }
-
-  const renFollowInfo = (appl_id) => {
-    const follow = props.vsf.activeIdno.follow_infos.filter(follow => follow.appl_id === appl_id)
-  }
+ 
 
 
   const renApplInfo = ({ item, index }) => {
@@ -278,7 +231,7 @@ function Skip(props) {
       >
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title><Text style={{ fontSize: 12 }}>{item.appl_id}</Text></DataTable.Title>
+            <DataTable.Title><Text style={{ fontSize: 11 }}>{item.appl_id}</Text></DataTable.Title>
             <DataTable.Title><Text style={{ fontSize: 10 }}>Sản phẩm: {item.product_group}</Text></DataTable.Title>
             <DataTable.Title><Text style={{ fontSize: 10 }}>Lãi Suất: {item.eff_rate}%</Text></DataTable.Title>
           </DataTable.Header>
@@ -318,9 +271,9 @@ function Skip(props) {
       payment = (
         <View style={{ marginTop: 3 }}>
           {
-            rowData.payment.map(pay => {
+            rowData.payment.map((pay, index) => {
               return (
-                <View style={[styles.descriptionContainer]}>
+                <View style={[styles.descriptionContainer]} key={index}>
                   <Text style={[styles.textDescription, { backgroundColor: colors.green, fontWeight: "bold" }]}>
                     Ngày {pay.pay_date.substring(8, 10)} | Thanh Toán: {moneyFormat(pay.receipt_amt)}
                   </Text>
@@ -369,37 +322,40 @@ function Skip(props) {
   const [activeIndex, setActivateIndex] = useState(0);
 
   useEffect(() => {
-    if (props.vsf.activeIdno.main_infos && !props.vsf.fetching)
+    if (props.vsf.activeIdno.main_infos !== undefined && !props.vsf.fetching)
       setPhoneBook(renPhonBook(props.vsf.activeIdno))
 
   }, [props.vsf.activeIdno]);
 
   useEffect(() => {
-    const appl_id = props.vsf.activeIdno.appl_infos[activeIndex].appl_id
-    const paymentsF = props.vsf.activeIdno.payment_infos.filter(pay => pay.appl_id === appl_id)
-    const dpdsF = props.vsf.activeIdno.dpd_infos.filter(item => item.appl_id === appl_id)
-    const followF = props.vsf.activeIdno.follow_infos.filter(follow => follow.appl_id === appl_id)
 
-    if (dpdsF.length === 0)
-      return setDataAppl([])
+    if (props.vsf.activeIdno.main_infos !== undefined) { 
+      const appl_id = props.vsf.activeIdno.appl_infos[activeIndex].appl_id
+      const paymentsF = props.vsf.activeIdno.payment_infos.filter(pay => pay.appl_id === appl_id)
+      const dpdsF = props.vsf.activeIdno.dpd_infos.filter(item => item.appl_id === appl_id)
+      const followF = props.vsf.activeIdno.follow_infos.filter(follow => follow.appl_id === appl_id)
+      if (dpdsF.length === 0)
+        setDataAppl([])
+      else {
+        const payments = paymentsF.length > 0 ? paymentsF[0].value : []
+        const follows = followF.length > 0 ? followF[0].value : []
+        const dpds = dpdsF[0].value
 
-    const payments = paymentsF.length > 0 ? paymentsF[0].value : []
-    const follows = followF.length > 0 ? followF[0].value : []
-    const dpds = dpdsF[0].value
-
-    const data = []
-    for (let i = 0; i < dpds.length; i++) {
-      data.push(
-        {
-          ...dpds[i],
-          payment: payments.filter(pay => pay.pay_date.substring(0, 7) === dpds[i].month_dt),
-          follow: follows.filter(follow => follow.contact_time.substring(0, 7) === dpds[i].month_dt)
+        const data = []
+        for (let i = 0; i < dpds.length; i++) {
+          data.push(
+            {
+              ...dpds[i],
+              payment: payments.filter(pay => pay.pay_date.substring(0, 7) === dpds[i].month_dt),
+              follow: follows.filter(follow => follow.contact_time.substring(0, 7) === dpds[i].month_dt)
+            }
+          )
         }
-      )
+        setDataAppl(data)
+      }
+    } else {
+      setDataAppl([])
     }
-    setDataAppl(data)
-    console.log(dataAppl)
-
   }, [activeIndex]);
 
 
@@ -407,8 +363,14 @@ function Skip(props) {
 
   if (props.vsf.fetching)
     return <Loader />
+  if (props.vsf.activeIdno.main_infos === undefined)
+    return (
+      <View>
+        <Text> kh</Text>
+      </View>
+    )
 
-  if (!props.vsf.fetching && props.vsf.activeIdno.main_infos)
+  if (!props.vsf.fetching && props.vsf.activeIdno.main_infos !== undefined)
     return (
       <View>
         <ScrollView>
@@ -432,7 +394,7 @@ function Skip(props) {
                       fontWeight: "bold",
                     }}
                   >
-                    {getIndicator(isExpanded, hasChildrenNodes)} {node.name} | {node.id}
+                    {getIndicator(isExpanded, hasChildrenNodes)} {node.name} | {node.ref_relation} | {node.phone}
                   </Text>
 
                 </View>
@@ -448,7 +410,6 @@ function Skip(props) {
               data={props.vsf.activeIdno.appl_infos}
               sliderWidth={SliderWidth}
               itemWidth={width * 0.95}
-
               renderItem={renApplInfo}
               useScrollView={false}
               activeSlideAlignment="center"
@@ -479,12 +440,7 @@ function Skip(props) {
 
       </View>
     )
-
-  return (
-    <View>
-      <Text> kh</Text>
-    </View>
-  )
+ 
 }
 
 
@@ -544,6 +500,11 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 20,
     marginLeft: 20
+  },
+  list: {
+    flex: 1,
+    paddingRight: 10,
+    marginTop: 10
   },
   time: {
     fontSize: 11,
