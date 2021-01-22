@@ -9,6 +9,9 @@ import ScoreCategories from './ScoreCategories'
 import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
 import User from './User'
+import Todo from './Todo'
+import Summary from './Summary'
+
 
 
 
@@ -50,6 +53,33 @@ function Menutop_Categories() {
   );
 }
 
+function Menutop_Dashboard() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Summary"
+      tabBarOptions={{
+        activeTintColor: colors.info,
+        inactiveTintColor: colors.black,
+        labelStyle: { fontSize: 12, fontWeight: 'bold' },
+        style: { backgroundColor: 'white' },
+      }}
+    >
+      <Tab.Screen
+        name="Summary"
+        component={Summary, Dashboard}
+        options={{ tabBarLabel: 'Summary' }}
+      />
+      <Tab.Screen
+        name="Todo"
+        component={Todo, Dashboard}
+        options={{ tabBarLabel: 'Todo' }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+
 export {
-  Menutop_Categories
+  Menutop_Categories,
+  Menutop_Dashboard
 };

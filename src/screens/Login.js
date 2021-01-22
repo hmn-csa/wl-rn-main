@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, KeyboardAvoidingView,
-  TextInput, Button, AsyncStorage,
+  TextInput, AsyncStorage,
   ImageBackground, Image,
 } from 'react-native'
 // import CheckBox from '@react-native-community/checkbox';
@@ -13,6 +13,8 @@ import { actloginUser, actLocationSet } from "../actions/index"
 import { styles, colors } from '../styles'
 import { Ionicons } from '@expo/vector-icons';
 import Loader from '../components/elements/Loader'
+import { Button } from 'react-native-paper';
+
 
 
 
@@ -166,10 +168,11 @@ function Login(props) {
             {errors.password && <Text style={styles.alertlogin}>Mật khẩu không được để trống</Text>}
             <View style={styles.loginBtn}>
               <Button
-                onPress={handleSubmit(onSubmit)}
-                title="ĐĂNG NHẬP"
                 color={colors.info}
+                mode="contained"
+                onPress={handleSubmit(onSubmit)}
               >
+                ĐĂNG NHẬP
               </Button>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>

@@ -53,7 +53,7 @@ function Tree(props) {
     if (name == 'Total') {
       return { fontWeight: 'bold', fontSize: 20 }
     }
-    return ":123"
+    return null
   }
   return (
     <ScrollView style={{ padding: 20 }} >
@@ -113,16 +113,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 }
-
-const buttonStyles = StyleSheet.create({
-  buttons: {
-    flexDirection: 'row',
-    padding: 2,
-  },
-  button: {
-    margin: 2,
-  },
-});
 
 
 

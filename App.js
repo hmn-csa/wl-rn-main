@@ -1,5 +1,5 @@
-import React from 'react' 
-import { View, StyleSheet} from 'react-native';
+import React from 'react'
+import { View, StyleSheet } from 'react-native';
 //https://reactnavigation.org/docs/getting-started
 
 import { Provider } from 'react-redux'

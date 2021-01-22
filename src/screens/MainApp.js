@@ -9,7 +9,7 @@ import axios from "axios"
 import { actLocationSet, actGetUptrails, actSetActiveStaff } from "../actions"
 import * as constAction from '../consts'
 import { colors } from '../styles'
-import DrawerNavigator from './DrawerNavigator'
+import MenuBottom from './MenuBottom'
 
 enableScreens()
 
@@ -81,7 +81,7 @@ function MainApp(props) {
   // }, []);
   return (
     <NavigationContainer>
-      <DrawerNavigator />
+      <MenuBottom />
     </NavigationContainer>
   );
 }
