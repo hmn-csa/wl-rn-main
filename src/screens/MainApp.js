@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { enableScreens } from 'react-native-screens'
+//import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+//import { createDrawerNavigator } from '@react-navigation/drawer'
+import { TransitionSpecs } from '@react-navigation/stack'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import * as Location from 'expo-location'
 import * as Device from 'expo-device'
 import { connect } from "react-redux"
 import axios from "axios"
+
 import { actLocationSet, actGetUptrails, actSetActiveStaff } from "../actions"
 import * as constAction from '../consts'
 import { colors } from '../styles'
@@ -14,7 +20,7 @@ import MenuBottom from './MenuBottom'
 enableScreens()
 
 
-
+const Tab = createBottomTabNavigator();
 function MainApp(props) {
 
   const getLocation = async () => {
@@ -44,11 +50,9 @@ function MainApp(props) {
 
   const upLocation = async () => {
     if (props.token.token) {
-
       setOldlat(props.token.lat)
       setOldlon(props.token.lon)
       await getLocation()
-      //if (props.token.lat !== oldlat || props.token.lon !== oldlon) {
       let data = {
         lat: props.token.lat,
         lon: props.token.lon,
@@ -66,12 +70,18 @@ function MainApp(props) {
           data: data
         }
         const response = await axios(config);
-        //console.log(response.data)
       } catch (error) {
         console.log(error)
       }
     }
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      upLocation()
+    }, 1 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -79,6 +89,7 @@ function MainApp(props) {
   //   }, 1 * 60 * 1000);
   //   return () => clearInterval(interval);
   // }, []);
+
   return (
     <NavigationContainer>
       <MenuBottom />
@@ -100,6 +111,16 @@ const mapDispatchToProps = (dispatch) => {
     locationSet: (content) => {
       dispatch(actLocationSet(content))
     },
+    setActiveStaff: (content) => {
+      dispatch(actSetActiveStaff(content))
+    }
   }
 }
+
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(MainApp);
+
+
+
+// export default MainApp;

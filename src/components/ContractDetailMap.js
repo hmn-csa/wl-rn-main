@@ -9,6 +9,7 @@ import {
   actGetVsfSaga, actSetActiveApplId, actChangeToDo,
   actChangeTodoSaga, calTodoDash,
 } from "../actions"
+import * as constAction from '../consts'
 import { styles, colors } from '../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
@@ -81,6 +82,24 @@ function ContractDetailMap(props) {
       props.navigation.navigate('Vsf')
     }
   }
+
+  const handleGetSkip = () => {
+
+    if (props.vsf.skips.map(appl => appl.id_no).includes(content.id_no)) {
+      props.setActiveSkip(
+        props.vsf.skips.filter(appl => appl.id_no === content.id_no)[0]
+        )
+      props.navigation.navigate('Skip')
+    }
+    else {
+      const config = {
+        'id_no': content.id_no,
+      }
+      props.apiGetSkip(config)
+      props.navigation.navigate('Skip')
+    }
+  }
+
 
   const handleRemark = () => {
     props.setActiveVsf(content)
@@ -252,7 +271,7 @@ function ContractDetailMap(props) {
           <Ionicons
             name='ios-search'
             style={showstyles.logo}
-            onPress={handleSkip}
+            onPress={handleGetSkip}
           />
         </View>
 
@@ -294,22 +313,54 @@ function ContractDetailMap(props) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+
     apiChangeTodo: (config) => {
-      dispatch(actChangeTodoSaga(config));
+      dispatch({
+        type: constAction.API_TODO_REQUEST,
+        config
+      });
     },
+
     changeTodo: (content) => {
-      dispatch(actChangeToDo(content));
+      dispatch({
+        type: constAction.CHANGE_TODO,
+        content
+      });
     },
 
     apiGetVsf: (config) => {
-      dispatch(actGetVsfSaga(config));
+      dispatch({
+        type: constAction.API_VSF_REQUEST,
+        config
+      });
     },
-    setActiveVsf: (appl_id) => {
-      dispatch(actSetActiveApplId(appl_id));
+
+    apiGetSkip: (config) => {
+      dispatch({
+        type: constAction.API_SKIP_REQUEST,
+        config
+      });
+    },
+
+    setActiveVsf: (content) => {
+      dispatch({
+        type: constAction.APPLID_VSF_ACTIVE,
+        content
+      });
+    },
+
+    setActiveSkip: (content) => {
+      dispatch({
+        type: constAction.IDNO_SKIP_ACTIVE,
+        content
+      });
     },
 
     calTodoDash: (data) => {
-      dispatch(calTodoDash(data))
+      dispatch({
+        type: constAction.CAL_TODO_DASH,
+        data
+      })
     },
 
   }

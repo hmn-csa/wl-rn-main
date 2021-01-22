@@ -21,12 +21,12 @@ import { Button } from 'react-native-paper';
 function Login(props) {
   //============ Get IP user
   const [ip, setIP] = React.useState(null);
-  const getIP = async () => {
-    fetch('https://api.ipify.org?format=json')
-      .then(response => response.json())
-      .then(data => setIP(data.ip))
-      .catch(error => console.log(error));
-  }
+  // const getIP = async () => {
+  //   fetch('https://api.ipify.org?format=json')
+  //     .then(response => response.json())
+  //     .then(data => setIP(data.ip))
+  //     .catch(error => console.log(error));
+  // }
   //=============================
   //============ Get Long Lat
   const getLocation = async () => {
@@ -37,11 +37,25 @@ function Login(props) {
     let locationC = await Location.getCurrentPositionAsync({});
     props.locationSet(locationC.coords)
   }
+
+  const getToken = async () => {
+    try {
+      let userData = await AsyncStorage.getItem("userData");
+      let data = JSON.parse(userData);
+      if (data !== null) {
+        setValue("username", data.username)
+        setValue("password", data.password)
+      }
+    } catch (error) {
+      alert(error);
+    }
+  }
+
   //=========================
   //======= Run fisrt times after load page
   useEffect(() => {
     getLocation();
-    getIP();
+    //getIP();
     getToken();
   }, []);
 
@@ -68,13 +82,14 @@ function Login(props) {
       device_os: Device.osName,
       device_name: Device.modelName,
     }
-    if (data.lat == null || data.lon == null)
+    if (data.lat === null || data.lon === null)
       getLocation()
     else {
       props.login(data)
       storeToken(data)
     }
   };
+
   const storeToken = async (data) => {
     try {
       await AsyncStorage.setItem("userData", JSON.stringify(data));
@@ -82,19 +97,7 @@ function Login(props) {
       alert("Something went wrong", error);
     }
   }
-  const getToken = async () => {
-    try {
-      let userData = await AsyncStorage.getItem("userData");
-      let data = JSON.parse(userData);
-      if (data !== null) {
-        setValue("username", data.username)
-        setValue("password", data.password)
-        //setSelection(true)
-      }
-    } catch (error) {
-      alert(error);
-    }
-  }
+  
   const removeToken = async (key) => {
     try {
       await AsyncStorage.removeItem(key);

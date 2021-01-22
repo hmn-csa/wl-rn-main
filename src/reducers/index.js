@@ -30,4 +30,7 @@ const rootReducer  = combineReducers({
     staff: staffReducers,
 })
 
-export default rootReducer
+
+export default (state, action) =>
+  rootReducer(action.type === 'TOKEN_REMOVE' ? undefined : state, action);
+// export default rootReducer

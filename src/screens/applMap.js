@@ -24,6 +24,7 @@ function applMap(props) {
 
   const mapRef = useRef(null);
   const carouselRef = useRef(null);
+  const makerRef = {};
 
   const [showlists, setShowlists] = useState(
     props.showlists.applIds.map(appl => appl.appl_id)
@@ -69,6 +70,7 @@ function applMap(props) {
                   carouselRef.current.snapToItem(index)
                 }}
                 Color={'blue'}
+                ref={(ref) => makerRef[index] = ref}
               />
             )
           }
@@ -90,6 +92,7 @@ function applMap(props) {
             mapRef.current.animateToCoordinate(
               { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
             )
+            makerRef[index].showCallout()
           }}
           activeSlideAlignment="center"
         />

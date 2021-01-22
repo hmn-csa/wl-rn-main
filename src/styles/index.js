@@ -10,9 +10,7 @@ const BACKGROUND_COLOR = '#FFFFFF'
 
 const styles = StyleSheet.create({
   boxinfodevice: {
-    //backgroundColor: 'rgba(255,255,255,0.2)',
     padding: 20,
-
   },
   checkbox: {
     alignSelf: "center",

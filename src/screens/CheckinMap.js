@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import MapView from 'react-native-map-clustering';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 //import MapView from 'react-native-map-clustering';
 //import { MapView, Marker, PROVIDER_GOOGLE  } from 'expo'
 import { Button, Dialog, Portal, } from 'react-native-paper';
@@ -12,6 +11,8 @@ import {
 import { connect } from "react-redux";
 import { colors } from '../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import { Entypo, FontAwesome5 } from '@expo/vector-icons'; 
 
 import {calInitialRegion} from '../functions'
 const { width, height } = Dimensions.get("window");
@@ -36,7 +37,7 @@ function CheckinMap(props) {
 
   const mapRef = useRef(null)
   const carouselRef = useRef(null)
-
+  const makerRef = {};
 
   const _renderItem = ({ item, index }) => {
 
@@ -58,6 +59,7 @@ function CheckinMap(props) {
           padding: 10
         }}>
         <Text style={{ fontSize: 10 }}>{item.endtime.substring(0, 10)}  {item.endtime.substring(11, 16)} </Text>
+        <Text style={{ fontSize: 8 }}>Thiết bị : {item.device_name} </Text>
         {
           _renTime(item)
         }
@@ -71,29 +73,46 @@ function CheckinMap(props) {
   const renMarker = (index, length, appl) => {
 
     if (index === 0) {
-      return <View>
-        <Text style={styles.msgTxt}>Start {appl.endtime.substring(11, 16)}
-          <Ionicons name='ios-disc'
-            style={[styles.logo, { color: colors.secondaryGradientEnd }]} /> </Text>
+      return <View >
+        <Text style={styles.msgTxt}>
+          {/* Start {appl.endtime.substring(11, 16)} */}
+          <Entypo name="location-pin" style={ { fontSize: 40, color: colors.secondary }}/>
+          
+          </Text>
         {/* {showTime(appl.time)} */}
       </View>
     }
     if (index === length - 1) {
       return <View>
-        <Text style={styles.msgTxt}>Finish {appl.endtime.substring(11, 16)}
-          <Ionicons name='ios-pin'
-            style={[styles.logo, { fontSize: 45 }]} /> </Text>
+        <Text style={styles.msgTxt}>
+        {/* Finish {appl.endtime.substring(11, 16)} */}
+        <Entypo name="location-pin" style={ { fontSize: 40, color: colors.primary }}/>
+         
+        </Text>
         {/* {showTime(appl.time)} */}
       </View>
     }
-    return <View>
-      <Text style={styles.msgTxt}>{index} | {appl.endtime.substring(11, 16)}
-        <Ionicons name='ios-disc'
-          style={[styles.logo, { color: colors.primary }]} /> </Text>
+    return <View style={{ 
+      height: 30, 
+      width: 30, 
+      borderRadius: 50, 
+      borderColor: colors.secondary, 
+      borderWidth: 2,
+      alignItems: "center",
+      justifyContent: "center",}}
+      >
+      <Text style={{ alignItems: 'center', fontWeight: '600', color: colors.secondary}}>
+        {index}
+      </Text>
     </View>
   }
 
-
+  if (listAppls.length === 0) 
+  return (
+    <View  style={styles.container}>
+      <Text>Chưa có checkin trong ngày</Text>
+    </View>
+  )
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -113,6 +132,8 @@ function CheckinMap(props) {
                     setActivateIndex(index)
                     carouselRef.current.snapToItem(index)
                   }}
+                  description={marker.endtime.substring(11, 16)}
+                  ref={(ref) => makerRef[index] = ref}
                 >
 
                   <View>
@@ -132,7 +153,7 @@ function CheckinMap(props) {
           ref={carouselRef}
           data={listAppls}
           sliderWidth={SliderWidth}
-          itemWidth={SliderWidth * 0.6}
+          itemWidth={SliderWidth * 0.7}
           itemHeight={CARD_HEIGHT}
           renderItem={_renderItem}
           useScrollView={false}
@@ -141,6 +162,7 @@ function CheckinMap(props) {
             mapRef.current.animateToCoordinate(
               { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
             )
+            makerRef[index].showCallout()
           }}
           activeSlideAlignment="center"
         />
@@ -165,7 +187,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: 25,
-    color: colors.green,
     padding: 3,
   },
   nameTxt: {
@@ -228,10 +249,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  marker: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  markerNumber: {
     backgroundColor: "rgba(130,4,150, 0.9)",
   },
   ring: {

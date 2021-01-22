@@ -94,7 +94,7 @@ function ListAppls(props) {
             itemHeight={CARD_HEIGHT}
             sliderHeight={height}
             renderItem={_renderItem}
-            useScrollView={false}
+            useScrollView={true}
             activeSlideAlignment="start"
             currentIndex={0}
           />

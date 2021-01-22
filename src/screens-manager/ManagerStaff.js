@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import {
   StyleSheet, Text, View, FlatList,
   TouchableOpacity, Alert, Image, ActivityIndicator,
-  ImageBackground,
+  ImageBackground, Animated,
 } from 'react-native';
 import { connect } from "react-redux";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,7 +11,8 @@ import TimeAgo from 'react-native-timeago'
 import { colors, styles as masterStyles } from '../styles'
 import * as constAction from '../consts'
 import { moneyFormat } from '../functions'
-import { EMPTYAVATAR } from '../images';
+import { EMPTYAVATAR } from '../images'
+
 
 
 function ManagerStaff(props) {
@@ -30,7 +31,7 @@ function ManagerStaff(props) {
       last_pull: props.staff.last_pull
     }
     if (config.last_pull !== null)
-    props.pullManager(config)
+      props.pullManager(config)
   }, [props.staff.pullcnt])
 
 
@@ -67,113 +68,118 @@ function ManagerStaff(props) {
 
   const renAvatar = (avatar) => {
     if (!avatar)
-      return EMPTYAVATAR 
+      return EMPTYAVATAR
     else return { uri: avatar }
   }
 
-  
-  const renderItem = ({ item, index })  => { 
-    return <TouchableOpacity 
-    key={item.staff_id}
-    onPress={() => props.toStaffMode({
-      staff_id:item.staff_id, 
-      token: props.token, 
-      fc_name: item.info.fc_name,
-    })} >
+  const renPayment = () => {
 
-    <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>
-      <View style={[styles.box, { flex: 0.35, borderRadius: 30, }]}>
-        {/* {renAvatar(item.info.avatar)} */}
-        <ImageBackground
-          style={[styles.pic, { resizeMode: "cover" }]}
-          imageStyle={{ borderRadius: 50 }}
-          source={renAvatar(item.info.avatar)}>
-          {renIcon(item.checkin)}
-        </ImageBackground>
-      </View>
-      <View style={styles.box}>
-        <View>
-          <View style={styles.nameContainer}>
-            <Text style={styles.nameTxt}
-              numberOfLines={1}
-              ellipsizeMode="tail">
-              {item.info.fc_name} - {item.info.staff_id}
-            </Text>
-          </View>
-
-          <View style={[styles.msgContainer, { marginTop: 5 }]}>
-            <View style={[styles.row, { flex: 1 }]}>
-              <View style={[styles.box, { flex: 0.3 }]}>
-                <Text style={[styles.msgTxt,]}>
-                checkin:
-                </Text>
-              </View>
-              <View style={[styles.box, { flex: 0.8 }]}>
-                <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={[styles.msgContainer, { marginTop: 5 }]}>
-            <View style={[styles.row, { flex: 1 }]}>
-              <View style={[styles.box, { flex: 0.3 }]}>
-                <Text style={[styles.msgTxt,]}>
-                  Uptrail:
-                </Text>
-              </View>
-              <View style={[styles.box, { flex: 0.8 }]}>
-                <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={[styles.msgContainer, { marginTop: 5 }]}>
-            <View style={[styles.row, { flex: 1 }]}>
-              <View style={[styles.box, { flex: 0.3 }]}>
-                <Text style={[styles.msgTxt,]}>{item.case} case</Text>
-              </View>
-              <View style={[styles.box, { flex: 0.4 }]}>
-                <Text style={[styles.msgTxt,]}>{item.paidcase} paid</Text>
-              </View>
-              <View style={[styles.box, { flex: 0.4 }]}>
-                <Text style={[styles.msgTxt,]}>{item.paidtodaycase}</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={[styles.msgContainer, { marginTop: 5 }]}>
-            <View style={[styles.row, { flex: 1 }]}>
-            <View style={[styles.box, { flex: 0.3 }]}>
-                <Text style={[styles.msgTxt,]}>{item.visited} đã đi</Text>
-              </View>
-              <View style={[styles.box, { flex: 0.4 }]}>
-                <Text style={[styles.msgTxt,]}>{moneyFormat(item.paidamt)}</Text>
-              </View>
-
-              <View style={[styles.box, { flex: 0.4 }]}>
-                <Text style={[styles.msgTxt,]}>{moneyFormat(item.todayamt)}</Text>
-              </View>
-
-            </View>
-          </View>
-
-          <View style={[styles.msgContainer, { marginTop: 1 }]}>
-            <View style={[styles.row, { flex: 1 }]}>
-              <View style={[styles.box, { flex: 0.8 }]}>
-                <Text style={[styles.msgTxt,]}></Text>
-              </View>
-              <View style={styles.box}>
-              </View>
-            </View>
-          </View>
-
-        </View>
-      </View>
-    </View>
-
-  </TouchableOpacity>
   }
 
+
+  const renderItem = ({ item, index }) => {
+    return <TouchableOpacity
+      key={item.staff_id}
+      onPress={() => props.toStaffMode({
+        staff_id: item.staff_id,
+        token: props.token,
+        fc_name: item.info.fc_name,
+      })} >
+
+      <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>
+        <View style={[styles.box, { flex: 0.35, borderRadius: 30, }]}>
+          {/* {renAvatar(item.info.avatar)} */}
+          <ImageBackground
+            style={[styles.pic, { resizeMode: "cover" }]}
+            imageStyle={{ borderRadius: 50 }}
+            source={renAvatar(item.info.avatar)}>
+            {renIcon(item.checkin)}
+          </ImageBackground>
+        </View>
+        <View style={styles.box}>
+          <View>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {item.info.fc_name} - {item.info.staff_id}
+              </Text>
+            </View>
+
+            <View style={[styles.msgContainer, { marginTop: 5 }]}>
+              <View style={[styles.row, { flex: 1 }]}>
+                <View style={[styles.box, { flex: 0.3 }]}>
+                  <Text style={[styles.msgTxt,]}>
+                    checkin:
+                </Text>
+                </View>
+                <View style={[styles.box, { flex: 0.8 }]}>
+                  <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.msgContainer, { marginTop: 5 }]}>
+              <View style={[styles.row, { flex: 1 }]}>
+                <View style={[styles.box, { flex: 0.3 }]}>
+                  <Text style={[styles.msgTxt,]}>
+                    Uptrail:
+                </Text>
+                </View>
+                <View style={[styles.box, { flex: 0.8 }]}>
+                  <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.msgContainer, { marginTop: 5 }]}>
+              <View style={[styles.row, { flex: 1 }]}>
+                <View style={[styles.box, { flex: 0.3 }]}>
+                  <Text style={[styles.msgTxt,]}>{item.case} case</Text>
+                </View>
+                <View style={[styles.box, { flex: 0.4 }]}>
+                  <Text style={[styles.msgTxt,]}>{item.paidcase} paid</Text>
+                </View>
+                <View style={[styles.box, { flex: 0.4 }]}>
+                  <Text style={[styles.msgTxt,]}>{item.paidtodaycase}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.msgContainer, { marginTop: 5 }]}>
+              <View style={[styles.row, { flex: 1 }]}>
+                <View style={[styles.box, { flex: 0.3 }]}>
+                  <Text style={[styles.msgTxt,]}>{item.visited} đã đi</Text>
+                </View>
+                <View style={[styles.box, { flex: 0.4 }]}>
+                  <Text style={[styles.msgTxt,]}>{moneyFormat(item.paidamt)}</Text>
+                </View>
+
+                <View style={[styles.box, { flex: 0.4 }]}>
+                  <Text style={[styles.msgTxt,]}>{moneyFormat(item.todayamt)}</Text>
+                </View>
+
+              </View>
+            </View>
+
+            <View style={[styles.msgContainer, { marginTop: 1 }]}>
+              <View style={[styles.row, { flex: 1 }]}>
+                <View style={[styles.box, { flex: 0.8 }]}>
+                  <Text style={[styles.msgTxt,]}></Text>
+                </View>
+                <View style={styles.box}>
+                </View>
+              </View>
+            </View>
+
+          </View>
+        </View>
+      </View>
+
+    </TouchableOpacity>
+  }
+
+  // ========= render =========== //
   if (props.staff.staffs.length == 0)
     return (
       <View style={[masterStyles.container, { alignItems: 'center' }]}>
@@ -183,12 +189,74 @@ function ManagerStaff(props) {
     )
 
   else return (
-    <View style={styles.container} >
-      <FlatList
-        data={props.staff.staffs}
-        horizontal={false}
-        numColumns={1}
-        renderItem={renderItem} />
+    <View style={[styles.container, {marginTop: 20}]} >
+      {/*  */}
+      <View style={[styles.row, { flex: 0.118, }]}>
+        <View style={[styles.box]}>
+          <TouchableOpacity
+            style={{ alignItems: 'center' }}
+            onPress={() => handleShow(props.totalCal.totalCase.applIds, false)}>
+            <Text style={styles.indexLabel}>Tổng số HĐ</Text>
+            <Text
+              style={styles.indexValue}
+            >{props.staff.dash.totalCase.case}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.box]}>
+          <TouchableOpacity
+            style={{ alignItems: 'center' }}
+            onPress={() => handleShow(props.treeCal[1].applIds, true)}>
+            <Text style={styles.indexLabel}>Pos</Text>
+            <Text
+              style={styles.indexValue}
+            >{moneyFormat(props.staff.dash.totalCase.pos)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.box]}>
+          <TouchableOpacity
+            style={{ alignItems: 'center' }}
+            onPress={() => handleShow(props.totalCal.ptpCase.applIds, true)}>
+            <Text style={styles.indexLabel}>Visited</Text>
+            <Text
+              style={styles.indexValue}
+            >{props.staff.dash.visited.case}
+            </Text>
+
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={[styles.row, { flex: 0.118 }]}>
+        <View style={[styles.box, { alignItems: 'center' }]}>
+          <Text style={styles.indexLabel}>Tổng Thu</Text>
+          <Text
+            style={[styles.indexValueSmall, { color: colors.green }]}
+          >{props.staff.dash.paidMtd.case} hđ | {moneyFormat(props.staff.dash.paidMtd.value)} vnđ
+          </Text>
+         
+        </View>
+        <View style={[styles.box, { alignItems: 'center' }]}>
+          <Text style={styles.indexLabel}>Thu trong ngày</Text>
+          <Text
+            style={[styles.indexValueSmall, { color: colors.green }]}
+          >{props.staff.dash.paidToday.case} hđ | {moneyFormat(props.staff.dash.paidToday.value)} vnđ
+          </Text>
+        </View>
+      </View>
+
+      {/* <View style={[styles.row, { flex: 1 }]}> */}
+        <FlatList
+          style={{ flex: 1 }}
+          data={props.staff.staffs}
+          horizontal={false}
+          numColumns={1}
+          renderItem={renderItem} 
+        />
+      {/* </View>  */}
     </View>
   )
 }
@@ -212,8 +280,8 @@ const mapDispatchToProps = (dispatch) => {
         type: constAction.STAFF_CHECKIN_PULL,
         config
       })
-    }, 
-    toStaffMode : (token) => {
+    },
+    toStaffMode: (token) => {
       dispatch({
         type: constAction.SET_STAFF_MODE,
         token
@@ -225,6 +293,7 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
   },
   row: {
     flexDirection: 'row',
@@ -281,7 +350,7 @@ const styles = StyleSheet.create({
   msgContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5 
+    marginTop: 5
   },
   msgTxt: {
     fontWeight: '400',

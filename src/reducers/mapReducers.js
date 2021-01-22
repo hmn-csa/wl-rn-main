@@ -63,6 +63,7 @@ const cookCheckin = (checkinData) => {
     let item = checkins[i]
     item.value = Date.parse(item.runtime)
     if (arr.length === 0) arr.push({
+      device_name: item.device_name,
       lat: item.lat,
       lon: item.lon,
       starttime: item.runtime,
@@ -73,6 +74,7 @@ const cookCheckin = (checkinData) => {
       let distance = calcDistance(arr[arr.length - 1].lat, arr[arr.length - 1].lon, item.lat, item.lon)
       if (distance > 100) {
         arr.push({
+          device_name: item.device_name,
           lat: item.lat,
           lon: item.lon,
           starttime: item.runtime,
@@ -97,6 +99,9 @@ const cookCheckin = (checkinData) => {
   //console.log(result)
   return result
 }
+
+
+
 
 const mapReducers = (state = initialState, action) => {
 

@@ -7,10 +7,6 @@ const initialState = {
   error: null,
   lat: null,
   lon: null,
-  device_brand: null,
-  device_os: null,
-  device_name: null, 
-
   // currrent user token
   token: null,
 

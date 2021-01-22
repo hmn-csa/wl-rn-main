@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 // import MapView from 'react-native-map-clustering';
-import { Button, Dialog, Portal, } from 'react-native-paper';
+import { FAB, Portal, Provider } from 'react-native-paper';
 import {
   StyleSheet, Text, View, Dimensions, TouchableOpacity, Animated,
   Image, ImageBackground, FlatList, ActivityIndicator
@@ -19,30 +19,11 @@ const CARD_HEIGHT = height / 8.5;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 const SliderWidth = Dimensions.get('screen').width;
 
-import {calInitialRegion} from '../functions'
+import { calInitialRegion } from '../functions'
 
 
 
-// const calInitialRegion = (listAppls) => {
-//   const listLat = listAppls.map(appl => appl.lat)
-//   const listLon = listAppls.map(appl => appl.lon)
-//   const meanLat = listLat.reduce(function (sum, pay) {
-//     return sum = sum + pay;
-//   }, 0) / listAppls.length
-//   const latDetal = Math.max.apply(Math, listLat) - Math.min.apply(Math, listLat) + 0.05
-//   const lonDetal = Math.max.apply(Math, listLon) - Math.min.apply(Math, listLon) + 0.05
 
-//   const meanLon = listAppls.map(appl => appl.lon).reduce(function (sum, pay) {
-//     return sum = sum + pay;
-//   }, 0) / listAppls.length
-
-//   return {
-//     latitude: meanLat,
-//     longitude: meanLon,
-//     latitudeDelta: latDetal,
-//     longitudeDelta: lonDetal,
-//   }
-// }
 
 const usePulse = (startDelay = 500) => {
   const opacity = useRef(new Animated.Value(1)).current;
@@ -74,70 +55,75 @@ function ManagerMap(props) {
     longitudeDelta: null,
   });
   const mapRef = useRef(null);
-  const makerRef = useRef(null);
+  const makerRef = {};
   const carouselRef = useRef(null);
-
-  
 
 
   useEffect(() => {
     if (props.staff.data_done) {
       setListappls(props.staff.lastCheckin)
       setInitialRegion(calInitialRegion(props.staff.lastCheckin))
-      // if (mapRef !== null && listAppls !== null) {
-      //   mapRef.current.animateToCoordinate(
-      //     { latitude: listAppls[0].lat, longitude: listAppls[0].lon }, 0
-      //   )
-      // }
     }
   }, [props.staff.pullcnt]);
 
   const opacity = usePulse();
 
+  const sortTime = (list) => {
+    return list.sort(function(a,b){
+      return Date.parse(a.endtime)  - Date.parse(b.endtime);
+    })
+  }
 
+  const [stateFAB, setStateFAB] = React.useState({ open: false });
+  const onStateChange = ({ open }) => setStateFAB({ open });
+  const { open } = stateFAB;
+
+
+  
 
   const _renderItem = ({ item, index }) => {
 
-    let avatar = { uri: Object.values(props.staff.staffs).filter((staff) => {
-      return staff.staff_id == item.staff_id
-    })[0].info.avatar}
-    if (!avatar.uri) 
+    let avatar = {
+      uri: Object.values(props.staff.staffs).filter((staff) => {
+        return staff.staff_id == item.staff_id
+      })[0].info.avatar
+    }
+    if (!avatar.uri)
       avatar = EMPTYAVATAR
     const _renTime = (item) => {
       if (item.time)
         return (
           <View>
             <View style={styles.row}>
-              <View  style={[styles.box, { flex: 0.3 }]}>
-                <Image source={avatar}  
-                imageStyle={{ borderRadius: 50 }} 
-                style={[{ height: 30, width: 30, borderRadius: 50, resizeMode: "cover" }]} />
+              <View style={[styles.box, { flex: 0.3 }]}>
+                <Image source={avatar}
+                  imageStyle={{ borderRadius: 50 }}
+                  style={[{ height: 30, width: 30, borderRadius: 50, resizeMode: "cover" }]} />
               </View>
               <View style={[styles.box]}>
-                <Text style={{ fontSize: 12 }}>{item.staff_id} - {item.fc_name}</Text>
-                <Text style={{ fontSize: 11}}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
+                <Text style={{ fontSize: 11 }}>{item.staff_id} - {item.fc_name}</Text>
+                <Text style={{ fontSize: 10 }}>Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
               </View>
             </View>
-            <View style={[styles.row, {padding: 10}]}>
+            <View style={[styles.row, { padding: 10 }]}>
               <Text style={{ fontSize: 10 }}>Đã ở khu vực này khoảng {item.time}</Text>
             </View>
           </View>
         )
       else return (
-
         <View>
-            <View style={styles.row}>
-              <View style={[styles.box, { flex: 0.3 }]}>
-                <Image source={avatar}  
-                imageStyle={{ borderRadius: 50 }} 
+          <View style={styles.row}>
+            <View style={[styles.box, { flex: 0.3 }]}>
+              <Image source={avatar}
+                imageStyle={{ borderRadius: 50 }}
                 style={{ height: 30, width: 30, borderRadius: 50, resizeMode: "cover" }} />
-              </View>
-              <View style={[styles.box]}>
-                <Text style={{ fontSize: 12 }}>{item.staff_id} - {item.fc_name}</Text>
-                <Text style={{ fontSize: 11 }}>{item.endtime.substring(11, 16)} </Text>
-              </View>
+            </View>
+            <View style={[styles.box]}>
+              <Text style={{ fontSize: 11 }}>{item.staff_id} - {item.fc_name}</Text>
+              <Text style={{ fontSize: 10 }}>{item.endtime.substring(11, 16)} </Text>
             </View>
           </View>
+        </View>
       )
     }
     return (
@@ -148,7 +134,7 @@ function ManagerMap(props) {
           height: CARD_HEIGHT,
           padding: 10
         }}>
- 
+
         {
           _renTime(item)
         }
@@ -161,45 +147,51 @@ function ManagerMap(props) {
 
   const renMarkerAvatar = (appl, staffs) => {
 
-    let avatar =  { uri: Object.values(staffs).filter((staff) => {
-      return staff.staff_id == appl.staff_id
-    })[0].info.avatar }
-    if (!avatar.uri) 
+    let avatar = {
+      uri: Object.values(staffs).filter((staff) => {
+        return staff.staff_id == appl.staff_id
+      })[0].info.avatar
+    }
+    if (!avatar.uri)
       avatar = EMPTYAVATAR
-    
-    if (!avatar)
-      return <View style={{ borderRadius: 50 }}>
+
+    if (appl.isLast)
+      return <View style={{ borderRadius: 50 ,  }}>
         {/* <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text> */}
         <Animated.View style={{ borderRadius: 50 }}>
-          <Animated.Image source={avatar}  
-          opacity={opacity}
-          imageStyle={{ borderRadius: 50 }} 
-          style={{ height: 25, width: 25, borderRadius: 50, resizeMode: "cover" }} />
+          <Animated.Image source={avatar}
+            opacity={opacity}
+            imageStyle={{ borderRadius: 50 }}
+            style={{ height: 25, width: 25, borderRadius: 50, resizeMode: "cover", }} />
         </Animated.View>
       </View>
 
     return <View style={{ borderRadius: 50 }}>
       {/* <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text> */}
       <Animated.View style={{ borderRadius: 50 }}>
-        <Animated.Image source={avatar}  
-        opacity={opacity}
-        imageStyle={{ borderRadius: 50 }} 
-        style={{ height: 25, width: 25, borderRadius: 50, resizeMode: "cover" }} />
+        <ImageBackground source={avatar}
+          opacity={0.5}
+          imageStyle={{ borderRadius: 50, }}
+          style={{ height: 20, width: 20, borderRadius: 50, resizeMode: "cover" }} >
+        </ImageBackground>
+
       </Animated.View>
     </View>
 
   }
 
-  if (!listAppls) 
-  return (
-    <View style={[{ alignItems: 'center' }]}>
-      <ActivityIndicator size={100} color={colors.primary} />
-      <Text>Loading ... </Text>
-    </View>
-)
+  if (!listAppls)
+    return (
+      <View style={[{ alignItems: 'center' }]}>
+        <ActivityIndicator size={100} color={colors.primary} />
+        <Text>Loading ... </Text>
+      </View>
+    )
   return (
     <View style={styles.container}>
+
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
@@ -208,14 +200,18 @@ function ManagerMap(props) {
         >
           {
             listAppls.map((marker, index) => {
+              let description = `${marker.fc_name} - ${marker.endtime.substring(11,16)}`
               return (
                 <Marker
                   coordinate={{ latitude: marker.lat, longitude: marker.lon }}
                   key={index}
+                  // identifier={index}
                   onPress={() => {
                     setActivateIndex(index)
                     carouselRef.current.snapToItem(index)
                   }}
+                  description={description}
+                  ref={(ref) => makerRef[index] = ref}
                 >
                   <View>
                     {renMarkerAvatar(marker, props.staff.staffs)}
@@ -228,27 +224,70 @@ function ManagerMap(props) {
 
         </MapView>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: height - CARD_HEIGHT - 150 }}>
+
+
+      <Provider>
+        <Portal>
+          <FAB.Group
+            style={{ flexDirection: 'row', justifyContent: 'flex-end', marginRight: -10 }}
+            // style={{position: 'absolute' , paddingBottom: CARD_HEIGHT * 4}}
+            open={open}
+            icon={open ? 'calendar-today' : 'plus'}
+            actions={[
+              {
+                icon: 'bell',
+                label: 'sort',
+                onPress: () => setListappls(sortTime(props.staff.listCheckin)),
+              },
+              {
+                icon: 'star',
+                label: 'last',
+                onPress: () => setListappls(props.staff.lastCheckin),
+              },
+              {
+                icon: 'email',
+                label: 'all',
+                onPress: () => setListappls(props.staff.listCheckin),
+              },
+            ]}
+            onStateChange={onStateChange}
+            onPress={() => {
+              if (open) {
+                // do something if the speed dial is open
+              }
+            }}
+          />
+        </Portal>
+      </Provider>
+
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: height - CARD_HEIGHT * 4 }}>
+
         <Carousel
           layout={'default'}
           ref={carouselRef}
           data={listAppls}
           sliderWidth={SliderWidth}
-          itemWidth={SliderWidth * 0.5}
+          itemWidth={SliderWidth * 0.7}
           itemHeight={CARD_HEIGHT}
           renderItem={_renderItem}
           useScrollView={false}
-          
+
           onSnapToItem={(index) => {
             setActivateIndex(index)
             mapRef.current.animateToCoordinate(
               { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
             )
+            makerRef[index].showCallout()
+            // makerRef[index].redrawCallout()
+            // mapRef.current.fitToElements()
+            // mapRef.current.fitToSuppliedMarkers([index]) // mapRef.current.fitToSuppliedMarkers([index])
           }}
           activeSlideAlignment="center"
         />
+
       </View>
 
+      
     </View>
   );
 }

@@ -7,7 +7,7 @@ https://code.tutsplus.com/vi/tutorials/get-started-with-layouts-in-react-native-
 # Kết hợp Stacks, Tabs
 **install**
 https://reactnavigation.org/docs/getting-started/
-https://viblo.asia/p/ket-hop-stacks-tabs-va-drawers-cua-react-navigation-4x-trong-react-native-maGK7OqMKj2
+**https://viblo.asia/p/ket-hop-stacks-tabs-va-drawers-cua-react-navigation-4x-trong-react-native-maGK7OqMKj2**
 
 **demo**
 https://github.com/react-navigation/react-navigation/tree/main/example

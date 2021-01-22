@@ -1,9 +1,7 @@
 import React from 'react'
 import { Text, View, StyleSheet, ScrollView, ImageBackground } from 'react-native'
 import TreeView from 'react-native-final-tree-view'
-import { FontAwesome } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { connect } from "react-redux"
 import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { colors } from '../styles'
