@@ -22,27 +22,7 @@ const SliderWidth = Dimensions.get('screen').width;
 
 
 //ion-md-remove
-function getIndicator(isExpanded, hasChildrenNodes) {
-  if (!hasChildrenNodes) {
-    return <Entypo name="phone" size={18} color= {colors.info } />
-  } else if (isExpanded) {
-    return <Ionicons
-      style={{
-        fontWeight: "bold",
-        fontSize: 20,
-        color: MAIN_COLOR2
-      }}
-      name='ios-arrow-dropdown-circle' />
-  } else {
-    return <Ionicons
-      style={{
-        fontWeight: "bold",
-        fontSize: 20,
-        color: MAIN_COLOR2
-      }}
-      name='ios-arrow-dropright' />
-  }
-}
+
 
 const BOOK = [
   {
@@ -411,6 +391,33 @@ function Skip(props) {
   }
 
   const renTree = () => {
+    function getIndicator(isExpanded, hasChildrenNodes, node) {
+      if (!hasChildrenNodes) {
+        return (
+          <TouchableOpacity 
+              onPress={() => handleCall(node.phone)}
+            >
+            <Entypo name="phone" size={18} color= {colors.info } />
+          </TouchableOpacity>
+        )
+      } else if (isExpanded) {
+        return <Ionicons
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            color: colors.secondary
+          }}
+          name='ios-arrow-dropdown-circle' />
+      } else {
+        return <Ionicons
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            color: colors.secondary
+          }}
+          name='ios-arrow-dropright' />
+      }
+    }
 
     const handleCall = (phone) => {
       var phoneNumber = `tel:${phone}`;
@@ -427,7 +434,7 @@ function Skip(props) {
         return (
           <View style={{
             height: 35,
-            marginLeft: 25 * level,
+            marginLeft: 25 * level + 5,
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}

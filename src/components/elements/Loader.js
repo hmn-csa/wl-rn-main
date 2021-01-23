@@ -8,7 +8,7 @@ function Loader(props) {
   return (
     <View style={[styles.container, { alignItems: 'center' }]}>
       {/* <ActivityIndicator size={80} color={colors.info}/>  */}
-      <View style={{ flexDirection: 'row', marginTop: 30 }}>
+      <View style={{ flexDirection: 'row', marginTop: 5 }}>
         <Text style={{ fontSize: 12 }}>Đang tải dữ liệu </Text>
         <Image source={require('../../images/Loading-page.gif')} style={{ height: 15, width: 50 }}></Image>
       </View>
@@ -18,10 +18,8 @@ function Loader(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff"
   }
 });
 

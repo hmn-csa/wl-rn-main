@@ -11,6 +11,7 @@ import { actGetUptrails, actUpdateShowlist } from "../actions/index"
 
 const { width, height } = Dimensions.get("window");
 import * as consts from '../consts'
+import { set } from 'react-native-reanimated';
 
 
 function ImageShow(props) {
@@ -50,6 +51,9 @@ function Uptrail(props) {
   const [image3, setimage3] = useState((props.image3 === null || props.image3 === '') ? null : props.image3)
 
 
+  const [openwide, setOpenwide] = useState(false);
+  
+
   const [visible, setVisible] = useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -65,7 +69,16 @@ function Uptrail(props) {
   const payAmount = (n) => {
     if (n != null & parseFloat(n, 10) > 0) {
       const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
-      return <Text style={[stylesTrail.nameTxt, { color: colors.green }]}>Hứa trả: {money.substring(0, money.length - 2)} </Text>
+      // return <Text style={[stylesTrail.nameTxt, { color: colors.green }]}>Hứa trả: {money.substring(0, money.length - 2)} </Text>
+
+      return <View style={[styles.row]}>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={stylesTrail.msgTxt} >Hứa trả:</Text>
+        </View>
+        <View style={[styles.box,]}>
+          <Text style={[stylesTrail.msgTxt, { fontWeight: "bold", }]}>{money.substring(0, money.length - 2)}</Text>
+        </View>
+      </View>
     }
   }
 
@@ -83,15 +96,11 @@ function Uptrail(props) {
   const reVisit = (next_visit_time) => {
     if (next_visit_time != null)
       return <View style={[styles.row]}>
-        <View style={styles.box}>
+        <View style={[styles.box, { flex: 0.618 }]}>
           <Text style={stylesTrail.msgTxt} >Ngày hẹn:</Text>
         </View>
-        <View style={[styles.box, { flex: 4 }]}>
-          <View style={[styles.row]}>
-            <View style={[styles.box]}>
-              <Text style={[stylesTrail.msgTxt, { fontWeight: "bold", }]}>{nextTime(next_visit_time)}</Text>
-            </View>
-          </View>
+        <View style={[styles.box,]}>
+          <Text style={[stylesTrail.msgTxt, { fontWeight: "bold", }]}>{nextTime(next_visit_time)}</Text>
         </View>
       </View>
   }
@@ -99,36 +108,12 @@ function Uptrail(props) {
   const renCode = (code) => {
     if (['PTP', 'OBT', 'WFP', 'TER'].includes(code))
       return <Text
-        style={[stylesTrail.remarkCode, { color: colors.green, }]}>{code}</Text>
+        style={[stylesTrail.remarkCode, { color: colors.green,}]}>{code}</Text>
     else return <Text
       style={[stylesTrail.remarkCode, { color: colors.secondary, }]}>{code}</Text>
   }
 
-  // const images = (image1, image2, image3) => {
-  //   if (image1 !== null || image2 !== null || image3 !== null)
-  //     return (
-  //       <Button
-  //         icon="camera"
-  //         mode="contained"
-
-  //         style={buttonStyles.button}
-  //         onPress={showDialog}>
-  //       </Button>
-  //     )
-  // }
-
-  //   <Button
-  //   icon="camera"
-  //   mode="contained"
-
-  //   style={buttonStyles.button}
-  //   onPress={showDialog}>
-  // </Button>
-
-  // onPress={() => {
-  //   setActivateImage(image)
-  //   showDialogImage()
-  // }}
+  
   const getCodeLabel = (code) => {
     var result = consts.REMARK_CODE.filter(obj => {
       return obj.value === code
@@ -143,7 +128,7 @@ function Uptrail(props) {
         <View style={[buttonStyles.buttons, { backgroundColor: null }]}>
 
           <TouchableOpacity
-            style={[buttonStyles.button, { backgroundColor: null }]}
+            style={[buttonStyles.button, { backgroundColor: null,  }]}
             onPress={() => {
               setActivateImage({ uri: image1 })
               showDialogImage()
@@ -153,7 +138,8 @@ function Uptrail(props) {
               source={{ uri: image1 }}
               style={{
                 width: 45,
-                height: 60
+                height: 60,
+                borderRadius:10
               }}
             />
           </TouchableOpacity>
@@ -169,7 +155,8 @@ function Uptrail(props) {
               source={{ uri: image2 }}
               style={{
                 width: 45,
-                height: 60
+                height: 60,
+                borderRadius:10
               }}
 
             />
@@ -186,7 +173,8 @@ function Uptrail(props) {
               source={{ uri: image3 }}
               style={{
                 width: 45,
-                height: 60
+                height: 60,
+                borderRadius:10
               }}
 
             />
@@ -198,83 +186,116 @@ function Uptrail(props) {
       )
   }
 
+
+  const renOpenItems = (isOpen) => {
+    if (isOpen)
+      return (
+        <View style={{marginTop: 10}}>
+          <View style={[styles.row]}>
+            <View style={[styles.box, {flex: 0.618}]}>
+              <Text style={stylesTrail.msgTxt}>Remark</Text>
+            </View>
+            <View style={[styles.box,]}>
+              <View style={[styles.row]}>
+                <View style={[styles.box,]}>
+                  <Text style={[stylesTrail.msgTxt,]}>{getCodeLabel(code)}</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          
+          <View style={[styles.row]}>
+           <View style={[styles.box, {flex: 0.618}]}>
+              <Text style={stylesTrail.msgTxt}>Địa chỉ:</Text>
+            </View>
+            <View style={[styles.box, ]}>
+              <View style={[styles.row]}>
+                <View style={[styles.box]}>
+                  <Text style={stylesTrail.msgTxt}>{trust_address}</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          
+          {payAmount(pay_amount)}
+
+          {reVisit(next_visit_time)}
+          <View style={[styles.row]}>
+            {images(image1, image2, image3)}
+          </View>
+        </View>
+      )
+   
+  }
+
   return (
     <View style={{
-      backgroundColor: colors.white,
+      backgroundColor: 'white',
       borderWidth: 1,
       borderRadius: 15,
-      borderColor: colors.lightGray
+      borderColor: colors.lightGray,
+      marginTop: 5, 
     }}>
 
       <TouchableOpacity
-        style={{ padding: 5 }}
+        style={{ padding: 10 }}
         onLongPress={() => handleShow([{ appl_id: props.appl_id, cust_name: props.cust_name }])}
+        onPress={() => {
+          openwide ? setOpenwide(false) : setOpenwide(true)
+        }}
       >
 
         <View style={styles.row}>
-          <View style={styles.box}>
-            <Text style={stylesTrail.nameTxt}>{splitTime(runtime)}</Text>
+          <View style={[styles.box, {flex: 0.618}]}>
+            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>Hợp đồng: </Text>
           </View>
-          <View style={[styles.box, { flex: 0.2 }]}>
+          <View style={[styles.box]}>
+            <Text  style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>{appl_id}</Text>
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <View style={[styles.box, {flex: 0.618}]}>
+            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>Code: </Text>
+          </View>
+          <View style={[styles.box]}>
             {renCode(code)}
           </View>
         </View>
+  
+
         <View style={styles.row}>
-          <Text style={stylesTrail.nameTxt}>HĐ: {appl_id}</Text>
-          <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
+          <View style={[styles.box, {flex: 0.618}]}>
+            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>Khách hàng: </Text>
+          </View>
+          <View style={[styles.box]}>
+            <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
+          </View>
         </View>
-        {/* <View style={styles.row}>
-          <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
-          {payAmount(pay_amount)}
-        </View> */}
-        <View style={[styles.row,]}>
-          {payAmount(pay_amount)}
-        </View>
-
 
 
         <View style={[styles.row]}>
-          <View style={styles.box}>
-            <Text style={stylesTrail.msgTxt}>Remark</Text>
+          <View style={[styles.box, {flex: 0.618}]}>
+            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>ghi chú:</Text>
           </View>
-          <View style={[styles.box, { flex: 4 }]}>
+          <View style={[styles.box,]}>
             <View style={[styles.row]}>
               <View style={[styles.box,]}>
-                <Text style={[stylesTrail.msgTxt, { fontWeight: "bold", }]}>{getCodeLabel(code)}</Text>
+                <Text style={[stylesTrail.msgTxt, ]}>{remark}</Text>
               </View>
             </View>
           </View>
         </View>
 
-        <View style={[styles.row]}>
-          <View style={styles.box}>
-            <Text style={stylesTrail.msgTxt} >ghi chú:</Text>
-          </View>
-          <View style={[styles.box, { flex: 4 }]}>
-            <View style={[styles.row]}>
-              <View style={[styles.box,]}>
-                <Text style={[stylesTrail.msgTxt, { fontWeight: "bold", }]}>{remark}</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+ 
+        
+        {renOpenItems(openwide)}
 
         <View style={[styles.row]}>
-          <View style={styles.box}>
-            <Text style={stylesTrail.msgTxt}>Địa chỉ:</Text>
+          <View style={[styles.box]}>
+            <Text style={{textAlign: 'right', fontSize: 9}}>{splitTime(runtime)}</Text>
           </View>
-          <View style={[styles.box, { flex: 4 }]}>
-            <View style={[styles.row]}>
-              <View style={[styles.box]}>
-                <Text style={stylesTrail.msgTxt}>{trust_address}</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {reVisit(next_visit_time)}
-        <View style={[styles.row]}>
-          {images(image1, image2, image3)}
         </View>
 
 
@@ -327,6 +348,9 @@ function Uptrail(props) {
   )
 }
 
+
+
+
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token.token.access,
@@ -357,14 +381,12 @@ const stylesTrail = StyleSheet.create({
   },
   nameTxt: {
     marginLeft: 5,
-    fontWeight: '600',
-    color: '#222',
-    fontSize: 13,
+    fontSize: 12,
     width: 190,
   },
   msgTxt: {
     fontWeight: '400',
-    color: colors.textcolor,
+    // color: colors.textcolor,
     fontSize: 11,
     marginLeft: 5,
   },
@@ -397,7 +419,7 @@ const stylesTrail = StyleSheet.create({
   remarkCode: {
     fontWeight: "bold",
     fontSize: 16,
-    textAlign: 'right'
+    marginLeft: 4
   },
   description: {
     paddingBottom: 10,

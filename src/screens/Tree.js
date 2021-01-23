@@ -68,7 +68,6 @@ function Tree(props) {
                 fontSize: 15,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                flex: 1
               }}
             >
               <View>
