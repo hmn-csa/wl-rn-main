@@ -329,14 +329,7 @@ function Skip(props) {
   const [phoneBook, setPhoneBook] = useState(BOOK)
   const [activeIndex, setActivateIndex] = useState(0);
 
-  useEffect(() => {
-    if (props.vsf.activeIdno.main_infos !== undefined && !props.vsf.fetching)
-      setPhoneBook(renPhonBook(props.vsf.activeIdno))
-
-  }, [props.vsf.activeIdno]);
-
-  useEffect(() => {
-
+  const setInit = () => {
     if (props.vsf.activeIdno.main_infos !== undefined) { 
       const appl_id = props.vsf.activeIdno.appl_infos[activeIndex].appl_id
       const paymentsF = props.vsf.activeIdno.payment_infos.filter(pay => pay.appl_id === appl_id)
@@ -364,6 +357,16 @@ function Skip(props) {
     } else {
       setDataAppl([])
     }
+  }
+
+  useEffect(() => {
+    if (props.vsf.activeIdno.main_infos !== undefined && !props.vsf.fetching)
+      setPhoneBook(renPhonBook(props.vsf.activeIdno))
+      setInit()
+  }, [props.vsf.activeIdno]);
+
+  useEffect(() => {
+    setInit()
   }, [activeIndex]);
 
 
