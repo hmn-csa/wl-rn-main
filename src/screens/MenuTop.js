@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { colors } from '../styles'
-import { TreeStack, SegmentStack, ProductStack, PortStack, DashboardStack, UserStack } from './Stacks'
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
-import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
-import User from './User'
-import Todo from './Todo'
-import Summary from './Summary'
-
-
-
 
 const Tab = createMaterialTopTabNavigator();
 

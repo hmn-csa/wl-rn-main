@@ -12,11 +12,9 @@ import Swiper from 'react-native-swiper';
 import { Button } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form'
 import Calendar_ from '../components/Calendar'
-import TodoDash from '../components/TodoDash'
-import SummaryDash from '../components/SummaryDash'
 
 
-function Dashboard(props) {
+function TodoDash(props) {
   const { register, setValue, handleSubmit, control, errors } = useForm();
 
   const handleShowTodo = () => {
@@ -43,17 +41,7 @@ function Dashboard(props) {
         flexDirection: 'column',
         backgroundColor: 'white',
       }}>
-        <Swiper
-          showsButtons={false}
-          autoplay={true}
-          autoplayTimeout={6}
-          style={{ height: 190 }}
-          showsPagination={false}
-          autoplayDirection={true}>
-          <TodoDash />
-          <SummaryDash />
-        </Swiper>
-        {/* <Text style={styles.header_dash}>
+        <Text style={styles.header_dash}>
           Todo list
         </Text>
         <View style={styles.todo_frame}>
@@ -113,119 +101,6 @@ function Dashboard(props) {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
-
-        <Text style={styles.header_dash}>
-          Collections
-        </Text>
-        <View style={styles.collx_frame}>
-          <View style={styles.frame_l}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                60
-              </Text>
-              <Text style={styles.title_value}>
-                Total case
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  500000
-                </Text>
-                <Text style={styles.title_value}>
-                  Paid MTD
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.frame_r}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                4/12
-              </Text>
-              <Text style={styles.title_value}>
-                Total PTP / Visit
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  5
-                </Text>
-                <Text style={styles.title_value}>
-                  Collected MTD
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View> */}
-
-        {/* <Text style={styles.header_dash}>
-          Past due list
-        </Text>
-        <View style={styles.past_due_frame}>
-          <TouchableOpacity style={styles.main_frame}>
-            <Text style={styles.sub_value}>
-              0
-              </Text>
-            <Text style={styles.title_value}>
-              Broken PTP
-              </Text>
-          </TouchableOpacity>
-          <View style={styles.frame_r}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.sub_value}>
-                2
-              </Text>
-              <Text style={styles.title_value}>
-                Unvisit
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View> */}
-        <View style={{ flex: 1 }}>
-          <Calendar_ />
-        </View>
-        <View style={styles.tool_frame}>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                placeholder=" Nhập mã HD..."
-                style={{
-                  width: '90%', paddingLeft: 5,
-                  borderTopLeftRadius: 5, borderBottomLeftRadius: 5, borderRightWidth: 0, borderWidth: 1,
-                  borderColor: colors.grey
-                }}
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-              />
-            )}
-            name="searchall"
-            defaultValue=""
-          />
-          <View style={{
-            marginRight: 10, borderTopRightRadius: 5, borderBottomRightRadius: 5,
-            borderWidth: 1, borderLeftWidth: 0, borderColor: colors.grey
-          }}>
-            <FontAwesome name="search" size={15} color="rgba(0,0,0,0.4)" style={{ margin: 5 }} />
-          </View>
-        </View>
-        <View style={styles.tool_frame}>
-          <TouchableOpacity style={styles.btn_tool}>
-            <FontAwesome5 name="search-dollar" size={24} color={colors.gray} style={{ padding: 15 }} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
-            <FontAwesome5 name="map-marked-alt" size={24} color={colors.gray} style={{ padding: 15 }} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
-            <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
-            <MaterialCommunityIcons name="map-clock" size={24} color={colors.gray} style={{ padding: 15 }} />
-          </TouchableOpacity>
         </View>
       </ScrollView >
     )
@@ -353,7 +228,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoDash);
 

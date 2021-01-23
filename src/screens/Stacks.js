@@ -18,6 +18,7 @@ import { styles, colors } from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
+import { Colors } from 'react-native-paper'
 
 const Stack = createStackNavigator()
 
@@ -130,23 +131,28 @@ function DashboardStack(props) {
         component={Dashboard}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.info,
           },
           headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 16,
           },
+          headerTitle: 'Dashboard',
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              <TouchableOpacity>
+              {/* <TouchableOpacity>
                 <Animated.View style={styleAni}>
                   <Controller
                     control={control}
                     render={({ onChange, onBlur, value }) => (
                       <TextInput
                         placeholder=" Nhập mã HD..."
-                        style={{ backgroundColor: 'rgba(255,255,255,1)', width: 120, paddingLeft: 5 }}
+                        style={{
+                          backgroundColor: 'rgba(255,255,255,1)', width: 120, paddingLeft: 5,
+                          borderTopLeftRadius: 5, borderBottomLeftRadius: 5, borderRightWidth: 0, borderWidth: 1,
+                          borderColor: colors.white
+                        }}
                         onBlur={onBlur}
                         onChangeText={value => onChange(value)}
                         value={value}
@@ -155,38 +161,30 @@ function DashboardStack(props) {
                     name="searchall"
                     defaultValue=""
                   />
-                  <View style={{ marginRight: 10, backgroundColor: 'rgba(255,255,255,1)' }}>
+                  <View style={{
+                    marginRight: 10, backgroundColor: 'rgba(255,255,255,1)', borderTopRightRadius: 5, borderBottomRightRadius: 5,
+                    borderWidth: 1, borderLeftWidth: 0, borderColor: colors.white
+                  }}>
                     <FontAwesome name="search" size={15} color="rgba(0,0,0,0.4)" style={{ margin: 5 }} />
                   </View>
                 </Animated.View>
-              </TouchableOpacity>
-              {hidesearch != true ?
+              </TouchableOpacity> */}
+              {/* {hidesearch != true ?
                 <TouchableOpacity>
-                  <MaterialIcons name="search" size={24} color="white" style={{ marginRight: 10 }} onPress={fadeIn} />
+                  <MaterialIcons name="search" size={24} color={colors.white} style={{ marginRight: 10 }} onPress={fadeIn} />
                 </TouchableOpacity>
-                : null}
+                : null} */}
               <TouchableOpacity>
-                <MaterialIcons name="chat" size={24} color="white" style={{ marginRight: 10 }} />
+                <MaterialIcons name="chat" size={24} color={colors.white} style={{ marginRight: 10 }} />
               </TouchableOpacity>
               <TouchableOpacity>
-                <FontAwesome name="bell-o" size={24} color="white" />
+                <FontAwesome name="bell-o" size={24} color={colors.white} />
               </TouchableOpacity>
-            </View>
+            </View >
           ),
-          // headerLeft: () => (
-          //   <View style={{ paddingLeft: 20 }}>
-          //     <TouchableOpacity onPress={() =>
-          //       props.navigation.navigate('Portfolio', {
-          //         screen: 'Maps'
-          //       })
-          //     } >
-          //       <MaterialIcons name="map" size={30} color="white" />
-          //     </TouchableOpacity>
-          //   </View>
-          // )
         }}
       />
-      <Stack.Screen
+      < Stack.Screen
         name="ListPayment"
         component={ListPayment}
         options={{
@@ -209,14 +207,14 @@ function DashboardStack(props) {
         }}
       />
 
-      <Stack.Screen
+      < Stack.Screen
         name="checkinMap"
         component={CheckinMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          headerTintColor: colors.info,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -225,14 +223,14 @@ function DashboardStack(props) {
           headerRight: () => (
             <View style={{ paddingRight: 20 }}>
               <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
+                <MaterialIcons name="search" size={30} color={colors.info} />
               </TouchableOpacity>
             </View>
           )
         }}
       />
 
-      <Stack.Screen
+      < Stack.Screen
         name="Uptrail"
         component={ListUptrail}
         options={{
@@ -254,7 +252,7 @@ function DashboardStack(props) {
           )
         }}
       />
-    </Stack.Navigator>
+    </Stack.Navigator >
   )
 }
 
