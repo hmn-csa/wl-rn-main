@@ -33,10 +33,11 @@ function MyApp(props) {
     if (props.staff.mode_staff)
       return (
         <View style={styles.container}>
+          
+          <MainApp />
           <Button onPress={() => props.outStaffMode()}>
             X
-        </Button>
-          <MainApp />
+          </Button>
         </View>
       )
     else return <ManagerApp />

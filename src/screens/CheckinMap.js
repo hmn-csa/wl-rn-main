@@ -16,7 +16,7 @@ import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
 import {calInitialRegion} from '../functions'
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 8;
+const CARD_HEIGHT = height / 10;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 import Carousel from 'react-native-snap-carousel';

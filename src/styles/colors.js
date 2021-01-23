@@ -7,7 +7,7 @@ const colors = {
   secondaryGradientEnd: '#FF1358',
   profileGradientStart: '#54CBF6',
   profileGradientEnd: '#49D2D0',
-  secondary: "#d71921", //'#FF1358',
+  secondary: "#fb5b5a", //'#FF1358',
   grey: '#acacac',
   gray: '#5f5f5f',
   darkGray: '#4d4d4d',

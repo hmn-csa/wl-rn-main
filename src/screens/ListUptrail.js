@@ -9,10 +9,11 @@ import axios from "axios"
 import DatePicker from 'react-native-datepicker'
 
 import { actGetUptrails, actUpdateShowlist } from "../actions/index"
-
+import Loader from '../components/elements/Loader'
 import Uptrail from '../components/Uptrail'
 import * as constAction from '../consts'
 // function Uptrail
+
 
 function ListUptrail(props) {
 
@@ -51,10 +52,7 @@ function ListUptrail(props) {
   const renMoreLoading = () => {
     if (props.uptrails.moreFetching)
       return (
-        <View style={[styles.container, { alignItems: 'center' }]}>
-          <Text>Loading ... </Text>
-          <ActivityIndicator size={5} color={colors.primary} />
-        </View>
+        <Loader/>
       )
     return <View></View>
   }
@@ -72,14 +70,11 @@ function ListUptrail(props) {
 
 
   if (props.uptrails.fetching || uptrailStatus)
-    return <View style={[styles.container, { alignItems: 'center' }]}>
-      <Text>Loading ... </Text>
-      <ActivityIndicator size={100} color={colors.primary} />
-    </View>
+    return <Loader/>
 
   else if (props.uptrails.uptrails.length > 0)
     return (
-      <ScrollView>
+      <ScrollView style={{padding: 10}} >
 
         {props.uptrails.uptrails.map(item =>
           <Uptrail
@@ -137,7 +132,6 @@ function ListUptrail(props) {
     return (
       <View style={[{ alignItems: 'center' }]}>
         <Text>không có Uptrail</Text>
-
       </View>
     )
 

@@ -1,51 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native'
+import { Text, View, StyleSheet, ScrollView, 
+  Dimensions, Linking, Platform, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TreeView from 'react-native-final-tree-view'
 import { Button } from 'react-native-paper';
 import { connect } from "react-redux"
 import Carousel from 'react-native-snap-carousel'
 import Timeline from 'react-native-timeline-flatlist'
+import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import { actUpdateShowlist } from "../actions"
 import { MAIN_COLOR2, colors } from '../styles'
 import Loader from '../components/elements/Loader'
 
+
+
 import { moneyFormat } from '../functions';
-import { DataTable } from 'react-native-paper';
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 5;
 const SliderWidth = Dimensions.get('screen').width;
 
 
 //ion-md-remove
-function getIndicator(isExpanded, hasChildrenNodes) {
-  if (!hasChildrenNodes) {
-    return <Ionicons name='ios-remove' />
-  } else if (isExpanded) {
-    return <Ionicons
-      style={{
-        fontWeight: "bold",
-        fontSize: 20,
-        color: MAIN_COLOR2
-      }}
-      name='ios-arrow-dropdown-circle' />
-  } else {
-    return <Ionicons
-      style={{
-        fontWeight: "bold",
-        fontSize: 20,
-        color: MAIN_COLOR2
-      }}
-      name='ios-arrow-dropright' />
-  }
-}
+
 
 const BOOK = [
   {
     id: 'mainPhone',
     name: 'Thông tin liên lạc',
-    children:  []
+    children: []
   },
   {
     id: 'mainRef',
@@ -74,7 +57,7 @@ function Skip(props) {
         phone: info.father_ref[i].ref_phone,
         ref_relation: info.father_ref[i].ref_relation
       })
-    
+
     const mainPhone = []
 
     if (info.main_infos.s37_phone !== null && info.main_infos.s37_phone !== undefined && info.main_infos.s37_phone !== "")
@@ -83,7 +66,7 @@ function Skip(props) {
         name: "s37_phone",
         phone: info.main_infos.s37_phone
       })
-    
+
     if (info.main_infos.cash24_phone !== null && info.main_infos.cash24_phone !== undefined && info.main_infos.cash24_phone !== "")
       mainPhone.push({
         id: "cash24_phone",
@@ -105,7 +88,7 @@ function Skip(props) {
         phone: info.main_infos.vmg_phone
       })
 
-    if (mainPhone.length > 0 ) 
+    if (mainPhone.length > 0)
       return [
         {
           id: 'mainPhone',
@@ -132,61 +115,93 @@ function Skip(props) {
     ]
   }
 
+
+
   const renMainInfo = (maininfo) => {
     return (
-      <DataTable style={{backgroundColor: 'white', margin: 10,  borderRadius: 10}} >
-        <DataTable.Header>
-          <DataTable.Title>Thông tin cơ bản: {maininfo.client_name}</DataTable.Title>
-        </DataTable.Header>
 
-        <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>CMND: {maininfo.id_no}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Chủ hộ khẩu: {maininfo.fb_no}</Text></DataTable.Cell>
-        </DataTable.Row>
+      <View style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 10,
+        backgroundColor: "white",
+        // borderRadius: 10,
+        // borderLeftWidth: 2,
+      }}>
+        <View style={[styles.row, { marginBottom: 10 }]}>
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent, { fontWeight: 'bold' }]}>Thông tin cơ bản: {maininfo.client_name}</Text>
+          </View>
+        </View>
 
-        <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Ngày sinh: {maininfo.birthday}</Text></DataTable.Cell>
-        </DataTable.Row>
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>CMND: {maininfo.id_no}</Text>
+          </View>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Chủ hộ khẩu: {maininfo.fb_no}</Text>
+          </View>
+        </View>
 
-        <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Học vấn: {maininfo.education}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Hôn nhân: {maininfo.marital_status}</Text></DataTable.Cell>
-        </DataTable.Row>
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text>
+          </View>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Ngày sinh: {maininfo.birthday}</Text>
+          </View>
+        </View>
 
-        <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Nghề nghiệp: {maininfo.job_description}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Thu nhập: {moneyFormat(maininfo.personal_income)} </Text></DataTable.Cell>
-        </DataTable.Row>
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Học vấn: {maininfo.education}</Text>
+          </View>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Hôn nhân: {maininfo.marital_status}</Text>
+          </View>
+        </View>
 
-        <DataTable.Row>
-          <DataTable.Cell >
-            <View>
-              <Text style={{ fontSize: 10 }}>Tạm trú : {maininfo.address}</Text>
-              <Text style={{ fontSize: 10 }}>Thường trú : {maininfo.address_per}</Text>
-            </View>
-          </DataTable.Cell>
-        </DataTable.Row>
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Nghề nghiệp: {maininfo.job_description}</Text>
+          </View>
+          <View style={[styles.box]}>
+            <Text style={styles.textContent}>Thu nhập: {moneyFormat(maininfo.personal_income)}</Text>
+          </View>
+        </View>
 
-        <DataTable.Row>
-          <DataTable.Cell >
-            <View>
-              <Text style={{ fontSize: 10 }}>Công ty: {maininfo.company_name}</Text>
-              <Text style={{ fontSize: 10 }}>Địa chỉ: {maininfo.address_off}</Text>
-            </View>
-          </DataTable.Cell>
-        </DataTable.Row>
+        <View style={[styles.row, { marginTop: 8 }]}>
+          <View style={[styles.box]}>
+            <Text style={{ fontSize: 10 }}>Tạm trú : {maininfo.address}</Text>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={[styles.box]}>
+            <Text style={{ fontSize: 10 }}>Thường trú : {maininfo.address_per}</Text>
+          </View>
+        </View>
 
-      </DataTable>
+        <View style={[styles.row, { marginTop: 5 }]}>
+          <View style={[styles.box]}>
+            <Text style={{ fontSize: 10 }}>Công ty: {maininfo.company_name}</Text>
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <View style={[styles.box]}>
+            <Text style={{ fontSize: 10 }}>Địa chỉ cty: {maininfo.address_off}</Text>
+          </View>
+        </View>
+
+      </View>
     )
   }
 
- 
+
 
 
   const renApplInfo = ({ item, index }) => {
-
-    // const activeAppls = applinfos.filter(appl => appl.status === 'Active')
 
     const statusColor = (status, appl_id) => {
       if (status === 'Active')
@@ -205,18 +220,18 @@ function Skip(props) {
 
     const loan = (status, appl_id) => {
       if (status === 'Active')
-        return `Loan: ${moneyFormat(item.loanamount)}`
+        return `${moneyFormat(item.loanamount)}`
       if (appl_id !== "")
-        return `Loan: ${moneyFormat(item.loanamount)}`
-      return `UW: ${moneyFormat(item.loanamount_uw)}`
+        return `${moneyFormat(item.loanamount)}`
+      return `${moneyFormat(item.loanamount_uw)}`
     }
 
     const emi = (status, appl_id) => {
       if (status === 'Active')
-        return `Tiền/kỳ: ${moneyFormat(item.installment)}`
+        return `${moneyFormat(item.installment)}`
       if (appl_id !== "")
-        return `Tiền/kỳ: ${moneyFormat(item.installment)}`
-      return `Tiền/kỳ: ${moneyFormat(item.installment)}`
+        return `${moneyFormat(item.installment)}`
+      return `${moneyFormat(item.installment)}`
     }
 
 
@@ -224,37 +239,98 @@ function Skip(props) {
       <View style={{
         backgroundColor: 'white',
         padding: 0,
-        borderLeftWidth: 5,
+        borderLeftWidth: 3,
         borderRadius: 10,
-        borderColor: statusColor(item.status, item.appl_id)
+        borderColor: statusColor(item.status, item.appl_id),
+        padding: 10
       }}
       >
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title><Text style={{ fontSize: 11 }}>{item.appl_id}</Text></DataTable.Title>
-            <DataTable.Title><Text style={{ fontSize: 10 }}>Sản phẩm: {item.product_group}</Text></DataTable.Title>
-            <DataTable.Title><Text style={{ fontSize: 10 }}>Lãi Suất: {item.eff_rate}%</Text></DataTable.Title>
-          </DataTable.Header>
-          <DataTable.Row >
-            <DataTable.Cell ><Text style={{ fontSize: 10, backgroundColor: statusColor(item.status, item.appl_id) }}>
-              Trạng thái: {statusText(item.status, item.appl_id)} </Text></DataTable.Cell>
-            <DataTable.Cell ><Text style={{ fontSize: 10 }}>Ngày mở: {item.operate_date ? item.operate_date.substring(0, 10) : ""} </Text></DataTable.Cell>
-            <DataTable.Cell ><Text style={{ fontSize: 10 }}>due: {item.first_duedate ? item.first_duedate.substring(0, 10) : ""} </Text></DataTable.Cell>
-          </DataTable.Row>
 
-          <DataTable.Row >
-            <DataTable.Cell ><Text style={{ fontSize: 10 }}>{loan(item.status, item.appl_id)}</Text></DataTable.Cell>
-            <DataTable.Cell ><Text style={{ fontSize: 10 }}>{emi(item.status, item.appl_id)}</Text></DataTable.Cell>
-            <DataTable.Cell ><Text style={{ fontSize: 10 }}>Số kỳ: {item.tenor}</Text></DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent, { fontWeight: 'bold', backgroundColor: statusColor(item.status, item.appl_id) }]}>
+              {item.appl_id}
+            </Text>
+          </View>
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent,]}>
+              <Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text>
+              <Text >{statusText(item.status, item.appl_id)}</Text>
+            </Text>
+          </View>
+
+        </View>
+        <View style={[styles.row, { marginTop: 5 }]}>
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent]}>
+              <Text style={{ fontWeight: 'bold' }}>Ngày mở: </Text>
+              <Text>{item.operate_date ? item.operate_date.substring(0, 10) : ""}</Text>
+            </Text>
+          </View>
+
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent]}>
+              <Text style={{ fontWeight: 'bold' }}>Ngày due: </Text>
+              <Text>{item.first_duedate ? item.first_duedate.substring(0, 10) : ""}</Text>
+            </Text>
+          </View>
+        </View>
+
+        <View style={[styles.row, { marginTop: 5 }]}>
+
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent]}>
+              <Text style={{ fontWeight: 'bold' }}>Sản phẩm: </Text>
+              <Text>{item.product_group}</Text>
+            </Text>
+          </View>
+
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent]}>
+              <Text style={{ fontWeight: 'bold' }}>Lãi Suất: </Text>
+              <Text>{item.eff_rate}%</Text>
+            </Text>
+          </View>
+        </View>
+
+        <View style={[styles.row, { marginTop: 5 }]}>
+
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent]}>
+              <Text style={{ fontWeight: 'bold' }}>Loan: </Text>
+              <Text>{loan(item.status, item.appl_id)}</Text>
+            </Text>
+          </View>
+
+          <View style={[styles.box]}>
+            <Text style={[styles.textContent]}>
+              <Text style={{ fontWeight: 'bold' }}>Tiền/kỳ: </Text>
+              <Text>{emi(item.status, item.appl_id)}</Text>
+            </Text>
+          </View>
+        </View>
+        <View style={[styles.row, { paddingTop: 10, borderTopWidth:1, borderTopColor: colors.lightGray }]}>
+          <Text style={[styles.textContent,{ fontWeight: 'bold' }] }>Chit tiết: </Text>
+        </View>
+        <Timeline
+            data={dataAppl}
+            separator={false}
+            circleSize={0.1}
+            innerCircle={'none'}
+            columnFormat={'single-column-right'}
+            dotSize={0}
+            innerCircle={'dot'}
+            renderDetail={renderDetail}
+            showTime={false}
+            lineWidth={0}
+          />
+       
       </View>
 
     )
   }
 
-
-
+  
 
   renderDetail = (rowData, sectionID, rowID) => {
     let title = <Text style={[styles.title]}>{rowData.month_dt} | DPD: {rowData.dpd}</Text>
@@ -291,7 +367,7 @@ function Skip(props) {
             rowData.follow.map(fol => {
               return (
                 <View style={[styles.descriptionContainer]} >
-                  <Text style={[styles.textDescription, { fontSize: 10 }]}>
+                  <Text style={[styles.textDescription]}>
                     Ngày {fol.contact_time.substring(8, 10)} {fol.contact_time.substring(11, 16)} | {fol.response_code} | {fol.person_contacted} |
                   {fol.remarks}
                   </Text>
@@ -304,16 +380,86 @@ function Skip(props) {
 
 
     return (
-      <View style={{ flex: 1 ,backgroundColor: 'white', padding:5, borderRadius: 13, }}>
+      <View style={{ flex: 1, backgroundColor: 'white', padding:0 }}>
         {title}
         {content}
         {payment}
         {followContent}
+        
       </View>
     )
   }
 
+  const renTree = () => {
+    function getIndicator(isExpanded, hasChildrenNodes, node) {
+      if (!hasChildrenNodes) {
+        return (
+          <TouchableOpacity 
+              onPress={() => handleCall(node.phone)}
+            >
+            <Entypo name="phone" size={18} color= {colors.info } />
+          </TouchableOpacity>
+        )
+      } else if (isExpanded) {
+        return <Ionicons
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            color: colors.secondary
+          }}
+          name='ios-arrow-dropdown-circle' />
+      } else {
+        return <Ionicons
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            color: colors.secondary
+          }}
+          name='ios-arrow-dropright' />
+      }
+    }
 
+    const handleCall = (phone) => {
+      var phoneNumber = `tel:${phone}`;
+      if (Platform.OS !== 'android') {
+        phoneNumber = `telprompt:${phone}`;
+      }
+      return Linking.openURL(phoneNumber)
+    }
+  
+    return <TreeView
+      data={phoneBook}
+      initialExpanded={true}
+      renderNode={({ node, level, isExpanded, hasChildrenNodes }) => {
+        return (
+          <View style={{
+            height: 35,
+            marginLeft: 25 * level + 5,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+          > 
+            <View >
+              <Text style={[styles.textContent, { fontWeight: 'bold',}]} >
+                {getIndicator(isExpanded, hasChildrenNodes)} {node.name} 
+              </Text>
+            </View>
+            <TouchableOpacity 
+              onPress={() => handleCall(node.phone)}
+            >
+              <Text style={[styles.textContent, { fontWeight: 'bold',}]}>
+                <Text style={{ color: colors.black }}>
+                  {node.phone}
+                </Text>{"\t"}
+               
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+        )
+      }}
+    />
+  }
 
   // ====================================================== // 
 
@@ -321,15 +467,8 @@ function Skip(props) {
   const [phoneBook, setPhoneBook] = useState(BOOK)
   const [activeIndex, setActivateIndex] = useState(0);
 
-  useEffect(() => {
-    if (props.vsf.activeIdno.main_infos !== undefined && !props.vsf.fetching)
-      setPhoneBook(renPhonBook(props.vsf.activeIdno))
-
-  }, [props.vsf.activeIdno]);
-
-  useEffect(() => {
-
-    if (props.vsf.activeIdno.main_infos !== undefined) { 
+  const setInit = () => {
+    if (props.vsf.activeIdno.main_infos !== undefined) {
       const appl_id = props.vsf.activeIdno.appl_infos[activeIndex].appl_id
       const paymentsF = props.vsf.activeIdno.payment_infos.filter(pay => pay.appl_id === appl_id)
       const dpdsF = props.vsf.activeIdno.dpd_infos.filter(item => item.appl_id === appl_id)
@@ -356,6 +495,16 @@ function Skip(props) {
     } else {
       setDataAppl([])
     }
+  }
+
+  useEffect(() => {
+    if (props.vsf.activeIdno.main_infos !== undefined && !props.vsf.fetching)
+      setPhoneBook(renPhonBook(props.vsf.activeIdno))
+    setInit()
+  }, [props.vsf.activeIdno]);
+
+  useEffect(() => {
+    setInit()
   }, [activeIndex]);
 
 
@@ -374,34 +523,12 @@ function Skip(props) {
     return (
       <View>
         <ScrollView>
-          <TreeView
-            data={phoneBook}
-            initialExpanded={true}
-            renderNode={({ node, level, isExpanded, hasChildrenNodes }) => {
-              return (
-                <View style={{
-                  height: 40,
-                  marginBottom: 4,
-                  paddingBottom: 5,
-                  flexDirection: 'row',
-                }}
-                >
-                  <Text
-                    style={{
-                      height: 40,
-                      marginLeft: 25 * level,
-                      fontSize: 12,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {getIndicator(isExpanded, hasChildrenNodes)} {node.name} | {node.ref_relation} | {node.phone}
-                  </Text>
-
-                </View>
-              )
-            }}
-          />
-          <View>
+          <View style={{
+            backgroundColor: 'white',
+            margin: 10,
+            
+          }}>
+            {renTree()}
             {renMainInfo(props.vsf.activeIdno.main_infos)}
           </View>
           <View style={{ flexDirection: 'row', }}>
@@ -421,26 +548,14 @@ function Skip(props) {
           </View>
 
           {/* {renPaymentInfo(props.vsf.activeIdno.appl_infos[activeIndex].appl_id)} */}
-          <Timeline
-            style={styles.list}
-            data={dataAppl}
-            separator={false}
-            circleSize={20}
-            innerCircle={'dot'}
-            circleColor='rgb(45,156,219)'
-            lineColor='rgb(45,156,219)'
-            timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-            timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, borderRadius: 13 }}
-            descriptionStyle={{ color: 'green' }}
-            renderDetail={renderDetail}
-            showTime={false}
-          />
+          
+
 
         </ScrollView>
 
       </View>
     )
- 
+
 }
 
 
@@ -482,9 +597,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start'
   },
-  content: {
-    marginLeft: 16,
+  row: {
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 3
+  },
+  box: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+
+  textContent: {
+    fontSize: 12
   },
   contentHeader: {
     flexDirection: 'row',
@@ -502,31 +628,28 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   list: {
-    flex: 1,
-    paddingRight: 10,
-    marginTop: 10
+    backgroundColor: 'white',
   },
   time: {
     fontSize: 11,
     color: "#808080",
   },
   name: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
   },
   title: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: 'bold'
   },
   descriptionContainer: {
     flexDirection: 'row',
-    paddingRight: 10,
-    
   },
 
   textDescription: {
     marginLeft: 10,
-    color: 'gray'
+    color: 'gray',
+    fontSize: 10,
   }
 });
 
