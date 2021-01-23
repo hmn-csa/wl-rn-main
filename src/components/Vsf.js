@@ -24,8 +24,8 @@ function Vsf(props){
     )
 
   return (  
-    <ScrollView >
-      <View style={styles.container}>
+    <ScrollView style={{padding: 5}}>
+      <View style={[styles.container, ]}>
         <View style={[styles.row, {backgroundColor: MAIN_COLOR3}]}>
           <Text style={styles.header2}>Khách hàng: {props.vsf.activeApplId.cust_name} </Text>
         </View>
