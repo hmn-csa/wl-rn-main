@@ -134,50 +134,58 @@ function Skip(props) {
 
   const renMainInfo = (maininfo) => {
     return (
-      <DataTable style={{backgroundColor: 'white', margin: 10,  borderRadius: 10}} >
+      <View style={{backgroundColor: 'white', margin: 10,  borderRadius: 10}} >
+      <DataTable >
         <DataTable.Header>
           <DataTable.Title>Thông tin cơ bản: {maininfo.client_name}</DataTable.Title>
         </DataTable.Header>
 
         <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>CMND: {maininfo.id_no}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Chủ hộ khẩu: {maininfo.fb_no}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>CMND: {maininfo.id_no}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Chủ hộ khẩu: {maininfo.fb_no}</Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Ngày sinh: {maininfo.birthday}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Ngày sinh: {maininfo.birthday}</Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Học vấn: {maininfo.education}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Hôn nhân: {maininfo.marital_status}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Học vấn: {maininfo.education}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Hôn nhân: {maininfo.marital_status}</Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Nghề nghiệp: {maininfo.job_description}</Text></DataTable.Cell>
-          <DataTable.Cell><Text style={{ fontSize: 11 }}>Thu nhập: {moneyFormat(maininfo.personal_income)} </Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Nghề nghiệp: {maininfo.job_description}</Text></DataTable.Cell>
+          <DataTable.Cell><Text style={{ fontSize: 10 }}>Thu nhập: {moneyFormat(maininfo.personal_income)} </Text></DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
           <DataTable.Cell >
-            <View>
-              <Text style={{ fontSize: 10 }}>Tạm trú : {maininfo.address}</Text>
-              <Text style={{ fontSize: 10 }}>Thường trú : {maininfo.address_per}</Text>
-            </View>
+              <Text style={{ fontSize: 9 }}>Tạm trú : {maininfo.address}</Text>
           </DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
           <DataTable.Cell >
-            <View>
-              <Text style={{ fontSize: 10 }}>Công ty: {maininfo.company_name}</Text>
-              <Text style={{ fontSize: 10 }}>Địa chỉ: {maininfo.address_off}</Text>
-            </View>
+            <Text style={{ fontSize: 9 }}>Thường trú : {maininfo.address_per}</Text>
+          </DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell >
+            <Text style={{ fontSize: 9 }}>Công ty: {maininfo.company_name}</Text>
+          </DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell >
+            <Text style={{ fontSize: 9 }}>Địa chỉ cty: {maininfo.address_off}</Text>
           </DataTable.Cell>
         </DataTable.Row>
 
       </DataTable>
+      </View>
     )
   }
 
