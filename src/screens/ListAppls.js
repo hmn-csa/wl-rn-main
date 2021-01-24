@@ -13,6 +13,9 @@ const KEYS_TO_FILTERS = ['appl_id', 'cust_name'];
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
 const SliderWidth = Dimensions.get('screen').width;
+import MapViewDirections from 'react-native-maps-directions';
+
+
 
 function ListAppls(props) {
 

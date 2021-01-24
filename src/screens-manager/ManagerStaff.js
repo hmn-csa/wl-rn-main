@@ -189,7 +189,7 @@ function ManagerStaff(props) {
     )
 
   else return (
-    <View style={[styles.container, {marginTop: 20}]} >
+    <View style={[styles.container, { marginTop: 20 }]} >
       {/*  */}
       <View style={[styles.row, { flex: 0.118, }]}>
         <View style={[styles.box]}>
@@ -237,7 +237,7 @@ function ManagerStaff(props) {
             style={[styles.indexValueSmall, { color: colors.green }]}
           >{props.staff.dash.paidMtd.case} hđ | {moneyFormat(props.staff.dash.paidMtd.value)} vnđ
           </Text>
-         
+
         </View>
         <View style={[styles.box, { alignItems: 'center' }]}>
           <Text style={styles.indexLabel}>Thu trong ngày</Text>
@@ -249,13 +249,13 @@ function ManagerStaff(props) {
       </View>
 
       {/* <View style={[styles.row, { flex: 1 }]}> */}
-        <FlatList
-          style={{ flex: 1 }}
-          data={props.staff.staffs}
-          horizontal={false}
-          numColumns={1}
-          renderItem={renderItem} 
-        />
+      <FlatList
+        style={{ flex: 1 }}
+        data={props.staff.staffs}
+        horizontal={false}
+        numColumns={1}
+        renderItem={renderItem}
+      />
       {/* </View>  */}
     </View>
   )

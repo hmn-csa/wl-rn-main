@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import MapView from 'react-native-map-clustering';
+
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 //import { MapView, Marker, PROVIDER_GOOGLE  } from 'expo'
 import { Button, Dialog, Portal, } from 'react-native-paper';
 import {
-  StyleSheet, Text, View,TouchableOpacity, Dimensions,
+  StyleSheet, Text, View, TouchableOpacity, Dimensions,
   ScrollView, FlatList
 } from 'react-native'
 import { connect } from "react-redux"
@@ -13,18 +13,18 @@ import Carousel from 'react-native-snap-carousel'
 
 import ContractDetailMap from '../components/ContractDetailMap'
 
-import {calInitialRegion} from '../functions'
+import { calInitialRegion } from '../functions'
 
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 4.5;
+const CARD_HEIGHT = height / 10;
 const SliderWidth = Dimensions.get('screen').width;
 
 
 function applMap(props) {
 
-  const mapRef = useRef(null);
-  const carouselRef = useRef(null);
-  const makerRef = {};
+  const mapRef = useRef(null)
+  const makerRef = {}
+  const carouselRef = useRef(null)
 
   const [showlists, setShowlists] = useState(
     props.showlists.applIds.map(appl => appl.appl_id)
@@ -41,7 +41,7 @@ function applMap(props) {
     return (
       <ContractDetailMap
         opacity={0.2}
-        key={item.appl_id}
+        key={index}
         contractId={item.appl_id}
         navigation={props.navigation}
       />
@@ -50,58 +50,61 @@ function applMap(props) {
 
 
   if (listAppls.length > 0)
-  return (
-    <View style={styles.container}>
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-        <MapView
-          style={styles.mapStyle}
-          provider={PROVIDER_GOOGLE}
-          ref={mapRef}
-          initialRegion={initialRegion}
-        >
-          {
-            listAppls.map((appl, index) =>
-              <Marker
-                coordinate={{ latitude: appl.lat, longitude: appl.lon }}
-                key={appl.appl_id}
-                description={appl.appl_id}
-                onPress={() => {
-                  setActivateIndex(index)
-                  carouselRef.current.snapToItem(index)
-                }}
-                Color={'blue'}
-                ref={(ref) => makerRef[index] = ref}
-              />
-            )
-          }
-        </MapView>
-      </View>
-      <View 
-        opacity={0.8}
-        style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 5 }}>
-        <Carousel
-          ref={carouselRef}
-          layout={'default'}
-          data={listAppls}
-          sliderWidth={SliderWidth}
-          itemWidth={width * 0.9}
-          renderItem={_renderItem}
-          useScrollView={false}
-          onSnapToItem={(index) => {
-            setActivateIndex(index)
-            mapRef.current.animateToCoordinate(
-              { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
-            )
-            makerRef[index].showCallout()
-          }}
-          activeSlideAlignment="center"
-        />
-      </View>
+    return (
+      <View style={styles.container}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+          <MapView
+            style={styles.mapStyle}
+            provider={PROVIDER_GOOGLE}
+            ref={mapRef}
+            initialRegion={initialRegion}
+          >
+            {
+              listAppls.map((appl, index) => {
+                let description = `${appl.appl_id}`
+                return <Marker
+                  coordinate={{ latitude: appl.lat, longitude: appl.lon }}
+                  key={appl.appl_id}
+                  description={description}
+                  onPress={() => {
+                    setActivateIndex(index)
+                    carouselRef.current.snapToItem(index)
+                  }}
+                  Color={'blue'}
+                  ref={(ref) => makerRef[index] = ref}
+                />
+              }
+              )
+            }
+          </MapView>
+        </View>
+        <View
+          opacity={0.8}
+          style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 5 }}>
+          <Carousel
+            ref={carouselRef}
+            layout={'default'}
+            data={listAppls}
+            sliderWidth={SliderWidth}
+            itemWidth={width * 0.9}
+            renderItem={_renderItem}
+            useScrollView={false}
+            onSnapToItem={(index) => {
+              setActivateIndex(index)
+              mapRef.current.animateToCoordinate(
+                { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
+              )
+              if (makerRef[index] != undefined)
+                makerRef[index].showCallout()
+            }}
+            activeSlideAlignment="center"
+          />
+        </View>
 
-    </View>
-  );
-  else 
-    return(
+      </View>
+    );
+  else
+    return (
       <View><Text>Không có hợp đồng</Text></View>
     )
 }

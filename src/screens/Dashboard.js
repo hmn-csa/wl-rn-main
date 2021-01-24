@@ -53,137 +53,7 @@ function Dashboard(props) {
           <TodoDash />
           <SummaryDash />
         </Swiper>
-        {/* <Text style={styles.header_dash}>
-          Todo list
-        </Text>
-        <View style={styles.todo_frame}>
-          <View style={styles.frame_l}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                60
-              </Text>
-              <Text style={styles.title_value}>
-                Case
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  5
-                </Text>
-                <Text style={styles.title_value}>
-                  Paid
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sub_frame_r}>
-                <Text style={styles.sub_value}>
-                  0
-                </Text>
-                <Text style={styles.title_value}>
-                  PTP
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.frame_r}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                2
-              </Text>
-              <Text style={styles.title_value}>
-                Visited
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  5
-                </Text>
-                <Text style={styles.title_value}>
-                  Broken PTP
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sub_frame_r}>
-                <Text style={styles.sub_value}>
-                  0
-                </Text>
-                <Text style={styles.title_value}>
-                  Re Visit
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
 
-        <Text style={styles.header_dash}>
-          Collections
-        </Text>
-        <View style={styles.collx_frame}>
-          <View style={styles.frame_l}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                60
-              </Text>
-              <Text style={styles.title_value}>
-                Total case
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  500000
-                </Text>
-                <Text style={styles.title_value}>
-                  Paid MTD
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.frame_r}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                4/12
-              </Text>
-              <Text style={styles.title_value}>
-                Total PTP / Visit
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  5
-                </Text>
-                <Text style={styles.title_value}>
-                  Collected MTD
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View> */}
-
-        {/* <Text style={styles.header_dash}>
-          Past due list
-        </Text>
-        <View style={styles.past_due_frame}>
-          <TouchableOpacity style={styles.main_frame}>
-            <Text style={styles.sub_value}>
-              0
-              </Text>
-            <Text style={styles.title_value}>
-              Broken PTP
-              </Text>
-          </TouchableOpacity>
-          <View style={styles.frame_r}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.sub_value}>
-                2
-              </Text>
-              <Text style={styles.title_value}>
-                Unvisit
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View> */}
         <View style={{ flex: 1 }}>
           <Calendar_ />
         </View>
@@ -195,7 +65,10 @@ function Dashboard(props) {
                 placeholder=" Nhập mã HD..."
                 style={{
                   width: '90%', paddingLeft: 5,
-                  borderTopLeftRadius: 5, borderBottomLeftRadius: 5, borderRightWidth: 0, borderWidth: 1,
+                  borderTopLeftRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderRightWidth: 0,
+                  borderWidth: 1,
                   borderColor: colors.grey
                 }}
                 onBlur={onBlur}
@@ -223,7 +96,7 @@ function Dashboard(props) {
           <TouchableOpacity style={styles.btn_tool}>
             <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
+          <TouchableOpacity style={styles.btn_tool} onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
             <MaterialCommunityIcons name="map-clock" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
         </View>

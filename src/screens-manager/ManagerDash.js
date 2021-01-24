@@ -7,7 +7,7 @@ import { Button } from 'react-native-paper';
 
 import { connect } from "react-redux"
 // import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Ionicons, Entypo, MaterialIcons} from '@expo/vector-icons';
+import { Ionicons, Entypo, MaterialIcons } from '@expo/vector-icons';
 import { styles, colors } from '../styles'
 import { color } from 'react-native-reanimated';
 import { SHOWLIST_CLEAR } from '../consts';
@@ -19,7 +19,7 @@ function ManagerDash(props) {
   //const navigation = useNavigation()
 
 
-  
+
 }
 
 const cardStyles = StyleSheet.create({
@@ -77,9 +77,9 @@ const cardStyles = StyleSheet.create({
   },
 
   iconContainer: {
-    backgroundColor: 'white', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 15,
     margin: 15,
   },

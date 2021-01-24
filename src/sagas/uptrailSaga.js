@@ -22,7 +22,7 @@ export function* workerGetUptrail(request) {
   try {
     const config = {
       method: 'get',
-      url: `${constAction.WORKLIST_API}/uptrail?staff_id=${request.config.staff_id}&start=${request.config.start}&end=${request.config.end}`,
+      url: `${constAction.WORKLIST_API}/uptrail?staff_id=${request.config.staff_id}&loaddate=${request.config.loaddate}`,
       headers: {
         'Authorization': `Bearer ${request.config.token}`,
       },
@@ -34,7 +34,7 @@ export function* workerGetUptrail(request) {
     //const data = response.data;
 
     // dispatch a success action to the store with the new dog
-    yield put({ type: constAction.API_UPTRAIL_SUCCESS, content: response.data});
+    yield put({ type: constAction.API_UPTRAIL_SUCCESS, content: response.data });
 
   } catch (error) {
     // dispatch a failure action to the store with the error
@@ -44,6 +44,8 @@ export function* workerGetUptrail(request) {
 
 
 export function* workerGetMoreUptrail(request) {
+
+
   try {
     const config = {
       method: 'get',
@@ -56,7 +58,7 @@ export function* workerGetMoreUptrail(request) {
     const response = yield call(axios, config);
     //const data = response.data;
     // dispatch a success action to the store with the new dog
-    yield put({ type: constAction.API_UPTRAIL_SUCCESS, content: response.data});
+    yield put({ type: constAction.MORE_UPTRAIL_SUCCESS, content: response.data });
 
   } catch (error) {
     // dispatch a failure action to the store with the error
@@ -67,11 +69,11 @@ export function* workerGetMoreUptrail(request) {
 
 export function* workerUserUptrail(request) {
   try {
-    
-    let dataContent =  {
-      ...request.config, 
+
+    let dataContent = {
+      ...request.config,
     }
-    
+
     let config = {
       method: 'post',
       url: `${constAction.WORKLIST_API}/uptrail`,
@@ -80,11 +82,11 @@ export function* workerUserUptrail(request) {
       },
       data: dataContent
     }
-    
+
     const response = yield call(axios, config);
     // dispatch a success action to the store with the new content
-    dataContent = {...dataContent, runtime :response.data.message}
-    yield put({ type: constAction.USER_UPTRAIL_SUCCESS, content: dataContent});
+    dataContent = { ...dataContent, runtime: response.data.message }
+    yield put({ type: constAction.USER_UPTRAIL_SUCCESS, content: dataContent });
 
     // dispatch CAL-DASH
 

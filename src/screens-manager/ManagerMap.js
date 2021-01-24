@@ -44,6 +44,8 @@ const usePulse = (startDelay = 500) => {
   return opacity;
 };
 
+
+
 function ManagerMap(props) {
 
   const [listAppls, setListappls] = useState(null)
@@ -69,8 +71,8 @@ function ManagerMap(props) {
   const opacity = usePulse();
 
   const sortTime = (list) => {
-    return list.sort(function(a,b){
-      return Date.parse(a.endtime)  - Date.parse(b.endtime);
+    return list.sort(function (a, b) {
+      return Date.parse(a.endtime) - Date.parse(b.endtime);
     })
   }
 
@@ -79,7 +81,7 @@ function ManagerMap(props) {
   const { open } = stateFAB;
 
 
-  
+
 
   const _renderItem = ({ item, index }) => {
 
@@ -156,7 +158,7 @@ function ManagerMap(props) {
       avatar = EMPTYAVATAR
 
     if (appl.isLast)
-      return <View style={{ borderRadius: 50 ,  }}>
+      return <View style={{ borderRadius: 50, }}>
         {/* <Text style={styles.msgTxt}>{appl.staff_id} - {appl.endtime.substring(11, 16)}</Text> */}
         <Animated.View style={{ borderRadius: 50 }}>
           <Animated.Image source={avatar}
@@ -200,7 +202,7 @@ function ManagerMap(props) {
         >
           {
             listAppls.map((marker, index) => {
-              let description = `${marker.fc_name} - ${marker.endtime.substring(11,16)}`
+              let description = `${marker.fc_name} - ${marker.endtime.substring(11, 16)}`
               return (
                 <Marker
                   coordinate={{ latitude: marker.lat, longitude: marker.lon }}
@@ -287,7 +289,7 @@ function ManagerMap(props) {
 
       </View>
 
-      
+
     </View>
   );
 }
