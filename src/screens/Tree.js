@@ -54,7 +54,7 @@ function Tree(props) {
     return null
   }
   return (
-    <ScrollView style={{ padding: 20 }} >
+    <ScrollView style={{ padding: 20, backgroundColor: 'white' }} >
       <TreeView
         data={props.tree}
         initialExpanded={true}
@@ -70,11 +70,9 @@ function Tree(props) {
                 justifyContent: 'space-between',
               }}
             >
-              <View>
-                <Text style={getstyle_txttree(node.name)}>
-                  {getIndicator(isExpanded, hasChildrenNodes, node.type, level)} {node.name}
-                </Text>
-              </View>
+              <Text style={getstyle_txttree(node.name)}>
+                {getIndicator(isExpanded, hasChildrenNodes, node.type, level)} {node.name}
+              </Text>
               <Text style={{ fontWeight: 'bold' }}>
                 <Text style={{ color: colors.black }}>
                   {node.case}
@@ -95,7 +93,6 @@ function Tree(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-
     tree: state.treeCal,
   };
 };
@@ -110,9 +107,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 }
-
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tree);
 

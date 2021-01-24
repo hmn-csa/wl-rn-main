@@ -24,8 +24,8 @@ function SummaryDash(props) {
         <View style={styles.frame_l}>
           <TouchableOpacity style={styles.main_frame}>
             <Text style={styles.main_value}>
-              60
-              </Text>
+              {props.totalCal.totalCase.case}
+            </Text>
             <Text style={styles.title_value}>
               Total case
               </Text>
@@ -33,8 +33,8 @@ function SummaryDash(props) {
           <View style={styles.sub_frame}>
             <TouchableOpacity style={styles.sub_frame_l}>
               <Text style={styles.sub_value}>
-                500000
-                </Text>
+                {moneyFormat(props.totalCal.paidMtd.value)}
+              </Text>
               <Text style={styles.title_value}>
                 Paid MTD
                 </Text>
@@ -44,7 +44,7 @@ function SummaryDash(props) {
         <View style={styles.frame_r}>
           <TouchableOpacity style={styles.main_frame}>
             <Text style={styles.main_value}>
-              4/12
+              {props.totalCal.ptpCase.case}/12
               </Text>
             <Text style={styles.title_value}>
               Total PTP / Visit
@@ -53,8 +53,8 @@ function SummaryDash(props) {
           <View style={styles.sub_frame}>
             <TouchableOpacity style={styles.sub_frame_l}>
               <Text style={styles.sub_value}>
-                5
-                </Text>
+                {props.totalCal.paidMtd.case}
+              </Text>
               <Text style={styles.title_value}>
                 Collected MTD
                 </Text>

@@ -41,7 +41,6 @@ function MenuBottom() {
       <Tab.Screen name="User" component={UserStack} />
     </Tab.Navigator>
   );
-
 }
 
 export default MenuBottom;

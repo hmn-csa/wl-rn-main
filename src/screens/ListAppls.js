@@ -69,7 +69,6 @@ function ListAppls(props) {
             useScrollView={false}
             activeSlideAlignment="start"
             currentIndex={0}
-
           />
         </View>
       </View>
@@ -101,16 +100,12 @@ function ListAppls(props) {
         </View>
       </View>
     )
-
-
-
   else return (
     <View style={[styles.container, { alignItems: 'center' }]}>
       <Text>Loading ... </Text>
       <ActivityIndicator size={100} color={colors.primary} />
     </View>
   )
-
 }
 
 const mapStateToProps = (state, ownProps) => {

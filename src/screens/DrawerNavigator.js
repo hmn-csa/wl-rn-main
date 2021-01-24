@@ -5,7 +5,6 @@ import { CategorieStack, TreeStack, SegmentStack, ProductStack, PortStack, Dashb
 import { FontAwesome } from '@expo/vector-icons';
 import { colors } from '../styles'
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { drawerItemsMain } from './drawerItemsMain';
 import CustomDrawerContent from './CustomDrawerContent.js';
 import CustomHeader from './CustomHeader';
 import MenuBottom from './MenuBottom'

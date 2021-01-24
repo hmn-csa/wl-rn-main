@@ -361,21 +361,21 @@ function PortStack(props) {
           headerStyle: {
             backgroundColor: colors.primary,
           },
+          headerTitleAlign: 'center',
           headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
-            alignSelf: 'center'
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
+              {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
                 props.navigation.navigate('Portfolio', {
                   screen: 'Maps'
                 })
               } >
                 <MaterialIcons name="map" size={30} color="white" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity>
                 <MaterialIcons name="search" size={30} color="white" />
               </TouchableOpacity>

@@ -52,7 +52,7 @@ function Uptrail(props) {
 
 
   const [openwide, setOpenwide] = useState(false);
-  
+
 
   const [visible, setVisible] = useState(false);
   const showDialog = () => setVisible(true);
@@ -108,12 +108,12 @@ function Uptrail(props) {
   const renCode = (code) => {
     if (['PTP', 'OBT', 'WFP', 'TER'].includes(code))
       return <Text
-        style={[stylesTrail.remarkCode, { color: colors.green,}]}>{code}</Text>
+        style={[stylesTrail.remarkCode, { color: colors.green, }]}>{code}</Text>
     else return <Text
       style={[stylesTrail.remarkCode, { color: colors.secondary, }]}>{code}</Text>
   }
 
-  
+
   const getCodeLabel = (code) => {
     var result = consts.REMARK_CODE.filter(obj => {
       return obj.value === code
@@ -128,7 +128,7 @@ function Uptrail(props) {
         <View style={[buttonStyles.buttons, { backgroundColor: null }]}>
 
           <TouchableOpacity
-            style={[buttonStyles.button, { backgroundColor: null,  }]}
+            style={[buttonStyles.button, { backgroundColor: null, }]}
             onPress={() => {
               setActivateImage({ uri: image1 })
               showDialogImage()
@@ -139,7 +139,7 @@ function Uptrail(props) {
               style={{
                 width: 45,
                 height: 60,
-                borderRadius:10
+                borderRadius: 10
               }}
             />
           </TouchableOpacity>
@@ -156,7 +156,7 @@ function Uptrail(props) {
               style={{
                 width: 45,
                 height: 60,
-                borderRadius:10
+                borderRadius: 10
               }}
 
             />
@@ -174,7 +174,7 @@ function Uptrail(props) {
               style={{
                 width: 45,
                 height: 60,
-                borderRadius:10
+                borderRadius: 10
               }}
 
             />
@@ -190,9 +190,9 @@ function Uptrail(props) {
   const renOpenItems = (isOpen) => {
     if (isOpen)
       return (
-        <View style={{marginTop: 10}}>
+        <View style={{ marginTop: 10 }}>
           <View style={[styles.row]}>
-            <View style={[styles.box, {flex: 0.618}]}>
+            <View style={[styles.box, { flex: 0.618 }]}>
               <Text style={stylesTrail.msgTxt}>Remark</Text>
             </View>
             <View style={[styles.box,]}>
@@ -203,12 +203,12 @@ function Uptrail(props) {
               </View>
             </View>
           </View>
-          
+
           <View style={[styles.row]}>
-           <View style={[styles.box, {flex: 0.618}]}>
+            <View style={[styles.box, { flex: 0.618 }]}>
               <Text style={stylesTrail.msgTxt}>Địa chỉ:</Text>
             </View>
-            <View style={[styles.box, ]}>
+            <View style={[styles.box,]}>
               <View style={[styles.row]}>
                 <View style={[styles.box]}>
                   <Text style={stylesTrail.msgTxt}>{trust_address}</Text>
@@ -217,7 +217,7 @@ function Uptrail(props) {
             </View>
           </View>
 
-          
+
           {payAmount(pay_amount)}
 
           {reVisit(next_visit_time)}
@@ -226,7 +226,7 @@ function Uptrail(props) {
           </View>
         </View>
       )
-   
+
   }
 
   return (
@@ -235,7 +235,7 @@ function Uptrail(props) {
       borderWidth: 1,
       borderRadius: 15,
       borderColor: colors.lightGray,
-      marginTop: 5, 
+      marginTop: 5,
     }}>
 
       <TouchableOpacity
@@ -247,27 +247,27 @@ function Uptrail(props) {
       >
 
         <View style={styles.row}>
-          <View style={[styles.box, {flex: 0.618}]}>
-            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>Hợp đồng: </Text>
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Hợp đồng: </Text>
           </View>
           <View style={[styles.box]}>
-            <Text  style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>{appl_id}</Text>
+            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>{appl_id}</Text>
           </View>
         </View>
 
         <View style={styles.row}>
-          <View style={[styles.box, {flex: 0.618}]}>
-            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>Code: </Text>
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Code: </Text>
           </View>
           <View style={[styles.box]}>
             {renCode(code)}
           </View>
         </View>
-  
+
 
         <View style={styles.row}>
-          <View style={[styles.box, {flex: 0.618}]}>
-            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>Khách hàng: </Text>
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Khách hàng: </Text>
           </View>
           <View style={[styles.box]}>
             <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
@@ -276,25 +276,25 @@ function Uptrail(props) {
 
 
         <View style={[styles.row]}>
-          <View style={[styles.box, {flex: 0.618}]}>
-            <Text style={[stylesTrail.nameTxt, {fontWeight: 'bold'}]}>ghi chú:</Text>
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>ghi chú:</Text>
           </View>
           <View style={[styles.box,]}>
             <View style={[styles.row]}>
               <View style={[styles.box,]}>
-                <Text style={[stylesTrail.msgTxt, ]}>{remark}</Text>
+                <Text style={[stylesTrail.msgTxt,]}>{remark}</Text>
               </View>
             </View>
           </View>
         </View>
 
- 
-        
+
+
         {renOpenItems(openwide)}
 
         <View style={[styles.row]}>
           <View style={[styles.box]}>
-            <Text style={{textAlign: 'right', fontSize: 9}}>{splitTime(runtime)}</Text>
+            <Text style={{ textAlign: 'right', fontSize: 9 }}>{splitTime(runtime)}</Text>
           </View>
         </View>
 

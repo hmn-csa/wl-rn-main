@@ -34,10 +34,10 @@ function ProductCategories(props) {
               </View>
               <View style={{ flexDirection: 'row', paddingTop: 10 }}>
                 <Text style={{ width: '40%' }}>
-                  <FontAwesome name="file-text-o" size={15} color="black" /> 50
+                  <FontAwesome name="file-text" size={15} color={colors.yellow} /> 50
               </Text>
                 <Text>
-                  <FontAwesome name="dollar" size={15} color="black" /> 50000
+                  <FontAwesome name="dollar" size={15} color={colors.success} /> 50000
               </Text>
               </View>
               <View style={{ paddingTop: 10 }}>
@@ -123,11 +123,11 @@ const styles = StyleSheet.create({
     shadowColor: '#00000021',
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 4,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 4,
     marginVertical: 5,
     backgroundColor: "white",
     flexBasis: '46%',

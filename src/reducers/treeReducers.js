@@ -130,27 +130,27 @@ const treeReducers = (state = defaultState, action) => {
       })
 
       let initNotfollow = appls.filter((appl) => {
-        return appl.Followed == 0
+        return appl.followed == 0
       })
 
       let initNotfollowPaid = initPaidAppls.filter((appl) => {
-        return appl.Followed == 0
+        return appl.followed == 0
       })
 
       let initNotfollowNotPaid = initNotPaidAppls.filter((appl) => {
-        return appl.Followed == 0
+        return appl.followed == 0
       })
 
       // follow:
       let initFollow = appls.filter((appl) => {
-        return appl.Followed == 1
+        return appl.followed == 1
       })
 
       let initFollowPaid = initFollow.filter((appl) => {
-        return appl.full_Paid == 1
+        return appl.full_paid == 1
       })
       let initFollowNotPaid = initFollow.filter((appl) => {
-        return appl.full_Paid == 0
+        return appl.full_paid == 0
       })
       let initNotPaidMeet = initFollowNotPaid.filter((appl) => {
         return !(notMeetCode.includes(appl.last_action_code))//appl.lv4 == 'Meet'
@@ -162,7 +162,7 @@ const treeReducers = (state = defaultState, action) => {
         return ['WAS', 'LST'].includes(appl.last_action_code) //appl.lv5 == 'DIF Finance'
       })
       let initMeetRTP = initNotPaidMeet.filter((appl) => {
-        return appl.last_action_code == 'RPT' // appl.lv5 == 'RPT'
+        return appl.last_action_code == 'RTP' // appl.lv5 == 'RPT'
       })
 
       let initNotPaidNotMeet = initFollowNotPaid.filter((appl) => {
@@ -197,7 +197,7 @@ const treeReducers = (state = defaultState, action) => {
                   id: 'Paid',
                   name: 'Paid',
                   case: initNotfollowPaid.length,
-                  share: (initNotfollowPaid.length / totalCase * 100).toFixed(1),
+                  share: ((initNotfollowPaid.length / initNotfollow.length * 100) ? initNotfollow.length > 0 : 0).toFixed(1),
                   applIds: initNotfollowPaid, //.map(appl => appl.appl_id),
                   type: 'good',
                 },
@@ -205,7 +205,7 @@ const treeReducers = (state = defaultState, action) => {
                   id: 'Not Paid',
                   name: 'Not Paid',
                   case: initNotfollowNotPaid.length,
-                  share: (initNotfollowNotPaid.length / totalCase * 100).toFixed(1),
+                  share: ((initNotfollowNotPaid.length / initNotfollow.length * 100) ? initNotfollow.length > 0 : 0).toFixed(1),
                   applIds: initNotfollowNotPaid, //.map(appl => appl.appl_id),
                   type: 'bad',
                 },
@@ -223,7 +223,7 @@ const treeReducers = (state = defaultState, action) => {
                   id: 'Paid',
                   name: 'Paid',
                   case: initFollowPaid.length,
-                  share: (initFollowPaid.length / totalCase * 100).toFixed(1),
+                  share: (initFollowPaid.length / initFollow.length * 100).toFixed(1),
                   applIds: initFollowPaid, //.map(appl => appl.appl_id),
                   type: 'good',
                 },
@@ -231,7 +231,7 @@ const treeReducers = (state = defaultState, action) => {
                   id: 'Not Paid',
                   name: 'Not Paid',
                   case: initFollowNotPaid.length,
-                  share: (initFollowNotPaid.length / totalCase * 100).toFixed(1),
+                  share: (initFollowNotPaid.length / initFollow.length * 100).toFixed(1),
                   applIds: initFollowNotPaid, //.map(appl => appl.appl_id),
                   type: 'bad',
                   children: [
@@ -239,7 +239,7 @@ const treeReducers = (state = defaultState, action) => {
                       id: 'Meet',
                       name: 'Meet',
                       case: initNotPaidMeet.length,
-                      share: (initNotPaidMeet.length / totalCase * 100).toFixed(1),
+                      share: (initNotPaidMeet.length / initFollowNotPaid.length * 100).toFixed(1),
                       applIds: initNotPaidMeet, //.map(appl => appl.appl_id),
                       type: 'good',
                       children: [
@@ -247,7 +247,7 @@ const treeReducers = (state = defaultState, action) => {
                           id: 'PTP',
                           name: 'PTP',
                           case: initMeetPTP.length,
-                          share: (initMeetPTP.length / totalCase * 100).toFixed(1),
+                          share: (initMeetPTP.length / initNotPaidMeet.length * 100).toFixed(1),
                           applIds: initMeetPTP, //.map(appl => appl.appl_id),
                           type: 'good',
                         },
@@ -255,7 +255,7 @@ const treeReducers = (state = defaultState, action) => {
                           id: 'DIF Finance',
                           name: 'DIF Finance',
                           case: initMeetDif.length,
-                          share: (initMeetDif.length / totalCase * 100).toFixed(1),
+                          share: (initMeetDif.length / initNotPaidMeet.length * 100).toFixed(1),
                           applIds: initMeetDif, //.map(appl => appl.appl_id),
                           type: 'bad',
                         },
@@ -263,7 +263,7 @@ const treeReducers = (state = defaultState, action) => {
                           id: 'RTP',
                           name: 'RTP',
                           case: initMeetRTP.length,
-                          share: (initMeetRTP.length / totalCase * 100).toFixed(1),
+                          share: (initMeetRTP.length / initNotPaidMeet.length * 100).toFixed(1),
                           applIds: initMeetRTP, //.map(appl => appl.appl_id),
                           type: 'bad',
                         },
@@ -273,7 +273,7 @@ const treeReducers = (state = defaultState, action) => {
                       id: 'Not Meet',
                       name: 'Not Meet',
                       case: initNotPaidNotMeet.length,
-                      share: (initNotPaidNotMeet.length / totalCase * 100).toFixed(1),
+                      share: (initNotPaidNotMeet.length / initFollowNotPaid.length * 100).toFixed(1),
                       applIds: initNotPaidNotMeet, //.map(appl => appl.appl_id),
                       type: 'bad',
                       children: [
@@ -281,7 +281,7 @@ const treeReducers = (state = defaultState, action) => {
                           id: 'Found House',
                           name: 'Found House',
                           case: initNotMeetFH.length,
-                          share: (initNotMeetFH.length / totalCase * 100).toFixed(1),
+                          share: (initNotMeetFH.length / initNotPaidNotMeet.length * 100).toFixed(1),
                           applIds: initNotMeetFH, //.map(appl => appl.appl_id),
                           type: 'good',
                         },
@@ -289,7 +289,7 @@ const treeReducers = (state = defaultState, action) => {
                           id: 'Not Found House',
                           name: 'Not Found House',
                           case: initNotMeetNFH.length,
-                          share: (initNotMeetNFH.length / totalCase * 100).toFixed(1),
+                          share: (initNotMeetNFH.length / initNotPaidNotMeet.length * 100).toFixed(1),
                           applIds: initNotMeetNFH, //.map(appl => appl.appl_id),
                           type: 'bad',
                         },
@@ -301,10 +301,6 @@ const treeReducers = (state = defaultState, action) => {
             },
           ]
         },
-        {
-          id: '',
-          name: '',
-        }
       ]
       return state;
     default:
