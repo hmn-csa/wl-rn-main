@@ -12,6 +12,7 @@ import User from './User'
 import ListPayment from './ListPayment'
 import applMap from './applMap'
 import CheckinMap from './CheckinMap'
+import TodoDash from '../components/TodoDash'
 import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
 import ListUptrail from './ListUptrail'
 import { styles, colors } from '../styles'
@@ -19,6 +20,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Colors } from 'react-native-paper'
+
 
 const Stack = createStackNavigator()
 
@@ -141,39 +143,6 @@ function DashboardStack(props) {
           headerTitle: 'Dashboard',
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              {/* <TouchableOpacity>
-                <Animated.View style={styleAni}>
-                  <Controller
-                    control={control}
-                    render={({ onChange, onBlur, value }) => (
-                      <TextInput
-                        placeholder=" Nhập mã HD..."
-                        style={{
-                          backgroundColor: 'rgba(255,255,255,1)', width: 120, paddingLeft: 5,
-                          borderTopLeftRadius: 5, borderBottomLeftRadius: 5, borderRightWidth: 0, borderWidth: 1,
-                          borderColor: colors.white
-                        }}
-                        onBlur={onBlur}
-                        onChangeText={value => onChange(value)}
-                        value={value}
-                      />
-                    )}
-                    name="searchall"
-                    defaultValue=""
-                  />
-                  <View style={{
-                    marginRight: 10, backgroundColor: 'rgba(255,255,255,1)', borderTopRightRadius: 5, borderBottomRightRadius: 5,
-                    borderWidth: 1, borderLeftWidth: 0, borderColor: colors.white
-                  }}>
-                    <FontAwesome name="search" size={15} color="rgba(0,0,0,0.4)" style={{ margin: 5 }} />
-                  </View>
-                </Animated.View>
-              </TouchableOpacity> */}
-              {/* {hidesearch != true ?
-                <TouchableOpacity>
-                  <MaterialIcons name="search" size={24} color={colors.white} style={{ marginRight: 10 }} onPress={fadeIn} />
-                </TouchableOpacity>
-                : null} */}
               <TouchableOpacity>
                 <MaterialIcons name="chat" size={24} color={colors.white} style={{ marginRight: 10 }} />
               </TouchableOpacity>
@@ -206,7 +175,10 @@ function DashboardStack(props) {
           )
         }}
       />
-
+      < Stack.Screen
+        name="TodoDash"
+        component={TodoDash}
+      />
       < Stack.Screen
         name="checkinMap"
         component={CheckinMap}

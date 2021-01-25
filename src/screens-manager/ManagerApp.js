@@ -9,10 +9,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper';
 
-import {UserStack} from '../screens/Stacks'
+import { UserStack } from '../screens/Stacks'
 
 
-import{ styles, colors } from '../styles'
+import { styles, colors } from '../styles'
 
 // import ManagerDash from './ManagerDash'
 import ManagerStaff from './ManagerStaff'
@@ -23,7 +23,7 @@ import Notify from './Notifications'
 enableScreens()
 
 const Tab = createBottomTabNavigator();
-function MagagerApp () {
+function MagagerApp() {
 
 
   return (
@@ -32,25 +32,25 @@ function MagagerApp () {
       <Tab.Navigator
         screenOptions={
           ({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'ManagerStaff') {
-              iconName = focused ? 'ios-stats' : 'ios-stats';
-            } else if (route.name === 'ManagerMap') {
-              iconName = focused ? 'ios-home' : 'ios-home';
-            } else if (route.name === 'Portfolio') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
-            } else if (route.name === 'User') {
-              iconName = focused ? 'ios-person' : 'ios-person';
-            } else if (route.name === 'Categories') {
-              iconName = focused ? 'ios-folder' : 'ios-folder';
-            } 
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === 'ManagerStaff') {
+                iconName = focused ? 'ios-stats' : 'ios-stats';
+              } else if (route.name === 'ManagerMap') {
+                iconName = focused ? 'ios-home' : 'ios-home';
+              } else if (route.name === 'Portfolio') {
+                iconName = focused ? 'ios-list-box' : 'ios-list';
+              } else if (route.name === 'User') {
+                iconName = focused ? 'ios-person' : 'ios-person';
+              } else if (route.name === 'Categories') {
+                iconName = focused ? 'ios-folder' : 'ios-folder';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })
         }
         tabBarOptions={{
-          activeTintColor: colors.secondary, 
+          activeTintColor: colors.secondary,
           inactiveTintColor: 'gray',
         }}
       >
@@ -60,7 +60,7 @@ function MagagerApp () {
         <Tab.Screen name="UserStack" component={UserStack} />
 
       </Tab.Navigator>
-      <Notify/>
+      <Notify />
     </NavigationContainer>
   );
 }

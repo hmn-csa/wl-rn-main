@@ -3,18 +3,19 @@ import {
   View, Text, Image, TouchableOpacity, StyleSheet, TextInput, ScrollView, ActivityIndicator
 } from 'react-native'
 import { connect } from "react-redux"
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { actUpdateShowlist, actSetTodoShowlist, actGetUptrails, actSetActiveStaff } from "../actions"
+import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { colors } from '../styles'
 import { moneyFormat } from '../functions';
-import Loader from '../components/elements/Loader'
-import Swiper from 'react-native-swiper';
-import { Button } from 'react-native-paper';
-import { useForm, Controller } from 'react-hook-form'
-import Calendar_ from '../components/Calendar'
+import { useNavigation } from '@react-navigation/native';
+
 
 
 function SummaryDash(props) {
+  const navigation = useNavigation();
+  const handleShow = (list) => {
+    navigation.navigate('Portfolio', { screen: 'List' })
+    props.updateShowlist(list)
+  }
   return (
     <ScrollView >
       <Text style={styles.header_dash}>
@@ -22,7 +23,7 @@ function SummaryDash(props) {
         </Text>
       <View style={styles.collx_frame}>
         <View style={styles.frame_l}>
-          <TouchableOpacity style={styles.main_frame}>
+          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.totalCal.totalCase.applIds)}>
             <Text style={styles.main_value}>
               {props.totalCal.totalCase.case}
             </Text>
@@ -31,7 +32,7 @@ function SummaryDash(props) {
               </Text>
           </TouchableOpacity>
           <View style={styles.sub_frame}>
-            <TouchableOpacity style={styles.sub_frame_l}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.totalCal.paidMtd.applIds)}>
               <Text style={styles.sub_value}>
                 {moneyFormat(props.totalCal.paidMtd.value)}
               </Text>
@@ -43,15 +44,24 @@ function SummaryDash(props) {
         </View>
         <View style={styles.frame_r}>
           <TouchableOpacity style={styles.main_frame}>
-            <Text style={styles.main_value}>
-              {props.totalCal.ptpCase.case}/12
-              </Text>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity onPress={() => handleShow(props.totalCal.ptpCase.applIds)}>
+                <Text style={styles.main_value}>
+                  {props.totalCal.ptpCase.case}/
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleShow(props.totalCal.followed.applIds)} >
+                <Text style={styles.main_value}>
+                  {props.totalCal.followed.case}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <Text style={styles.title_value}>
               Total PTP / Visit
               </Text>
           </TouchableOpacity>
           <View style={styles.sub_frame}>
-            <TouchableOpacity style={styles.sub_frame_l}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.totalCal.paidMtd.applIds)}>
               <Text style={styles.sub_value}>
                 {props.totalCal.paidMtd.case}
               </Text>
@@ -78,7 +88,7 @@ const styles = StyleSheet.create({
   frame_r: {
     flex: 1,
     flexDirection: 'column',
-    borderLeftWidth: 1,
+    borderLeftWidth: 0,
     borderLeftColor: '#CCC'
   },
   header_dash: {
@@ -99,7 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'stretch',
     alignItems: 'center',
-    borderTopWidth: 1,
+    borderTopWidth: 0,
     borderTopColor: '#CCC'
   },
   sub_frame_l: {
@@ -107,7 +117,7 @@ const styles = StyleSheet.create({
   },
   sub_frame_r: {
     flex: 1,
-    borderLeftWidth: 1,
+    borderLeftWidth: 0,
     borderLeftColor: '#CCC'
   },
   main_value: {
@@ -174,15 +184,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     setTodoShowlist: (content) => {
       dispatch(actSetTodoShowlist(content))
-    },
-    setActiveStaff: (content) => {
-      dispatch(actSetActiveStaff(content))
-    },
-    initDashboard: () => {
-      dispatch(actInitDashboard())
-    },
-    getUptrails: (config) => {
-      dispatch(actGetUptrails(config))
     },
   };
 };

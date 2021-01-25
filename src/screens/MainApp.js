@@ -17,6 +17,7 @@ import * as constAction from '../consts'
 import { colors } from '../styles'
 import MenuBottom from './MenuBottom'
 
+
 enableScreens()
 
 

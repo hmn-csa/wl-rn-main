@@ -1,7 +1,7 @@
 import {
-  View, Text, ActivityIndicator, Dimensions
+  View, Text, ActivityIndicator, Dimensions, ScrollView, FlatList
 } from 'react-native'
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { connect } from "react-redux"
 import ContractDetailMap from '../components/ContractDetailMap'
 import Carousel from 'react-native-snap-carousel'
@@ -14,16 +14,15 @@ const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
 const SliderWidth = Dimensions.get('screen').width;
 
+
+
 function ListAppls(props) {
-
-
   const [searchTerm, setSearchTerm] = useState("")
   const [filtered, setFiltered] = useState(props.showlists.applIds)
   const hangleSearch = (value) => {
     try {
 
       setSearchTerm(value)
-      console.log(searchTerm)
       if (value != null && value != "" && value != undefined) {
         setFiltered(
           Object.values(props.data).filter(createFilter(searchTerm, KEYS_TO_FILTERS))
@@ -46,17 +45,19 @@ function ListAppls(props) {
     );
   };
 
+
+
   if (searchTerm !== null && searchTerm !== "")
     return (
       <View >
-        <Searchbar
+        {/* <Searchbar
           onChangeText={(value) => hangleSearch(value)}
           placeholder="Nhập tên có dấu hoặc appl_id "
           onSubmitEditing={(value) => hangleSearch(value)}
           clearIcon={'alpha-x-box-outline'}
         >
-        </Searchbar>
-        <View style={{ flexDirection: 'row' }}>
+        </Searchbar> */}
+        {/* <View style={{ flexDirection: 'row' }}>
           <Carousel
             layout={'default'}
             vertical={true}
@@ -70,20 +71,25 @@ function ListAppls(props) {
             activeSlideAlignment="start"
             currentIndex={0}
           />
-        </View>
+        </View> */}
+        <FlatList
+          data={props.showlists.applIds}
+          renderItem={_renderItem}
+          keyExtractor={(item) => item.id}
+        />
       </View>
     )
 
   if (props.data !== null)
     return (
       <View >
-        <Searchbar
+        {/* <Searchbar
           onChangeText={(value) => hangleSearch(value)}
           placeholder="Nhập tên (có dấu) hoặc appl_id"
           onSubmitEditing={(value) => hangleSearch(value)}
           clearIcon={'alpha-x-box-outline'}
-        />
-        <View style={{ flexDirection: 'row' }}>
+        /> */}
+        {/* <View style={{ flexDirection: 'row' }}>
           <Carousel
             layout={'default'}
             vertical={true}
@@ -97,7 +103,13 @@ function ListAppls(props) {
             activeSlideAlignment="start"
             currentIndex={0}
           />
-        </View>
+        </View > */}
+        <FlatList
+          data={props.showlists.applIds}
+          renderItem={_renderItem}
+          keyExtractor={(item) => item.id}
+          style={{ padding: 5, paddingBottom: 10 }}
+        />
       </View>
     )
   else return (

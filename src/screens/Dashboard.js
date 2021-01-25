@@ -11,26 +11,11 @@ import Loader from '../components/elements/Loader'
 import Swiper from 'react-native-swiper';
 import { Button } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form'
-import Calendar_ from '../components/Calendar'
+import Calendar from '../components/Calendar'
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
 
-
 function Dashboard(props) {
-  const { register, setValue, handleSubmit, control, errors } = useForm();
-
-  const handleShowTodo = () => {
-    const list_todo = Object.values(props.data).filter(appl => appl.todo_flag == 1).map(a => a.appl_id);
-    props.navigation.navigate('Portfolio', { screen: 'List' });
-    props.updateShowlist(list_todo)
-  }
-
-  const handleShow = (list, isTodo) => {
-    props.setTodoShowlist(isTodo)
-    props.navigation.navigate('Portfolio', { screen: 'List' })
-    props.updateShowlist(list)
-  }
-
   if (props.fetching || props.data === null)
     return (
       <Loader />
@@ -49,14 +34,16 @@ function Dashboard(props) {
           autoplayTimeout={6}
           style={{ height: 190 }}
           showsPagination={false}
-          autoplayDirection={true}>
+          autoplayDirection={true}
+          navigation={props.navigation}
+        >
           <TodoDash />
           <SummaryDash />
         </Swiper>
         <View style={{ flex: 1 }}>
-          <Calendar_ />
+          <Calendar />
         </View>
-        <View style={styles.tool_frame}>
+        {/* <View style={styles.tool_frame}>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -64,7 +51,10 @@ function Dashboard(props) {
                 placeholder=" Nhập mã HD..."
                 style={{
                   width: '90%', paddingLeft: 5,
-                  borderTopLeftRadius: 5, borderBottomLeftRadius: 5, borderRightWidth: 0, borderWidth: 1,
+                  borderTopLeftRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderRightWidth: 0,
+                  borderWidth: 1,
                   borderColor: colors.grey
                 }}
                 onBlur={onBlur}
@@ -81,7 +71,7 @@ function Dashboard(props) {
           }}>
             <FontAwesome name="search" size={15} color="rgba(0,0,0,0.4)" style={{ margin: 5 }} />
           </View>
-        </View>
+        </View> */}
         <View style={styles.tool_frame}>
           <TouchableOpacity style={styles.btn_tool}
             onPress={() => props.navigation.navigate('ListPayment')}>
@@ -94,7 +84,7 @@ function Dashboard(props) {
           <TouchableOpacity style={styles.btn_tool}>
             <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
+          <TouchableOpacity style={styles.btn_tool} onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
             <MaterialCommunityIcons name="map-clock" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
         </View>

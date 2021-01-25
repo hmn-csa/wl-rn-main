@@ -3,7 +3,7 @@ import React from "react";
 import ManagerApp from './ManagerApp'
 
 import { connect } from "react-redux";
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 
 function ManagerView(props) {

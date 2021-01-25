@@ -33,22 +33,24 @@ function ImageShow(props) {
 
 function Uptrail(props) {
 
-  const [runtime, setRuntime] = useState(props.runtime)
-  const [code, setCode] = useState(props.code)
-  const [appl_id, setAppl_id] = useState(props.appl_id)
-  const [cust_name, setCust_name] = useState(props.cust_name)
-  const [pay_amount, setPayamount] = useState(props.pay_amount)
-  const [remark, setRemark] = useState(props.remark)
-  const [trust_address, setTrust_address] = useState(props.trust_address)
-  const [next_visit_time, setnext_visit_time] = useState(props.next_visit_time)
+  const [item, setItem] = useState(props.item)
+
+  const [runtime, setRuntime] = useState(item.runtime)
+  const [code, setCode] = useState(item.code)
+  const [appl_id, setAppl_id] = useState(item.appl_id)
+  const [cust_name, setCust_name] = useState(item.cust_name)
+  const [pay_amount, setPayamount] = useState(item.pay_amount)
+  const [remark, setRemark] = useState(item.remark)
+  const [trust_address, setTrust_address] = useState(item.trust_address)
+  const [next_visit_time, setnext_visit_time] = useState(item.next_visit_time)
 
   // const [image1, setimage1] = useState(props.image1 === null ? null : "data:image/png;base64," + props.image1)
   // const [image2, setimage2] = useState(props.image2 === null ? null : `data:image/png;base64,${props.image2}`)
   // const [image3, setimage3] = useState(props.image3 === null ? null : "data:image/png;base64," + props.image3)
 
-  const [image1, setimage1] = useState((props.image1 === null || props.image1 === '') ? null : props.image1)
-  const [image2, setimage2] = useState((props.image2 === null || props.image2 === '') ? null : props.image2)
-  const [image3, setimage3] = useState((props.image3 === null || props.image3 === '') ? null : props.image3)
+  const [image1, setimage1] = useState((item.image1 === null || item.image1 === "") ? null : item.image1)
+  const [image2, setimage2] = useState((item.image2 === null || item.image2 === "") ? null : item.image2)
+  const [image3, setimage3] = useState((item.image3 === null || item.image3 === "") ? null : item.image3)
 
 
   const [openwide, setOpenwide] = useState(false);
@@ -186,8 +188,23 @@ function Uptrail(props) {
       )
   }
 
-
+  const cardStyle = props.type === "marker" ? {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    borderColor: colors.lightGray,
+    padding: 10,
+    height: 120
+  } : {
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderRadius: 15,
+      borderColor: colors.lightGray,
+      margin: 5,
+      padding: 10,
+    }
   const renOpenItems = (isOpen) => {
+    if (props.type === "marker")
+      return <View></View>
     if (isOpen)
       return (
         <View style={{ marginTop: 10 }}>
@@ -228,124 +245,236 @@ function Uptrail(props) {
       )
 
   }
-
+  //if (props.type !== 'marker')
   return (
-    <View style={{
-      backgroundColor: 'white',
-      borderWidth: 1,
-      borderRadius: 15,
-      borderColor: colors.lightGray,
-      marginTop: 5,
-    }}>
+    <TouchableOpacity
+      style={cardStyle}
+      // onLongPress={() => handleShow([{ appl_id: props.appl_id, cust_name: props.cust_name }])}
+      onPress={() => {
+        openwide ? setOpenwide(false) : setOpenwide(true)
+      }}>
 
-      <TouchableOpacity
-        style={{ padding: 10 }}
-        onLongPress={() => handleShow([{ appl_id: props.appl_id, cust_name: props.cust_name }])}
-        onPress={() => {
-          openwide ? setOpenwide(false) : setOpenwide(true)
-        }}
-      >
 
-        <View style={styles.row}>
-          <View style={[styles.box, { flex: 0.618 }]}>
-            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Hợp đồng: </Text>
-          </View>
-          <View style={[styles.box]}>
-            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>{appl_id}</Text>
-          </View>
+      {/* <TouchableOpacity
+          style={{ padding: 10 }}
+          onLongPress={() => handleShow([{ appl_id: props.appl_id, cust_name: props.cust_name }])}
+          onPress={() => {
+            openwide ? setOpenwide(false) : setOpenwide(true)
+          }}
+        > */}
+
+      <View style={styles.row}>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Hợp đồng: </Text>
         </View>
-
-        <View style={styles.row}>
-          <View style={[styles.box, { flex: 0.618 }]}>
-            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Code: </Text>
-          </View>
-          <View style={[styles.box]}>
-            {renCode(code)}
-          </View>
+        <View style={[styles.box]}>
+          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>{appl_id}</Text>
         </View>
+      </View>
 
-
-        <View style={styles.row}>
-          <View style={[styles.box, { flex: 0.618 }]}>
-            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Khách hàng: </Text>
-          </View>
-          <View style={[styles.box]}>
-            <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
-          </View>
+      <View style={styles.row}>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Code: </Text>
         </View>
+        <View style={[styles.box]}>
+          {renCode(code)}
+        </View>
+      </View>
 
 
-        <View style={[styles.row]}>
-          <View style={[styles.box, { flex: 0.618 }]}>
-            <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>ghi chú:</Text>
-          </View>
-          <View style={[styles.box,]}>
-            <View style={[styles.row]}>
-              <View style={[styles.box,]}>
-                <Text style={[stylesTrail.msgTxt,]}>{remark}</Text>
-              </View>
+      <View style={styles.row}>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Khách hàng: </Text>
+        </View>
+        <View style={[styles.box]}>
+          <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
+        </View>
+      </View>
+
+
+      <View style={[styles.row]}>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>ghi chú:</Text>
+        </View>
+        <View style={[styles.box,]}>
+          <View style={[styles.row]}>
+            <View style={[styles.box,]}>
+              <Text style={[stylesTrail.msgTxt,]}>{remark}</Text>
             </View>
           </View>
         </View>
+      </View>
 
 
 
-        {renOpenItems(openwide)}
+      {renOpenItems(openwide)}
 
-        <View style={[styles.row]}>
-          <View style={[styles.box]}>
-            <Text style={{ textAlign: 'right', fontSize: 9 }}>{splitTime(runtime)}</Text>
-          </View>
+      <View style={[styles.row]}>
+        <View style={[styles.box]}>
+          <Text style={{ textAlign: 'right', fontSize: 9 }}>{splitTime(runtime)}</Text>
         </View>
+      </View>
 
 
-        <Portal style={[styles.container, { height: 600 }]}>
-          <Dialog visible={visible} onDismiss={hideDialog}>
-            <Dialog.Content>
-              <View style={{ height: 600 }}>
-                <ImageShow image={image1}></ImageShow>
-                <ImageShow image={image2}></ImageShow>
-                <ImageShow image={image3}></ImageShow>
-              </View>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button
-                style={buttonStyles.button}
-                mode="contained"
-                onPress={hideDialog}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+      <Portal style={[styles.container, { height: 600 }]}>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Content>
+            <View style={{ height: 600 }}>
+              <ImageShow image={image1}></ImageShow>
+              <ImageShow image={image2}></ImageShow>
+              <ImageShow image={image3}></ImageShow>
+            </View>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              style={buttonStyles.button}
+              mode="contained"
+              onPress={hideDialog}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
 
 
-        <Portal style={[{ width: width, height: height }]}>
-          <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
-            <Dialog.Content>
-              <ScrollView>
+      <Portal style={[{ width: width, height: height }]}>
+        <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
+          <Dialog.Content>
+            <ScrollView>
 
-                <Image
-                  source={activateImage}
-                  style={{
-                    height: 400,
-                    flex: 1,
-                    width: null
-                  }}
-                  resizeMode="contain"
-                />
+              <Image
+                source={activateImage}
+                style={{
+                  height: 400,
+                  flex: 1,
+                  width: null
+                }}
+                resizeMode="contain"
+              />
 
-              </ScrollView>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialogImage}>Close</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+            </ScrollView>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialogImage}>Close</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
 
-      </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   )
+  // return (
+  //   <TouchableOpacity
+  //     style=  
+  //     onLongPress={() => handleShow([{ appl_id: props.appl_id, cust_name: props.cust_name }])}
+  //     onPress={() => {
+  //       openwide ? setOpenwide(false) : setOpenwide(true)
+  //     }}>
+
+  //     {/* <TouchableOpacity
+  //       style={{ padding: 10 }}
+  //       onLongPress={() => handleShow([{ appl_id: props.appl_id, cust_name: props.cust_name }])}
+  //       onPress={() => {
+  //         openwide ? setOpenwide(false) : setOpenwide(true)
+  //       }}
+  //     > */}
+
+  //     <View style={styles.row}>
+  //       <View style={[styles.box, { flex: 0.618 }]}>
+  //         <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Hợp đồng: </Text>
+  //       </View>
+  //       <View style={[styles.box]}>
+  //         <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>{appl_id}</Text>
+  //       </View>
+  //     </View>
+
+  //     <View style={styles.row}>
+  //       <View style={[styles.box, { flex: 0.618 }]}>
+  //         <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Code: </Text>
+  //       </View>
+  //       <View style={[styles.box]}>
+  //         {renCode(code)}
+  //       </View>
+  //     </View>
+
+
+  //     <View style={styles.row}>
+  //       <View style={[styles.box, { flex: 0.618 }]}>
+  //         <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Khách hàng: </Text>
+  //       </View>
+  //       <View style={[styles.box]}>
+  //         <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
+  //       </View>
+  //     </View>
+
+
+  //     <View style={[styles.row]}>
+  //       <View style={[styles.box, { flex: 0.618 }]}>
+  //         <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>ghi chú:</Text>
+  //       </View>
+  //       <View style={[styles.box,]}>
+  //         <View style={[styles.row]}>
+  //           <View style={[styles.box,]}>
+  //             <Text style={[stylesTrail.msgTxt,]}>{remark}</Text>
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </View>
+
+
+  //     <View style={[styles.row]}>
+  //       <View style={[styles.box]}>
+  //         <Text style={{ textAlign: 'right', fontSize: 9 }}>{splitTime(runtime)}</Text>
+  //       </View>
+  //     </View>
+
+
+  //     <Portal style={[styles.container, { height: 600 }]}>
+  //       <Dialog visible={visible} onDismiss={hideDialog}>
+  //         <Dialog.Content>
+  //           <View style={{ height: 600 }}>
+  //             <ImageShow image={image1}></ImageShow>
+  //             <ImageShow image={image2}></ImageShow>
+  //             <ImageShow image={image3}></ImageShow>
+  //           </View>
+  //         </Dialog.Content>
+  //         <Dialog.Actions>
+  //           <Button
+  //             style={buttonStyles.button}
+  //             mode="contained"
+  //             onPress={hideDialog}>Done</Button>
+  //         </Dialog.Actions>
+  //       </Dialog>
+  //     </Portal>
+
+
+
+  //     <Portal style={[{ width: width, height: height }]}>
+  //       <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
+  //         <Dialog.Content>
+  //           <ScrollView>
+
+  //             <Image
+  //               source={activateImage}
+  //               style={{
+  //                 height: 400,
+  //                 flex: 1,
+  //                 width: null
+  //               }}
+  //               resizeMode="contain"
+  //             />
+
+  //           </ScrollView>
+  //         </Dialog.Content>
+  //         <Dialog.Actions>
+  //           <Button onPress={hideDialogImage}>Close</Button>
+  //         </Dialog.Actions>
+  //       </Dialog>
+  //     </Portal>
+
+
+  //     {/* </TouchableOpacity> */}
+  //   </TouchableOpacity>
+  // )
 }
 
 

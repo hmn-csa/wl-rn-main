@@ -1,13 +1,13 @@
 import {
   View, Text, Image, TouchableOpacity, Alert, FlatList, StyleSheet
 } from 'react-native'
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-import { ProgressBar } from 'react-native-paper';
 import { actUpdateShowlist } from "../actions"
 import { colors } from '../styles'
+import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { ProgressBar } from 'react-native-paper';
 
 function ScoreCategories(props) {
   //console.log(props.data.categoryProduct)
@@ -52,45 +52,6 @@ function ScoreCategories(props) {
                 </Text>
                 <ProgressBar progress={0.5} color={colors.info} />
               </View>
-              {/* <View style={{ padding:2,}}>
-              <View style={[styles.row]}>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text>Số lượng:</Text>
-                </View>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text>{item.case}</Text>
-                </View>
-              </View>
-
-              <View style={[styles.row]}>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text>Paid case:</Text>
-                </View>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text style={{color:colors.green}}>{item.paidcase}</Text>
-                </View>
-              </View>
-
-              <View style={[styles.row]}>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text>Thanh toán:</Text>
-                </View>
-                <View style={[styles.box, {flex:1, color:colors.green}]}>
-                  <Text style={{color:colors.green}}>{moneyFormat(item.paidamt)}</Text>
-                </View>
-              </View>
-
-              <View style={[styles.row]}>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text>Viếng thăm:</Text>
-                </View>
-                <View style={[styles.box, {flex:1}]}>
-                  <Text>{item.visited}</Text>
-                </View>
-              </View>
-
-              
-            </View> */}
             </TouchableOpacity>
           )
         }} />
@@ -114,6 +75,8 @@ const mapDispatchToProps = (dispatch) => {
     }
   };
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

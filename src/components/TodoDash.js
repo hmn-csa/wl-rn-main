@@ -3,107 +3,88 @@ import {
   View, Text, Image, TouchableOpacity, StyleSheet, TextInput, ScrollView, ActivityIndicator
 } from 'react-native'
 import { connect } from "react-redux"
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { actUpdateShowlist, actSetTodoShowlist, actGetUptrails, actSetActiveStaff } from "../actions"
+import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { colors } from '../styles'
 import { moneyFormat } from '../functions';
-import Loader from '../components/elements/Loader'
-import Swiper from 'react-native-swiper';
-import { Button } from 'react-native-paper';
-import { useForm, Controller } from 'react-hook-form'
-import Calendar_ from '../components/Calendar'
+import { useNavigation } from '@react-navigation/native';
+
 
 
 function TodoDash(props) {
-  const { register, setValue, handleSubmit, control, errors } = useForm();
-
-  const handleShowTodo = () => {
-    const list_todo = Object.values(props.data).filter(appl => appl.todo_flag == 1).map(a => a.appl_id);
-    props.navigation.navigate('Portfolio', { screen: 'List' });
-    props.updateShowlist(list_todo)
-  }
-
-  const handleShow = (list, isTodo) => {
-    props.setTodoShowlist(isTodo)
-    props.navigation.navigate('Portfolio', { screen: 'List' })
+  const navigation = useNavigation();
+  const handleShow = (list) => {
+    navigation.navigate('Portfolio', { screen: 'List' })
     props.updateShowlist(list)
   }
-
-  if (props.fetching || props.data === null)
-    return (
-      <Loader />
-    )
-
-  else
-    return (
-      <ScrollView style={{
-        flex: 1,
-        flexDirection: 'column',
-        backgroundColor: 'white',
-      }}>
-        <Text style={styles.header_dash}>
-          Todo list
+  return (
+    <ScrollView style={{
+      flex: 1,
+      flexDirection: 'column',
+      backgroundColor: 'white',
+    }}>
+      <Text style={styles.header_dash}>
+        Todo list
         </Text>
-        <View style={styles.todo_frame}>
-          <View style={styles.frame_l}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                60
+      <View style={styles.todo_frame}>
+        <View style={styles.frame_l}>
+          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.todoCal.todoCase.applIds)}>
+            <Text style={styles.main_value}>
+              {props.todoCal.todoCase.case}
+            </Text>
+            <Text style={styles.title_value}>
+              Case
+              </Text>
+          </TouchableOpacity>
+          <View style={styles.sub_frame}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.todoCal.todoPaid.applIds)}>
+              <Text style={styles.sub_value}>
+                {props.todoCal.todoPaid.case}
               </Text>
               <Text style={styles.title_value}>
-                Case
-              </Text>
+                Paid
+                </Text>
             </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  5
-                </Text>
-                <Text style={styles.title_value}>
-                  Paid
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sub_frame_r}>
-                <Text style={styles.sub_value}>
-                  0
-                </Text>
-                <Text style={styles.title_value}>
-                  PTP
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.frame_r}>
-            <TouchableOpacity style={styles.main_frame}>
-              <Text style={styles.main_value}>
-                2
+            <TouchableOpacity style={styles.sub_frame_r} onPress={() => handleShow(props.todoCal.todoPtp.applIds)}>
+              <Text style={styles.sub_value}>
+                {props.todoCal.todoPtp.case}
               </Text>
               <Text style={styles.title_value}>
-                Visited
-              </Text>
+                PTP
+                </Text>
             </TouchableOpacity>
-            <View style={styles.sub_frame}>
-              <TouchableOpacity style={styles.sub_frame_l}>
-                <Text style={styles.sub_value}>
-                  5
-                </Text>
-                <Text style={styles.title_value}>
-                  Broken PTP
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.sub_frame_r}>
-                <Text style={styles.sub_value}>
-                  0
-                </Text>
-                <Text style={styles.title_value}>
-                  Re Visit
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
-      </ScrollView >
-    )
+        <View style={styles.frame_r} >
+          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.todoCal.todoFollowed.applIds)}>
+            <Text style={styles.main_value}>
+              {props.todoCal.todoFollowed.case}
+            </Text>
+            <Text style={styles.title_value}>
+              Visited
+              </Text>
+          </TouchableOpacity>
+          <View style={styles.sub_frame}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.todoCal.todoBptp.applIds)}>
+              <Text style={styles.sub_value}>
+                {props.todoCal.todoBptp.case}
+              </Text>
+              <Text style={styles.title_value}>
+                Broken PTP
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.sub_frame_r} onPress={() => handleShow(props.todoCal.todoRevisit.applIds)}>
+              <Text style={styles.sub_value}>
+                {props.todoCal.todoRevisit.case}
+              </Text>
+              <Text style={styles.title_value}>
+                Re Visit
+                </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </ScrollView >
+  )
 }
 
 const styles = StyleSheet.create({
@@ -118,8 +99,8 @@ const styles = StyleSheet.create({
   frame_r: {
     flex: 1,
     flexDirection: 'column',
-    borderLeftWidth: 1,
-    borderLeftColor: '#CCC'
+    borderLeftWidth: 0,
+    borderLeftColor: 'rgba(0,0,0,0.1)'
   },
   header_dash: {
     color: colors.info,
@@ -139,16 +120,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'stretch',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#CCC'
+    borderTopWidth: 0,
+    borderTopColor: 'rgba(0,0,0,0.1)'
   },
   sub_frame_l: {
     flex: 1,
   },
   sub_frame_r: {
     flex: 1,
-    borderLeftWidth: 1,
-    borderLeftColor: '#CCC'
+    borderLeftWidth: 0,
+    borderLeftColor: 'rgba(0,0,0,1)'
   },
   main_value: {
     fontSize: 35,
@@ -196,13 +177,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    fetching: state.data.fetching,
     data: state.data.data,
-    showlists: state.showlists.applIds,
     todoCal: state.todoCal,
-    totalCal: state.totalCal,
-    treeCal: state.treeCal,
-    uptrails: state.uptrails,
     token: state.token,
   };
 };
@@ -214,15 +190,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     setTodoShowlist: (content) => {
       dispatch(actSetTodoShowlist(content))
-    },
-    setActiveStaff: (content) => {
-      dispatch(actSetActiveStaff(content))
-    },
-    initDashboard: () => {
-      dispatch(actInitDashboard())
-    },
-    getUptrails: (config) => {
-      dispatch(actGetUptrails(config))
     },
   };
 };

@@ -22,7 +22,8 @@ function ContractDetailMap(props) {
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
-  const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.info : colors.white)
+  const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
+  const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
   const handleChangeTodo = async () => {
     const todo_new = isTodo === 1 ? 0 : 1
@@ -42,8 +43,8 @@ function ContractDetailMap(props) {
       const responseTodo = response.data.todo_flag
       setTodoContent(responseTodo)
       props.changeTodo({ appl_id: content.appl_id, todo_flag: responseTodo })
-      setTodoColor(responseTodo === 1 ? colors.secondary : 'white')
-      setTodoIconColor(responseTodo === 1 ? colors.secondary : 'black')
+      setTodoColor(responseTodo === 1 ? colors.danger : colors.grey)
+      setTodoIconColor(responseTodo === 1 ? colors.danger : colors.grey)
       props.calTodoDash(props.data)
     } catch (error) {
       console.error(error);
@@ -154,29 +155,22 @@ function ContractDetailMap(props) {
       style={{
         backgroundColor: 'white',
         padding: 5,
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: colors.grey,
-        borderLeftWidth: 3,
-        borderLeftColor: todoColor,
+        // borderTopColor: todoColor,
         borderRadius: 10,
         height: CARD_HEIGHT,
-
+        marginTop: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+        elevation: 2,
       }}
     >
-      <View style={[showstyles.row]}>
-        <View style={showstyles.box}>
-          <Text style={showstyles.msgTxt}>Hợp đồng:</Text>
-        </View>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
-          <View style={[showstyles.row]}>
-            <View style={[showstyles.box, { flex: 3 }]}>
-              <Text style={showstyles.nameTxt}>{content.appl_id}</Text>
-            </View>
-            <View style={[showstyles.box, { flex: 1 }]}>
-            </View>
-          </View>
-        </View>
-      </View>
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={showstyles.msgTxt}>Tên KH:</Text>
@@ -194,6 +188,21 @@ function ContractDetailMap(props) {
       </View>
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
+          <Text style={showstyles.msgTxt}>Hợp đồng:</Text>
+        </View>
+        <View style={[showstyles.box, { flex: 3.5 }]}>
+          <View style={[showstyles.row]}>
+            <View style={[showstyles.box, { flex: 3 }]}>
+              <Text style={showstyles.nameTxt}>{content.appl_id}</Text>
+            </View>
+            <View style={[showstyles.box, { flex: 1 }]}>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      <View style={[showstyles.row]}>
+        <View style={showstyles.box}>
           <Text style={showstyles.msgTxt}>Thanh toán:</Text>
         </View>
         <View style={[showstyles.box, { flex: 3.5 }]}>
@@ -201,9 +210,9 @@ function ContractDetailMap(props) {
             <View style={[showstyles.box, { flex: 3 }]}>
               {paidIcon(content.total_pay_amount)}
             </View>
-            <View style={[showstyles.box, { flex: 1 }]}>
+            {/* <View style={[showstyles.box, { flex: 1 }]}>
               {followIcon(content.followed)}
-            </View>
+            </View> */}
           </View>
         </View>
       </View>
@@ -224,50 +233,49 @@ function ContractDetailMap(props) {
         </View>
       </View>
       {/* BEGIN BUTTONS */}
-      <View style={[showstyles.row]}>
-        <View style={[showstyles.box]}>
+      <View style={[showstyles.btngroup]}>
+        <View style={[showstyles.btn]}>
           <FontAwesome
             name='file-text-o'
             style={showstyles.logo}
             onPress={handleGetVsf}
           />
         </View>
-        <View style={[showstyles.box]}>
+        <View style={[showstyles.btn]}>
           <FontAwesome
             name='search'
             style={showstyles.logo}
             onPress={handleGetSkip}
           />
         </View>
-        <View style={[showstyles.box]}>
+        <View style={[showstyles.btn]}>
           <FontAwesome
             name={todoIcon}
-            style={[showstyles.logo]}
+            style={[showstyles.logo, { color: todoColor }]}
             onPress={handleChangeTodo}
           />
         </View>
-        <View style={[showstyles.box]}>
+        <View style={[showstyles.btn]}>
           <FontAwesome
             name="pencil"
-            style={showstyles.logo}
+            style={[showstyles.logo, { color: followedColor }]}
             onPress={handleRemark}
           />
         </View>
-        <View style={[showstyles.box]}>
+        <View style={[showstyles.btn]}>
           <FontAwesome5
             name="directions"
             style={showstyles.logo}
             onPress={handleMap}
           />
         </View>
-        <View style={[showstyles.box]}>
+        <View style={[showstyles.btn]}>
           <FontAwesome
             name="phone"
             style={showstyles.logo}
             onPress={handleCall}
           />
         </View>
-        <View style={[showstyles.box]}></View>
       </View>
     </View>
   )
@@ -332,11 +340,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const showstyles = StyleSheet.create({
   logo: {
-    fontSize: 16,
-    paddingRight: 8,
-    paddingLeft: 8,
-    marginTop: 5,
-    color: colors.info
+    fontSize: 12,
+    padding: 8,
+    color: colors.grey
   },
   nameTxt: {
     marginLeft: 10,
@@ -363,7 +369,19 @@ const showstyles = StyleSheet.create({
   box: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'stretch',
+  },
+  btngroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'center',
+    width: '80%',
+    marginTop: 15,
+    marginBottom: 5
+  },
+  btn: {
+    borderWidth: 1,
+    borderColor: colors.grey,
+    borderRadius: 10,
   },
 
 })

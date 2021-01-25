@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import { colors } from '../styles';
-import { color } from 'react-native-reanimated';
 
 export default class App extends Component {
   constructor(props) {

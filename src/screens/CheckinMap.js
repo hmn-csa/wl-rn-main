@@ -12,9 +12,9 @@ import { connect } from "react-redux";
 import { colors } from '../styles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Entypo, FontAwesome5 } from '@expo/vector-icons'; 
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
-import {calInitialRegion} from '../functions'
+import { calInitialRegion } from '../functions'
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 10;
 const CARD_WIDTH = CARD_HEIGHT - 50;
@@ -25,10 +25,6 @@ const SliderWidth = Dimensions.get('screen').width;
 
 
 function CheckinMap(props) {
-
-  //const listAppls = props.data.data.filter((appl) => {
-  //  return props.showlists.includes(appl.appl_id)
-  //})
 
 
   const [listAppls, setListappls] = useState(Object.values(props.map.checkin))
@@ -76,43 +72,44 @@ function CheckinMap(props) {
       return <View >
         <Text style={styles.msgTxt}>
           {/* Start {appl.endtime.substring(11, 16)} */}
-          <Entypo name="location-pin" style={ { fontSize: 40, color: colors.secondary }}/>
-          
-          </Text>
+          <Entypo name="location-pin" style={{ fontSize: 40, color: colors.secondary }} />
+
+        </Text>
         {/* {showTime(appl.time)} */}
       </View>
     }
     if (index === length - 1) {
       return <View>
         <Text style={styles.msgTxt}>
-        {/* Finish {appl.endtime.substring(11, 16)} */}
-        <Entypo name="location-pin" style={ { fontSize: 40, color: colors.primary }}/>
-         
+          {/* Finish {appl.endtime.substring(11, 16)} */}
+          <Entypo name="location-pin" style={{ fontSize: 40, color: colors.primary }} />
+
         </Text>
         {/* {showTime(appl.time)} */}
       </View>
     }
-    return <View style={{ 
-      height: 30, 
-      width: 30, 
-      borderRadius: 50, 
-      borderColor: colors.secondary, 
+    return <View style={{
+      height: 30,
+      width: 30,
+      borderRadius: 50,
+      borderColor: colors.secondary,
       borderWidth: 2,
       alignItems: "center",
-      justifyContent: "center",}}
-      >
-      <Text style={{ alignItems: 'center', fontWeight: '600', color: colors.secondary}}>
+      justifyContent: "center",
+    }}
+    >
+      <Text style={{ alignItems: 'center', fontWeight: '600', color: colors.secondary }}>
         {index}
       </Text>
     </View>
   }
 
-  if (listAppls.length === 0) 
-  return (
-    <View  style={styles.container}>
-      <Text>Chưa có checkin trong ngày</Text>
-    </View>
-  )
+  if (listAppls.length === 0)
+    return (
+      <View style={styles.container}>
+        <Text>Chưa có checkin trong ngày</Text>
+      </View>
+    )
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>

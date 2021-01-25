@@ -105,8 +105,7 @@ export function* workerGetDataFC(token) {
       config: {
         staff_id: token.staff_id,
         token: token.token,
-        start: '',
-        end: ''
+        loaddate: "",
       }
     });
 
@@ -172,8 +171,7 @@ export function* workerGetDataFCMode(request) {
       config: {
         staff_id: request.token.staff_id,
         token: request.token.token,
-        start: '',
-        end: ''
+        loaddate: "",
       }
     });
   } catch (error) {
