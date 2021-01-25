@@ -33,23 +33,23 @@ function ProductCategories(props) {
               </View>
               <View style={{ flexDirection: 'row', paddingTop: 10 }}>
                 <Text style={{ width: '40%' }}>
-                  <FontAwesome name="file-text-o" size={15} color="black" /> {item.case}
+                  <FontAwesome name="file-text" size={15} color={colors.yellow} /> {item.case}
                 </Text>
                 <Text>
-                  <FontAwesome name="dollar" size={15} color="black" /> {moneyFormat(item.paidamt)}
+                  <FontAwesome name="dollar" size={15} color={colors.success} /> {moneyFormat(item.paidamt)}
                 </Text>
               </View>
               <View style={{ paddingTop: 10 }}>
                 <Text style={{ marginBottom: 2 }}>
-                  <FontAwesome name="dollar" size={15} color="black" /> {item.visited}/{item.case} Paid
+                  <FontAwesome name="dollar" size={15} color="black" /> {item.paidcase}/{item.case} Paid
                 </Text>
-                <ProgressBar progress={0.8} color={colors.success} />
+                <ProgressBar progress={item.paidcase / item.case} color={colors.success} />
               </View>
               <View style={{ paddingTop: 10 }}>
                 <Text style={{ marginBottom: 2 }}>
-                  <FontAwesome name="check" size={15} color="black" /> {item.paidcase}/{item.case} Visit
+                  <FontAwesome name="check" size={15} color="black" /> {item.visited}/{item.case} Visit
                 </Text>
-                <ProgressBar progress={0.5} color={colors.info} />
+                <ProgressBar progress={item.visited / item.case} color={colors.info} />
               </View>
               {/* <View style={{ padding: 2, }}>
                 <View style={[styles.row]}>

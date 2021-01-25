@@ -30,27 +30,27 @@ function ScoreCategories(props) {
           return (
             <TouchableOpacity style={styles.card} onPress={() => { handleShow(item.applIds) }}>
               <View style={styles.cardHeader}>
-                <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{item.key}</Text>
+                <Text style={{ color: colors.info, fontWeight: 'bold', fontSize: 16 }}>{item.key}</Text>
               </View>
               <View style={{ flexDirection: 'row', paddingTop: 10 }}>
                 <Text style={{ width: '40%' }}>
-                  <FontAwesome name="file-text" size={15} color={colors.yellow} /> 50
-              </Text>
+                  <FontAwesome name="file-text" size={15} color={colors.yellow} /> {item.case}
+                </Text>
                 <Text>
-                  <FontAwesome name="dollar" size={15} color={colors.success} /> 50000
-              </Text>
+                  <FontAwesome name="dollar" size={15} color={colors.success} /> {moneyFormat(item.paidamt)}
+                </Text>
               </View>
               <View style={{ paddingTop: 10 }}>
                 <Text style={{ marginBottom: 2 }}>
-                  <FontAwesome name="dollar" size={15} color="black" /> 46/50 Paid
+                  <FontAwesome name="dollar" size={15} color="black" /> {item.paidcase}/{item.case} Paid
                 </Text>
-                <ProgressBar progress={0.8} color={colors.success} />
+                <ProgressBar progress={item.paidcase / item.case} color={colors.success} />
               </View>
               <View style={{ paddingTop: 10 }}>
                 <Text style={{ marginBottom: 2 }}>
-                  <FontAwesome name="check" size={15} color="black" /> 32/50 Visit
+                  <FontAwesome name="check" size={15} color="black" /> {item.visited}/{item.case} Visit
                 </Text>
-                <ProgressBar progress={0.5} color={colors.info} />
+                <ProgressBar progress={item.visited / item.case} color={colors.info} />
               </View>
             </TouchableOpacity>
           )

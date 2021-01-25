@@ -126,7 +126,7 @@ function DashboardStack(props) {
   }
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: true, headerTitleAlign: 'left' }}
+      screenOptions={{ headerShown: true, headerTitleAlign: 'center' }}
     >
       <Stack.Screen
         name="Dashboard"
@@ -138,7 +138,7 @@ function DashboardStack(props) {
           headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-            fontSize: 16,
+            fontSize: 18,
           },
           headerTitle: 'Dashboard',
           headerRight: () => (
@@ -516,13 +516,6 @@ function CategorieStack(props) {
             fontWeight: 'bold',
             fontSize: 18,
           },
-          headerRight: () => (
-            <View style={{ paddingRight: 22 }}>
-              <TouchableOpacity onPress={() => props.navigation.dispatch(DrawerActions.toggleDrawer())} >
-                <MaterialIcons name="menu" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
         }}
       >
       </Stack.Screen>
