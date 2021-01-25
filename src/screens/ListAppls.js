@@ -82,35 +82,33 @@ function ListAppls(props) {
 
   if (props.data !== null)
     return (
-      <View >
-        {/* <Searchbar
-          onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên (có dấu) hoặc appl_id"
-          onSubmitEditing={(value) => hangleSearch(value)}
-          clearIcon={'alpha-x-box-outline'}
-        /> */}
-        {/* <View style={{ flexDirection: 'row' }}>
-          <Carousel
-            layout={'default'}
-            vertical={true}
-            data={props.showlists.applIds}
-            sliderWidth={SliderWidth}
-            itemWidth={width * 0.9}
-            itemHeight={CARD_HEIGHT}
-            sliderHeight={height}
-            renderItem={_renderItem}
-            useScrollView={true}
-            activeSlideAlignment="start"
-            currentIndex={0}
-          />
-        </View > */}
-        <FlatList
-          data={props.showlists.applIds}
-          renderItem={_renderItem}
-          keyExtractor={(item) => item.id}
-          style={{ padding: 5, paddingBottom: 10 }}
-        />
-      </View>
+      // {/* <Searchbar
+      //     onChangeText={(value) => hangleSearch(value)}
+      //     placeholder="Nhập tên (có dấu) hoặc appl_id"
+      //     onSubmitEditing={(value) => hangleSearch(value)}
+      //     clearIcon={'alpha-x-box-outline'}
+      //   /> */}
+      //   {/* <View style={{ flexDirection: 'row' }}>
+      //     <Carousel
+      //       layout={'default'}
+      //       vertical={true}
+      //       data={props.showlists.applIds}
+      //       sliderWidth={SliderWidth}
+      //       itemWidth={width * 0.9}
+      //       itemHeight={CARD_HEIGHT}
+      //       sliderHeight={height}
+      //       renderItem={_renderItem}
+      //       useScrollView={true}
+      //       activeSlideAlignment="start"
+      //       currentIndex={0}
+      //     />
+      //   </View > */}
+      <FlatList
+        data={props.showlists.applIds}
+        renderItem={_renderItem}
+        keyExtractor={(item) => item.id}
+        style={{ padding: 5 }}
+      />
     )
   else return (
     <View style={[styles.container, { alignItems: 'center' }]}>

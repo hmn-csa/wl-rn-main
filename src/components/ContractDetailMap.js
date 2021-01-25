@@ -44,7 +44,7 @@ function ContractDetailMap(props) {
       setTodoContent(responseTodo)
       props.changeTodo({ appl_id: content.appl_id, todo_flag: responseTodo })
       setTodoColor(responseTodo === 1 ? colors.danger : colors.grey)
-      setTodoIconColor(responseTodo === 1 ? colors.danger : colors.grey)
+      setTodoIcon(responseTodo === 1 ? 'heart' : 'heart-o')
       props.calTodoDash(props.data)
     } catch (error) {
       console.error(error);
@@ -160,25 +160,21 @@ function ContractDetailMap(props) {
         // borderTopColor: todoColor,
         borderRadius: 10,
         height: CARD_HEIGHT,
-        marginTop: 10,
+        marginBottom: 10,
         shadowColor: "#000",
         shadowOffset: {
           width: 0,
-          height: 2,
+          height: 10,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
-        elevation: 2,
+        shadowRadius: 50,
+        elevation: 5,
       }}
     >
-      <View style={[showstyles.row]}>
-        <View style={showstyles.box}>
-          <Text style={showstyles.msgTxt}>Tên KH:</Text>
-        </View>
+      <View style={[showstyles.row, { borderBottomWidth: 1, borderColor: '#CCC' }]}>
         <View style={[showstyles.box, { flex: 3.5 }]}>
           <View style={[showstyles.row]}>
             <View style={[showstyles.box, { flex: 3 }]}>
-              <Text style={showstyles.nameTxt}>{content.cust_name}</Text>
+              <Text style={[showstyles.nameTxt]}>{content.cust_name}</Text>
             </View>
             <View style={[showstyles.box, { flex: 1 }]}>
               {ptpIcon(content.last_action_code)}
@@ -188,19 +184,18 @@ function ContractDetailMap(props) {
       </View>
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
-          <Text style={showstyles.msgTxt}>Hợp đồng:</Text>
+          <Text style={[showstyles.msgTxt]}>Hợp đồng:</Text>
         </View>
         <View style={[showstyles.box, { flex: 3.5 }]}>
           <View style={[showstyles.row]}>
             <View style={[showstyles.box, { flex: 3 }]}>
-              <Text style={showstyles.nameTxt}>{content.appl_id}</Text>
+              <Text style={[showstyles.nameTxt, { fontWeight: 'normal' }]}>{content.appl_id}</Text>
             </View>
             <View style={[showstyles.box, { flex: 1 }]}>
             </View>
           </View>
         </View>
       </View>
-
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={showstyles.msgTxt}>Thanh toán:</Text>
@@ -277,7 +272,7 @@ function ContractDetailMap(props) {
           />
         </View>
       </View>
-    </View>
+    </View >
   )
 }
 const mapDispatchToProps = (dispatch) => {

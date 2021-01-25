@@ -19,8 +19,8 @@ import { styles, colors } from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
+import { Calendar_ } from './Calendar'
 import { Colors } from 'react-native-paper'
-
 
 const Stack = createStackNavigator()
 
@@ -260,6 +260,34 @@ function TreeStack(props) {
     </Stack.Navigator>
   )
 }
+
+function CalendarStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Calendar"
+      screenOptions={{ headerShown: true, headerTransparent: false, headerTitleAlign: 'center', }}
+    >
+      <Stack.Screen
+        name="Calendar"
+        component={Calendar_}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+
+
 function ProductStack(props) {
   return (
     <Stack.Navigator
@@ -539,5 +567,6 @@ export {
   SegmentStack,
   PortStack,
   UserStack,
-  CategorieStack
+  CategorieStack,
+  CalendarStack,
 }
