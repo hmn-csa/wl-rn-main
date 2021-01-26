@@ -226,7 +226,7 @@ function ListUptrail(props) {
   else if (props.uptrails.uptrails.length > 0 && pageMap === false) {
     return (
       <View >
-        <View style={buttonStyles.buttons}>
+        <View style={[buttonStyles.buttons, { backgroundColor: 'white' }]}>
           <Button
             mode="contained"
             onPress={() => setPageMap(false)}
@@ -244,6 +244,7 @@ function ListUptrail(props) {
         </View>
 
         <ScrollView
+          style={{ backgroundColor: 'white', padding: 10, paddingBottom: 40 }}
           onScroll={({ nativeEvent }) => {
             if (isCloseToBottom(nativeEvent)) {
               getMoreUptrails2();
