@@ -1,17 +1,18 @@
 import {
-  View, Text, Image, TouchableOpacity, Alert, FlatList, StyleSheet
+  View, Text, TouchableOpacity, FlatList, StyleSheet
 } from 'react-native'
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Button } from 'react-native-paper';
+import { FontAwesome } from '@expo/vector-icons';
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-import { ProgressBar } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper'
 import { actUpdateShowlist } from "../actions"
 import { colors } from '../styles'
 
+
+
 function ProductCategories(props) {
-  const handleShow = (list) => {
-    props.navigation.navigate('Portfolio', { screen: 'List' });
+  const handleShow = (list, title) => {
+    props.navigation.navigate('Portfolio', { name: title })
     props.updateShowlist(list)
   }
 
@@ -27,7 +28,7 @@ function ProductCategories(props) {
         numColumns={2}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity style={styles.card} onPress={() => { handleShow(item.applIds) }}>
+            <TouchableOpacity style={styles.card} onPress={() => { handleShow(item.applIds, item.key) }}>
               <View style={styles.cardHeader}>
                 <Text style={{ color: colors.primary, fontWeight: 'bold', fontSize: 16 }}>{item.key}</Text>
               </View>
@@ -51,43 +52,6 @@ function ProductCategories(props) {
                 </Text>
                 <ProgressBar progress={item.visited / item.case} color={colors.info} />
               </View>
-              {/* <View style={{ padding: 2, }}>
-                <View style={[styles.row]}>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text>Số lượng:</Text>
-                  </View>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text>{item.case}</Text>
-                  </View>
-                </View>
-
-                <View style={[styles.row]}>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text>Paid case:</Text>
-                  </View>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text style={{ color: colors.green }}>{item.paidcase}</Text>
-                  </View>
-                </View>
-
-                <View style={[styles.row]}>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text>Thanh toán:</Text>
-                  </View>
-                  <View style={[styles.box, { flex: 1, color: colors.green }]}>
-                    <Text style={{ color: colors.green }}>{moneyFormat(item.paidamt)}</Text>
-                  </View>
-                </View>
-
-                <View style={[styles.row]}>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text>Viếng thăm:</Text>
-                  </View>
-                  <View style={[styles.box, { flex: 1 }]}>
-                    <Text>{item.visited}</Text>
-                  </View>
-                </View>
-              </View> */}
             </TouchableOpacity>
           )
         }} />

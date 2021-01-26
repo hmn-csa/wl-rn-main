@@ -161,13 +161,14 @@ function ContractDetailMap(props) {
         borderRadius: 10,
         height: CARD_HEIGHT,
         marginBottom: 10,
-        shadowColor: "#000",
+        shadowColor: '#00000021',
         shadowOffset: {
           width: 0,
-          height: 10,
+          height: 4,
         },
-        shadowRadius: 50,
-        elevation: 5,
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 2,
       }}
     >
       <View style={[showstyles.row, { borderBottomWidth: 1, borderColor: '#CCC' }]}>

@@ -11,8 +11,8 @@ import { ProgressBar } from 'react-native-paper';
 
 function ScoreCategories(props) {
   //console.log(props.data.categoryProduct)
-  const handleShow = (list) => {
-    props.navigation.navigate('Portfolio', { screen: 'List' });
+  const handleShow = (list, title) => {
+    props.navigation.navigate('Portfolio', { name: title });
     props.updateShowlist(list)
   }
 
@@ -28,7 +28,7 @@ function ScoreCategories(props) {
         numColumns={2}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity style={styles.card} onPress={() => { handleShow(item.applIds) }}>
+            <TouchableOpacity style={styles.card} onPress={() => { handleShow(item.applIds, item.key) }}>
               <View style={styles.cardHeader}>
                 <Text style={{ color: colors.info, fontWeight: 'bold', fontSize: 16 }}>{item.key}</Text>
               </View>

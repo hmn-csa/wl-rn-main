@@ -12,8 +12,8 @@ import { useNavigation } from '@react-navigation/native';
 
 function TodoDash(props) {
   const navigation = useNavigation();
-  const handleShow = (list) => {
-    navigation.navigate('Portfolio', { screen: 'List' })
+  const handleShow = (list, title) => {
+    navigation.navigate('Portfolio', { name: title });
     props.updateShowlist(list)
   }
   return (
@@ -27,7 +27,7 @@ function TodoDash(props) {
         </Text>
       <View style={styles.todo_frame}>
         <View style={styles.frame_l}>
-          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.todoCal.todoCase.applIds)}>
+          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.todoCal.todoCase.applIds, 'Todo list')}>
             <Text style={styles.main_value}>
               {props.todoCal.todoCase.case}
             </Text>
@@ -36,7 +36,7 @@ function TodoDash(props) {
               </Text>
           </TouchableOpacity>
           <View style={styles.sub_frame}>
-            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.todoCal.todoPaid.applIds)}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.todoCal.todoPaid.applIds, 'Todo Paid Case')}>
               <Text style={styles.sub_value}>
                 {props.todoCal.todoPaid.case}
               </Text>
@@ -44,7 +44,7 @@ function TodoDash(props) {
                 Paid
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.sub_frame_r} onPress={() => handleShow(props.todoCal.todoPtp.applIds)}>
+            <TouchableOpacity style={styles.sub_frame_r} onPress={() => handleShow(props.todoCal.todoPtp.applIds, 'Todo PTP')}>
               <Text style={styles.sub_value}>
                 {props.todoCal.todoPtp.case}
               </Text>
@@ -55,7 +55,7 @@ function TodoDash(props) {
           </View>
         </View>
         <View style={styles.frame_r} >
-          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.todoCal.todoFollowed.applIds)}>
+          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.todoCal.todoFollowed.applIds, 'Todo Followed')}>
             <Text style={styles.main_value}>
               {props.todoCal.todoFollowed.case}
             </Text>
@@ -64,7 +64,7 @@ function TodoDash(props) {
               </Text>
           </TouchableOpacity>
           <View style={styles.sub_frame}>
-            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.todoCal.todoBptp.applIds)}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.todoCal.todoBptp.applIds, 'Todo Broken PTP')}>
               <Text style={styles.sub_value}>
                 {props.todoCal.todoBptp.case}
               </Text>
@@ -72,12 +72,12 @@ function TodoDash(props) {
                 Broken PTP
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.sub_frame_r} onPress={() => handleShow(props.todoCal.todoRevisit.applIds)}>
+            <TouchableOpacity style={styles.sub_frame_r} onPress={() => handleShow(props.todoCal.todoRevisit.applIds, 'Todo Revisit')}>
               <Text style={styles.sub_value}>
                 {props.todoCal.todoRevisit.case}
               </Text>
               <Text style={styles.title_value}>
-                Re Visit
+                Revisit
                 </Text>
             </TouchableOpacity>
           </View>
