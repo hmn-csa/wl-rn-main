@@ -5,7 +5,6 @@ import { colors } from '../styles'
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
-import Dashboard from './Dashboard'
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -45,33 +44,7 @@ function Menutop_Categories() {
   );
 }
 
-function Menutop_Dashboard() {
-  return (
-    <Tab.Navigator
-      initialRouteName="Summary"
-      tabBarOptions={{
-        activeTintColor: colors.info,
-        inactiveTintColor: colors.black,
-        labelStyle: { fontSize: 12, fontWeight: 'bold' },
-        style: { backgroundColor: 'white' },
-      }}
-    >
-      <Tab.Screen
-        name="Summary"
-        component={Summary, Dashboard}
-        options={{ tabBarLabel: 'Summary' }}
-      />
-      <Tab.Screen
-        name="Todo"
-        component={Todo, Dashboard}
-        options={{ tabBarLabel: 'Todo' }}
-      />
-    </Tab.Navigator>
-  );
-}
-
 
 export {
   Menutop_Categories,
-  Menutop_Dashboard
 };

@@ -10,11 +10,9 @@ import { moneyFormat } from '../functions';
 import Loader from '../components/elements/Loader'
 import Swiper from 'react-native-swiper';
 import { Button } from 'react-native-paper';
-import { useForm, Controller } from 'react-hook-form'
-import Calendar from '../components/Calendar'
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
-
+import Calendar from '../components/Calendar'
 function Dashboard(props) {
   if (props.fetching || props.data === null)
     return (

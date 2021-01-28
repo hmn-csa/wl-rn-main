@@ -7,13 +7,15 @@ import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { colors } from '../styles'
 import { moneyFormat } from '../functions';
 import { useNavigation } from '@react-navigation/native';
+import { CategorieStack, CalendarStack, DashboardStack, UserStack, PortStack } from '../screens/Stacks'
+
 
 
 
 function SummaryDash(props) {
   const navigation = useNavigation();
-  const handleShow = (list) => {
-    navigation.navigate('Portfolio', { screen: 'List' })
+  const handleShow = (list, title) => {
+    navigation.navigate('Portfolio', { name: title })
     props.updateShowlist(list)
   }
   return (
@@ -23,7 +25,7 @@ function SummaryDash(props) {
         </Text>
       <View style={styles.collx_frame}>
         <View style={styles.frame_l}>
-          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.totalCal.totalCase.applIds)}>
+          <TouchableOpacity style={styles.main_frame} onPress={() => handleShow(props.totalCal.totalCase.applIds, 'Total Cases')}>
             <Text style={styles.main_value}>
               {props.totalCal.totalCase.case}
             </Text>
@@ -32,7 +34,7 @@ function SummaryDash(props) {
               </Text>
           </TouchableOpacity>
           <View style={styles.sub_frame}>
-            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.totalCal.paidMtd.applIds)}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.totalCal.paidMtd.applIds, 'Total Paid Cases')}>
               <Text style={styles.sub_value}>
                 {moneyFormat(props.totalCal.paidMtd.value)}
               </Text>
@@ -45,12 +47,12 @@ function SummaryDash(props) {
         <View style={styles.frame_r}>
           <TouchableOpacity style={styles.main_frame}>
             <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity onPress={() => handleShow(props.totalCal.ptpCase.applIds)}>
+              <TouchableOpacity onPress={() => handleShow(props.totalCal.ptpCase.applIds, 'Total PTP')}>
                 <Text style={styles.main_value}>
                   {props.totalCal.ptpCase.case}/
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleShow(props.totalCal.followed.applIds)} >
+              <TouchableOpacity onPress={() => handleShow(props.totalCal.followed.applIds, 'Total Followed')} >
                 <Text style={styles.main_value}>
                   {props.totalCal.followed.case}
                 </Text>
@@ -61,7 +63,7 @@ function SummaryDash(props) {
               </Text>
           </TouchableOpacity>
           <View style={styles.sub_frame}>
-            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.totalCal.paidMtd.applIds)}>
+            <TouchableOpacity style={styles.sub_frame_l} onPress={() => handleShow(props.totalCal.paidMtd.applIds, 'Total Paid Cases')}>
               <Text style={styles.sub_value}>
                 {props.totalCal.paidMtd.case}
               </Text>
