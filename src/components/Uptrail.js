@@ -1,17 +1,18 @@
 import {
   View, Text, Image, ScrollView, Alert, FlatList,
-  StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions
+  StyleSheet, TouchableOpacity, Dimensions, Modal
 } from 'react-native'
 import { Button, Portal, Dialog } from 'react-native-paper';
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { styles, colors } from '../styles'
-import axios from "axios"
 import { actGetUptrails, actUpdateShowlist } from "../actions/index"
 const { width, height } = Dimensions.get("window");
 import * as consts from '../consts'
 import { set, color } from 'react-native-reanimated';
-import { FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import ImageView from 'react-native-image-view';
+
 
 
 
@@ -47,11 +48,12 @@ function Uptrail(props) {
   const [image3, setimage3] = useState((item.image3 === null || item.image3 === "") ? null : item.image3)
   const [openwide, setOpenwide] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isVisibleImage, setIsVisibleImage] = useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
-  const [visibleImage, setVisibleImage] = useState(false);
-  const showDialogImage = () => setVisibleImage(true);
-  const hideDialogImage = () => setVisibleImage(false);
+  const [visibleAddress, setVisibleAddress] = useState(false);
+  // const showDialogImage = () => setVisibleImage(true);
+  // const hideDialogImage = () => setVisibleImage(false);
   const [activateImage, setActivateImage] = useState({ uri: null });
   //const splitTime = (t) => t.substring(0, 10) + " " + t.substring(11, 19)
   const splitDate = (t) => t.substring(0, 10)
@@ -111,15 +113,19 @@ function Uptrail(props) {
   const NoteAddress = (result) => {
     if (result == 'Per')
       return (
-        <View style={{ flexDirection: 'row', borderColor: 'rgba(9,135,101,0.8)', borderWidth: 1, borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}>
-          <Text style={{ fontSize: 12, color: colors.success, fontWeight: 'bold' }}>Hộ khẩu</Text>
-        </View>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', borderColor: 'rgba(9,135,101,0.8)', borderWidth: 1, borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}
+          onPress={() => setVisibleAddress(true)}>
+          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.success} /><Text style={{ fontSize: 12, color: colors.success, fontWeight: 'bold' }}> Hộ khẩu</Text>
+        </TouchableOpacity>
       )
     else
       return (
-        <View style={{ flexDirection: 'row', borderColor: 'rgba(249,60,26,0.8)', borderWidth: 1, borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}>
-          <Text style={{ fontSize: 12, color: colors.danger, fontWeight: 'bold' }}>Khác</Text>
-        </View>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', borderColor: 'rgba(249,60,26,0.8)', borderWidth: 1, borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}
+          onPress={() => setVisibleAddress(true)}>
+          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.danger} /><Text style={{ fontSize: 12, color: colors.danger, fontWeight: 'bold' }}> Khác</Text>
+        </TouchableOpacity>
       )
   }
 
@@ -149,16 +155,15 @@ function Uptrail(props) {
           <TouchableOpacity
             style={[buttonStyles.button, { backgroundColor: null, }]}
             onPress={() => {
-              alert("123")
               setActivateImage({ uri: image1 })
-              showDialogImage()
+              setIsVisibleImage(true)
             }}
           >
             <Image
               source={{ uri: image1 }}
               style={{
-                width: 45,
-                height: 60,
+                width: 80,
+                height: 80,
                 borderRadius: 10
               }}
             />
@@ -166,16 +171,15 @@ function Uptrail(props) {
           <TouchableOpacity
             style={[buttonStyles.button, { backgroundColor: null }]}
             onPress={() => {
-              alert("123")
               setActivateImage({ uri: image2 })
-              showDialogImage()
+              setIsVisibleImage(true)
             }}
           >
             <Image
               source={{ uri: image2 }}
               style={{
-                width: 45,
-                height: 60,
+                width: 80,
+                height: 80,
                 borderRadius: 10
               }}
             />
@@ -183,16 +187,15 @@ function Uptrail(props) {
           <TouchableOpacity
             style={[buttonStyles.button, { backgroundColor: null }]}
             onPress={() => {
-              alert("123")
               setActivateImage({ uri: image3 })
-              showDialogImage()
+              setIsVisibleImage(true)
             }}
           >
             <Image
               source={{ uri: image3 }}
               style={{
-                width: 45,
-                height: 60,
+                width: 80,
+                height: 80,
                 borderRadius: 10
               }}
             />
@@ -200,6 +203,18 @@ function Uptrail(props) {
         </View>
       )
   }
+  const renderImg = [
+    {
+      source: {
+        uri: activateImage.uri,
+      },
+      title: 'Paris',
+      width: 806,
+      height: 720,
+    },
+  ];
+
+
   const cardStyle = props.type === "marker" ? {
     backgroundColor: 'white',
     borderRadius: 15,
@@ -214,47 +229,8 @@ function Uptrail(props) {
       margin: 5,
       padding: 10,
     }
-  const renOpenItems = (isOpen) => {
-    if (props.type === "marker")
-      return <View></View>
-    if (isOpen)
-      return (
-        <View style={{ marginTop: 10 }}>
-          <View style={[styles.row]}>
-            <View style={[styles.box, { flex: 0.618 }]}>
-              <Text style={stylesTrail.msgTxt}>Remark</Text>
-            </View>
-            <View style={[styles.box,]}>
-              <View style={[styles.row]}>
-                <View style={[styles.box,]}>
-                  <Text style={[stylesTrail.msgTxt,]}>{getCodeLabel(code)}</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-
-          <View style={[styles.row]}>
-            <View style={[styles.box, { flex: 0.618 }]}>
-              <Text style={stylesTrail.msgTxt}>Địa chỉ:</Text>
-            </View>
-            <View style={[styles.box,]}>
-              <View style={[styles.row]}>
-                <View style={[styles.box]}>
-                  <Text style={stylesTrail.msgTxt}>{trust_address}</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          {payAmount(pay_amount)}
-          {reVisit(next_visit_time)}
-          <View style={[styles.row]}>
-            {images(image1, image2, image3)}
-          </View>
-        </View>
-      )
-  }
   return (
-    <TouchableOpacity
+    <View
       style={cardStyle}
       onPress={() => {
         openwide ? setOpenwide(false) : setOpenwide(true)
@@ -285,7 +261,6 @@ function Uptrail(props) {
           <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{appl_id}</Text>
         </View>
       </View>
-
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
         <View>
           <Text style={[stylesTrail.nameTxt]}>{payAmount(pay_amount)}</Text>
@@ -294,120 +269,77 @@ function Uptrail(props) {
           <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{reVisit(next_visit_time)}</Text>
         </View>
       </View>
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <View>
-          <Text style={[stylesTrail.nameTxt]}>{trust_address}</Text>
+      {remark != "" ?
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+          <View>
+            <Text style={[stylesTrail.nameTxt]}>Ghi chú : {remark}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}></Text>
-        </View>
-      </View>
+        : null}
 
       <View style={[stylesTrail.btngroup]}>
-        <View style={[stylesTrail.btn]}>
-          <MaterialCommunityIcons
-            name="file-document-edit-outline"
-            style={stylesTrail.logo}
-          />
-        </View>
-        <View style={[stylesTrail.btn]}>
-          {haveimages(image1, image2, image3) == true ?
+        {haveimages(image1, image2, image3) == true ?
+          <TouchableOpacity style={[stylesTrail.btn, { borderColor: colors.info }]} onPress={() => { setVisible(true) }}>
             <FontAwesome5
               name='images'
               style={[stylesTrail.logo, { color: colors.info }]}
-              onPress={() => { showDialog() }}
             />
-            :
+            {/* <Text style={{ padding: 5, fontSize: 12, color: colors.info, fontWeight: 'bold' }}> Hình ảnh</Text> */}
+          </TouchableOpacity>
+          :
+          <View style={[stylesTrail.btn]}>
             <FontAwesome5
               name='images'
               style={[stylesTrail.logo]}
             />
-          }
-        </View>
+            {/* <Text style={{ padding: 5, fontSize: 12, color: colors.grey, fontWeight: 'bold' }}> Hình ảnh</Text> */}
+          </View>
+        }
+
+
         <View>
           {['PTP', 'OBT', 'WFP', 'TER'].includes(code) ? NoteAddress('Per') : NoteAddress('Other')}
         </View>
       </View>
-      {/* <View style={styles.row}>
-        <View style={[styles.box, { flex: 0.618 }]}>
-          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Hợp đồng: </Text>
-        </View>
-        <View style={[styles.box]}>
-          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>{appl_id}</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={[styles.box, { flex: 0.618 }]}>
-          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Code: </Text>
-        </View>
-        <View style={[styles.box]}>
-          {renCode(code)}
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={[styles.box, { flex: 0.618 }]}>
-          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>Khách hàng: </Text>
-        </View>
-        <View style={[styles.box]}>
-          <Text style={stylesTrail.nameTxt}>{cust_name}</Text>
-        </View>
-      </View>
-
-      <View style={[styles.row]}>
-        <View style={[styles.box, { flex: 0.618 }]}>
-          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold' }]}>ghi chú:</Text>
-        </View>
-        <View style={[styles.box,]}>
-          <View style={[styles.row]}>
-            <View style={[styles.box,]}>
-              <Text style={[stylesTrail.msgTxt,]}>{remark}</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      {renOpenItems(openwide)}
-      <View style={[styles.row]}>
-        <View style={[styles.box]}>
-          <Text style={{ textAlign: 'right', fontSize: 9 }}>{splitTime(runtime)}</Text>
-        </View>
-      </View>*/}
-      <Portal style={[styles.container, { height: 600 }]}>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Content>
-            <View style={[styles.row]}>
-              {images(image1, image2, image3)}
-            </View>
+      <Portal style={[styles.container, { height: 500 }]}>
+        <Dialog visible={visible} onDismiss={hideDialog} style={{ borderRadius: 10 }}>
+          <Dialog.Content style={{ padding: 0 }}>
+            {images(image1, image2, image3)}
           </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Đóng</Button>
+          <Dialog.Actions style={{ padding: 0 }}>
+            <TouchableOpacity
+              style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, padding: 5 }}
+              onPress={hideDialog}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
           </Dialog.Actions>
         </Dialog>
       </Portal>
-
-      <Portal style={[styles.container, { height: 600 }]}>
-        <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
+      <ImageView
+        images={renderImg}
+        imageIndex={0}
+        isVisible={isVisibleImage}
+        onClose={() => setIsVisibleImage(false)}
+        animationType="slide"
+        isSwipeCloseEnabled={false}
+      />
+      <Portal style={{ height: 500 }}>
+        <Dialog visible={visibleAddress} onDismiss={visibleAddress} style={{ borderRadius: 10 }}>
           <Dialog.Content>
-            <ScrollView>
-              <Image
-                source={activateImage}
-                style={{
-                  height: 400,
-                  flex: 1,
-                  width: null
-                }}
-                resizeMode="contain"
-              />
-            </ScrollView>
+            <Text>
+              {trust_address}
+            </Text>
           </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialogImage}>Đóng</Button>
+          <Dialog.Actions style={{ padding: 0 }}>
+            <TouchableOpacity
+              style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, padding: 5 }}
+              onPress={() => setVisibleAddress(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </TouchableOpacity>
+    </View >
   )
 }
 
@@ -500,7 +432,8 @@ const stylesTrail = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 10,
-    marginRight: 20
+    marginRight: 20,
+    flexDirection: 'row'
   },
   logo: {
     fontSize: 16,
@@ -513,7 +446,6 @@ const buttonStyles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     padding: 2,
-
   },
   button: {
     marginLeft: 2,

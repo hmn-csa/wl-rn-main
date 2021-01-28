@@ -10,7 +10,6 @@ import axios from "axios"
 import DatePicker from 'react-native-datepicker'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel'
-
 import { actGetUptrails, actUpdateShowlist } from "../actions/index"
 import Loader from '../components/elements/Loader'
 import Uptrail from '../components/Uptrail'
@@ -45,7 +44,6 @@ function ListUptrail(props) {
   const [activeIndex, setActivateIndex] = useState(0);
 
   const getDailyUptrails = (date) => {
-    console.log(date)
     props.getUptrails({
       staff_id: props.token.active_staff,
       token: props.token.token.access,
@@ -81,7 +79,6 @@ function ListUptrail(props) {
       token: props.token.token.access,
       loadfrom: loadfrom
     }
-    console.log(config)
     props.getMoreUptrails(config)
   }
 
@@ -132,7 +129,6 @@ function ListUptrail(props) {
             useScrollView={true}
             onSnapToItem={(index) => {
               setActivateIndex(index)
-              console.log()
               mapRef.current.animateToCoordinate(
                 { latitude: props.uptrails.uptrails[index].lat, longitude: props.uptrails.uptrails[index].lon }, 0
               )
@@ -209,7 +205,6 @@ function ListUptrail(props) {
           useScrollView={true}
           onSnapToItem={(index) => {
             setActivateIndex(index)
-            console.log()
             mapRef.current.animateToCoordinate(
               { latitude: props.uptrails.uptrails[index].lat, longitude: props.uptrails.uptrails[index].lon }, 0
             )
