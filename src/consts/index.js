@@ -60,10 +60,11 @@ export const DATA_INIT_DASHBOARD = "DATA_INIT_DASHBOARD"
 export const DATA_CLEAR = "DATA_CLEAR"
 
 // ----------- TOODO  ---------------//
+export const SET_TODO_TASK = "SET_TODO_TASK"
+
 export const API_TODO_REQUEST = "API_TODO_REQUEST"
 export const API_TODO_SUCCESS = "API_TODO_SUCCESS"
 export const API_TODO_FAILURE = "API_TODO_FAILURE"
-export const API_TODO_DASHBOARD = "API_TODO_DASHBOARD"
 
 // ----------- VSF ---------------//
 export const API_VSF_REQUEST = "API_VSF_REQUEST"
@@ -110,6 +111,7 @@ export const CAL_TOTAL_DASH = "CAL_TOTAL_DASH"
 export const CAL_TODO_DASH = "CAL_TODO_DASH"
 export const CAL_TREE_DASH = "CAL_TREE_DASH"
 export const CAL_CATE_DASH = "CAL_CATE_DASH"
+
 
 
 export const CHANGE_TODO = "CHANGE_TODO"

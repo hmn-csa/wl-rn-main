@@ -2,37 +2,38 @@ import * as constAction from "../consts/index";
 
 
 const initialState = {
-  'todoCase':{
+  'todoCase': {
     'case': 0,
     'applIds': []
   },
-  'todoFollowed':{
+  'todoFollowed': {
     'case': 0,
     'applIds': []
   },
-  'todoPaid':{
+  'todoPaid': {
     'case': 0,
     'applIds': []
   },
-  'todoPtp':{
+  'todoPtp': {
     'case': 0,
     'applIds': []
   },
-  'todoBptp':{
+  'todoBptp': {
     'case': 0,
     'applIds': []
   },
-  'todoRevisit':{
+  'todoRevisit': {
     'case': 0,
     'applIds': []
   },
+  list_task: []
 }
 
 
 
 const todoReducers = (state = initialState, action) => {
 
-  switch(action.type) {
+  switch (action.type) {
     // get data 
     case constAction.CAL_TODO_DASH:
       let appls = Object.values(action.data)
@@ -41,7 +42,7 @@ const todoReducers = (state = initialState, action) => {
         return appl.todo_flag == 1
       })
       let todoFollowedAppls = todoAppls.filter((appl) => {
-        return appl.followed == 1 
+        return appl.followed == 1
       })
       let todoPaidAppls = todoAppls.filter((appl) => {
         return appl.total_pay_amount > 0
@@ -54,10 +55,9 @@ const todoReducers = (state = initialState, action) => {
         return ['NAH', 'LEM'].includes(appl.last_action_code)
       })
 
-
       state = {
-        ...state, 
-        'todoCase':{
+        ...state,
+        'todoCase': {
           'case': todoAppls.length,
           'applIds': todoAppls//.map(appl => appl.appl_id)
         },
@@ -73,16 +73,24 @@ const todoReducers = (state = initialState, action) => {
           'case': todoPtpAppls.length,
           'applIds': todoPtpAppls//.map(appl => appl.appl_id)
         },
-        'todoBptp':{
+        'todoBptp': {
           'case': 0,
           'applIds': []
         },
-        'todoRevisit':{
+        'todoRevisit': {
           'case': reVisitAppls.length,
           'applIds': reVisitAppls//.map(appl => appl.appl_id)
         },
       }
       return state;
+
+    // case constAction.SET_TODO_TASK:
+    //   const list_task = [...action.content, ...state.list_task]
+    //   return {
+    //     ...state,
+    //     list_task: list_task,
+    //   }
+
 
     default:
       return state;

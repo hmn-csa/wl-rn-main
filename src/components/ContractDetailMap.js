@@ -25,6 +25,24 @@ function ContractDetailMap(props) {
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
+
+
+  const handleÁyncChangeTodo = () => {
+    let todo_value = isTodo === 1 ? 0 : 1
+    let config = {
+      'appl_id': content.appl_id,
+      'todo_value': todo_value
+    }
+    const response = await axios(config);
+    const responseTodo = response.data.todo_flag
+    props.apiChangeTodo(config)
+    props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_value })
+    setTodoContent(todo_value)
+    setTodoColor(todo_value === 1 ? colors.danger : colors.grey)
+    setTodoIcon(todo_value === 1 ? 'heart' : 'heart-o')
+    props.calTodoDash(props.data)
+
+  }
   const handleChangeTodo = async () => {
     const todo_new = isTodo === 1 ? 0 : 1
     let config = {
@@ -41,6 +59,7 @@ function ContractDetailMap(props) {
     try {
       const response = await axios(config);
       const responseTodo = response.data.todo_flag
+
       setTodoContent(responseTodo)
       props.changeTodo({ appl_id: content.appl_id, todo_flag: responseTodo })
       setTodoColor(responseTodo === 1 ? colors.danger : colors.grey)
@@ -50,6 +69,7 @@ function ContractDetailMap(props) {
       console.error(error);
     }
   }
+
   const handleGetVsf = () => {
     if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
       props.setActiveVsf(content)

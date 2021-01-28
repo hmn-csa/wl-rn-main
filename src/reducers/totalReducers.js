@@ -38,9 +38,6 @@ const totalReducers = (state = initialState, action) => {
       let appls = Object.values(action.data)
       let totalCase = appls.length
       // ======== todos ==========
-      // let initPaidAppls = appls.filter((appl) => {
-      //   return appl.total_pay_amount > 0
-      // })
 
       let initPaidMtd = appls.filter((appl) => {
         return parseFloat(appl.total_pay_amount) > 0

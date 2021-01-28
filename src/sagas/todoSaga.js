@@ -13,15 +13,15 @@ export function* watcherSetTodo() {
 
 
 export function* workerSetTodo(request) {
-  
+
   try {
     let config = {
       method: 'put',
       url: `${constAction.WORKLIST_API}/appls-list/`,
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${request.config.token_value}`
       },
-      data : {
+      data: {
         'appl_id': request.config.appl_id,
         'todo_value': request.config.todo_value
       }
@@ -29,18 +29,17 @@ export function* workerSetTodo(request) {
     //console.log(config)
     const response = yield call(axios, config);
     const data = response.data;
-    
-    //console.log(data)
-    
-    yield put({ type: constAction.API_TODO_SUCCESS, content: {
+
+    yield put({
+      type: constAction.CHANGE_TODO,
+      content: {
         'appl_id': request.config.appl_id,
-        'todo_value': request.config.todo_value
+        'todo_flag': request.config.todo_value
       }
     });
 
-  
-    yield put({ type: constAction.DATA_INIT_DASHBOARD });
-  
+    //yield put({ type: constAction.CAL_TODO_DASH });
+
   } catch (error) {
     console.log(error)
     // dispatch a failure action to the store with the error
