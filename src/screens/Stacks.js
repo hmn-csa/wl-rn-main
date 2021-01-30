@@ -21,6 +21,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Calendar_ } from './Calendar'
 import { Colors } from 'react-native-paper'
+import { Menutop_Uptrail } from './MenuTop'
 
 const Stack = createStackNavigator()
 
@@ -203,7 +204,7 @@ function DashboardStack(props) {
       />
       < Stack.Screen
         name="Uptrail"
-        component={ListUptrail}
+        component={Menutop_Uptrail}
         options={{
           headerStyle: {
             backgroundColor: colors.primary,
@@ -427,7 +428,7 @@ function CategorieStack(props) {
       />
       <Stack.Screen
         name="Uptrail"
-        component={ListUptrail}
+        component={Menutop_Uptrail}
         options={{
           headerStyle: {
             backgroundColor: colors.primary,

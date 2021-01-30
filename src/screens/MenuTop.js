@@ -5,6 +5,8 @@ import { colors } from '../styles'
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
+import ListUptrail from './ListUptrail'
+import ListUptrailMonth from './ListUptrailMonth'
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -44,7 +46,33 @@ function Menutop_Categories() {
   );
 }
 
+function Menutop_Uptrail() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Day"
+      tabBarOptions={{
+        activeTintColor: colors.info,
+        inactiveTintColor: colors.black,
+        labelStyle: { fontSize: 12, fontWeight: 'bold' },
+        style: { backgroundColor: 'white' },
+      }}
+    >
+      <Tab.Screen
+        name="Day"
+        component={ListUptrail}
+        options={{ tabBarLabel: 'Ngày' }}
+      />
+      <Tab.Screen
+        name="Month"
+        component={ListUptrailMonth}
+        options={{ tabBarLabel: 'Tháng' }}
+      />
+    </Tab.Navigator>
+  );
+}
+
 
 export {
   Menutop_Categories,
+  Menutop_Uptrail
 };

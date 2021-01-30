@@ -77,13 +77,6 @@ function MainApp(props) {
     }
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      upLocation()
-    }, 1 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     upLocation()

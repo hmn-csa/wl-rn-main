@@ -2,7 +2,7 @@ import {
   View, Text, Image, ScrollView, Alert, FlatList,
   StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions
 } from 'react-native'
-import { FAB, Portal, Provider } from 'react-native-paper';
+import { Button, Portal, Provider, FAB } from 'react-native-paper';
 import React, { useState, useEffect, useRef } from "react"
 import { connect } from "react-redux"
 import { colors } from '../styles'
@@ -15,7 +15,6 @@ import Loader from '../components/elements/Loader'
 import Uptrail from '../components/Uptrail'
 import * as constAction from '../consts'
 import { calInitialRegion } from '../functions'
-import { FontAwesome5 } from '@expo/vector-icons';
 // function Uptrail
 
 const { width, height } = Dimensions.get("window");
@@ -23,7 +22,7 @@ const CARD_HEIGHT = height / 8;
 const SliderWidth = Dimensions.get('screen').width;
 
 
-function ListUptrail(props) {
+function ListUptrailMonth(props) {
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 30;
@@ -84,25 +83,69 @@ function ListUptrail(props) {
 
   // -------------------------------------
 
+  const renMap = () => {
+    return (
+      <View style={{
+      }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+          <MapView
+            style={styles.mapStyle}
+            provider={PROVIDER_GOOGLE}
+            ref={mapRef}
+            initialRegion={calInitialRegion(props.uptrails.uptrails)}
+          >
+            {
+              props.uptrails.uptrails.map((appl, index) => {
+                let description = `${appl.appl_id}`
+                return <Marker
+                  coordinate={{ latitude: appl.lat, longitude: appl.lon }}
+                  key={appl.appl_id}
+                  description={description}
+                  onPress={() => {
+                    setActivateIndex(index)
+                    carouselRef.current.snapToItem(index)
+                  }}
+                  Color={'blue'}
+                  ref={(ref) => makerRef[index] = ref}
+                />
+              }
+              )
+            }
+          </MapView>
+        </View>
+        <View
+          style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: CARD_HEIGHT * 5 }}>
+          <Carousel
+            ref={carouselRef}
+            layout={'default'}
+            data={props.uptrails.uptrails}
+            sliderWidth={SliderWidth}
+            itemWidth={width * 0.9}
+            itemHeight={CARD_HEIGHT}
+            renderItem={_renderItem}
+            useScrollView={true}
+            onSnapToItem={(index) => {
+              setActivateIndex(index)
+              mapRef.current.animateToCoordinate(
+                { latitude: props.uptrails.uptrails[index].lat, longitude: props.uptrails.uptrails[index].lon }, 0
+              )
+              if (makerRef[index] != undefined)
+                makerRef[index].showCallout()
+            }}
+            activeSlideAlignment="center"
+          />
+        </View>
+
+      </View>
+    )
+  }
+
+
   if (props.uptrails.fetching || uptrailStatus)
     return <Loader />
   else if (props.uptrails.uptrails.length > 0 && pageMap) {
     return <View style={styles.container}>
-
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-        <Portal>
-          <FAB
-            style={{
-              position: 'absolute',
-              bottom: 220,
-              right: 20,
-              backgroundColor: 'white',
-            }}
-            icon={(props) => <FontAwesome5 name="list-alt"  {...props} />}
-            color={colors.danger}
-            onPress={() => setPageMap(false)}
-          />
-        </Portal>
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
@@ -128,9 +171,8 @@ function ListUptrail(props) {
           }
         </MapView>
       </View>
-
       <View
-        style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingBottom: 10 }}>
+        style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBotom: 10 }}>
         <Carousel
           ref={carouselRef}
           layout={'default'}
@@ -151,7 +193,7 @@ function ListUptrail(props) {
           activeSlideAlignment="center"
         />
       </View>
-    </View >
+    </View>
   }
 
   else if (props.uptrails.uptrails.length > 0 && pageMap === false) {
@@ -163,43 +205,7 @@ function ListUptrail(props) {
             getMoreUptrails2();
           }
         }}>
-        <DatePicker
-          style={{ backgroundColor: colors.white, borderRadius: 10 }}
-          date={reDate}
-          mode="date"
-          placeholder="từ ngày"
-          format="YYYY-MM-DD"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              left: 4,
-              top: 4,
-              marginLeft: 0
-            },
-            dateInput: {
-              marginLeft: 36
-            }
-          }}
-          onDateChange={(date) => {
-            setRedate(date)
-            getDailyUptrails(date)
-          }}
-        />
-        <Portal>
-          <FAB
-            style={{
-              position: 'absolute',
-              bottom: 220,
-              right: 20,
-              backgroundColor: 'white',
-            }}
-            icon={(props) => <FontAwesome5 name="map-marked-alt"  {...props} />}
-            color={colors.danger}
-            onPress={() => setPageMap(true)}
-          />
-        </Portal>
+
         {props.uptrails.uptrails.map(item =>
           <Uptrail
             key={item.runtime}
@@ -321,5 +327,5 @@ const stylesTrail = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListUptrail);
+export default connect(mapStateToProps, mapDispatchToProps)(ListUptrailMonth);
 
