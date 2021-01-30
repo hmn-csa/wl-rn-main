@@ -86,10 +86,10 @@ function ListUptrail(props) {
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
           ref={mapRef}
-          initialRegion={calInitialRegion(props.uptrails.uptrails)}
+          initialRegion={calInitialRegion(props.uptrails.dailyUptrails)}
         >
           {
-            props.uptrails.uptrails.map((appl, index) => {
+            props.uptrails.dailyUptrails.map((appl, index) => {
               let description = `${appl.appl_id}`
               return <Marker
                 coordinate={{ latitude: appl.lat, longitude: appl.lon }}
@@ -113,7 +113,7 @@ function ListUptrail(props) {
         <Carousel
           ref={carouselRef}
           layout={'default'}
-          data={props.uptrails.uptrails}
+          data={props.uptrails.dailyUptrails}
           sliderWidth={SliderWidth}
           itemWidth={width * 0.9}
           itemHeight={CARD_HEIGHT}
@@ -122,7 +122,7 @@ function ListUptrail(props) {
           onSnapToItem={(index) => {
             setActivateIndex(index)
             mapRef.current.animateToCoordinate(
-              { latitude: props.uptrails.uptrails[index].lat, longitude: props.uptrails.uptrails[index].lon }, 0
+              { latitude: props.uptrails.dailyUptrails[index].lat, longitude: props.uptrails.uptrails[index].lon }, 0
             )
             if (makerRef[index] != undefined)
               makerRef[index].showCallout()
