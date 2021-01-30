@@ -216,11 +216,10 @@ function Uptrail(props) {
 
 
   const cardStyle = props.type === "marker" ? {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.7)',
     borderRadius: 15,
     borderColor: colors.lightGray,
     padding: 10,
-    height: 120
   } : {
       backgroundColor: 'white',
       borderWidth: 1,
