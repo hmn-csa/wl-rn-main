@@ -204,7 +204,8 @@ function ListUptrailMonth(props) {
           if (isCloseToBottom(nativeEvent)) {
             getMoreUptrails2();
           }
-        }}>
+        }}
+      >
 
         {props.uptrails.uptrails.map(item =>
           <Uptrail

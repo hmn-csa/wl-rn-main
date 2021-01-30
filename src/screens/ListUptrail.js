@@ -31,9 +31,7 @@ function ListUptrail(props) {
   };
 
   const [pageMap, setPageMap] = useState(false)
-
   const [reDate, setRedate] = useState(null)
-  const [uptrailStatus, setUptrailStatus] = useState(false);
 
   const mapRef = useRef(null)
   const makerRef = {}
@@ -43,7 +41,7 @@ function ListUptrail(props) {
   const [activeIndex, setActivateIndex] = useState(0);
 
   const getDailyUptrails = (date) => {
-    props.getUptrails({
+    props.getDailyUptrails({
       staff_id: props.token.active_staff,
       token: props.token.token.access,
       loaddate: date
@@ -62,31 +60,12 @@ function ListUptrail(props) {
     );
   };
 
-  const renMoreLoading = () => {
-    if (props.uptrails.moreFetching)
-      return (
-        <View style={{ height: 80 }}>
-          <Loader />
-        </View>
-      )
-  }
-  // ---------------------------------------
-  const getMoreUptrails2 = () => {
-    let loadfrom = props.uptrails.uptrails[props.uptrails.uptrails.length - 1].runtime
-    let config = {
-      staff_id: props.token.active_staff,
-      token: props.token.token.access,
-      loadfrom: loadfrom
-    }
-    props.getMoreUptrails(config)
-  }
-
 
   // -------------------------------------
 
-  if (props.uptrails.fetching || uptrailStatus)
+  if (props.uptrails.dailyFetching)
     return <Loader />
-  else if (props.uptrails.uptrails.length > 0 && pageMap) {
+  else if (props.uptrails.dailyUptrails.length > 0 && pageMap) {
     return <View style={styles.container}>
 
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
@@ -154,15 +133,11 @@ function ListUptrail(props) {
     </View >
   }
 
-  else if (props.uptrails.uptrails.length > 0 && pageMap === false) {
+  else if (props.uptrails.dailyUptrails.length > 0 && pageMap === false) {
     return (
       <ScrollView
         style={{ backgroundColor: 'white', padding: 10, paddingBottom: 40 }}
-        onScroll={({ nativeEvent }) => {
-          if (isCloseToBottom(nativeEvent)) {
-            getMoreUptrails2();
-          }
-        }}>
+      >
         <DatePicker
           style={{ backgroundColor: colors.white, borderRadius: 10 }}
           date={reDate}
@@ -200,58 +175,42 @@ function ListUptrail(props) {
             onPress={() => setPageMap(true)}
           />
         </Portal>
-        {props.uptrails.uptrails.map(item =>
+        {props.uptrails.dailyUptrails.map(item =>
           <Uptrail
             key={item.runtime}
             item={item}
             navigation={props.navigation}
           />)
         }
-        {renMoreLoading()}
-        {/* <View style={[styles.row, { marginTop: 10 }]}>
-          <DatePicker
-            style={[styles.box, { backgroundColor: colors.secondary, borderRadius: 10, }]}
-            date={reDate}
-            mode="date"
-            placeholder="từ ngày"
-            format="YYYY-MM-DD"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: 'absolute',
-                left: 4,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={(date) => {
-              setRedate(date)
-              getDailyUptrails(date)
-            }}
-          />
-
-          <Button
-            mode="contained"
-            onPress={getMoreUptrails2}
-            style={[styles.box, buttonStyles.button]}>
-            lấy thêm
-         </Button>
-        </View> */}
       </ScrollView>
     )
   }
   return (
-    <ScrollView
-      onScroll={({ nativeEvent }) => {
-        if (isCloseToBottom(nativeEvent)) {
-          getMoreUptrails2();
-        }
-      }}>
-      <Text>không có Uptrail</Text>
+    <ScrollView>
+      <DatePicker
+        style={{ backgroundColor: colors.white, borderRadius: 10 }}
+        date={reDate}
+        mode="date"
+        placeholder="từ ngày"
+        format="YYYY-MM-DD"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 4,
+            top: 4,
+            marginLeft: 0
+          },
+          dateInput: {
+            marginLeft: 36
+          }
+        }}
+        onDateChange={(date) => {
+          setRedate(date)
+          getDailyUptrails(date)
+        }}
+      />
     </ScrollView>
   )
 
@@ -266,21 +225,15 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUptrails: (config) => {
+    getDailyUptrails: (config) => {
       dispatch({
-        type: constAction.API_UPTRAIL_REQUEST,
+        type: constAction.DAILY_UPTRAIL_REQUEST,
         config
       })
     },
     updateShowlist: (content) => {
       dispatch(actUpdateShowlist(content))
     },
-    getMoreUptrails: (config) => {
-      dispatch({
-        type: constAction.MORE_UPTRAIL_REQUEST,
-        config
-      })
-    }
   }
 }
 

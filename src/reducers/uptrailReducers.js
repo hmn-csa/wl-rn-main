@@ -7,8 +7,10 @@ const initialState = {
   error: null,
   userFetching: false,
   justFetching: false,
+  dailyFetching: false,
   userError: null,
-  uptrails: []
+  uptrails: [],
+  dailyUptrails: []
 };
 
 const uptrailReducers = (state = initialState, action) => {
@@ -17,18 +19,10 @@ const uptrailReducers = (state = initialState, action) => {
     case constAction.UPTRAIL_CLEAR:
       return initialState
 
-    // case constAction.SET_ACTIVE_STAFF:
-    //   return { ...state, 
-    //     active_staff: action.content.staff_id, 
-    //     active_infos: action.content.info};
-
     case constAction.API_UPTRAIL_REQUEST:
       return { ...state, fetching: true, error: null };
 
-
     case constAction.API_UPTRAIL_SUCCESS:
-      //const initUptrails = state.uptrails.concat(action.content)
-      //const uptrails = [...state.uptrails, ...action.content]
       state = {
         ...state,
         fetching: false,
@@ -42,7 +36,6 @@ const uptrailReducers = (state = initialState, action) => {
     case constAction.MORE_UPTRAIL_REQUEST:
       return { ...state, moreFetching: true, error: null };
 
-
     case constAction.MORE_UPTRAIL_SUCCESS:
       const uptrails = [...state.uptrails, ...action.content]
       state = {
@@ -55,9 +48,26 @@ const uptrailReducers = (state = initialState, action) => {
       }
       return state;
 
+    case constAction.DAILY_UPTRAIL_REQUEST:
+      return { ...state, dailyFetching: true, error: null }
+
+    case constAction.DAILY_UPTRAIL_SUCCESS:
+      state = {
+        ...state,
+        dailyFetching: false,
+        dailyUptrails: action.content
+      }
+      return state;
+
 
     case constAction.API_UPTRAIL_FAILURE:
-      state = { ...state, fetching: false, error: action.error }
+      state = {
+        ...state,
+        fetching: false,
+        dailyFetching: false,
+        moreFetching: false,
+        error: action.error
+      }
       return state;
 
     case constAction.USER_UPTRAIL_REQUEST:
@@ -75,7 +85,11 @@ const uptrailReducers = (state = initialState, action) => {
       return state;
 
     case constAction.USER_UPTRAIL_FAILURE:
-      state = { ...state, userFetching: false, userError: action.error }
+      state = {
+        ...state,
+        userFetching: false,
+        userError: action.error
+      }
       return state;
 
     default:
