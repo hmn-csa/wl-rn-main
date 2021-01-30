@@ -19,7 +19,7 @@ export function* workerSetTodo(request) {
       method: 'put',
       url: `${constAction.WORKLIST_API}/appls-list/`,
       headers: {
-        'Authorization': `Bearer ${request.config.token_value}`
+        'Authorization': `Bearer ${request.config.token}`
       },
       data: {
         'appl_id': request.config.appl_id,

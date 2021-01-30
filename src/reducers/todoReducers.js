@@ -26,7 +26,9 @@ const initialState = {
     'case': 0,
     'applIds': []
   },
-  list_task: []
+  error: false,
+  error_applid: null,
+
 }
 
 
