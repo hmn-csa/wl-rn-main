@@ -5,30 +5,34 @@ export const WORKLIST_API = "https://beta-fc.lgm.com.vn/rn-ver/api"
 
 export const REMARK_CODE = [
   { label: 'PTP - Hứa thanh toán', value: 'PTP' },
-  { label: 'OBT - Đã thu được tiền', value: 'OBT' },
+  { label: 'F_OBT - Đã thu được tiền', value: 'OBT' },
   { label: 'WFP - Đã thanh toán chờ kiểm tra', value: 'WFP' },
   { label: 'TER - Thanh lý', value: 'TER' },
 
-  { label: 'NAH - Không có nhà', value: 'NAH' },
-  { label: 'LEM - Để lại lời nhắn', value: 'LEM' },
 
   { label: 'WAS - Chờ thu nhập, trợ cấp', value: 'WAS' },
   { label: 'LST - Thất nghiệp, làm ăn thua lỗ', value: 'LST' },
+  { label: 'MCW - KH bị bệnh, tai nạn', value: 'MCW' },
+  { label: 'CTI - Thiên tai', value: 'CTI' },
+
+  { label: 'F_NAH - Không có nhà', value: 'F_NAH' },
+  { label: 'LEM - Để lại lời nhắn', value: 'LEM' },
+
 
   { label: 'RTP - Từ chôí thanh toán', value: 'RTP' },
-
-  { label: 'RENT - Nhà thuê và đã dọn đi', value: 'RENT' },
-  { label: 'HOS - Nhà đã bán', value: 'HOS' },
-
-  { label: 'WAU - Bỏ trốn, người thân không tìm thấy ', value: 'WAU' },
-  { label: 'NFH - Không tìm thấy nhà', value: 'NFH' },
-  { label: 'NIW - Không có thông tin tại nơi làm việc', value: 'NIW' },
-  { label: 'NLA - Không sống tại địa chỉ', value: 'NLA' },
-
   { label: 'GSF - Gian lận', value: 'GSF' },
   { label: 'IGN1 - Chưa nhận khoản vay', value: 'IGN1' },
   { label: 'IGN2 - Báo đã hủy hợp đồng', value: 'IGN2' },
-  { label: 'CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần', value: 'CGI' },
+
+  { label: 'F_RENT - Nhà thuê và đã dọn đi', value: 'F_RENT' },
+  { label: 'F_HOS - Nhà đã bán', value: 'F_HOS' },
+  { label: 'F_WAU - KH bỏ trốn, gia đình còn ở tại địa phương', value: 'F_WAU' },
+  { label: 'F_NFH - Không tìm thấy nhà', value: 'F_NFH' },
+  { label: 'F_NIW - Không có thông tin tại nơi làm việc', value: 'F_NIW' },
+  { label: 'F_NLA - Không sống tại địa chỉ', value: 'F_NLA' },
+  { label: 'F_WET - KH bỏ trốn, không gặp gia đình', value: 'F_WET' },
+
+  { label: 'F_CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần', value: 'F_CGI' },
   { label: 'DIE - Đã qua đời', value: 'DIE' },
 ];
 

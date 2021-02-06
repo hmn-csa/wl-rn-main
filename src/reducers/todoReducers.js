@@ -86,13 +86,6 @@ const todoReducers = (state = initialState, action) => {
       }
       return state;
 
-    // case constAction.SET_TODO_TASK:
-    //   const list_task = [...action.content, ...state.list_task]
-    //   return {
-    //     ...state,
-    //     list_task: list_task,
-    //   }
-
 
     default:
       return state;

@@ -81,10 +81,12 @@ export function* workerGetDataFC(token) {
     // content
 
     // dispatch CAL-DASH
-    yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TODO_DASH, data: response.data });
+
+    yield put({ type: constAction.CAL_TODO_DASH });
+    yield put({ type: constAction.CAL_TOTAL_DASH });
+    yield put({ type: constAction.CAL_TREE_DASH });
     yield put({ type: constAction.CAL_CATE_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TREE_DASH, data: response.data });
+
 
     // dispatch UPDATE_SHOWLIST
     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data) });
@@ -147,10 +149,11 @@ export function* workerGetDataFCMode(request) {
     })
 
     // dispatch CAL-DASH
-    yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TODO_DASH, data: response.data });
+
+    yield put({ type: constAction.CAL_TODO_DASH });
+    yield put({ type: constAction.CAL_TOTAL_DASH });
+    yield put({ type: constAction.CAL_TREE_DASH });
     yield put({ type: constAction.CAL_CATE_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TREE_DASH, data: response.data });
 
     // dispatch UPDATE_SHOWLIST
     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data) });
