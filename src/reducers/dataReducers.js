@@ -1,3 +1,4 @@
+import { startClock } from "react-native-reanimated";
 import * as constAction from "../consts/index";
 
 
@@ -171,6 +172,7 @@ const initialState = {
   fetching: false,
   data: null,
   error: null,
+  todoError: null,
   totalCal: initialTotal,
   todoCal: initialTodo,
   treeCal: initialTree,
@@ -203,6 +205,9 @@ const dataReducers = (state = initialState, action) => {
     case constAction.CHANGE_TODO:
       state.data[action.content.appl_id] = { ...state.data[action.content.appl_id], todo_flag: action.content.todo_flag }
       return state
+
+    case constAction.API_TODO_FAILURE:
+      return { ...state, todoError: action.content }
 
     case constAction.CHANGE_FOLLOW:
       if (action.content.code != 'PTP') {
@@ -535,7 +540,45 @@ const dataReducers = (state = initialState, action) => {
       }
       return state;
 
+    case constAction.CAL_CATE_DASH:
+
+      let appls2 = Object.values(state.data)
+
+      const groupBy = function (xs, key) {
+        return xs.reduce(function (rv, x) {
+          rv[x[key]] = rv[x[key]] || { paidamt: 0, visited: 0, case: 0, paidcase: 0, applIds: [] };
+          rv[x[key]] = {
+            ...rv[x[key]],
+            paidamt: rv[x[key]].paidamt + x.total_pay_amount,
+            paidcase: rv[x[key]].paidcase + x.full_paid,
+            case: rv[x[key]].case + 1,
+            visited: rv[x[key]].visited + x.followed,
+            applIds: rv[x[key]].applIds.concat([{ appl_id: x.appl_id, cust_name: x.cust_name }])
+          };
+          return rv;
+        }, {});
+      };
+      // Groupby return array before Object
+      const groupByArray = (xs, key) => {
+        const groupJson = groupBy(xs, key)
+        const groupArray = []
+        for (const [key, value] of Object.entries(groupJson)) {
+          groupArray.push({ ...value, key: key })
+        }
+        return groupArray;
+      }
+
+      // ======== todos ==========
+      state = {
+        ...state,
+        categoryProduct: groupByArray(appls2, 'product_group'),
+        categoryBinscore: groupByArray(appls2, 'bin_value'),
+      }
+      return state;
     // ================ End dash board =================//
+
+
+
     default:
       return state;
 

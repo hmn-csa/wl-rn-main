@@ -34,12 +34,10 @@ function ContractDetailMap(props) {
       appl_id: content.appl_id,
       todo_value: todo_value
     }
-    props.apiChangeTodo(config)
-    props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_value })
     setTodoContent(todo_value)
     setTodoColor(todo_value === 1 ? colors.danger : colors.grey)
     setTodoIcon(todo_value === 1 ? 'heart' : 'heart-o')
-    props.calTodoDash(props.data)
+    props.apiChangeTodo(config)
   }
 
   const handleChangeTodo = async () => {
@@ -271,7 +269,7 @@ function ContractDetailMap(props) {
           <FontAwesome
             name={todoIcon}
             style={[showstyles.logo, { color: todoColor }]}
-            onPress={handleChangeTodo}
+            onPress={handleAsyncChangeTodo}
           />
         </View>
         <View style={[showstyles.btn]}>

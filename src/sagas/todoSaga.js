@@ -38,11 +38,16 @@ export function* workerSetTodo(request) {
       }
     });
 
-    //yield put({ type: constAction.CAL_TODO_DASH });
+    yield put({ type: constAction.CAL_TODO_DASH });
 
   } catch (error) {
-    console.log(error)
     // dispatch a failure action to the store with the error
-    yield put({ type: constAction.API_TODO_FAILURE, error });
+    yield put({
+      type: constAction.API_TODO_FAILURE,
+      content: {
+        'appl_id': request.config.appl_id,
+        'todo_flag': request.config.todo_value
+      }
+    });
   }
 }
