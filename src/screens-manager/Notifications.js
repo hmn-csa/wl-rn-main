@@ -40,7 +40,7 @@ function Notify(props) {
 
 
   useEffect(() => {
-    if (props.staff.notCheckin !== null) {  // && props.staff.notCheckin !== 0
+    if (props.staff.notCheckin !== null && props.staff.notCheckin !== 0) {  // && props.staff.notCheckin !== 0
       Notifications.scheduleNotificationAsync({
         content: {
           title: `Có ${props.staff.notCheckin} nhân viên chưa thực hiện Checkin 📬`,

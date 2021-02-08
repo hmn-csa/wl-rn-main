@@ -37,7 +37,7 @@ export function* workerGetToken(request) {
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
     // get appls data
     if (data.role === 'FC') {
-      yield call(workerGetDataFC, { token: data.access, staff_id: data.staff_id, fc_name: data.fc_name });
+      yield call(workerGetDataFC, { token: data.access, staff_id: data.staff_id, fc_name: data.fc_name, avatar: data.avatar });
     }
     else {
       yield call(workerGetStaffInfo, data.access);
@@ -73,7 +73,8 @@ export function* workerGetDataFC(token) {
       type: constAction.SET_ACTIVE_STAFF, content: {
         staff_id: token.staff_id,
         info: {
-          fc_name: token.fc_name
+          fc_name: token.fc_name,
+          avatar: token.avatar
         }
       }
     })
@@ -143,7 +144,8 @@ export function* workerGetDataFCMode(request) {
       type: constAction.SET_ACTIVE_STAFF, content: {
         staff_id: request.token.staff_id,
         info: {
-          fc_name: request.token.fc_name
+          fc_name: request.token.fc_name,
+          avatar: request.token.avatar
         }
       }
     })

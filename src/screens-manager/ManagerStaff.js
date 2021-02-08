@@ -72,9 +72,7 @@ function ManagerStaff(props) {
     else return { uri: avatar }
   }
 
-  const renPayment = () => {
 
-  }
 
 
   const renderItem = ({ item, index }) => {
@@ -84,6 +82,7 @@ function ManagerStaff(props) {
         staff_id: item.staff_id,
         token: props.token,
         fc_name: item.info.fc_name,
+        avatar: item.info.avatar,
       })} >
 
       <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>

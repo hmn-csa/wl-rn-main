@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Alert, Image } from 'react-native';
 import { connect } from "react-redux";
 import {
   actlogoutUser, clearUptrail,
@@ -13,6 +13,8 @@ import { Calendar, CalendarList, Agenda } from 'react-native-calendars'
 import CalendarStrip from 'react-native-calendar-strip'
 import treeReducers from '../reducers/treeReducers';
 import { colors } from '../styles';
+
+import { EMPTYAVATAR } from '../images'
 
 function User(props) {
   const outUsers = () => {
@@ -48,13 +50,25 @@ function User(props) {
     );
   });
 
-  const data = {
-    1: '12tr'
+
+
+
+  const renAvatar = (avatar) => {
+    if (!avatar)
+      return EMPTYAVATAR
+    else return { uri: avatar }
   }
 
   return (
     <View style={{ flex: 1, }}>
       {/* <Text style={styles.logo}>HMN APP</Text> */}
+      <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+        <Image
+          style={[styles.avatar]}
+          source={renAvatar(props.token.active_infos.avatar)}>
+        </Image>
+        <Text style={styles.name}>{props.token.active_staff} - {props.token.active_infos.fc_name}</Text>
+      </View>
       <Button
         style={styles.loginBtn}
         title='SIGOUT'
@@ -63,16 +77,8 @@ function User(props) {
 
 
 
-      <Calendar
-        // Collection of dates that have to be marked. Default = {}
-        // markedDates={{
-        //   '2021-01-16': { selected: true, marked: true, selectedColor: 'blue' },
-        //   '2021-01-17': { marked: true },
-        //   '2021-01-18': { marked: true, dotColor: 'red', activeOpacity: 0 },
-        //   '2021-01-19': { disabled: true, disableTouchEvent: true },
-        //   '2021-o1-25': { dots: [vacation, massage, workout], selected: true, selectedColor: 'red' },
-        //   '2021-01-26': { dots: [massage, workout], disabled: true }
-        // }}
+      {/* <Calendar
+        
         customHeader={CustomHeader}
         dayComponent={({ date, state }) => {
           return (
@@ -187,7 +193,7 @@ function User(props) {
         maxDate={'2021-01-31'}
         hideExtraDays
 
-      />
+      /> */}
 
 
 
@@ -235,6 +241,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
+  },
+  avatar: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 130,
+    height: 130,
+    borderRadius: 63,
+    borderWidth: 4,
+    borderColor: "white",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  name: {
+    fontSize: 22,
+    color: "#000000",
+    fontWeight: '600',
   },
   logo: {
     fontWeight: "bold",
