@@ -7,15 +7,34 @@ import {
 } from "../actions/index"
 
 import { Button } from 'react-native-paper';
+import * as constAction from '../consts'
 
-
-import { colors, styles } from '../styles';
+import { colors } from '../styles';
 
 import { EMPTYAVATAR } from '../images'
 
-function User(props) {
+function UserSignout(props) {
 
   const [changePw, setChangePw] = useState(false)
+  const [newPw, setNewPw] = useState('')
+  const [confirmPw, setConfirmPw] = useState('')
+
+  const handleChangePw = () => {
+    if (newPw !== "") {
+      if (confirmPw !== newPw) {
+        alert("Mật khẩu xác thực chưa đúng")
+      }
+      else {
+        let config = {
+          token: props.token.token.access,
+          new_password: newPw
+        }
+        props.changePw(config)
+        alert("Mật khẩu mới thành công")
+      }
+    }
+    else alert("Nhập vào mật khẩu mới")
+  }
 
   const outUsers = () => {
     props.logout()
@@ -33,32 +52,42 @@ function User(props) {
       return (
         <View style={[
           {
-            width: '80%',
+            width: '88%',
             marginLeft: 'auto',
             marginRight: 'auto',
+            marginBottom: 10
           },]} >
-
-          <TextInput
-            placeholder="Tài khoản"
-            style={styles.inputTextBlack}
-          />
-          <TextInput
-            mode="Flat"
-            style={{ color: colors.primary }}
-            label="Mật khẩu mới 2"
-          />
-          <TextInput
-            mode="flat"
-            style={{ color: colors.primary }}
-            label="Nhập lại mật khẩu mới"
-          />
+          <View style={styles.inputView} >
+            <TextInput
+              secureTextEntry={true}
+              placeholder="Mật khẩu mới"
+              style={styles.inputTextBlack}
+              value={newPw}
+              onChangeText={value => setNewPw(value)}
+            />
+          </View>
+          <View style={styles.inputView} >
+            <TextInput
+              secureTextEntry={true}
+              style={[styles.inputTextBlack]}
+              placeholder="Nhập lại mật khẩu mới"
+              value={confirmPw}
+              onChangeText={value => setConfirmPw(value)}
+            />
+          </View>
           <Button
             mode="contained"
+            style={{
+              width: "85%",
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
             color={colors.secondary}
             contentStyle={{ marginLeft: 2 }}
+            onPress={() => handleChangePw()}
           >
             Xác nhận
-          </Button>
+            </Button>
 
         </View>
       )
@@ -138,10 +167,47 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(clearShowlist())
       dispatch(clearUptrail())
       dispatch(clearData())
+    },
+
+    changePw: (config) => {
+      dispatch(
+        {
+          type: constAction.API_CHANGEPW_REQUEST,
+          config
+        }
+      )
     }
   }
 }
 
+const styles = StyleSheet.create({
+  inputView: {
+    width: "85%",
+    backgroundColor: colors.light,
+    height: 30,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 10,
+    justifyContent: "center",
+    padding: 20,
+    paddingLeft: 20,
+    borderRadius: 5,
+    position: 'relative',
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+  loginBtn: {
+    width: "85%",
+    marginLeft: 'auto',
+    marginRight: '7.5%',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  inputTextBlack: {
+    height: 50,
+    color: "black"
+  },
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserSignout);
 

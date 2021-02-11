@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Image, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Image, ScrollView } from 'react-native';
 import { connect } from "react-redux";
 import {
   actlogoutUser, clearUptrail,
   clearData, clearShowlist
 } from "../actions/index"
 
-import { Button } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 
 
 import { colors, styles } from '../styles';
 
 import { EMPTYAVATAR } from '../images'
 
-function User(props) {
+function UserSignout(props) {
 
-  const [changePw, setChangePw] = useState(false)
+  const [changePw, setChangePw] = useState(true)
 
   const outUsers = () => {
     props.logout()
@@ -37,15 +37,10 @@ function User(props) {
             marginLeft: 'auto',
             marginRight: 'auto',
           },]} >
-
           <TextInput
-            placeholder="Tài khoản"
-            style={styles.inputTextBlack}
-          />
-          <TextInput
-            mode="Flat"
+            mode="flat"
             style={{ color: colors.primary }}
-            label="Mật khẩu mới 2"
+            label="Mật khẩu mới"
           />
           <TextInput
             mode="flat"
@@ -143,5 +138,5 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+export default connect(mapStateToProps, mapDispatchToProps)(UserSignout);
 

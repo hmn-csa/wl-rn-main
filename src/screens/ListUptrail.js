@@ -48,7 +48,6 @@ function ListUptrail(props) {
     })
   }
 
-
   const _renderItem = ({ item, index }) => {
     return (
       <Uptrail
@@ -59,7 +58,6 @@ function ListUptrail(props) {
       />
     );
   };
-
 
   // -------------------------------------
 

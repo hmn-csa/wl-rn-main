@@ -13,6 +13,32 @@ export function* watcherSaga() {
 }
 
 
+export function* workerChangePw(request) {
+  try {
+    let config = {
+      method: 'post',
+      url: `${constAction.WORKLIST_API}/change-pw`,
+      headers: {
+        'Authorization': `Bearer ${request.token}`
+      },
+      data: {
+        new_password: require.new_password
+      }
+    }
+
+    const response = yield call(axios, config);
+    const data = response.data;
+
+    yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
+    // get appls data
+
+  } catch (error) {
+    // dispatch a failure action to the store with the error
+    yield put({ type: constAction.API_TOKEN_FAILURE, error: 'Sai tài khoản hoặc mật khẩu' });
+  }
+}
+
+
 export function* workerGetToken(request) {
   try {
     const config = {

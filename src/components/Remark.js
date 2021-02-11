@@ -7,7 +7,10 @@ import { connect } from "react-redux"
 import { styles as masterStyle, BACKGROUND_LOGIN, MAIN_COLOR2 } from '../styles'
 import DatePicker from 'react-native-datepicker'
 import * as ImagePicker from 'expo-image-picker';
-import { Button, TextInput, Paragraph, Dialog, Portal, RadioButton } from 'react-native-paper';
+import {
+  Button, TextInput, Paragraph,
+  Dialog, Portal, RadioButton
+} from 'react-native-paper';
 import * as Location from 'expo-location';
 import axios from "axios";
 
@@ -333,7 +336,7 @@ function Remark(props) {
                   onValueChange={
                     newValue => {
                       setCode(newValue);
-                      if (['PTP', 'WFP', 'OBT', 'TER'].includes(newValue)) setVisiblePayamount(true);
+                      if (['PTP'].includes(newValue)) setVisiblePayamount(true);
                     }
                   }
                   value={code}>
