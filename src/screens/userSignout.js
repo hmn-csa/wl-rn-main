@@ -27,10 +27,11 @@ function UserSignout(props) {
       else {
         let config = {
           token: props.token.token.access,
-          new_password: newPw
+          newPw: newPw
         }
+        console.log(config)
         props.changePw(config)
-        alert("Mật khẩu mới thành công")
+        //alert("Mật khẩu mới thành công")
       }
     }
     else alert("Nhập vào mật khẩu mới")

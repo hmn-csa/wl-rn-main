@@ -24,6 +24,7 @@ import {
 } from "../actions"
 import * as consts from '../consts'
 import { colors } from '../styles'
+import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get("window");
 
@@ -253,6 +254,7 @@ function Remark(props) {
       showImages.push(EMPTYIMAGE)
     }
     //console.log(showImages)
+
     return <View
       style={[masterStyle.row, styles.container, buttonStyles.buttons, { height: 120 }]}>
       {
@@ -275,7 +277,6 @@ function Remark(props) {
           </TouchableOpacity>
         )
       }
-
 
     </View>
   }
@@ -327,9 +328,9 @@ function Remark(props) {
           <Text>Số tiền hứa/đã thanh toán: {moneyFormat(payAmount)}</Text>
         </View>
 
-        <Portal style={[masterStyle.container, { height: height }]}>
+        <Portal style={[{ height: height }]}>
           <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height }}>
-            <Dialog.Content style={{ width: null, height: height - 60 }}>
+            <Dialog.Content style={{ width: '100%', height: height - 60 }}>
               {/* <Button onPress={hideDialog}>Done</Button> */}
               <ScrollView style={{ marginTop: 10 }}>
                 <RadioButton.Group
@@ -344,9 +345,19 @@ function Remark(props) {
                     consts.REMARK_CODE.map(item =>
                       <RadioButton.Item
                         key={item.value}
-                        style={{ fontSize: 15 }}
+                        color={colors.green}
+                        uncheckedColor={colors.white}
+                        labelStyle={{
+                          fontSize: 12,
+                          marginRight: 60,
+                        }}
+                        style={{
+                          paddingRight: 20
+                        }}
                         value={item.value}
-                        label={item.label} />
+                        label={item.label}
+                        mode='ios'
+                      />
                     )
                   }
                 </RadioButton.Group>
@@ -385,30 +396,35 @@ function Remark(props) {
         </View>
 
 
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
+        <Portal style={[{ with: '90%', height: height }]}>
           <Dialog visible={visibleAddress} onDismiss={hideDialogAddress}>
-            <Dialog.Content>
-              <ScrollView>
-                <RadioButton.Group
-                  onValueChange={newValue => setAddress(newValue)} value={address}>
-                  {
-                    addressItems.map(item =>
-                      <RadioButton.Item
-                        key={item.value}
-                        style={{ fontSize: 15 }}
-                        value={item.value}
-                        label={item.label} />
-                    )
-                  }
-                </RadioButton.Group>
+            <ScrollView>
+              <RadioButton.Group
+                onValueChange={newValue => setAddress(newValue)} value={address}>
+                {
+                  addressItems.map(item =>
+                    <RadioButton.Item
+                      key={item.value}
+                      value={item.value}
+                      label={item.label}
+                      uncheckedColor={colors.white}
+                      labelStyle={{
+                        marginTop: 10,
+                        marginRight: 50,
+                        fontSize: 12,
+                      }}
+                      mode='ios'
+                    />
+                  )
+                }
+              </RadioButton.Group>
 
-                <TextInput
-                  mode="flat"
-                  label="Dia chi khac"
-                  onChangeText={setAddress}
-                />
-              </ScrollView>
-            </Dialog.Content>
+              <TextInput
+                mode="flat"
+                label="Dia chi khac"
+                onChangeText={setAddress}
+              />
+            </ScrollView>
             <Dialog.Actions>
               <Button onPress={hideDialogAddress}>Done</Button>
             </Dialog.Actions>
@@ -448,46 +464,6 @@ function Remark(props) {
           onDateChange={(date) => setRedate(date)}
         />
 
-
-        {/* <View style={[masterStyle.row, styles.container]}>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage1}>
-              image1
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image1 && <Image source={{ uri: image1.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage2}>
-              chọn hình
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image2 && <Image source={{ uri: image2.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage3}>
-              chụp mới
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image3 && <Image source={{ uri: image3.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-        </View> */}
-
         <View style={[buttonStyles.buttons]}>
           <Button
             icon="camera"
@@ -505,7 +481,7 @@ function Remark(props) {
           </Button>
         </View>
 
-        {renImages()}
+        { renImages()}
 
         <Button
           mode="contained"
@@ -537,7 +513,7 @@ function Remark(props) {
           </Dialog>
         </Portal>
 
-      </View>
+      </View >
     )
 
 };

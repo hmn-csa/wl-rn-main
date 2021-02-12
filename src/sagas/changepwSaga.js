@@ -19,7 +19,7 @@ export function* workerChangePw(request) {
         'Authorization': `Bearer ${request.config.token}`
       },
       data: {
-        new_password: require.config.new_password
+        new_password: request.config.newPw
       }
     }
 
@@ -29,7 +29,7 @@ export function* workerChangePw(request) {
 
     //yield put({ type: constAction.API_CHANGEPW_SUCCESS, content: data });
     // get appls data
-    //alert("Mật khẩu mới thành công")
+    alert("Mật khẩu mới thành công, vui lòng đăng nhập với mật khẩu mới")
     yield put({ type: constAction.TOKEN_REMOVE });
 
   } catch (error) {

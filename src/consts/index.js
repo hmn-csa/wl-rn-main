@@ -18,7 +18,6 @@ export const REMARK_CODE = [
   { label: 'F_NAH - Không có nhà', value: 'F_NAH' },
   { label: 'LEM - Để lại lời nhắn', value: 'LEM' },
 
-
   { label: 'RTP - Từ chôí thanh toán', value: 'RTP' },
   { label: 'GSF - Gian lận', value: 'GSF' },
   { label: 'IGN1 - Chưa nhận khoản vay', value: 'IGN1' },
@@ -53,11 +52,6 @@ export const API_TOKEN_SUCCESS = "API_TOKEN_SUCCESS"
 export const API_TOKEN_FAILURE = "API_TOKEN_FAILURE"
 export const TOKEN_REMOVE = "TOKEN_REMOVE"
 export const LOCATION_SET = "LOCATION_SET"
-
-
-export const API_CHANGEPW_REQUEST = "API_CHANGEPW_REQUEST"
-export const API_CHANGEPW_SUCCESS = "API_CHANGEPW_SUCCESS"
-export const API_CHANGEPW_FAILURE = "API_CHANGEPW_FAILURE"
 
 
 // ----------- DATA CASE DETAIL ---------------//
