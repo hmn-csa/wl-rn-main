@@ -19,12 +19,13 @@ export function* workerChangePw(request) {
         'Authorization': `Bearer ${request.config.token}`
       },
       data: {
-        new_password: require.config.new_password
+        'new_password': request.config.newPw
       }
     }
+    console.log(config)
 
     const response = yield call(axios, config);
-    const data = response.data;
+    console.log(response)
 
 
     //yield put({ type: constAction.API_CHANGEPW_SUCCESS, content: data });

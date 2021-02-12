@@ -7,12 +7,15 @@ import { connect } from "react-redux"
 import { styles as masterStyle, BACKGROUND_LOGIN, MAIN_COLOR2 } from '../styles'
 import DatePicker from 'react-native-datepicker'
 import * as ImagePicker from 'expo-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import {
   Button, TextInput, Paragraph,
   Dialog, Portal, RadioButton
 } from 'react-native-paper';
 import * as Location from 'expo-location';
-import axios from "axios";
+
+import { Camera } from 'expo-camera';
 
 
 import { EMPTYIMAGE } from '../images';
@@ -28,6 +31,12 @@ import { colors } from '../styles'
 const { width, height } = Dimensions.get("window");
 
 function Remark(props) {
+
+
+
+  //===============================================
+
+
   const [newAddress, setNewAddress] = useState(props.vsf.activeApplId.new_address)
   const addressItems = [
     { label: props.vsf.activeApplId.reg_address, value: props.vsf.activeApplId.reg_address },
@@ -77,6 +86,15 @@ function Remark(props) {
   const showDialogImage = () => setVisibleImage(true);
   const hideDialogImage = () => setVisibleImage(false);
 
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -254,7 +272,7 @@ function Remark(props) {
     }
     //console.log(showImages)
     return <View
-      style={[masterStyle.row, styles.container, buttonStyles.buttons, { height: 120 }]}>
+      style={[masterStyle.row, styles.container, buttonStyles.buttons,]}>
       {
         showImages.map((image, index) =>
           <TouchableOpacity
@@ -267,8 +285,8 @@ function Remark(props) {
             <Image
               source={image}
               style={{
-                width: 90,
-                height: 120
+                width: width * 0.8 / 3,
+                height: (width * 0.8 / 3) * 4 / 3
               }}
               onLoadStart={() => <ActivityIndicator size={10} color='black' />}
             />
@@ -327,32 +345,35 @@ function Remark(props) {
           <Text>Số tiền hứa/đã thanh toán: {moneyFormat(payAmount)}</Text>
         </View>
 
-        <Portal style={[masterStyle.container, { height: height }]}>
-          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height }}>
-            <Dialog.Content style={{ width: null, height: height - 60 }}>
-              {/* <Button onPress={hideDialog}>Done</Button> */}
-              <ScrollView style={{ marginTop: 10 }}>
-                <RadioButton.Group
-                  onValueChange={
-                    newValue => {
-                      setCode(newValue);
-                      if (['PTP'].includes(newValue)) setVisiblePayamount(true);
-                    }
+        <Portal style={[masterStyle.container]}>
+          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height - 80 }}>
+            {/* <Button onPress={hideDialog}>Done</Button> */}
+            <ScrollView style={{ marginTop: 2 }}>
+              <RadioButton.Group
+                onValueChange={
+                  newValue => {
+                    setCode(newValue);
+                    if (['PTP'].includes(newValue)) setVisiblePayamount(true);
                   }
-                  value={code}>
-                  {
-                    consts.REMARK_CODE.map(item =>
-                      <RadioButton.Item
-                        key={item.value}
-                        style={{ fontSize: 15 }}
-                        value={item.value}
-                        label={item.label} />
-                    )
-                  }
-                </RadioButton.Group>
+                }
+                value={code}>
+                {
+                  consts.REMARK_CODE.map(item =>
+                    <RadioButton.Item
+                      key={item.value}
+                      style={{ fontSize: 15 }}
+                      value={item.value}
+                      label={item.label}
+                      labelStyle={{
+                        fontSize: 12,
+                      }}
+                      mode='ios'
+                    />
+                  )
+                }
+              </RadioButton.Group>
 
-              </ScrollView>
-            </Dialog.Content>
+            </ScrollView>
             <Dialog.Actions>
               <Button onPress={hideDialog}>Done</Button>
             </Dialog.Actions>
@@ -379,35 +400,39 @@ function Remark(props) {
           onPress={showDialogAddress}
           style={[styles.container, buttonStyles.button]}  >
           Địa chỉ viếng thăm
-      </Button>
+        </Button>
         <View style={styles.container} >
           <Text>Địa chỉ: {address}</Text>
         </View>
 
 
+
         <Portal style={[masterStyle.container, { width: width, height: height }]}>
           <Dialog visible={visibleAddress} onDismiss={hideDialogAddress}>
             <Dialog.Content>
-              <ScrollView>
-                <RadioButton.Group
-                  onValueChange={newValue => setAddress(newValue)} value={address}>
-                  {
-                    addressItems.map(item =>
-                      <RadioButton.Item
-                        key={item.value}
-                        style={{ fontSize: 15 }}
-                        value={item.value}
-                        label={item.label} />
-                    )
-                  }
-                </RadioButton.Group>
+              <RadioButton.Group
+                onValueChange={newValue => setAddress(newValue)} value={address}>
+                {
+                  addressItems.map(item =>
+                    <RadioButton.Item
+                      key={item.value}
+                      value={item.value}
+                      label={item.label}
+                      labelStyle={{
+                        fontSize: 12,
+                        marginRight: 50
+                      }}
+                      mode='ios'
+                    />
+                  )
+                }
+              </RadioButton.Group>
 
-                <TextInput
-                  mode="flat"
-                  label="Dia chi khac"
-                  onChangeText={setAddress}
-                />
-              </ScrollView>
+              <TextInput
+                mode="flat"
+                label="Dia chi khac"
+                onChangeText={setAddress}
+              />
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={hideDialogAddress}>Done</Button>
@@ -447,6 +472,7 @@ function Remark(props) {
           }}
           onDateChange={(date) => setRedate(date)}
         />
+
 
 
         {/* <View style={[masterStyle.row, styles.container]}>
@@ -490,7 +516,7 @@ function Remark(props) {
 
         <View style={[buttonStyles.buttons]}>
           <Button
-            icon="camera"
+            icon="image"
             mode="contained"
             style={buttonStyles.button}
             onPress={pickImage2}>
@@ -591,7 +617,7 @@ const buttonStyles = StyleSheet.create({
   },
   button: {
     marginLeft: 2,
-    borderRadius: 10,
+    borderRadius: 5,
     fontSize: 10,
     fontWeight: 'bold',
     color: colors.primary,
