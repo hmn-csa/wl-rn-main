@@ -28,6 +28,7 @@ import {
   actUserUptrails
 } from "../actions"
 import * as consts from '../consts'
+import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get("window");
 
@@ -169,18 +170,6 @@ function Remark(props) {
   }
 
   // ======== Render Image ===========//
-  const pickImage1 = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: false,
-      base64: true,
-      // aspect: [4, 3],
-      quality: 0.1,
-    });
-    if (!result.cancelled) {
-      setImage1(result);
-    }
-  };
 
   const pickImage2 = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -189,7 +178,7 @@ function Remark(props) {
       allowsEditing: true,
       aspect: [3, 4],
       base64: true,
-      quality: 0.1,
+      quality: 0.4,
 
     });
     if (!result.cancelled) {
@@ -203,18 +192,6 @@ function Remark(props) {
     }
   };
 
-  // const pickImage3 = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: false,
-  //     // aspect: [4, 3],
-  //     base64: true,
-  //     quality: 0.1,
-  //   });
-  //   if (!result.cancelled) {
-  //     setImage3(result);
-  //   }
-  // };
 
   const pickImage3 = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -223,7 +200,7 @@ function Remark(props) {
       // allowsEditing: true,
       aspect: [3, 4],
       base64: true,
-      quality: 0.1,
+      quality: 0.4,
     });
     if (!result.cancelled) {
       if (images.length < 3)
@@ -241,12 +218,14 @@ function Remark(props) {
 
   const handleCommit = async () => {
 
-    if (address == '')
-      return Alert.alert('Vui lòng chọn địa chỉ viếng thăm')
-    // if (remark == '')
-    //   return Alert.alert('Vui lòng nhập ghi chú')
-    if (code == null)
-      return Alert.alert('Vui lòng chọn mã viếng thăm')
+
+
+    if (!personContact)
+      return Alert.alert('Vui lòng chọn người liên hệ !')
+    if (!code)
+      return Alert.alert('Vui lòng chọn kết quả viếng thăm !')
+    if (!address)
+      return Alert.alert('Vui lòng chọn địa chỉ viếng thăm !')
 
     setUptrailStatus(true)
     let locationCurrrent = await Location.getCurrentPositionAsync({});
@@ -315,49 +294,59 @@ function Remark(props) {
     }
     //console.log(showImages)
 
-    return <View
-      style={[styles.row, styles.buttons,]}>
-      {
-        showImages.map((image, index) =>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: null }]}
-            key={index}
-            onPress={() => {
-              setActivateImage(image)
-              setVisibleImage(true)
-            }}>
-            <Image
-              source={image}
-              style={{
-                width: width * 0.8 / 3,
-                height: (width * 0.8 / 3) * 4 / 3
-              }}
-              onLoadStart={() => <ActivityIndicator size={10} color='black' />}
-            />
-          </TouchableOpacity>
-        )
-      }
+    return <View style={styles.blockInput}>
+      <View style={[styles.row]}>
+        <View style={[styles.box, { flex: 0.382 }]}>
 
+          <Button
+            icon="image"
+            mode="contained"
+            style={[styles.row, styles.button, { margin: 2, }]}
+            labelStyle={[styles.buttonLabel, { fontSize: 10 }]}
+            onPress={pickImage2}>
+            chọn hình
+          </Button>
+          <Button
+            icon="camera"
+            mode="contained"
+            style={[styles.row, styles.button, { margin: 2 }]}
+            labelStyle={[styles.buttonLabel, { fontSize: 10 }]}
+            onPress={pickImage3}>
+            chụp mới
+          </Button>
+
+        </View>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <View style={styles.row}>
+
+            {
+              showImages.map((image, index) =>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: null }]}
+                  key={index}
+                  onPress={() => {
+                    setActivateImage(image)
+                    setVisibleImage(true)
+                  }}>
+                  <Image
+                    source={image}
+                    style={{
+                      width: width * 0.618 / 3 - 10,
+                      height: width * 0.618 / 3 - 10,
+                      borderRadius: 10,
+                      margin: 2
+                    }}
+                    onLoadStart={() => <ActivityIndicator size={10} color='black' />}
+                  />
+                </TouchableOpacity>
+              )
+            }
+          </View>
+        </View>
+      </View>
     </View>
   }
 
-  const loading = (status) => {
-    if (status)
-      return <View style={[styles.row, { alignItems: 'center' }]}>
-        <Text>Đang tải lên ... </Text>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-  }
-
-  const ortherAddress = () => {
-    if (![props.vsf.activeApplId.act_address, props.vsf.activeApplId.reg_address].includes(address))
-      return <TextInput
-        mode="flat"
-        label="Dia chi khac"
-        onChangeText={setAddress}
-      />
-    else return <Text> {address}</Text>
-  }
 
   if (props.uptrails.userFetching || uptrailStatus)
     return <View style={[styles.row, { alignItems: 'center' }]}>
@@ -366,28 +355,20 @@ function Remark(props) {
     </View>
   else
     return (
-      <ScrollView style={[{ flex: 1, backgroundColor: 'white' }]}>
+      <ScrollView style={[{ flex: 1 }]}>
 
         <View style={styles.blockInput}>
 
           <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
+          <Text style={[styles.smallHeader]}>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
 
-          <View style={styles.row}>
-            <Button
-              mode="contained"
-              style={[styles.box, styles.button, { backgroundColor: colors.secondary }]}
-              labelStyle={styles.buttonLabel}
-            >
-              Hợp đồng: {props.vsf.activeApplId.appl_id}
-            </Button>
-          </View>
 
         </View>
         {/* Ket qua vieng tham */}
         <View style={styles.blockInput}>
           <View style={styles.row}>
             <View style={[styles.box, styles.label]}>
-              <Text>Người liên hệ: </Text>
+              <Text>* Người liên hệ: </Text>
             </View>
             <View style={[styles.box, { flex: 0.618 }]}>
 
@@ -408,7 +389,7 @@ function Remark(props) {
         <View style={styles.blockInput}>
           <View style={styles.row}>
             <View style={[styles.box, styles.label]}>
-              <Text>Kết quả: </Text>
+              <Text>* Kết quả viếng thăm: </Text>
             </View>
             <View style={[styles.box, { flex: 0.618 }]}>
               <Button
@@ -428,7 +409,7 @@ function Remark(props) {
         <View style={styles.blockInput}>
           <View style={styles.row}>
             <View style={[styles.box, styles.label]}>
-              <Text>Địa chỉ viếng thăm: </Text>
+              <Text>* Địa chỉ viếng thăm: </Text>
             </View>
             <View style={[styles.box, { flex: 0.618 }]}>
               <Button
@@ -472,7 +453,7 @@ function Remark(props) {
                   },
                   dateText: {
                     fontWeight: "800",
-                    color: 'white',
+                    color: colors.primary,
                     fontSize: 12,
                   }
                 }}
@@ -497,6 +478,23 @@ function Remark(props) {
             />
           </View>
         </View>
+
+        { renImages()}
+
+
+        <Button
+          mode="contained"
+          style={[styles.button, {
+            width: "97%",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }]}
+          labelStyle={styles.buttonLabel}
+          onPress={handleCommit}>
+
+          Xác nhận
+        </Button>
+
 
 
         <Portal style={[styles.row]}>
@@ -601,7 +599,6 @@ function Remark(props) {
 
 
 
-
         <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visibleAddress} onDismiss={() => setVisibleAddress(false)}>
             <Dialog.Content>
@@ -615,7 +612,7 @@ function Remark(props) {
                       label={item.label}
                       labelStyle={{
                         fontSize: 12,
-                        marginRight: 50
+                        marginRight: 40
                       }}
                       mode='android'
                       style={{ height: 60 }}
@@ -625,8 +622,13 @@ function Remark(props) {
               </RadioButton.Group>
 
               <TextInput
+                style={{
+                  fontSize: 12,
+                  marginRight: 40
+                }}
                 mode="flat"
                 label="Dia chi khac"
+                placeholder="Nhập địa chỉ khác"
                 onChangeText={setAddress}
               />
             </Dialog.Content>
@@ -642,75 +644,22 @@ function Remark(props) {
 
 
 
-        <View style={[styles.buttons]}>
-          <Button
-            icon="image"
-            mode="contained"
-            style={styles.button}
-            labelStyle={styles.buttonLabel}
-            onPress={pickImage2}>
-            chọn hình
-          </Button>
-          <Button
-            icon="camera"
-            mode="contained"
-            style={styles.button}
-            labelStyle={styles.buttonLabel}
-            onPress={pickImage3}>
-            chụp mới
-          </Button>
-        </View>
 
-        { renImages()}
-
-        <Button
-          mode="contained"
-          style={[styles.button,]}
-          labelStyle={styles.buttonLabel}
-          onPress={handleCommit}>
-
-          Xác nhận
-        </Button>
 
         <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
-            <Dialog.Content>
-              <ScrollView>
-                <Image
-                  source={activateImage}
-                  style={{
-                    height: 400,
-                    flex: 1,
-                    width: null
-                  }}
-                  resizeMode="contain"
-                />
-
-                <ImageView
-                  images={[{
-                    source: { activateImage },
-                    title: 'Paris',
-                    width: 806,
-                    height: 720,
-                  },]}
-                  imageIndex={0}
-                  isVisible={visibleImage}
-                  onClose={() => setIsVisibleImage(false)}
-                  animationType="slide"
-                  isSwipeCloseEnabled={false}
-                />
-
-
-              </ScrollView>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setVisibleImage(false)}>
-                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-              </TouchableOpacity>
-
-            </Dialog.Actions>
+            <ImageView
+              images={[{
+                source: { uri: activateImage.uri },
+                width: 600,
+                height: 800,
+              },]}
+              imageIndex={0}
+              isVisible={visibleImage}
+              onClose={() => setVisibleImage(false)}
+              animationType="slide"
+              isSwipeCloseEnabled={false}
+            />
           </Dialog>
         </Portal>
 
@@ -756,18 +705,19 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 
   blockInput: {
-    backgroundColor: colors.light,
+
     borderBottomWidth: 0.2,
-    borderRadius: 10,
+    borderBottomColor: colors.grey,
+    borderRadius: 5,
     padding: 3,
-    marginBottom: 10,
+    marginBottom: 2,
     alignItems: 'center',
     marginLeft: 5,
     marginRight: 5,
   },
   row: {
     width: '95%',
-    marginVertical: 3,
+    marginVertical: 2,
     marginLeft: 'auto',
     marginRight: 'auto',
     flexDirection: 'row',
@@ -783,10 +733,16 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: 'bold',
     fontSize: 25,
-    marginTop: 10,
-    margin: 8,
+    margin: 2,
     justifyContent: 'center',
-    color: colors.primary,
+    color: 'black'
+  },
+  smallHeader: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    margin: 2,
+    justifyContent: 'center',
+    color: 'black'
   },
   buttons: {
     flexDirection: 'row',
@@ -794,9 +750,10 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 5,
-    color: colors.primary,
-    backgroundColor: colors.primary,
-    opacity: 0.7,
+    color: 'white',
+    backgroundColor: colors.light,
+    borderColor: colors.grey,
+    borderWidth: 0.3,
   },
   label: {
     borderRadius: 5,
@@ -812,6 +769,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   buttonLabel: {
+
+    color: colors.primary,
     fontSize: 12,
     fontWeight: "800"
   },
