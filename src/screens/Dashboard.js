@@ -13,6 +13,7 @@ import { Button } from 'react-native-paper';
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
 import Calendar from '../components/Calendar'
+import BarChart from '../components/Chart'
 function Dashboard(props) {
   if (props.fetching || props.data === null)
     return (
@@ -39,7 +40,7 @@ function Dashboard(props) {
           <SummaryDash />
         </Swiper>
         <View style={{ flex: 1 }}>
-          <Calendar />
+          <BarChart />
         </View>
         {/* <View style={styles.tool_frame}>
           <Controller
