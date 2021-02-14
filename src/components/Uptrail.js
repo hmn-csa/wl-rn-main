@@ -34,7 +34,6 @@ function ImageShow(props) {
 
 
 function Uptrail(props) {
-  ƒ
   const [item, setItem] = useState(props.item)
   const [runtime, setRuntime] = useState(item.runtime)
   const [code, setCode] = useState(item.code)
