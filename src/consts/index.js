@@ -5,10 +5,9 @@ export const WORKLIST_API = "https://beta-fc.lgm.com.vn/rn-ver/api"
 
 export const REMARK_CODE = [
   { label: 'PTP - Hứa thanh toán', value: 'PTP' },
-  { label: 'F_OBT - Đã thu được tiền', value: 'OBT' },
+  { label: 'F_OBT - Đã thu được tiền', value: 'F_OBT' },
   { label: 'WFP - Đã thanh toán chờ kiểm tra', value: 'WFP' },
   { label: 'TER - Thanh lý', value: 'TER' },
-
 
   { label: 'WAS - Chờ thu nhập, trợ cấp', value: 'WAS' },
   { label: 'LST - Thất nghiệp, làm ăn thua lỗ', value: 'LST' },
@@ -36,6 +35,28 @@ export const REMARK_CODE = [
 ];
 
 
+export const PERSON_CONTACT = [
+  { label: 'CLIENT - Khách hàng', value: 'CLIENT' },
+  { label: 'OWNER - Chủ HĐ', value: 'OWNER' },
+
+
+  { label: 'NOBODY - Không gặp ai', value: 'NOBODY' },
+  { label: 'FATHER - Cha', value: 'FATHER' },
+  { label: 'MOTHER - Cha', value: 'MOTHER' },
+
+  { label: 'BROTHER - Anh/em trai', value: 'BROTHER' },
+  { label: 'SISTER - Chị/em gái', value: 'SISTER' },
+  { label: 'HUSBAND - Chồng', value: 'HUSBAND' },
+  { label: 'WIFE - Vợ', value: 'WIFE' },
+
+  { label: 'CHILD - Con', value: 'CHILD' },
+  { label: 'UNCLE - Chú', value: 'UNCLE' },
+  { label: 'RELATIVE - Người thân', value: 'RELATIVE' },
+  { label: 'OTHER - Khác', value: 'OTHER' },
+
+];
+
+
 // Appls datas
 
 export const GET_TOKEN = "GET_TOKEN"
@@ -52,6 +73,15 @@ export const API_TOKEN_SUCCESS = "API_TOKEN_SUCCESS"
 export const API_TOKEN_FAILURE = "API_TOKEN_FAILURE"
 export const TOKEN_REMOVE = "TOKEN_REMOVE"
 export const LOCATION_SET = "LOCATION_SET"
+
+
+export const API_CHANGEPW_REQUEST = "API_CHANGEPW_REQUEST"
+export const API_CHANGEPW_FAILURE = "API_CHANGEPW_FAILURE"
+
+export const API_CHANGE_AVATAR_REQUEST = "API_CHANGE_AVATAR_REQUEST"
+export const API_CHANGE_AVATAR_SUCCESS = "API_CHANGE_AVATAR_SUCCESS"
+export const API_CHANGE_AVATAR_FAILURE = "API_CHANGE_AVATAR_FAILURE"
+
 
 
 // ----------- DATA CASE DETAIL ---------------//

@@ -50,3 +50,12 @@ https://github.com/archriss/react-native-snap-carousel/#showcase
 
 
 https://www.reactnativeschool.com/building-an-animation-hook-in-react-native
+
+
+
+# BUG List :
+
+Vào màn hình Uptrail ấn nút dashboard trên cùng bên trái bị lỗi : 
+```
+TypeError: Cannot read property 'label' of undefined
+```

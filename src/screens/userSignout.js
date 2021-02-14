@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Image, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Image, ScrollView, TextInput, ImageBackground } from 'react-native';
 import { connect } from "react-redux";
-import {
-  actlogoutUser, clearUptrail,
-  clearData, clearShowlist
-} from "../actions/index"
-
+import * as ImagePicker from 'expo-image-picker';
 import { Button } from 'react-native-paper';
-
-
+import { Entypo } from '@expo/vector-icons';
 
 import * as constAction from '../consts'
 import { colors } from '../styles';
@@ -22,6 +17,21 @@ function UserSignout(props) {
   const [newPw, setNewPw] = useState('')
   const [confirmPw, setConfirmPw] = useState('')
 
+  const [avatar, setAvatar] = useState(
+    !props.token.active_infos.avatar ? EMPTYAVATAR :
+      { uri: props.token.active_infos.avatar }
+  )
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 
   const handleChangePw = () => {
     if (newPw !== "") {
@@ -35,7 +45,6 @@ function UserSignout(props) {
         }
         console.log(config)
         props.changePw(config)
-        //alert("Mật khẩu mới thành công")
       }
     }
     else alert("Nhập vào mật khẩu mới")
@@ -50,6 +59,25 @@ function UserSignout(props) {
       return EMPTYAVATAR
     else return { uri: avatar }
   }
+
+  const pickAvatar = async () => {
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 4],
+      base64: true,
+      quality: 0.2,
+    })
+
+    if (!result.cancelled) {
+      setAvatar(result)
+      props.changeAvatar({
+        token: props.token.token.access,
+        avatar: "data:image/png;base64," + result.base64
+      })
+    }
+  };
 
   const renChangPassword = (changePw) => {
 
@@ -108,32 +136,95 @@ function UserSignout(props) {
 
   return (
     <ScrollView >
-      {/* <Text style={styles.logo}>HMN APP</Text> */}
 
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Image
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+      }}>
+
+        <ImageBackground
           style={{
             alignItems: 'center',
             justifyContent: 'center',
             width: 130,
             height: 130,
             borderRadius: 63,
-            borderWidth: 4,
+            borderWidth: 0,
             borderColor: "white",
-            marginTop: 10,
             marginBottom: 10,
+            marginTop: 10,
+            resizeMode: "cover"
           }}
-          source={renAvatar(props.token.active_infos.avatar)}>
-        </Image>
+          imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
+          source={avatar}>
+          <Entypo name="image"
+            size={22}
+            color="black"
+            style={{
+              marginLeft: 100,
+              marginTop: 105,
+              backgroundColor: 'white'
+            }}
+            onPress={() => pickAvatar()}
+          />
+        </ImageBackground>
+
         <Text style={styles.name}>{props.token.active_staff} - {props.token.active_infos.fc_name}</Text>
       </View>
 
-      <View style={styles.loginBtn}>
+      <View style={[styles.row, { flex: 1, padding: 5 }]}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={[styles.msgTxt]}>Tài khoản:</Text>
+        </View>
+        <View style={[styles.box, { flex: 1.2 }]}>
+          <Text style={[styles.msgTxt]}>{props.token.active_staff}</Text>
+        </View>
+      </View>
+
+      <View style={[styles.row, { flex: 1, padding: 5 }]}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={[styles.msgTxt]}>Họ tên:</Text>
+        </View>
+        <View style={[styles.box, { flex: 1.2 }]}>
+          <Text style={[styles.msgTxt]}>{props.token.active_infos.fc_name}</Text>
+        </View>
+      </View>
+
+      <View style={[styles.row, { flex: 1, padding: 5 }]}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={[styles.msgTxt]}>Sđt:</Text>
+        </View>
+        <View style={[styles.box, { flex: 1.2 }]}>
+          <Text style={[styles.msgTxt]}>{props.token.active_infos.phone}</Text>
+        </View>
+      </View>
+
+
+      <View style={[styles.row, { flex: 1, padding: 5 }]}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={[styles.msgTxt]}>team lead:</Text>
+        </View>
+        <View style={[styles.box, { flex: 1.2 }]}>
+          <Text style={[styles.msgTxt]}>{props.token.active_infos.team_lead}</Text>
+        </View>
+      </View>
+
+      <View style={[styles.row, { flex: 1, padding: 5 }]}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={[styles.msgTxt]}>Địa chỉ:</Text>
+        </View>
+        <View style={[styles.box, { flex: 1.2 }]}>
+          <Text style={[styles.msgTxt]}>{props.token.active_infos.address}</Text>
+        </View>
+      </View>
+
+      <View style={[styles.loginBtn, { marginTop: 20 }]}>
         <Button
           mode="contained"
           icon="key-change"
           color={colors.info}
-          contentStyle={{ marginLeft: 2 }}
+          labelStyle={styles.buttonLabel}
           onPress={
             () => {
               changePw ? setChangePw(false) : setChangePw(true)
@@ -149,16 +240,14 @@ function UserSignout(props) {
           mode="contained"
           icon="logout"
           color={colors.info}
-          contentStyle={{ marginLeft: 2 }}
+          labelStyle={styles.buttonLabel}
           onPress={() => outUsers()}
         >
           ĐĂNG XUẤT
         </Button>
       </View>
 
-
     </ScrollView>
-
   )
 }
 
@@ -171,10 +260,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => {
-      dispatch(actlogoutUser())
-      dispatch(clearShowlist())
-      dispatch(clearUptrail())
-      dispatch(clearData())
+      dispatch({ type: constAction.TOKEN_REMOVE })
     },
 
     changePw: (config) => {
@@ -184,11 +270,34 @@ const mapDispatchToProps = (dispatch) => {
           config
         }
       )
-    }
+    },
+
+    changeAvatar: (config) => {
+      dispatch(
+        {
+          type: constAction.API_CHANGE_AVATAR_REQUEST,
+          config
+        }
+      )
+    },
+
   }
 }
 
+
 const styles = StyleSheet.create({
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: "85%",
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  box: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   inputView: {
     width: "85%",
     backgroundColor: colors.light,
@@ -213,6 +322,9 @@ const styles = StyleSheet.create({
   inputTextBlack: {
     height: 50,
     color: "black"
+  },
+  buttonLabel: {
+    fontSize: 12
   },
 })
 

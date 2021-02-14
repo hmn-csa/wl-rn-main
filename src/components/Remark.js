@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
   Image, ScrollView, View, Text, Dimensions, TouchableOpacity,
-  Platform, StyleSheet, Alert, ActivityIndicator
+  Platform, StyleSheet, Alert, ActivityIndicator, TextInput
 } from 'react-native';
 import { connect } from "react-redux"
-import { styles as masterStyle, BACKGROUND_LOGIN, MAIN_COLOR2 } from '../styles'
+import { styles as masterStyle, colors } from '../styles'
 import DatePicker from 'react-native-datepicker'
 import * as ImagePicker from 'expo-image-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 import {
-  Button, TextInput, Paragraph,
+  Button, Paragraph,
   Dialog, Portal, RadioButton
 } from 'react-native-paper';
+
 import * as Location from 'expo-location';
 
 import { Camera } from 'expo-camera';
@@ -26,8 +26,6 @@ import {
   actUserUptrails
 } from "../actions"
 import * as consts from '../consts'
-import { colors } from '../styles'
-import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get("window");
 
@@ -35,14 +33,13 @@ function Remark(props) {
 
 
 
-  //===============================================
+  //===============================================sd
 
 
   const [newAddress, setNewAddress] = useState(props.vsf.activeApplId.new_address)
   const addressItems = [
-    { label: props.vsf.activeApplId.reg_address, value: props.vsf.activeApplId.reg_address },
-    { label: props.vsf.activeApplId.act_address, value: props.vsf.activeApplId.act_address },
-    //{ label: newAddress, value: newAddress},
+    { label: `Thường trú : ${props.vsf.activeApplId.reg_address}`, value: props.vsf.activeApplId.reg_address },
+    { label: `Tạm trú : ${props.vsf.activeApplId.act_address}`, value: props.vsf.activeApplId.act_address },
   ]
   if (props.vsf.activeApplId.new_address != null && props.vsf.activeApplId.new_address != "")
     addressItems.push({ label: newAddress, value: newAddress })
@@ -59,7 +56,7 @@ function Remark(props) {
   const [images, setImages] = useState([]);
   const [activateImage, setActivateImage] = useState({ uri: null });
 
-
+  const [personContact, setPersonContact] = useState(null)
   const [remark, setRemark] = useState('')
   const [address, setAddress] = useState('')
   const [code, setCode] = useState(null)
@@ -68,6 +65,7 @@ function Remark(props) {
 
   const [visible, setVisible] = useState(false);
   const [visiblePayamount, setVisiblePayamount] = useState(false);
+  const [visiblePerson, setVisiblePerson] = useState(false);
 
   const showDialog = () => setVisible(true);
 
@@ -121,6 +119,59 @@ function Remark(props) {
     })();
   }, []);
 
+  // ========= Render label ============// 
+  const renPersonContact = (personContact) => {
+    if (!personContact)
+      return <View></View>
+    return <View style={{ width: '95%', }}>
+      <Text style={styles.subLabel}>{consts.PERSON_CONTACT.filter(item => item.value == personContact)[0].label}</Text>
+    </View>
+  }
+
+
+  const renRemarkCode = (code) => {
+    if (!code)
+      return <View></View>
+    return <View style={{ width: '95%', }}>
+      <Text style={[styles.subLabel]}>{consts.REMARK_CODE.filter(item => item.value == code)[0].label}</Text>
+    </View >
+  }
+
+  const renPromisePTP = (payAmount) => {
+
+    if (!payAmount)
+      return <View></View>
+
+    return <View style={{ width: '95%', }}>
+      <Text style={[styles.subLabel, { color: colors.green, opacity: 1, fontWeight: "800" }]}>{moneyFormat(payAmount)} vnđ</Text>
+    </View>
+  }
+
+  const renAddress = (address) => {
+    if (!address)
+      return <View></View>
+
+    let curAddress = addressItems.filter(item => item.value == address)
+    if (curAddress.length > 0)
+      return <View style={{ width: '95%', }}>
+        <Text style={styles.subLabel}>{curAddress[0].label}</Text>
+      </View>
+    return <View style={{ width: '95%', }}>
+      <Text style={styles.subLabel}>Địa chỉ mới : {address}</Text>
+    </View>
+  }
+
+  const getAddressType = (address) => {
+    if (address == addressItems[0].value && address == addressItems[1].value)
+      return 'same_address';
+    if (address == addressItems[0].value)
+      return 'reg_address';
+    if (address == addressItems[1].value)
+      return 'act_address';
+    return 'orther_address';
+  }
+
+  // ======== Render Image ===========//
   const pickImage1 = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -190,6 +241,7 @@ function Remark(props) {
 
 
 
+
   const handleCommit = async () => {
 
     if (address == '')
@@ -203,15 +255,7 @@ function Remark(props) {
     let locationCurrrent = await Location.getCurrentPositionAsync({});
     setLocation(locationCurrrent);
 
-    const getAddressType = (address) => {
-      if (address == addressItems[0].value && address == addressItems[1].value)
-        return 'same_address';
-      if (address == addressItems[0].value)
-        return 'reg_address';
-      if (address == addressItems[1].value)
-        return 'act_address';
-      return 'orther_address';
-    }
+
 
     let imageSet = {}
     for (let j = 0; j < images.length; j++) {
@@ -231,6 +275,7 @@ function Remark(props) {
       'next_visit_time': reDate,
       'lat': location.coords.latitude,
       'lon': location.coords.longitude,
+      'person_contact': personContact,
       // 'image1': image1 === null ? null : "data:image/png;base64," + image1.base64,
       // 'image2': image2 === null ? null : "data:image/png;base64," + image2.base64,
       // 'image3': image3 === null ? null : "data:image/png;base64," + image3.base64,
@@ -274,11 +319,11 @@ function Remark(props) {
     //console.log(showImages)
 
     return <View
-      style={[masterStyle.row, styles.container, buttonStyles.buttons,]}>
+      style={[styles.row, styles.buttons,]}>
       {
         showImages.map((image, index) =>
           <TouchableOpacity
-            style={[buttonStyles.button, { backgroundColor: null }]}
+            style={[styles.button, { backgroundColor: null }]}
             key={index}
             onPress={() => {
               setActivateImage(image)
@@ -301,7 +346,7 @@ function Remark(props) {
 
   const loading = (status) => {
     if (status)
-      return <View style={[styles.container, { alignItems: 'center' }]}>
+      return <View style={[styles.row, { alignItems: 'center' }]}>
         <Text>Đang tải lên ... </Text>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
@@ -318,35 +363,177 @@ function Remark(props) {
   }
 
   if (props.uptrails.userFetching || uptrailStatus)
-    return <View style={[masterStyle.container, { alignItems: 'center' }]}>
+    return <View style={[styles.row, { alignItems: 'center' }]}>
       <Text>Up Loading ... </Text>
-      <ActivityIndicator size={100} color={BACKGROUND_LOGIN} />
+      <ActivityIndicator size={100} />
     </View>
   else
     return (
-      <View style={[masterStyle.container, { alignItems: 'center' }]}>
-        <View>
-          <Text style={[masterStyle.header, { alignItems: 'center' }]}>{props.vsf.activeApplId.cust_name}</Text>
-        </View>
+      <ScrollView style={[{ flex: 1, backgroundColor: 'white' }]}>
 
-        <View style={[masterStyle.indexValueSmall, { alignItems: 'center', color: colors.white }]} >
-          <Text>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
+        <Text style={[masterStyle.header, { alignItems: 'center' }]}>{props.vsf.activeApplId.cust_name}</Text>
+
+        <View style={styles.row}>
+          <Button
+            mode="contained"
+            style={[styles.box, styles.button, { backgroundColor: colors.secondary }]}
+            labelStyle={styles.buttonLabel}
+          >
+            Hợp đồng: {props.vsf.activeApplId.appl_id}
+          </Button>
         </View>
 
         {/* Ket qua vieng tham */}
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>Người liên hệ: </Text>
+            </View>
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Button
+                mode="contained"
+                onPress={() => setVisiblePerson(true)}
+                style={[styles.button]}
+                labelStyle={styles.buttonLabel}
+              >
+                {personContact}
+              </Button>
+            </View>
+          </View>
+          {renPersonContact(personContact)}
 
-        <Button
-          mode="contained"
-          onPress={showDialog}
-          style={[styles.container, buttonStyles.button]}  >
-          Kết quả viếng thăm: {code}
-        </Button>
-
-        <View style={styles.container} >
-          <Text>Số tiền hứa/đã thanh toán: {moneyFormat(payAmount)}</Text>
         </View>
 
-        <Portal style={[masterStyle.container]}>
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>Kết quả: </Text>
+            </View>
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Button
+                mode="contained"
+                onPress={showDialog}
+                style={[styles.button]}
+                labelStyle={styles.buttonLabel}
+              >
+                {code}
+              </Button>
+            </View>
+          </View>
+          {renRemarkCode(code)}
+          {renPromisePTP(payAmount)}
+        </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>Địa chỉ viếng thăm: </Text>
+            </View>
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Button
+                mode="contained"
+                onPress={showDialogAddress}
+                style={[styles.button]}
+                labelStyle={styles.buttonLabel}
+              >
+                {getAddressType(address)}
+              </Button>
+            </View>
+          </View>
+
+          {renAddress(address)}
+        </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label,]}>
+              <Text>Ngày viếng thăm lại: </Text>
+            </View>
+            <View style={[styles.box, styles.button, { flex: 0.618 }]}>
+              <DatePicker
+                date={reDate}
+                mode="date"
+                placeholder="Ngày"
+                format="YYYY-MM-DD"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                style={styles.buttonLabel}
+                customStyles={{
+                  dateIcon: {
+                    position: 'absolute',
+                    left: 4,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 30,
+                    borderWidth: 0,
+                  },
+                  dateText: {
+                    fontWeight: "1000",
+                    color: 'white'
+                  }
+                }}
+                onDateChange={(date) => setRedate(date)}
+              />
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>Ghi chú: </Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <TextInput
+              style={[styles.box, { color: colors.primary, paddingLeft: 3 }]}
+              placeholder="Nhập ghi chú"
+              value={remark}
+              onChangeText={setRemark}
+            />
+          </View>
+        </View>
+
+
+
+
+
+        <Portal style={[styles.row]}>
+          <Dialog visible={visiblePerson} onDismiss={() => setVisiblePerson(false)} style={{ width: null, }}>
+            {/* <Button onPress={hideDialog}>Done</Button> */}
+            <RadioButton.Group
+              onValueChange={
+                newValue => {
+                  setPersonContact(newValue);
+                }
+              }
+              value={personContact}>
+              {
+                consts.PERSON_CONTACT.map(item =>
+                  <RadioButton.Item
+                    key={item.value}
+                    style={{ height: 45 }}
+                    value={item.value}
+                    label={item.label}
+                    style={{ height: 40 }}
+                    labelStyle={{
+                      fontSize: 12,
+                    }}
+                    mode='android'
+                  />
+                )
+              }
+            </RadioButton.Group>
+
+            <Dialog.Actions>
+              <Button onPress={() => setVisiblePerson(false)}>Done</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+
+        <Portal style={[styles.row]}>
           <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height - 80 }}>
             {/* <Button onPress={hideDialog}>Done</Button> */}
             <ScrollView style={{ marginTop: 2 }}>
@@ -362,13 +549,13 @@ function Remark(props) {
                   consts.REMARK_CODE.map(item =>
                     <RadioButton.Item
                       key={item.value}
-                      style={{ fontSize: 15 }}
                       value={item.value}
                       label={item.label}
+                      style={{ height: 40 }}
                       labelStyle={{
                         fontSize: 12,
                       }}
-                      mode='ios'
+                      mode='android'
                     />
                   )
                 }
@@ -381,13 +568,14 @@ function Remark(props) {
           </Dialog>
         </Portal>
 
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
+        <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visiblePayamount} onDismiss={hideDialogPayamount}>
             <Dialog.Content>
               <TextInput
-                mode="flat"
-                label="Nhập số tiền"
+                placeholder="Nhập số tiền hứa thanh toán"
+                value={payAmount}
                 onChangeText={setPayAmount}
+                style={{ borderRadius: 0, height: 40, padding: 5, borderBottomWidth: 0.2, }}
               />
             </Dialog.Content>
             <Dialog.Actions>
@@ -396,19 +584,11 @@ function Remark(props) {
           </Dialog>
         </Portal>
 
-        <Button
-          mode="contained"
-          onPress={showDialogAddress}
-          style={[styles.container, buttonStyles.button]}  >
-          Địa chỉ viếng thăm
-        </Button>
-        <View style={styles.container} >
-          <Text>Địa chỉ: {address}</Text>
-        </View>
 
 
 
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
+
+        <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visibleAddress} onDismiss={hideDialogAddress}>
             <Dialog.Content>
               <RadioButton.Group
@@ -423,7 +603,8 @@ function Remark(props) {
                         fontSize: 12,
                         marginRight: 50
                       }}
-                      mode='ios'
+                      mode='android'
+                      style={{ height: 60 }}
                     />
                   )
                 }
@@ -441,92 +622,22 @@ function Remark(props) {
           </Dialog>
         </Portal>
 
-        <View style={styles.container} >
-          <TextInput
-            mode="flat"
-            style={{ color: colors.primary }}
-            label="Ghi chú"
-            onChangeText={setRemark}
-          />
-        </View>
-
-        <DatePicker
-          style={masterStyle.inputViewConst}
-          date={reDate}
-          mode="date"
-          placeholder="Ngày viếng thăm lại"
-          format="YYYY-MM-DD"
-          // minDate="2016-05-01"
-          // maxDate="2016-06-01"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              left: 4,
-              top: 4,
-              marginLeft: 0
-            },
-            dateInput: {
-              marginLeft: 36
-            }
-          }}
-          onDateChange={(date) => setRedate(date)}
-        />
 
 
-
-        {/* <View style={[masterStyle.row, styles.container]}>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage1}>
-              image1
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image1 && <Image source={{ uri: image1.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage2}>
-              chọn hình
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image2 && <Image source={{ uri: image2.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage3}>
-              chụp mới
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image3 && <Image source={{ uri: image3.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-        </View> */}
-
-        <View style={[buttonStyles.buttons]}>
+        <View style={[styles.buttons]}>
           <Button
             icon="image"
             mode="contained"
-            style={buttonStyles.button}
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
             onPress={pickImage2}>
             chọn hình
           </Button>
           <Button
             icon="camera"
             mode="contained"
-            style={buttonStyles.button}
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
             onPress={pickImage3}>
             chụp mới
           </Button>
@@ -536,12 +647,14 @@ function Remark(props) {
 
         <Button
           mode="contained"
-          style={[buttonStyles.button,]}
+          style={[styles.button,]}
+          labelStyle={styles.buttonLabel}
           onPress={handleCommit}>
+
           Xác nhận
         </Button>
 
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
+        <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
             <Dialog.Content>
               <ScrollView>
@@ -564,7 +677,7 @@ function Remark(props) {
           </Dialog>
         </Portal>
 
-      </View >
+      </ScrollView >
     )
 
 };
@@ -604,27 +717,58 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '90%',
-    marginVertical: 6
-  },
-});
 
-const buttonStyles = StyleSheet.create({
+  blockInput: {
+    backgroundColor: colors.light,
+    borderBottomWidth: 0.2,
+    borderRadius: 10,
+    padding: 3,
+    marginBottom: 10,
+  },
+  row: {
+    width: '95%',
+    marginVertical: 3,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+
+  box: {
+    justifyContent: 'center',
+    flex: 1
+  },
   buttons: {
     flexDirection: 'row',
-    padding: 2,
-
+    padding: 1,
   },
   button: {
-    marginLeft: 2,
     borderRadius: 5,
-    fontSize: 10,
-    fontWeight: 'bold',
     color: colors.primary,
     backgroundColor: colors.primary,
+    opacity: 0.7,
   },
+  label: {
+    borderRadius: 5,
+    margin: 2,
+    color: colors.primary,
+    opacity: 0.6,
+    paddingLeft: 3,
+  },
+  subLabel: {
+    opacity: 0.5,
+    paddingLeft: 5,
+    marginBottom: 5,
+    fontSize: 12,
+  },
+  buttonLabel: {
+    fontSize: 13,
+    fontWeight: "800"
+  },
+
 });
+
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
