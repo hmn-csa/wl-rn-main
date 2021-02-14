@@ -19,11 +19,19 @@ const data = {
   ]
 };
 
+const chartConfig = {
+  backgroundColor: "white",
+  backgroundGradientFrom: "white",
+  backgroundGradientTo: "white",
+  color: (opacity = 1) => 'green',
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+}
+
 export default class App extends Component {
   render() {
     return (
       <BarChart
-        style={graphStyle}
+        // style={graphStyle}
         data={data}
         width={screenWidth}
         height={220}
