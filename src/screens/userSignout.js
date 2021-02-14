@@ -224,7 +224,7 @@ function UserSignout(props) {
           mode="contained"
           icon="key-change"
           color={colors.info}
-          contentStyle={{ marginLeft: 2 }}
+          labelStyle={styles.buttonLabel}
           onPress={
             () => {
               changePw ? setChangePw(false) : setChangePw(true)
@@ -240,7 +240,7 @@ function UserSignout(props) {
           mode="contained"
           icon="logout"
           color={colors.info}
-          contentStyle={{ marginLeft: 2 }}
+          labelStyle={styles.buttonLabel}
           onPress={() => outUsers()}
         >
           ĐĂNG XUẤT
@@ -322,6 +322,9 @@ const styles = StyleSheet.create({
   inputTextBlack: {
     height: 50,
     color: "black"
+  },
+  buttonLabel: {
+    fontSize: 12
   },
 })
 

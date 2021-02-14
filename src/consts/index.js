@@ -36,6 +36,28 @@ export const REMARK_CODE = [
 ];
 
 
+export const PERSON_CONTACT = [
+  { label: 'CLIENT - Khách hàng', value: 'CLIENT' },
+  { label: 'OWNER - Chủ HĐ', value: 'OWNER' },
+
+
+  { label: 'NOBODY - Không gặp ai', value: 'NOBODY' },
+  { label: 'FATHER - Cha', value: 'FATHER' },
+  { label: 'MOTHER - Cha', value: 'MOTHER' },
+
+  { label: 'BROTHER - Anh/em trai', value: 'BROTHER' },
+  { label: 'SISTER - Chị/em gái', value: 'SISTER' },
+  { label: 'HUSBAND - Chồng', value: 'HUSBAND' },
+  { label: 'WIFE - Vợ', value: 'WIFE' },
+
+  { label: 'CHILD - Con', value: 'CHILD' },
+  { label: 'UNCLE - Chú', value: 'UNCLE' },
+  { label: 'RELATIVE - Người thân', value: 'RELATIVE' },
+  { label: 'OTHER - Khác', value: 'OTHER' },
+
+];
+
+
 // Appls datas
 
 export const GET_TOKEN = "GET_TOKEN"
