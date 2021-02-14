@@ -264,21 +264,17 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     changePw: (config) => {
-      dispatch(
-        {
-          type: constAction.API_CHANGEPW_REQUEST,
-          config
-        }
-      )
+      dispatch({
+        type: constAction.API_CHANGEPW_REQUEST,
+        config
+      })
     },
 
     changeAvatar: (config) => {
-      dispatch(
-        {
-          type: constAction.API_CHANGE_AVATAR_REQUEST,
-          config
-        }
-      )
+      dispatch({
+        type: constAction.API_CHANGE_AVATAR_REQUEST,
+        config
+      })
     },
 
   }

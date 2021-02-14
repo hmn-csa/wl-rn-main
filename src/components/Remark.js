@@ -16,7 +16,9 @@ import {
 import * as Location from 'expo-location';
 
 import { Camera } from 'expo-camera';
-
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import ImageView from 'react-native-image-view';
 
 import { EMPTYIMAGE } from '../images';
 
@@ -66,24 +68,9 @@ function Remark(props) {
   const [visible, setVisible] = useState(false);
   const [visiblePayamount, setVisiblePayamount] = useState(false);
   const [visiblePerson, setVisiblePerson] = useState(false);
-
-  const showDialog = () => setVisible(true);
-
-  const hideDialog = () => {
-    setVisible(false);
-    //if (code == 'PTP' || code == 'WFP')
-    //  setVisiblePayamount(true);
-  };
-
-  const hideDialogPayamount = () => setVisiblePayamount(false);
-
   const [visibleAddress, setVisibleAddress] = useState(false);
-  const showDialogAddress = () => setVisibleAddress(true);
-  const hideDialogAddress = () => setVisibleAddress(false);
-
   const [visibleImage, setVisibleImage] = useState(false);
-  const showDialogImage = () => setVisibleImage(true);
-  const hideDialogImage = () => setVisibleImage(false);
+
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -120,6 +107,13 @@ function Remark(props) {
   }, []);
 
   // ========= Render label ============// 
+
+  const renContentNull = (item) => {
+    if (!item)
+      return "***"
+    return item
+
+  }
   const renPersonContact = (personContact) => {
     if (!personContact)
       return <View></View>
@@ -162,12 +156,15 @@ function Remark(props) {
   }
 
   const getAddressType = (address) => {
+    if (!address)
+      return ""
     if (address == addressItems[0].value && address == addressItems[1].value)
       return 'same_address';
     if (address == addressItems[0].value)
       return 'reg_address';
     if (address == addressItems[1].value)
       return 'act_address';
+
     return 'orther_address';
   }
 
@@ -327,7 +324,7 @@ function Remark(props) {
             key={index}
             onPress={() => {
               setActivateImage(image)
-              showDialogImage()
+              setVisibleImage(true)
             }}>
             <Image
               source={image}
@@ -371,18 +368,21 @@ function Remark(props) {
     return (
       <ScrollView style={[{ flex: 1, backgroundColor: 'white' }]}>
 
-        <Text style={[masterStyle.header, { alignItems: 'center' }]}>{props.vsf.activeApplId.cust_name}</Text>
+        <View style={styles.blockInput}>
 
-        <View style={styles.row}>
-          <Button
-            mode="contained"
-            style={[styles.box, styles.button, { backgroundColor: colors.secondary }]}
-            labelStyle={styles.buttonLabel}
-          >
-            Hợp đồng: {props.vsf.activeApplId.appl_id}
-          </Button>
+          <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
+
+          <View style={styles.row}>
+            <Button
+              mode="contained"
+              style={[styles.box, styles.button, { backgroundColor: colors.secondary }]}
+              labelStyle={styles.buttonLabel}
+            >
+              Hợp đồng: {props.vsf.activeApplId.appl_id}
+            </Button>
+          </View>
+
         </View>
-
         {/* Ket qua vieng tham */}
         <View style={styles.blockInput}>
           <View style={styles.row}>
@@ -390,13 +390,14 @@ function Remark(props) {
               <Text>Người liên hệ: </Text>
             </View>
             <View style={[styles.box, { flex: 0.618 }]}>
+
               <Button
                 mode="contained"
                 onPress={() => setVisiblePerson(true)}
                 style={[styles.button]}
                 labelStyle={styles.buttonLabel}
               >
-                {personContact}
+                {renContentNull(personContact)}
               </Button>
             </View>
           </View>
@@ -412,11 +413,11 @@ function Remark(props) {
             <View style={[styles.box, { flex: 0.618 }]}>
               <Button
                 mode="contained"
-                onPress={showDialog}
+                onPress={() => setVisible(true)}
                 style={[styles.button]}
                 labelStyle={styles.buttonLabel}
               >
-                {code}
+                {renContentNull(code)}
               </Button>
             </View>
           </View>
@@ -432,11 +433,11 @@ function Remark(props) {
             <View style={[styles.box, { flex: 0.618 }]}>
               <Button
                 mode="contained"
-                onPress={showDialogAddress}
+                onPress={() => setVisibleAddress(true)}
                 style={[styles.button]}
                 labelStyle={styles.buttonLabel}
               >
-                {getAddressType(address)}
+                {renContentNull(getAddressType(address))}
               </Button>
             </View>
           </View>
@@ -470,8 +471,9 @@ function Remark(props) {
                     borderWidth: 0,
                   },
                   dateText: {
-                    fontWeight: "1000",
-                    color: 'white'
+                    fontWeight: "800",
+                    color: 'white',
+                    fontSize: 12,
                   }
                 }}
                 onDateChange={(date) => setRedate(date)}
@@ -497,11 +499,8 @@ function Remark(props) {
         </View>
 
 
-
-
-
         <Portal style={[styles.row]}>
-          <Dialog visible={visiblePerson} onDismiss={() => setVisiblePerson(false)} style={{ width: null, }}>
+          <Dialog visible={visiblePerson} onDismiss={() => setVisiblePerson(false)}>
             {/* <Button onPress={hideDialog}>Done</Button> */}
             <RadioButton.Group
               onValueChange={
@@ -528,13 +527,20 @@ function Remark(props) {
             </RadioButton.Group>
 
             <Dialog.Actions>
-              <Button onPress={() => setVisiblePerson(false)}>Done</Button>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisiblePerson(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
             </Dialog.Actions>
           </Dialog>
         </Portal>
 
         <Portal style={[styles.row]}>
-          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height - 80 }}>
+          <Dialog
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            style={{ width: null, height: height - 80 }}>
             {/* <Button onPress={hideDialog}>Done</Button> */}
             <ScrollView style={{ marginTop: 2 }}>
               <RadioButton.Group
@@ -563,23 +569,31 @@ function Remark(props) {
 
             </ScrollView>
             <Dialog.Actions>
-              <Button onPress={hideDialog}>Done</Button>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisible(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
             </Dialog.Actions>
           </Dialog>
         </Portal>
 
         <Portal style={[styles.row, { width: width, height: height }]}>
-          <Dialog visible={visiblePayamount} onDismiss={hideDialogPayamount}>
+          <Dialog visible={visiblePayamount} onDismiss={() => setVisiblePayamount(false)}>
             <Dialog.Content>
               <TextInput
                 placeholder="Nhập số tiền hứa thanh toán"
                 value={payAmount}
                 onChangeText={setPayAmount}
-                style={{ borderRadius: 0, height: 40, padding: 5, borderBottomWidth: 0.2, }}
+                style={{ borderRadius: 0, height: 40, padding: 5 }}
               />
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialogPayamount}>Done</Button>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisiblePayamount(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -589,7 +603,7 @@ function Remark(props) {
 
 
         <Portal style={[styles.row, { width: width, height: height }]}>
-          <Dialog visible={visibleAddress} onDismiss={hideDialogAddress}>
+          <Dialog visible={visibleAddress} onDismiss={() => setVisibleAddress(false)}>
             <Dialog.Content>
               <RadioButton.Group
                 onValueChange={newValue => setAddress(newValue)} value={address}>
@@ -617,7 +631,11 @@ function Remark(props) {
               />
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialogAddress}>Done</Button>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisibleAddress(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -655,10 +673,9 @@ function Remark(props) {
         </Button>
 
         <Portal style={[styles.row, { width: width, height: height }]}>
-          <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
+          <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
             <Dialog.Content>
               <ScrollView>
-
                 <Image
                   source={activateImage}
                   style={{
@@ -669,10 +686,30 @@ function Remark(props) {
                   resizeMode="contain"
                 />
 
+                <ImageView
+                  images={[{
+                    source: { activateImage },
+                    title: 'Paris',
+                    width: 806,
+                    height: 720,
+                  },]}
+                  imageIndex={0}
+                  isVisible={visibleImage}
+                  onClose={() => setIsVisibleImage(false)}
+                  animationType="slide"
+                  isSwipeCloseEnabled={false}
+                />
+
+
               </ScrollView>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialogImage}>Close</Button>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisibleImage(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
+
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -724,6 +761,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 3,
     marginBottom: 10,
+    alignItems: 'center',
+    marginLeft: 5,
+    marginRight: 5,
   },
   row: {
     width: '95%',
@@ -738,6 +778,15 @@ const styles = StyleSheet.create({
   box: {
     justifyContent: 'center',
     flex: 1
+  },
+
+  header: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    marginTop: 10,
+    margin: 8,
+    justifyContent: 'center',
+    color: colors.primary,
   },
   buttons: {
     flexDirection: 'row',
@@ -763,35 +812,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   buttonLabel: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "800"
   },
 
+  closeBtn: {
+    borderTopWidth: 1,
+    borderColor: colors.grey,
+    width: '100%',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    padding: 5
+  }
 });
 
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Remark);
