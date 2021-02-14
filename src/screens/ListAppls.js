@@ -50,31 +50,10 @@ function ListAppls(props) {
   if (searchTerm !== null && searchTerm !== "")
     return (
       <View >
-        {/* <Searchbar
-          onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên có dấu hoặc appl_id "
-          onSubmitEditing={(value) => hangleSearch(value)}
-          clearIcon={'alpha-x-box-outline'}
-        >
-        </Searchbar> */}
-        {/* <View style={{ flexDirection: 'row' }}>
-          <Carousel
-            layout={'default'}
-            vertical={true}
-            data={filtered}
-            sliderWidth={SliderWidth}
-            itemWidth={width * 0.9}
-            itemHeight={CARD_HEIGHT}
-            sliderHeight={height}
-            renderItem={_renderItem}
-            useScrollView={false}
-            activeSlideAlignment="start"
-            currentIndex={0}
-          />
-        </View> */}
         <FlatList
           data={props.showlists.applIds}
           renderItem={_renderItem}
+
           keyExtractor={(item) => item.id}
         />
       </View>

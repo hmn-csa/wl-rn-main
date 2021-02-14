@@ -13,6 +13,9 @@ export function* watcherSaga() {
 }
 
 
+
+
+
 export function* workerGetToken(request) {
   try {
     const config = {
@@ -37,7 +40,19 @@ export function* workerGetToken(request) {
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
     // get appls data
     if (data.role === 'FC') {
-      yield call(workerGetDataFC, { token: data.access, staff_id: data.staff_id, fc_name: data.fc_name });
+      yield call(workerGetDataFC,
+        {
+          token: data.access,
+          staff_id: data.staff_id,
+          fc_name: data.fc_name,
+          avatar: data.avatar,
+          role: data.role,
+          phone: data.phone,
+          address: data.address,
+          start_date: data.start_date,
+          team_lead: data.team_lead,
+        }
+      );
     }
     else {
       yield call(workerGetStaffInfo, data.access);
@@ -73,7 +88,15 @@ export function* workerGetDataFC(token) {
       type: constAction.SET_ACTIVE_STAFF, content: {
         staff_id: token.staff_id,
         info: {
-          fc_name: token.fc_name
+          fc_name: token.fc_name,
+          avatar: token.avatar,
+
+          role: token.role,
+          phone: token.phone,
+          address: token.address,
+          start_date: token.start_date,
+          team_lead: token.team_lead,
+
         }
       }
     })
@@ -81,10 +104,12 @@ export function* workerGetDataFC(token) {
     // content
 
     // dispatch CAL-DASH
-    yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TODO_DASH, data: response.data });
-    yield put({ type: constAction.CAL_CATE_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TREE_DASH, data: response.data });
+
+    yield put({ type: constAction.CAL_TODO_DASH });
+    yield put({ type: constAction.CAL_TOTAL_DASH });
+    yield put({ type: constAction.CAL_TREE_DASH });
+    yield put({ type: constAction.CAL_CATE_DASH });
+
 
     // dispatch UPDATE_SHOWLIST
     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data) });
@@ -141,16 +166,18 @@ export function* workerGetDataFCMode(request) {
       type: constAction.SET_ACTIVE_STAFF, content: {
         staff_id: request.token.staff_id,
         info: {
-          fc_name: request.token.fc_name
+          fc_name: request.token.fc_name,
+          avatar: request.token.avatar
         }
       }
     })
 
     // dispatch CAL-DASH
-    yield put({ type: constAction.CAL_TOTAL_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TODO_DASH, data: response.data });
-    yield put({ type: constAction.CAL_CATE_DASH, data: response.data });
-    yield put({ type: constAction.CAL_TREE_DASH, data: response.data });
+
+    yield put({ type: constAction.CAL_TODO_DASH });
+    yield put({ type: constAction.CAL_TOTAL_DASH });
+    yield put({ type: constAction.CAL_TREE_DASH });
+    yield put({ type: constAction.CAL_CATE_DASH });
 
     // dispatch UPDATE_SHOWLIST
     yield put({ type: constAction.UPDATE_SHOWLIST, content: Object.values(data) });

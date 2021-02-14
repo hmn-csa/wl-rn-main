@@ -5,31 +5,55 @@ export const WORKLIST_API = "https://beta-fc.lgm.com.vn/rn-ver/api"
 
 export const REMARK_CODE = [
   { label: 'PTP - Hứa thanh toán', value: 'PTP' },
-  { label: 'OBT - Đã thu được tiền', value: 'OBT' },
+  { label: 'F_OBT - Đã thu được tiền', value: 'F_OBT' },
   { label: 'WFP - Đã thanh toán chờ kiểm tra', value: 'WFP' },
   { label: 'TER - Thanh lý', value: 'TER' },
 
-  { label: 'NAH - Không có nhà', value: 'NAH' },
-  { label: 'LEM - Để lại lời nhắn', value: 'LEM' },
-
   { label: 'WAS - Chờ thu nhập, trợ cấp', value: 'WAS' },
   { label: 'LST - Thất nghiệp, làm ăn thua lỗ', value: 'LST' },
+  { label: 'MCW - KH bị bệnh, tai nạn', value: 'MCW' },
+  { label: 'CTI - Thiên tai', value: 'CTI' },
+
+  { label: 'F_NAH - Không có nhà', value: 'F_NAH' },
+  { label: 'LEM - Để lại lời nhắn', value: 'LEM' },
 
   { label: 'RTP - Từ chôí thanh toán', value: 'RTP' },
-
-  { label: 'RENT - Nhà thuê và đã dọn đi', value: 'RENT' },
-  { label: 'HOS - Nhà đã bán', value: 'HOS' },
-
-  { label: 'WAU - Bỏ trốn, người thân không tìm thấy ', value: 'WAU' },
-  { label: 'NFH - Không tìm thấy nhà', value: 'NFH' },
-  { label: 'NIW - Không có thông tin tại nơi làm việc', value: 'NIW' },
-  { label: 'NLA - Không sống tại địa chỉ', value: 'NLA' },
-
   { label: 'GSF - Gian lận', value: 'GSF' },
   { label: 'IGN1 - Chưa nhận khoản vay', value: 'IGN1' },
   { label: 'IGN2 - Báo đã hủy hợp đồng', value: 'IGN2' },
-  { label: 'CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần', value: 'CGI' },
+
+  { label: 'F_RENT - Nhà thuê và đã dọn đi', value: 'F_RENT' },
+  { label: 'F_HOS - Nhà đã bán', value: 'F_HOS' },
+  { label: 'F_WAU - KH bỏ trốn, gia đình còn ở tại địa phương', value: 'F_WAU' },
+  { label: 'F_NFH - Không tìm thấy nhà', value: 'F_NFH' },
+  { label: 'F_NIW - Không có thông tin tại nơi làm việc', value: 'F_NIW' },
+  { label: 'F_NLA - Không sống tại địa chỉ', value: 'F_NLA' },
+  { label: 'F_WET - KH bỏ trốn, không gặp gia đình', value: 'F_WET' },
+
+  { label: 'F_CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần', value: 'F_CGI' },
   { label: 'DIE - Đã qua đời', value: 'DIE' },
+];
+
+
+export const PERSON_CONTACT = [
+  { label: 'CLIENT - Khách hàng', value: 'CLIENT' },
+  { label: 'OWNER - Chủ HĐ', value: 'OWNER' },
+
+
+  { label: 'NOBODY - Không gặp ai', value: 'NOBODY' },
+  { label: 'FATHER - Cha', value: 'FATHER' },
+  { label: 'MOTHER - Cha', value: 'MOTHER' },
+
+  { label: 'BROTHER - Anh/em trai', value: 'BROTHER' },
+  { label: 'SISTER - Chị/em gái', value: 'SISTER' },
+  { label: 'HUSBAND - Chồng', value: 'HUSBAND' },
+  { label: 'WIFE - Vợ', value: 'WIFE' },
+
+  { label: 'CHILD - Con', value: 'CHILD' },
+  { label: 'UNCLE - Chú', value: 'UNCLE' },
+  { label: 'RELATIVE - Người thân', value: 'RELATIVE' },
+  { label: 'OTHER - Khác', value: 'OTHER' },
+
 ];
 
 
@@ -51,6 +75,15 @@ export const TOKEN_REMOVE = "TOKEN_REMOVE"
 export const LOCATION_SET = "LOCATION_SET"
 
 
+export const API_CHANGEPW_REQUEST = "API_CHANGEPW_REQUEST"
+export const API_CHANGEPW_FAILURE = "API_CHANGEPW_FAILURE"
+
+export const API_CHANGE_AVATAR_REQUEST = "API_CHANGE_AVATAR_REQUEST"
+export const API_CHANGE_AVATAR_SUCCESS = "API_CHANGE_AVATAR_SUCCESS"
+export const API_CHANGE_AVATAR_FAILURE = "API_CHANGE_AVATAR_FAILURE"
+
+
+
 // ----------- DATA CASE DETAIL ---------------//
 export const API_DATA_REQUEST = "API_DATA_REQUEST"
 export const API_DATA_SUCCESS = "API_DATA_SUCCESS"
@@ -60,10 +93,11 @@ export const DATA_INIT_DASHBOARD = "DATA_INIT_DASHBOARD"
 export const DATA_CLEAR = "DATA_CLEAR"
 
 // ----------- TOODO  ---------------//
+export const SET_TODO_TASK = "SET_TODO_TASK"
+
 export const API_TODO_REQUEST = "API_TODO_REQUEST"
 export const API_TODO_SUCCESS = "API_TODO_SUCCESS"
 export const API_TODO_FAILURE = "API_TODO_FAILURE"
-export const API_TODO_DASHBOARD = "API_TODO_DASHBOARD"
 
 // ----------- VSF ---------------//
 export const API_VSF_REQUEST = "API_VSF_REQUEST"
@@ -88,6 +122,10 @@ export const API_UPTRAIL_REQUEST = "API_UPTRAIL_REQUEST"
 export const API_UPTRAIL_SUCCESS = "API_UPTRAIL_SUCCESS"
 export const API_UPTRAIL_FAILURE = "API_UPTRAIL_FAILURE"
 
+export const DAILY_UPTRAIL_REQUEST = "DAILY_UPTRAIL_REQUEST"
+export const DAILY_UPTRAIL_SUCCESS = "DAILY_UPTRAIL_SUCCESS"
+
+
 export const MORE_UPTRAIL_REQUEST = "MORE_UPTRAIL_REQUEST"
 export const MORE_UPTRAIL_SUCCESS = "MORE_UPTRAIL_SUCCESS"
 
@@ -110,6 +148,7 @@ export const CAL_TOTAL_DASH = "CAL_TOTAL_DASH"
 export const CAL_TODO_DASH = "CAL_TODO_DASH"
 export const CAL_TREE_DASH = "CAL_TREE_DASH"
 export const CAL_CATE_DASH = "CAL_CATE_DASH"
+
 
 
 export const CHANGE_TODO = "CHANGE_TODO"

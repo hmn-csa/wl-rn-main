@@ -25,6 +25,21 @@ function ContractDetailMap(props) {
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
+
+
+  const handleAsyncChangeTodo = () => {
+    let todo_value = isTodo === 1 ? 0 : 1
+    let config = {
+      token: props.token.token.access,
+      appl_id: content.appl_id,
+      todo_value: todo_value
+    }
+    setTodoContent(todo_value)
+    setTodoColor(todo_value === 1 ? colors.danger : colors.grey)
+    setTodoIcon(todo_value === 1 ? 'heart' : 'heart-o')
+    props.apiChangeTodo(config)
+  }
+
   const handleChangeTodo = async () => {
     const todo_new = isTodo === 1 ? 0 : 1
     let config = {
@@ -39,17 +54,23 @@ function ContractDetailMap(props) {
       }
     }
     try {
+
+      setTodoContent(todo_new)
+      props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_new })
+      setTodoColor(todo_new === 1 ? colors.danger : colors.grey)
+      setTodoIcon(todo_new === 1 ? 'heart' : 'heart-o')
+
       const response = await axios(config);
       const responseTodo = response.data.todo_flag
-      setTodoContent(responseTodo)
-      props.changeTodo({ appl_id: content.appl_id, todo_flag: responseTodo })
-      setTodoColor(responseTodo === 1 ? colors.danger : colors.grey)
-      setTodoIcon(responseTodo === 1 ? 'heart' : 'heart-o')
       props.calTodoDash(props.data)
     } catch (error) {
-      console.error(error);
+      const todo_old = todo_new === 1 ? 0 : 1
+      setTodoContent(todo_old)
+      props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_old })
+
     }
   }
+
   const handleGetVsf = () => {
     if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
       props.setActiveVsf(content)
@@ -248,7 +269,7 @@ function ContractDetailMap(props) {
           <FontAwesome
             name={todoIcon}
             style={[showstyles.logo, { color: todoColor }]}
-            onPress={handleChangeTodo}
+            onPress={handleAsyncChangeTodo}
           />
         </View>
         <View style={[showstyles.btn]}>

@@ -116,7 +116,7 @@ const treeReducers = (state = defaultState, action) => {
 
   switch (action.type) {
 
-    case constAction.CAL_TREE_DASH:
+    case constAction.CAL_TREE2_DASH:
 
       let notMeetCode = ['NFH', 'NIW', 'NLA', 'NAH', 'LEM', 'CGI', 'DIE']
 

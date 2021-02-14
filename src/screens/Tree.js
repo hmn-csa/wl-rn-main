@@ -93,7 +93,7 @@ function Tree(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    tree: state.treeCal,
+    tree: state.data.treeCal,
   };
 };
 

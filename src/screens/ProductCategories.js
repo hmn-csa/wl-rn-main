@@ -63,7 +63,7 @@ function ProductCategories(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    categoryProduct: state.category.categoryProduct,
+    categoryProduct: state.data.categoryProduct,
     showlists: state.showlists
   };
 };

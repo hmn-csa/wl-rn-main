@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {
   Image, ScrollView, View, Text, Dimensions, TouchableOpacity,
-  Platform, StyleSheet, Alert, ActivityIndicator
+  Platform, StyleSheet, Alert, ActivityIndicator, TextInput
 } from 'react-native';
 import { connect } from "react-redux"
-import { styles as masterStyle, BACKGROUND_LOGIN, MAIN_COLOR2 } from '../styles'
+import { styles as masterStyle, colors } from '../styles'
 import DatePicker from 'react-native-datepicker'
 import * as ImagePicker from 'expo-image-picker';
-import { Button, TextInput, Paragraph, Dialog, Portal, RadioButton } from 'react-native-paper';
-import * as Location from 'expo-location';
-import axios from "axios";
 
+import {
+  Button, Paragraph,
+  Dialog, Portal, RadioButton
+} from 'react-native-paper';
+
+import * as Location from 'expo-location';
+
+import { Camera } from 'expo-camera';
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import ImageView from 'react-native-image-view';
 
 import { EMPTYIMAGE } from '../images';
 
@@ -20,16 +28,21 @@ import {
   actUserUptrails
 } from "../actions"
 import * as consts from '../consts'
-import { colors } from '../styles'
+import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get("window");
 
 function Remark(props) {
+
+
+
+  //===============================================sd
+
+
   const [newAddress, setNewAddress] = useState(props.vsf.activeApplId.new_address)
   const addressItems = [
-    { label: props.vsf.activeApplId.reg_address, value: props.vsf.activeApplId.reg_address },
-    { label: props.vsf.activeApplId.act_address, value: props.vsf.activeApplId.act_address },
-    //{ label: newAddress, value: newAddress},
+    { label: `Thường trú : ${props.vsf.activeApplId.reg_address}`, value: props.vsf.activeApplId.reg_address },
+    { label: `Tạm trú : ${props.vsf.activeApplId.act_address}`, value: props.vsf.activeApplId.act_address },
   ]
   if (props.vsf.activeApplId.new_address != null && props.vsf.activeApplId.new_address != "")
     addressItems.push({ label: newAddress, value: newAddress })
@@ -46,7 +59,7 @@ function Remark(props) {
   const [images, setImages] = useState([]);
   const [activateImage, setActivateImage] = useState({ uri: null });
 
-
+  const [personContact, setPersonContact] = useState(null)
   const [remark, setRemark] = useState('')
   const [address, setAddress] = useState('')
   const [code, setCode] = useState(null)
@@ -55,25 +68,20 @@ function Remark(props) {
 
   const [visible, setVisible] = useState(false);
   const [visiblePayamount, setVisiblePayamount] = useState(false);
-
-  const showDialog = () => setVisible(true);
-
-  const hideDialog = () => {
-    setVisible(false);
-    //if (code == 'PTP' || code == 'WFP')
-    //  setVisiblePayamount(true);
-  };
-
-  const hideDialogPayamount = () => setVisiblePayamount(false);
-
+  const [visiblePerson, setVisiblePerson] = useState(false);
   const [visibleAddress, setVisibleAddress] = useState(false);
-  const showDialogAddress = () => setVisibleAddress(true);
-  const hideDialogAddress = () => setVisibleAddress(false);
-
   const [visibleImage, setVisibleImage] = useState(false);
-  const showDialogImage = () => setVisibleImage(true);
-  const hideDialogImage = () => setVisibleImage(false);
 
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -99,18 +107,69 @@ function Remark(props) {
     })();
   }, []);
 
-  const pickImage1 = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: false,
-      base64: true,
-      // aspect: [4, 3],
-      quality: 0.1,
-    });
-    if (!result.cancelled) {
-      setImage1(result);
-    }
-  };
+  // ========= Render label ============// 
+
+  const renContentNull = (item) => {
+    if (!item)
+      return "***"
+    return item
+
+  }
+  const renPersonContact = (personContact) => {
+    if (!personContact)
+      return <View></View>
+    return <View style={{ width: '95%', }}>
+      <Text style={styles.subLabel}>{consts.PERSON_CONTACT.filter(item => item.value == personContact)[0].label}</Text>
+    </View>
+  }
+
+
+  const renRemarkCode = (code) => {
+    if (!code)
+      return <View></View>
+    return <View style={{ width: '95%', }}>
+      <Text style={[styles.subLabel]}>{consts.REMARK_CODE.filter(item => item.value == code)[0].label}</Text>
+    </View >
+  }
+
+  const renPromisePTP = (payAmount) => {
+
+    if (!payAmount)
+      return <View></View>
+
+    return <View style={{ width: '95%', }}>
+      <Text style={[styles.subLabel, { color: colors.green, opacity: 1, fontWeight: "800" }]}>{moneyFormat(payAmount)} vnđ</Text>
+    </View>
+  }
+
+  const renAddress = (address) => {
+    if (!address)
+      return <View></View>
+
+    let curAddress = addressItems.filter(item => item.value == address)
+    if (curAddress.length > 0)
+      return <View style={{ width: '95%', }}>
+        <Text style={styles.subLabel}>{curAddress[0].label}</Text>
+      </View>
+    return <View style={{ width: '95%', }}>
+      <Text style={styles.subLabel}>Địa chỉ mới : {address}</Text>
+    </View>
+  }
+
+  const getAddressType = (address) => {
+    if (!address)
+      return ""
+    if (address == addressItems[0].value && address == addressItems[1].value)
+      return 'same_address';
+    if (address == addressItems[0].value)
+      return 'reg_address';
+    if (address == addressItems[1].value)
+      return 'act_address';
+
+    return 'orther_address';
+  }
+
+  // ======== Render Image ===========//
 
   const pickImage2 = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -119,7 +178,7 @@ function Remark(props) {
       allowsEditing: true,
       aspect: [3, 4],
       base64: true,
-      quality: 0.1,
+      quality: 0.4,
 
     });
     if (!result.cancelled) {
@@ -133,18 +192,6 @@ function Remark(props) {
     }
   };
 
-  // const pickImage3 = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: false,
-  //     // aspect: [4, 3],
-  //     base64: true,
-  //     quality: 0.1,
-  //   });
-  //   if (!result.cancelled) {
-  //     setImage3(result);
-  //   }
-  // };
 
   const pickImage3 = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -153,7 +200,7 @@ function Remark(props) {
       // allowsEditing: true,
       aspect: [3, 4],
       base64: true,
-      quality: 0.1,
+      quality: 0.4,
     });
     if (!result.cancelled) {
       if (images.length < 3)
@@ -168,28 +215,23 @@ function Remark(props) {
 
 
 
+
   const handleCommit = async () => {
 
-    if (address == '')
-      return Alert.alert('Vui lòng chọn địa chỉ viếng thăm')
-    // if (remark == '')
-    //   return Alert.alert('Vui lòng nhập ghi chú')
-    if (code == null)
-      return Alert.alert('Vui lòng chọn mã viếng thăm')
+
+
+    if (!personContact)
+      return Alert.alert('Vui lòng chọn người liên hệ !')
+    if (!code)
+      return Alert.alert('Vui lòng chọn kết quả viếng thăm !')
+    if (!address)
+      return Alert.alert('Vui lòng chọn địa chỉ viếng thăm !')
 
     setUptrailStatus(true)
     let locationCurrrent = await Location.getCurrentPositionAsync({});
     setLocation(locationCurrrent);
 
-    const getAddressType = (address) => {
-      if (address == addressItems[0].value && address == addressItems[1].value)
-        return 'same_address';
-      if (address == addressItems[0].value)
-        return 'reg_address';
-      if (address == addressItems[1].value)
-        return 'act_address';
-      return 'orther_address';
-    }
+
 
     let imageSet = {}
     for (let j = 0; j < images.length; j++) {
@@ -209,6 +251,7 @@ function Remark(props) {
       'next_visit_time': reDate,
       'lat': location.coords.latitude,
       'lon': location.coords.longitude,
+      'person_contact': personContact,
       // 'image1': image1 === null ? null : "data:image/png;base64," + image1.base64,
       // 'image2': image2 === null ? null : "data:image/png;base64," + image2.base64,
       // 'image3': image3 === null ? null : "data:image/png;base64," + image3.base64,
@@ -250,291 +293,377 @@ function Remark(props) {
       showImages.push(EMPTYIMAGE)
     }
     //console.log(showImages)
-    return <View
-      style={[masterStyle.row, styles.container, buttonStyles.buttons, { height: 120 }]}>
-      {
-        showImages.map((image, index) =>
-          <TouchableOpacity
-            style={[buttonStyles.button, { backgroundColor: null }]}
-            key={index}
-            onPress={() => {
-              setActivateImage(image)
-              showDialogImage()
-            }}>
-            <Image
-              source={image}
-              style={{
-                width: 90,
-                height: 120
-              }}
-              onLoadStart={() => <ActivityIndicator size={10} color='black' />}
-            />
-          </TouchableOpacity>
-        )
-      }
 
+    return <View style={styles.blockInput}>
+      <View style={[styles.row]}>
+        <View style={[styles.box, { flex: 0.382 }]}>
 
-    </View>
-  }
-
-  const loading = (status) => {
-    if (status)
-      return <View style={[styles.container, { alignItems: 'center' }]}>
-        <Text>Đang tải lên ... </Text>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-  }
-
-  const ortherAddress = () => {
-    if (![props.vsf.activeApplId.act_address, props.vsf.activeApplId.reg_address].includes(address))
-      return <TextInput
-        mode="flat"
-        label="Dia chi khac"
-        onChangeText={setAddress}
-      />
-    else return <Text> {address}</Text>
-  }
-
-  if (props.uptrails.userFetching || uptrailStatus)
-    return <View style={[masterStyle.container, { alignItems: 'center' }]}>
-      <Text>Up Loading ... </Text>
-      <ActivityIndicator size={100} color={BACKGROUND_LOGIN} />
-    </View>
-  else
-    return (
-      <View style={[masterStyle.container, { alignItems: 'center' }]}>
-        <View>
-          <Text style={[masterStyle.header, { alignItems: 'center' }]}>{props.vsf.activeApplId.cust_name}</Text>
-        </View>
-
-        <View style={[masterStyle.indexValueSmall, { alignItems: 'center', color: colors.white }]} >
-          <Text>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
-        </View>
-
-        {/* Ket qua vieng tham */}
-
-        <Button
-          mode="contained"
-          onPress={showDialog}
-          style={[styles.container, buttonStyles.button]}  >
-          Kết quả viếng thăm: {code}
-        </Button>
-
-        <View style={styles.container} >
-          <Text>Số tiền hứa/đã thanh toán: {moneyFormat(payAmount)}</Text>
-        </View>
-
-        <Portal style={[masterStyle.container, { height: height }]}>
-          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height }}>
-            <Dialog.Content style={{ width: null, height: height - 60 }}>
-              {/* <Button onPress={hideDialog}>Done</Button> */}
-              <ScrollView style={{ marginTop: 10 }}>
-                <RadioButton.Group
-                  onValueChange={
-                    newValue => {
-                      setCode(newValue);
-                      if (['PTP', 'WFP', 'OBT', 'TER'].includes(newValue)) setVisiblePayamount(true);
-                    }
-                  }
-                  value={code}>
-                  {
-                    consts.REMARK_CODE.map(item =>
-                      <RadioButton.Item
-                        key={item.value}
-                        style={{ fontSize: 15 }}
-                        value={item.value}
-                        label={item.label} />
-                    )
-                  }
-                </RadioButton.Group>
-
-              </ScrollView>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialog}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
-          <Dialog visible={visiblePayamount} onDismiss={hideDialogPayamount}>
-            <Dialog.Content>
-              <TextInput
-                mode="flat"
-                label="Nhập số tiền"
-                onChangeText={setPayAmount}
-              />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialogPayamount}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-
-        <Button
-          mode="contained"
-          onPress={showDialogAddress}
-          style={[styles.container, buttonStyles.button]}  >
-          Địa chỉ viếng thăm
-      </Button>
-        <View style={styles.container} >
-          <Text>Địa chỉ: {address}</Text>
-        </View>
-
-
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
-          <Dialog visible={visibleAddress} onDismiss={hideDialogAddress}>
-            <Dialog.Content>
-              <ScrollView>
-                <RadioButton.Group
-                  onValueChange={newValue => setAddress(newValue)} value={address}>
-                  {
-                    addressItems.map(item =>
-                      <RadioButton.Item
-                        key={item.value}
-                        style={{ fontSize: 15 }}
-                        value={item.value}
-                        label={item.label} />
-                    )
-                  }
-                </RadioButton.Group>
-
-                <TextInput
-                  mode="flat"
-                  label="Dia chi khac"
-                  onChangeText={setAddress}
-                />
-              </ScrollView>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideDialogAddress}>Done</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-
-        <View style={styles.container} >
-          <TextInput
-            mode="flat"
-            style={{ color: colors.primary }}
-            label="Ghi chú"
-            onChangeText={setRemark}
-          />
-        </View>
-
-        <DatePicker
-          style={masterStyle.inputViewConst}
-          date={reDate}
-          mode="date"
-          placeholder="Ngày viếng thăm lại"
-          format="YYYY-MM-DD"
-          // minDate="2016-05-01"
-          // maxDate="2016-06-01"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              left: 4,
-              top: 4,
-              marginLeft: 0
-            },
-            dateInput: {
-              marginLeft: 36
-            }
-          }}
-          onDateChange={(date) => setRedate(date)}
-        />
-
-
-        {/* <View style={[masterStyle.row, styles.container]}>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage1}>
-              image1
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image1 && <Image source={{ uri: image1.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage2}>
-              chọn hình
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image2 && <Image source={{ uri: image2.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage3}>
-              chụp mới
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image3 && <Image source={{ uri: image3.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-        </View> */}
-
-        <View style={[buttonStyles.buttons]}>
           <Button
-            icon="camera"
+            icon="image"
             mode="contained"
-            style={buttonStyles.button}
+            style={[styles.row, styles.button, { margin: 2, }]}
+            labelStyle={[styles.buttonLabel, { fontSize: 10 }]}
             onPress={pickImage2}>
             chọn hình
           </Button>
           <Button
             icon="camera"
             mode="contained"
-            style={buttonStyles.button}
+            style={[styles.row, styles.button, { margin: 2 }]}
+            labelStyle={[styles.buttonLabel, { fontSize: 10 }]}
             onPress={pickImage3}>
             chụp mới
           </Button>
+
+        </View>
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <View style={styles.row}>
+
+            {
+              showImages.map((image, index) =>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: null }]}
+                  key={index}
+                  onPress={() => {
+                    setActivateImage(image)
+                    setVisibleImage(true)
+                  }}>
+                  <Image
+                    source={image}
+                    style={{
+                      width: width * 0.618 / 3 - 10,
+                      height: width * 0.618 / 3 - 10,
+                      borderRadius: 10,
+                      margin: 2
+                    }}
+                    onLoadStart={() => <ActivityIndicator size={10} color='black' />}
+                  />
+                </TouchableOpacity>
+              )
+            }
+          </View>
+        </View>
+      </View>
+    </View>
+  }
+
+
+  if (props.uptrails.userFetching || uptrailStatus)
+    return <View style={[styles.row, { alignItems: 'center' }]}>
+      <Text>Up Loading ... </Text>
+      <ActivityIndicator size={100} />
+    </View>
+  else
+    return (
+      <ScrollView style={[{ flex: 1 }]}>
+
+        <View style={styles.blockInput}>
+
+          <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
+          <Text style={[styles.smallHeader]}>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
+
+
+        </View>
+        {/* Ket qua vieng tham */}
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>* Người liên hệ: </Text>
+            </View>
+            <View style={[styles.box, { flex: 0.618 }]}>
+
+              <Button
+                mode="contained"
+                onPress={() => setVisiblePerson(true)}
+                style={[styles.button]}
+                labelStyle={styles.buttonLabel}
+              >
+                {renContentNull(personContact)}
+              </Button>
+            </View>
+          </View>
+          {renPersonContact(personContact)}
+
         </View>
 
-        {renImages()}
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>* Kết quả viếng thăm: </Text>
+            </View>
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Button
+                mode="contained"
+                onPress={() => setVisible(true)}
+                style={[styles.button]}
+                labelStyle={styles.buttonLabel}
+              >
+                {renContentNull(code)}
+              </Button>
+            </View>
+          </View>
+          {renRemarkCode(code)}
+          {renPromisePTP(payAmount)}
+        </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>* Địa chỉ viếng thăm: </Text>
+            </View>
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Button
+                mode="contained"
+                onPress={() => setVisibleAddress(true)}
+                style={[styles.button]}
+                labelStyle={styles.buttonLabel}
+              >
+                {renContentNull(getAddressType(address))}
+              </Button>
+            </View>
+          </View>
+
+          {renAddress(address)}
+        </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label,]}>
+              <Text>Ngày viếng thăm lại: </Text>
+            </View>
+            <View style={[styles.box, styles.button, { flex: 0.618 }]}>
+              <DatePicker
+                date={reDate}
+                mode="date"
+                placeholder="Ngày"
+                format="YYYY-MM-DD"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                style={styles.buttonLabel}
+                customStyles={{
+                  dateIcon: {
+                    position: 'absolute',
+                    left: 4,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 30,
+                    borderWidth: 0,
+                  },
+                  dateText: {
+                    fontWeight: "800",
+                    color: colors.primary,
+                    fontSize: 12,
+                  }
+                }}
+                onDateChange={(date) => setRedate(date)}
+              />
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            <View style={[styles.box, styles.label]}>
+              <Text>Ghi chú: </Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <TextInput
+              style={[styles.box, { color: colors.primary, paddingLeft: 3 }]}
+              placeholder="Nhập ghi chú"
+              value={remark}
+              onChangeText={setRemark}
+            />
+          </View>
+        </View>
+
+        { renImages()}
+
 
         <Button
           mode="contained"
-          style={[buttonStyles.button,]}
+          style={[styles.button, {
+            width: "97%",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }]}
+          labelStyle={styles.buttonLabel}
           onPress={handleCommit}>
+
           Xác nhận
         </Button>
 
-        <Portal style={[masterStyle.container, { width: width, height: height }]}>
-          <Dialog visible={visibleImage} onDismiss={hideDialogImage}>
-            <Dialog.Content>
-              <ScrollView>
 
-                <Image
-                  source={activateImage}
-                  style={{
-                    height: 400,
-                    flex: 1,
-                    width: null
-                  }}
-                  resizeMode="contain"
-                />
 
-              </ScrollView>
-            </Dialog.Content>
+        <Portal style={[styles.row]}>
+          <Dialog visible={visiblePerson} onDismiss={() => setVisiblePerson(false)}>
+            {/* <Button onPress={hideDialog}>Done</Button> */}
+            <RadioButton.Group
+              onValueChange={
+                newValue => {
+                  setPersonContact(newValue);
+                }
+              }
+              value={personContact}>
+              {
+                consts.PERSON_CONTACT.map(item =>
+                  <RadioButton.Item
+                    key={item.value}
+                    style={{ height: 45 }}
+                    value={item.value}
+                    label={item.label}
+                    style={{ height: 40 }}
+                    labelStyle={{
+                      fontSize: 12,
+                    }}
+                    mode='android'
+                  />
+                )
+              }
+            </RadioButton.Group>
+
             <Dialog.Actions>
-              <Button onPress={hideDialogImage}>Close</Button>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisiblePerson(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
             </Dialog.Actions>
           </Dialog>
         </Portal>
 
-      </View>
+        <Portal style={[styles.row]}>
+          <Dialog
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            style={{ width: null, height: height - 80 }}>
+            {/* <Button onPress={hideDialog}>Done</Button> */}
+            <ScrollView style={{ marginTop: 2 }}>
+              <RadioButton.Group
+                onValueChange={
+                  newValue => {
+                    setCode(newValue);
+                    if (['PTP'].includes(newValue)) setVisiblePayamount(true);
+                  }
+                }
+                value={code}>
+                {
+                  consts.REMARK_CODE.map(item =>
+                    <RadioButton.Item
+                      key={item.value}
+                      value={item.value}
+                      label={item.label}
+                      style={{ height: 40 }}
+                      labelStyle={{
+                        fontSize: 12,
+                      }}
+                      mode='android'
+                    />
+                  )
+                }
+              </RadioButton.Group>
+
+            </ScrollView>
+            <Dialog.Actions>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisible(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+
+        <Portal style={[styles.row, { width: width, height: height }]}>
+          <Dialog visible={visiblePayamount} onDismiss={() => setVisiblePayamount(false)}>
+            <Dialog.Content>
+              <TextInput
+                placeholder="Nhập số tiền hứa thanh toán"
+                value={payAmount}
+                onChangeText={setPayAmount}
+                style={{ borderRadius: 0, height: 40, padding: 5 }}
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisiblePayamount(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+
+
+
+
+        <Portal style={[styles.row, { width: width, height: height }]}>
+          <Dialog visible={visibleAddress} onDismiss={() => setVisibleAddress(false)}>
+            <Dialog.Content>
+              <RadioButton.Group
+                onValueChange={newValue => setAddress(newValue)} value={address}>
+                {
+                  addressItems.map(item =>
+                    <RadioButton.Item
+                      key={item.value}
+                      value={item.value}
+                      label={item.label}
+                      labelStyle={{
+                        fontSize: 12,
+                        marginRight: 40
+                      }}
+                      mode='android'
+                      style={{ height: 60 }}
+                    />
+                  )
+                }
+              </RadioButton.Group>
+
+              <TextInput
+                style={{
+                  fontSize: 12,
+                  marginRight: 40
+                }}
+                mode="flat"
+                label="Dia chi khac"
+                placeholder="Nhập địa chỉ khác"
+                onChangeText={setAddress}
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setVisibleAddress(false)}>
+                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+              </TouchableOpacity>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+
+
+
+
+
+        <Portal style={[styles.row, { width: width, height: height }]}>
+          <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
+            <ImageView
+              images={[{
+                source: { uri: activateImage.uri },
+                width: 600,
+                height: 800,
+              },]}
+              imageIndex={0}
+              isVisible={visibleImage}
+              onClose={() => setVisibleImage(false)}
+              animationType="slide"
+              isSwipeCloseEnabled={false}
+            />
+          </Dialog>
+        </Portal>
+
+      </ScrollView >
     )
 
 };
@@ -574,50 +703,89 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '90%',
-    marginVertical: 6
-  },
-});
 
-const buttonStyles = StyleSheet.create({
+  blockInput: {
+
+    borderBottomWidth: 0.2,
+    borderBottomColor: colors.grey,
+    borderRadius: 5,
+    padding: 3,
+    marginBottom: 2,
+    alignItems: 'center',
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  row: {
+    width: '95%',
+    marginVertical: 2,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+
+  box: {
+    justifyContent: 'center',
+    flex: 1
+  },
+
+  header: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    margin: 2,
+    justifyContent: 'center',
+    color: 'black'
+  },
+  smallHeader: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    margin: 2,
+    justifyContent: 'center',
+    color: 'black'
+  },
   buttons: {
     flexDirection: 'row',
-    padding: 2,
-
+    padding: 1,
   },
   button: {
-    marginLeft: 2,
-    borderRadius: 10,
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: colors.primary,
-    backgroundColor: colors.primary,
+    borderRadius: 5,
+    color: 'white',
+    backgroundColor: colors.light,
+    borderColor: colors.grey,
+    borderWidth: 0.3,
   },
+  label: {
+    borderRadius: 5,
+    margin: 2,
+    color: colors.primary,
+    opacity: 0.6,
+    paddingLeft: 3,
+  },
+  subLabel: {
+    opacity: 0.5,
+    paddingLeft: 5,
+    marginBottom: 5,
+    fontSize: 12,
+  },
+  buttonLabel: {
+
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: "800"
+  },
+
+  closeBtn: {
+    borderTopWidth: 1,
+    borderColor: colors.grey,
+    width: '100%',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    padding: 5
+  }
 });
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Remark);

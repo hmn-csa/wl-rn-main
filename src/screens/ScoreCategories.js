@@ -63,7 +63,7 @@ function ScoreCategories(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    categoryBinscore: state.category.categoryBinscore,
+    categoryBinscore: state.data.categoryBinscore,
     showlists: state.showlists
   };
 };

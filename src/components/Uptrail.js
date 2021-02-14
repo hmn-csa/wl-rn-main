@@ -130,7 +130,7 @@ function Uptrail(props) {
   }
 
   const renCode = (code) => {
-    if (['PTP', 'OBT', 'WFP', 'TER'].includes(code))
+    if (['PTP', 'F_OBT', 'WFP', 'TER'].includes(code))
       return <Text
         style={[stylesTrail.remarkCode, { color: colors.green, }]}>{code}</Text>
     else return <Text
@@ -142,6 +142,7 @@ function Uptrail(props) {
     })
     return (result[0].label)
   }
+
   const haveimages = (image1, image2, image3) => {
     if (image1 !== null || image2 !== null || image3 !== null)
       return true
@@ -221,13 +222,13 @@ function Uptrail(props) {
     borderColor: colors.lightGray,
     padding: 10,
   } : {
-      backgroundColor: 'white',
-      borderWidth: 1,
-      borderRadius: 15,
-      borderColor: colors.lightGray,
-      margin: 5,
-      padding: 10,
-    }
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: colors.lightGray,
+    margin: 5,
+    padding: 10,
+  }
   return (
     <View
       style={cardStyle}

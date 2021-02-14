@@ -3,6 +3,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { colors } from '../styles'
 import Tree from './Tree'
+import UserSignout from './userSignout'
+import UserInfo from './userInfo'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
 import ListUptrail from './ListUptrail'
@@ -19,7 +21,6 @@ function Menutop_Categories() {
         inactiveTintColor: colors.black,
         labelStyle: { fontSize: 12, fontWeight: 'bold' },
         style: { backgroundColor: 'white' },
-
       }}
     >
       <Tab.Screen
@@ -72,7 +73,35 @@ function Menutop_Uptrail() {
 }
 
 
+
+function Menutop_User() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Type"
+      tabBarOptions={{
+        activeTintColor: colors.info,
+        inactiveTintColor: colors.black,
+        labelStyle: { fontSize: 12, fontWeight: 'bold' },
+        style: { backgroundColor: 'white' },
+      }}
+    >
+      <Tab.Screen
+        name="Info"
+        component={UserInfo}
+        options={{ tabBarLabel: 'Info' }}
+      />
+      <Tab.Screen
+        name="Type"
+        component={UserSignout}
+        options={{ tabBarLabel: 'Sign' }}
+      />
+
+    </Tab.Navigator>
+  );
+}
+
 export {
   Menutop_Categories,
-  Menutop_Uptrail
+  Menutop_Uptrail,
+  Menutop_User
 };

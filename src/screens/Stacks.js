@@ -8,7 +8,7 @@ import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
 import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
-import User from './User'
+import UserSignout from './userSignout'
 import ListPayment from './ListPayment'
 import applMap from './applMap'
 import CheckinMap from './CheckinMap'
@@ -21,7 +21,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Calendar_ } from './Calendar'
 import { Colors } from 'react-native-paper'
-import { Menutop_Uptrail } from './MenuTop'
+import { Menutop_Uptrail, Menutop_User } from './MenuTop'
 
 const Stack = createStackNavigator()
 
@@ -32,7 +32,7 @@ function UserStack(props) {
     >
       <Stack.Screen
         name="User"
-        component={User}
+        component={UserSignout}
         options={{
           headerStyle: {
             backgroundColor: colors.primary,
@@ -154,7 +154,7 @@ function DashboardStack(props) {
           ),
         }}
       />
-      < Stack.Screen
+      <Stack.Screen
         name="ListPayment"
         component={ListPayment}
         options={{
@@ -176,11 +176,11 @@ function DashboardStack(props) {
           )
         }}
       />
-      < Stack.Screen
+      <Stack.Screen
         name="TodoDash"
         component={TodoDash}
       />
-      < Stack.Screen
+      <Stack.Screen
         name="checkinMap"
         component={CheckinMap}
         options={{
@@ -202,7 +202,7 @@ function DashboardStack(props) {
           )
         }}
       />
-      < Stack.Screen
+      <Stack.Screen
         name="Uptrail"
         component={Menutop_Uptrail}
         options={{
@@ -541,6 +541,172 @@ function CategorieStack(props) {
   )
 }
 
+function UserStack2(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="User"
+      screenOptions={{ headerShown: true, headerTransparent: false, headerTitleAlign: 'center', }}
+    >
+      <Stack.Screen
+        name='User'
+        component={Menutop_User}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+        }}
+      >
+      </Stack.Screen>
+      <Stack.Screen
+        name="Portfolio"
+        component={ListAppls}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20, flexDirection: 'row' }}>
+              {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
+                props.navigation.navigate('Portfolio', {
+                  screen: 'Maps'
+                })
+              } >
+                <MaterialIcons name="map" size={30} color="white" />
+              </TouchableOpacity> */}
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        })
+        }
+      />
+      <Stack.Screen
+        name="Uptrail"
+        component={Menutop_Uptrail}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Remark"
+        component={Remark}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Vsf"
+        component={Vsf}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitle: "Visit form",
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Skip"
+        component={Skip}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Maps"
+        component={applMap}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+    </Stack.Navigator >
+  )
+}
 
 const buttonStyles = StyleSheet.create({
   buttons: {
@@ -576,4 +742,5 @@ export {
   UserStack,
   CategorieStack,
   CalendarStack,
+  UserStack2
 }

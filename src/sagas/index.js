@@ -9,12 +9,13 @@ import { all, fork } from 'redux-saga/effects';
 import { watcherSaga } from './loginSaga'
 import { watcherSetTodo } from './todoSaga'
 import { watcherGetVsf } from './vsfSaga'
-import { watcherSagaUptrail} from './uptrailSaga'
+import { watcherSagaUptrail } from './uptrailSaga'
 import { watcherSagaCheckin } from './checkinSaga'
 import { watcherSagaPayment } from './paymentSaga'
+import { watcherChangePassword } from './changepwSaga'
 
 // Redux Saga: Root Saga
-export function* rootSaga () {
+export function* rootSaga() {
   yield all([
     fork(watcherSaga),
     fork(watcherSetTodo),
@@ -22,6 +23,7 @@ export function* rootSaga () {
     fork(watcherSagaUptrail),
     fork(watcherSagaCheckin),
     fork(watcherSagaPayment),
+    fork(watcherChangePassword),
   ]);
 };
 

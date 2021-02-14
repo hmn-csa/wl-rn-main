@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state, ownProps) => {
   return {
     data: state.data.data,
-    todoCal: state.todoCal,
+    todoCal: state.data.todoCal,
     token: state.token,
   };
 };
