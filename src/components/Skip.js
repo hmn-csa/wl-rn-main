@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet, ScrollView, 
-  Dimensions, Linking, Platform, TouchableOpacity } from 'react-native'
+import {
+  Text, View, StyleSheet, ScrollView,
+  Dimensions, Linking, Platform, TouchableOpacity
+} from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TreeView from 'react-native-final-tree-view'
 import { Button } from 'react-native-paper';
@@ -309,28 +311,28 @@ function Skip(props) {
             </Text>
           </View>
         </View>
-        <View style={[styles.row, { paddingTop: 10, borderTopWidth:1, borderTopColor: colors.lightGray }]}>
-          <Text style={[styles.textContent,{ fontWeight: 'bold' }] }>Chit tiết: </Text>
+        <View style={[styles.row, { paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.lightGray }]}>
+          <Text style={[styles.textContent, { fontWeight: 'bold' }]}>Chit tiết: </Text>
         </View>
         <Timeline
-            data={dataAppl}
-            separator={false}
-            circleSize={0.1}
-            innerCircle={'none'}
-            columnFormat={'single-column-right'}
-            dotSize={0}
-            innerCircle={'dot'}
-            renderDetail={renderDetail}
-            showTime={false}
-            lineWidth={0}
-          />
-       
+          data={dataAppl}
+          separator={false}
+          circleSize={0.1}
+          innerCircle={'none'}
+          columnFormat={'single-column-right'}
+          dotSize={0}
+          innerCircle={'dot'}
+          renderDetail={renderDetail}
+          showTime={false}
+          lineWidth={0}
+        />
+
       </View>
 
     )
   }
 
-  
+
 
   renderDetail = (rowData, sectionID, rowID) => {
     let title = <Text style={[styles.title]}>{rowData.month_dt} | DPD: {rowData.dpd}</Text>
@@ -380,12 +382,12 @@ function Skip(props) {
 
 
     return (
-      <View style={{ flex: 1, backgroundColor: 'white', padding:0 }}>
+      <View style={{ flex: 1, backgroundColor: 'white', padding: 0 }}>
         {title}
         {content}
         {payment}
         {followContent}
-        
+
       </View>
     )
   }
@@ -394,10 +396,10 @@ function Skip(props) {
     function getIndicator(isExpanded, hasChildrenNodes, node) {
       if (!hasChildrenNodes) {
         return (
-          <TouchableOpacity 
-              onPress={() => handleCall(node.phone)}
-            >
-            <Entypo name="phone" size={18} color= {colors.info } />
+          <TouchableOpacity
+            onPress={() => handleCall(node.phone)}
+          >
+            <Entypo name="phone" size={18} color={colors.info} />
           </TouchableOpacity>
         )
       } else if (isExpanded) {
@@ -426,7 +428,7 @@ function Skip(props) {
       }
       return Linking.openURL(phoneNumber)
     }
-  
+
     return <TreeView
       data={phoneBook}
       initialExpanded={true}
@@ -438,20 +440,20 @@ function Skip(props) {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}
-          > 
+          >
             <View >
-              <Text style={[styles.textContent, { fontWeight: 'bold',}]} >
-                {getIndicator(isExpanded, hasChildrenNodes)} {node.name} 
+              <Text style={[styles.textContent, { fontWeight: 'bold', }]} >
+                {getIndicator(isExpanded, hasChildrenNodes)} {node.name}
               </Text>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => handleCall(node.phone)}
             >
-              <Text style={[styles.textContent, { fontWeight: 'bold',}]}>
+              <Text style={[styles.textContent, { fontWeight: 'bold', }]}>
                 <Text style={{ color: colors.black }}>
                   {node.phone}
                 </Text>{"\t"}
-               
+
               </Text>
             </TouchableOpacity>
 
@@ -515,7 +517,7 @@ function Skip(props) {
   if (props.vsf.activeIdno.main_infos === undefined)
     return (
       <View>
-        <Text> kh</Text>
+        <Text>Không có thông tin khách hàng</Text>
       </View>
     )
 
@@ -526,11 +528,13 @@ function Skip(props) {
           <View style={{
             backgroundColor: 'white',
             margin: 10,
-            
+            borderRadius: 10,
+            padding: 5,
           }}>
             {renTree()}
             {renMainInfo(props.vsf.activeIdno.main_infos)}
           </View>
+
           <View style={{ flexDirection: 'row', }}>
             <Carousel
               layout={'default'}
@@ -548,7 +552,7 @@ function Skip(props) {
           </View>
 
           {/* {renPaymentInfo(props.vsf.activeIdno.appl_infos[activeIndex].appl_id)} */}
-          
+
 
 
         </ScrollView>

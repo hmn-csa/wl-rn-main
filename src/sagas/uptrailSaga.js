@@ -13,8 +13,6 @@ export function* watcherSagaUptrail() {
 }
 
 
-
-
 // function that makes the api request and returns a Promise for response
 
 
@@ -110,12 +108,15 @@ export function* workerUserUptrail(request) {
     dataContent = { ...dataContent, runtime: response.data.message }
     yield put({ type: constAction.USER_UPTRAIL_SUCCESS, content: dataContent });
 
+    alert(`Uptrail thành công: \nHợp đồng: ${dataContent.appl_id}\nKhách hàng: ${dataContent.cust_name}`)
     // dispatch CAL-DASH
+
 
   } catch (error) {
     console.log(error)
     // dispatch a failure action to the store with the error
     yield put({ type: constAction.USER_UPTRAIL_FAILURE, error });
+    alert(`Uptrail không thành công vui lòng thực hiện lại: \nHợp đồng: ${dataContent.appl_id}\nKhách hàng: ${dataContent.cust_name}`)
   }
 }
 

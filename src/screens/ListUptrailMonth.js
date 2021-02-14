@@ -215,39 +215,7 @@ function ListUptrailMonth(props) {
           />)
         }
         {renMoreLoading()}
-        {/* <View style={[styles.row, { marginTop: 10 }]}>
-          <DatePicker
-            style={[styles.box, { backgroundColor: colors.secondary, borderRadius: 10, }]}
-            date={reDate}
-            mode="date"
-            placeholder="từ ngày"
-            format="YYYY-MM-DD"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: 'absolute',
-                left: 4,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={(date) => {
-              setRedate(date)
-              getDailyUptrails(date)
-            }}
-          />
 
-          <Button
-            mode="contained"
-            onPress={getMoreUptrails2}
-            style={[styles.box, buttonStyles.button]}>
-            lấy thêm
-         </Button>
-        </View> */}
       </ScrollView>
     )
   }

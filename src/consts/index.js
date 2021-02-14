@@ -17,7 +17,6 @@ export const REMARK_CODE = [
   { label: 'F_NAH - Không có nhà', value: 'F_NAH' },
   { label: 'LEM - Để lại lời nhắn', value: 'LEM' },
 
-
   { label: 'RTP - Từ chôí thanh toán', value: 'RTP' },
   { label: 'GSF - Gian lận', value: 'GSF' },
   { label: 'IGN1 - Chưa nhận khoản vay', value: 'IGN1' },

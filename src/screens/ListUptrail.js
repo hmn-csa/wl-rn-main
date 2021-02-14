@@ -59,6 +59,48 @@ function ListUptrail(props) {
     );
   };
 
+  const renSelectDate = () => {
+
+    return (
+      <View style={[styles.row, {}]}>
+        <View style={[styles.box, { backgroundColor: 'white', borderRadius: 5, marginRight: 10, paddingLeft: 5 }]}>
+          <Text>Chọn ngày để xem báo cáo: </Text>
+        </View>
+        <View style={[styles.box, { backgroundColor: colors.secondary, borderRadius: 5, }]}>
+          <DatePicker
+            date={reDate}
+            mode="date"
+            placeholder="ngày"
+            format="YYYY-MM-DD"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateIcon: {
+                position: 'absolute',
+                left: 4,
+                top: 4,
+                marginLeft: 0,
+              },
+              dateInput: {
+                marginLeft: 35,
+                borderWidth: 0,
+              },
+              dateText: {
+                fontWeight: "800",
+                color: 'white',
+                fontSize: 12,
+              }
+            }}
+            onDateChange={(date) => {
+              setRedate(date)
+              getDailyUptrails(date)
+            }}
+          />
+        </View>
+      </View>
+    )
+
+  }
   // -------------------------------------
 
   if (props.uptrails.dailyFetching)
@@ -134,32 +176,10 @@ function ListUptrail(props) {
   else if (props.uptrails.dailyUptrails.length > 0 && pageMap === false) {
     return (
       <ScrollView
-        style={{ backgroundColor: 'white', padding: 10, paddingBottom: 40 }}
+        style={{ padding: 5, paddingBottom: 40 }}
       >
-        <DatePicker
-          style={{ backgroundColor: colors.white, borderRadius: 10 }}
-          date={reDate}
-          mode="date"
-          placeholder="từ ngày"
-          format="YYYY-MM-DD"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              left: 4,
-              top: 4,
-              marginLeft: 0
-            },
-            dateInput: {
-              marginLeft: 36
-            }
-          }}
-          onDateChange={(date) => {
-            setRedate(date)
-            getDailyUptrails(date)
-          }}
-        />
+        {renSelectDate()}
+
         <Portal>
           <FAB
             style={{
@@ -185,34 +205,12 @@ function ListUptrail(props) {
   }
   return (
     <ScrollView>
-      <DatePicker
-        style={{ backgroundColor: colors.white, borderRadius: 10 }}
-        date={reDate}
-        mode="date"
-        placeholder="từ ngày"
-        format="YYYY-MM-DD"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          dateIcon: {
-            position: 'absolute',
-            left: 4,
-            top: 4,
-            marginLeft: 0
-          },
-          dateInput: {
-            marginLeft: 36
-          }
-        }}
-        onDateChange={(date) => {
-          setRedate(date)
-          getDailyUptrails(date)
-        }}
-      />
+
+      {renSelectDate()}
     </ScrollView>
   )
-
 }
+
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token,
@@ -230,7 +228,10 @@ const mapDispatchToProps = (dispatch) => {
       })
     },
     updateShowlist: (content) => {
-      dispatch(actUpdateShowlist(content))
+      dispatch({
+        type: constAction.SET_TODO_SHOWLIST,
+        content,
+      })
     },
   }
 }
@@ -247,6 +248,22 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  row: {
+    width: '95%',
+    marginVertical: 2,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+
+  box: {
+    justifyContent: 'center',
+    flex: 1,
+
+  },
+
 })
 
 
