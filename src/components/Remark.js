@@ -7,12 +7,15 @@ import { connect } from "react-redux"
 import { styles as masterStyle, BACKGROUND_LOGIN, MAIN_COLOR2 } from '../styles'
 import DatePicker from 'react-native-datepicker'
 import * as ImagePicker from 'expo-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import {
   Button, TextInput, Paragraph,
   Dialog, Portal, RadioButton
 } from 'react-native-paper';
 import * as Location from 'expo-location';
-import axios from "axios";
+
+import { Camera } from 'expo-camera';
 
 
 import { EMPTYIMAGE } from '../images';
@@ -29,6 +32,12 @@ import { color } from 'react-native-reanimated';
 const { width, height } = Dimensions.get("window");
 
 function Remark(props) {
+
+
+
+  //===============================================
+
+
   const [newAddress, setNewAddress] = useState(props.vsf.activeApplId.new_address)
   const addressItems = [
     { label: props.vsf.activeApplId.reg_address, value: props.vsf.activeApplId.reg_address },
@@ -78,6 +87,15 @@ function Remark(props) {
   const showDialogImage = () => setVisibleImage(true);
   const hideDialogImage = () => setVisibleImage(false);
 
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -256,7 +274,7 @@ function Remark(props) {
     //console.log(showImages)
 
     return <View
-      style={[masterStyle.row, styles.container, buttonStyles.buttons, { height: 120 }]}>
+      style={[masterStyle.row, styles.container, buttonStyles.buttons,]}>
       {
         showImages.map((image, index) =>
           <TouchableOpacity
@@ -269,8 +287,8 @@ function Remark(props) {
             <Image
               source={image}
               style={{
-                width: 90,
-                height: 120
+                width: width * 0.8 / 3,
+                height: (width * 0.8 / 3) * 4 / 3
               }}
               onLoadStart={() => <ActivityIndicator size={10} color='black' />}
             />
@@ -328,42 +346,35 @@ function Remark(props) {
           <Text>Số tiền hứa/đã thanh toán: {moneyFormat(payAmount)}</Text>
         </View>
 
-        <Portal style={[{ height: height }]}>
-          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height }}>
-            <Dialog.Content style={{ width: '100%', height: height - 60 }}>
-              {/* <Button onPress={hideDialog}>Done</Button> */}
-              <ScrollView style={{ marginTop: 10 }}>
-                <RadioButton.Group
-                  onValueChange={
-                    newValue => {
-                      setCode(newValue);
-                      if (['PTP'].includes(newValue)) setVisiblePayamount(true);
-                    }
+        <Portal style={[masterStyle.container]}>
+          <Dialog visible={visible} onDismiss={hideDialog} style={{ width: null, height: height - 80 }}>
+            {/* <Button onPress={hideDialog}>Done</Button> */}
+            <ScrollView style={{ marginTop: 2 }}>
+              <RadioButton.Group
+                onValueChange={
+                  newValue => {
+                    setCode(newValue);
+                    if (['PTP'].includes(newValue)) setVisiblePayamount(true);
                   }
-                  value={code}>
-                  {
-                    consts.REMARK_CODE.map(item =>
-                      <RadioButton.Item
-                        key={item.value}
-                        color={colors.green}
-                        uncheckedColor={colors.white}
-                        labelStyle={{
-                          fontSize: 12,
-                          marginRight: 60,
-                        }}
-                        style={{
-                          paddingRight: 20
-                        }}
-                        value={item.value}
-                        label={item.label}
-                        mode='ios'
-                      />
-                    )
-                  }
-                </RadioButton.Group>
+                }
+                value={code}>
+                {
+                  consts.REMARK_CODE.map(item =>
+                    <RadioButton.Item
+                      key={item.value}
+                      style={{ fontSize: 15 }}
+                      value={item.value}
+                      label={item.label}
+                      labelStyle={{
+                        fontSize: 12,
+                      }}
+                      mode='ios'
+                    />
+                  )
+                }
+              </RadioButton.Group>
 
-              </ScrollView>
-            </Dialog.Content>
+            </ScrollView>
             <Dialog.Actions>
               <Button onPress={hideDialog}>Done</Button>
             </Dialog.Actions>
@@ -390,15 +401,16 @@ function Remark(props) {
           onPress={showDialogAddress}
           style={[styles.container, buttonStyles.button]}  >
           Địa chỉ viếng thăm
-      </Button>
+        </Button>
         <View style={styles.container} >
           <Text>Địa chỉ: {address}</Text>
         </View>
 
 
-        <Portal style={[{ with: '90%', height: height }]}>
+
+        <Portal style={[masterStyle.container, { width: width, height: height }]}>
           <Dialog visible={visibleAddress} onDismiss={hideDialogAddress}>
-            <ScrollView>
+            <Dialog.Content>
               <RadioButton.Group
                 onValueChange={newValue => setAddress(newValue)} value={address}>
                 {
@@ -407,11 +419,9 @@ function Remark(props) {
                       key={item.value}
                       value={item.value}
                       label={item.label}
-                      uncheckedColor={colors.white}
                       labelStyle={{
-                        marginTop: 10,
-                        marginRight: 50,
                         fontSize: 12,
+                        marginRight: 50
                       }}
                       mode='ios'
                     />
@@ -424,7 +434,7 @@ function Remark(props) {
                 label="Dia chi khac"
                 onChangeText={setAddress}
               />
-            </ScrollView>
+            </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={hideDialogAddress}>Done</Button>
             </Dialog.Actions>
@@ -464,9 +474,50 @@ function Remark(props) {
           onDateChange={(date) => setRedate(date)}
         />
 
+
+
+        {/* <View style={[masterStyle.row, styles.container]}>
+          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
+            <Button
+              icon="camera"
+              mode="contained"
+              style={buttonStyles.button}
+              onPress={pickImage1}>
+              image1
+          </Button>
+            <View style={{ width: 100, height: 100 }}>
+              {image1 && <Image source={{ uri: image1.uri }} style={{ width: 100, height: 100 }} />}
+            </View>
+          </View>
+          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
+            <Button
+              icon="camera"
+              mode="contained"
+              style={buttonStyles.button}
+              onPress={pickImage2}>
+              chọn hình
+          </Button>
+            <View style={{ width: 100, height: 100 }}>
+              {image2 && <Image source={{ uri: image2.uri }} style={{ width: 100, height: 100 }} />}
+            </View>
+          </View>
+          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
+            <Button
+              icon="camera"
+              mode="contained"
+              style={buttonStyles.button}
+              onPress={pickImage3}>
+              chụp mới
+          </Button>
+            <View style={{ width: 100, height: 100 }}>
+              {image3 && <Image source={{ uri: image3.uri }} style={{ width: 100, height: 100 }} />}
+            </View>
+          </View>
+        </View> */}
+
         <View style={[buttonStyles.buttons]}>
           <Button
-            icon="camera"
+            icon="image"
             mode="contained"
             style={buttonStyles.button}
             onPress={pickImage2}>
@@ -567,7 +618,7 @@ const buttonStyles = StyleSheet.create({
   },
   button: {
     marginLeft: 2,
-    borderRadius: 10,
+    borderRadius: 5,
     fontSize: 10,
     fontWeight: 'bold',
     color: colors.primary,

@@ -7,17 +7,21 @@ import {
 } from "../actions/index"
 
 import { Button } from 'react-native-paper';
+
+
+
 import * as constAction from '../consts'
-
 import { colors } from '../styles';
-
 import { EMPTYAVATAR } from '../images'
+
+
 
 function UserSignout(props) {
 
   const [changePw, setChangePw] = useState(false)
   const [newPw, setNewPw] = useState('')
   const [confirmPw, setConfirmPw] = useState('')
+
 
   const handleChangePw = () => {
     if (newPw !== "") {
@@ -90,6 +94,7 @@ function UserSignout(props) {
             Xác nhận
             </Button>
 
+
         </View>
       )
     }
@@ -150,6 +155,8 @@ function UserSignout(props) {
           ĐĂNG XUẤT
         </Button>
       </View>
+
+
     </ScrollView>
 
   )
