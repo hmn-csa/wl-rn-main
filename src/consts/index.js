@@ -5,10 +5,9 @@ export const WORKLIST_API = "https://beta-fc.lgm.com.vn/rn-ver/api"
 
 export const REMARK_CODE = [
   { label: 'PTP - Hứa thanh toán', value: 'PTP' },
-  { label: 'F_OBT - Đã thu được tiền', value: 'OBT' },
+  { label: 'F_OBT - Đã thu được tiền', value: 'F_OBT' },
   { label: 'WFP - Đã thanh toán chờ kiểm tra', value: 'WFP' },
   { label: 'TER - Thanh lý', value: 'TER' },
-
 
   { label: 'WAS - Chờ thu nhập, trợ cấp', value: 'WAS' },
   { label: 'LST - Thất nghiệp, làm ăn thua lỗ', value: 'LST' },
@@ -56,8 +55,12 @@ export const LOCATION_SET = "LOCATION_SET"
 
 
 export const API_CHANGEPW_REQUEST = "API_CHANGEPW_REQUEST"
-export const API_CHANGEPW_SUCCESS = "API_CHANGEPW_SUCCESS"
 export const API_CHANGEPW_FAILURE = "API_CHANGEPW_FAILURE"
+
+export const API_CHANGE_AVATAR_REQUEST = "API_CHANGE_AVATAR_REQUEST"
+export const API_CHANGE_AVATAR_SUCCESS = "API_CHANGE_AVATAR_SUCCESS"
+export const API_CHANGE_AVATAR_FAILURE = "API_CHANGE_AVATAR_FAILURE"
+
 
 
 // ----------- DATA CASE DETAIL ---------------//

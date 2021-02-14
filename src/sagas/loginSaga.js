@@ -13,30 +13,7 @@ export function* watcherSaga() {
 }
 
 
-export function* workerChangePw(request) {
-  try {
-    let config = {
-      method: 'post',
-      url: `${constAction.WORKLIST_API}/change-pw`,
-      headers: {
-        'Authorization': `Bearer ${request.token}`
-      },
-      data: {
-        new_password: require.new_password
-      }
-    }
 
-    const response = yield call(axios, config);
-    const data = response.data;
-
-    yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
-    // get appls data
-
-  } catch (error) {
-    // dispatch a failure action to the store with the error
-    yield put({ type: constAction.API_TOKEN_FAILURE, error: 'Sai tài khoản hoặc mật khẩu' });
-  }
-}
 
 
 export function* workerGetToken(request) {
@@ -63,7 +40,19 @@ export function* workerGetToken(request) {
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
     // get appls data
     if (data.role === 'FC') {
-      yield call(workerGetDataFC, { token: data.access, staff_id: data.staff_id, fc_name: data.fc_name, avatar: data.avatar });
+      yield call(workerGetDataFC,
+        {
+          token: data.access,
+          staff_id: data.staff_id,
+          fc_name: data.fc_name,
+          avatar: data.avatar,
+          role: data.role,
+          phone: data.phone,
+          address: data.address,
+          start_date: data.start_date,
+          team_lead: data.team_lead,
+        }
+      );
     }
     else {
       yield call(workerGetStaffInfo, data.access);
@@ -100,7 +89,14 @@ export function* workerGetDataFC(token) {
         staff_id: token.staff_id,
         info: {
           fc_name: token.fc_name,
-          avatar: token.avatar
+          avatar: token.avatar,
+
+          role: token.role,
+          phone: token.phone,
+          address: token.address,
+          start_date: token.start_date,
+          team_lead: token.team_lead,
+
         }
       }
     })

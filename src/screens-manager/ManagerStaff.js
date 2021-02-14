@@ -87,7 +87,6 @@ function ManagerStaff(props) {
 
       <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>
         <View style={[styles.box, { flex: 0.35, borderRadius: 30, }]}>
-          {/* {renAvatar(item.info.avatar)} */}
           <ImageBackground
             style={[styles.pic, { resizeMode: "cover" }]}
             imageStyle={{ borderRadius: 50 }}
@@ -189,7 +188,6 @@ function ManagerStaff(props) {
 
   else return (
     <View style={[styles.container, { marginTop: 20 }]} >
-      {/*  */}
       <View style={[styles.row, { flex: 0.118, }]}>
         <View style={[styles.box]}>
           <TouchableOpacity

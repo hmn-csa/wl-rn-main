@@ -7,12 +7,12 @@ import { connect } from "react-redux"
 import { styles as masterStyle, BACKGROUND_LOGIN, MAIN_COLOR2 } from '../styles'
 import DatePicker from 'react-native-datepicker'
 import * as ImagePicker from 'expo-image-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 import {
   Button, TextInput, Paragraph,
   Dialog, Portal, RadioButton
 } from 'react-native-paper';
+
 import * as Location from 'expo-location';
 
 import { Camera } from 'expo-camera';
@@ -324,9 +324,8 @@ function Remark(props) {
   else
     return (
       <View style={[masterStyle.container, { alignItems: 'center' }]}>
-        <View>
-          <Text style={[masterStyle.header, { alignItems: 'center' }]}>{props.vsf.activeApplId.cust_name}</Text>
-        </View>
+
+        <Text style={[masterStyle.header, { alignItems: 'center' }]}>{props.vsf.activeApplId.cust_name}</Text>
 
         <View style={[masterStyle.indexValueSmall, { alignItems: 'center', color: colors.white }]} >
           <Text>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
@@ -474,46 +473,6 @@ function Remark(props) {
         />
 
 
-
-        {/* <View style={[masterStyle.row, styles.container]}>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage1}>
-              image1
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image1 && <Image source={{ uri: image1.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage2}>
-              chọn hình
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image2 && <Image source={{ uri: image2.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-          <View style={[masterStyle.box, { 'flex': 1, width: 100, height: 100 }]} >
-            <Button
-              icon="camera"
-              mode="contained"
-              style={buttonStyles.button}
-              onPress={pickImage3}>
-              chụp mới
-          </Button>
-            <View style={{ width: 100, height: 100 }}>
-              {image3 && <Image source={{ uri: image3.uri }} style={{ width: 100, height: 100 }} />}
-            </View>
-          </View>
-        </View> */}
-
         <View style={[buttonStyles.buttons]}>
           <Button
             icon="image"
@@ -607,6 +566,14 @@ const styles = StyleSheet.create({
     width: '90%',
     marginVertical: 6
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  box: {
+    justifyContent: 'center',
+  },
+
 });
 
 const buttonStyles = StyleSheet.create({
