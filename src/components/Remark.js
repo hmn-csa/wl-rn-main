@@ -695,7 +695,7 @@ function Remark(props) {
                   },]}
                   imageIndex={0}
                   isVisible={visibleImage}
-                  onClose={() => setIsVisibleImage(false)}
+                  onClose={() => setVisibleImage(false)}
                   animationType="slide"
                   isSwipeCloseEnabled={false}
                 />
