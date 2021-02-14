@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import {
   StyleSheet, Text, View, FlatList,
   TouchableOpacity, Alert, Image, ActivityIndicator,
-  ImageBackground, Animated,
+  ImageBackground, Animated, Dimensions
 } from 'react-native';
 import { connect } from "react-redux";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,7 +12,11 @@ import { colors, styles as masterStyles } from '../styles'
 import * as constAction from '../consts'
 import { moneyFormat } from '../functions'
 import { EMPTYAVATAR } from '../images'
+import { ScrollView } from 'react-native-gesture-handler';
+const { width, height } = Dimensions.get("window");
 
+
+const AVATAR_WIDTH = width / 9
 
 
 function ManagerStaff(props) {
@@ -38,19 +42,19 @@ function ManagerStaff(props) {
   // =========== render ============== //
   const renIcon = (checkinData) => {
     if (!checkinData || checkinData.length == 0)
-      return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary }]} />
+      return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary, fontSize: 16 }]} />
     else
-      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.green }]} />
+      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.green, fontSize: 16 }]} />
   }
 
   const renCheckin = (checkinData) => {
     if (!checkinData)
       return <ActivityIndicator size={10} color='black' />
     else if (checkinData.length === 0)
-      return <Text>Chưa có</Text>
+      return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Checkin</Text>
     else {
       const lastCheckin = checkinData[checkinData.length - 1].endtime
-      return <Text>{lastCheckin.substring(11, 16)} | <TimeAgo time={lastCheckin} /></Text> //<Text><Moment fromNow date={checkinData[0].runtime}></Moment></Text>
+      return <Text style={{ color: colors.textcolor, fontSize: 11 }}>Checkin: {lastCheckin.substring(11, 16)} | <TimeAgo time={lastCheckin} /></Text> //<Text><Moment fromNow date={checkinData[0].runtime}></Moment></Text>
     }
   }
 
@@ -58,10 +62,10 @@ function ManagerStaff(props) {
     if (!uptrailData)
       return <ActivityIndicator size={10} color='black' />
     else if (uptrailData.length === 0)
-      return <Text>Chưa có</Text>
+      return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Uptrail</Text>
     else {
       const lastUptrail = uptrailData[uptrailData.length - 1].runtime
-      return <Text>{uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
+      return <Text style={{ color: colors.textcolor, fontSize: 11 }}>Uptrail: {uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
     }
   }
 
@@ -78,6 +82,7 @@ function ManagerStaff(props) {
   const renderItem = ({ item, index }) => {
     return <TouchableOpacity
       key={item.staff_id}
+      style={[styles.block, { flex: 1, }]}
       onPress={() => props.toStaffMode({
         staff_id: item.staff_id,
         token: props.token,
@@ -85,92 +90,87 @@ function ManagerStaff(props) {
         avatar: item.info.avatar,
       })} >
 
-      <View style={[styles.row, { padding: 10, borderBottomWidth: 1, borderRadius: 10, }]}>
-        <View style={[styles.box, { flex: 0.35, borderRadius: 30, }]}>
+      <View style={[styles.row, { borderBottomWidth: 0.2, borderRadius: 10 }]}>
+        <View style={[styles.box, { minWidth: AVATAR_WIDTH, margin: 5, flex: 0.05, }]}>
           <ImageBackground
-            style={[styles.pic, { resizeMode: "cover" }]}
-            imageStyle={{ borderRadius: 50 }}
+            style={[styles.pic]}
+            imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
             source={renAvatar(item.info.avatar)}>
             {renIcon(item.checkin)}
           </ImageBackground>
         </View>
-        <View style={styles.box}>
-          <View>
-            <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}
-                numberOfLines={1}
-                ellipsizeMode="tail">
-                {item.info.fc_name} - {item.info.staff_id}
-              </Text>
-            </View>
+        <View style={[styles.box, { flex: 1, },]}>
+          <Text style={[styles.nameTxt,]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.info.staff_id}
+          </Text>
+          <Text style={[styles.nameTxt, { fontSize: 10.5 }]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.info.fc_name}
+          </Text>
+        </View>
 
-            <View style={[styles.msgContainer, { marginTop: 5 }]}>
-              <View style={[styles.row, { flex: 1 }]}>
-                <View style={[styles.box, { flex: 0.3 }]}>
-                  <Text style={[styles.msgTxt,]}>
-                    checkin:
-                </Text>
-                </View>
-                <View style={[styles.box, { flex: 0.8 }]}>
-                  <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.msgContainer, { marginTop: 5 }]}>
-              <View style={[styles.row, { flex: 1 }]}>
-                <View style={[styles.box, { flex: 0.3 }]}>
-                  <Text style={[styles.msgTxt,]}>
-                    Uptrail:
-                </Text>
-                </View>
-                <View style={[styles.box, { flex: 0.8 }]}>
-                  <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.msgContainer, { marginTop: 5 }]}>
-              <View style={[styles.row, { flex: 1 }]}>
-                <View style={[styles.box, { flex: 0.3 }]}>
-                  <Text style={[styles.msgTxt,]}>{item.case} case</Text>
-                </View>
-                <View style={[styles.box, { flex: 0.4 }]}>
-                  <Text style={[styles.msgTxt,]}>{item.paidcase} paid</Text>
-                </View>
-                <View style={[styles.box, { flex: 0.4 }]}>
-                  <Text style={[styles.msgTxt,]}>{item.paidtodaycase}</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.msgContainer, { marginTop: 5 }]}>
-              <View style={[styles.row, { flex: 1 }]}>
-                <View style={[styles.box, { flex: 0.3 }]}>
-                  <Text style={[styles.msgTxt,]}>{item.visited} đã đi</Text>
-                </View>
-                <View style={[styles.box, { flex: 0.4 }]}>
-                  <Text style={[styles.msgTxt,]}>{moneyFormat(item.paidamt)}</Text>
-                </View>
-
-                <View style={[styles.box, { flex: 0.4 }]}>
-                  <Text style={[styles.msgTxt,]}>{moneyFormat(item.todayamt)}</Text>
-                </View>
-
-              </View>
-            </View>
-
-            <View style={[styles.msgContainer, { marginTop: 1 }]}>
-              <View style={[styles.row, { flex: 1 }]}>
-                <View style={[styles.box, { flex: 0.8 }]}>
-                  <Text style={[styles.msgTxt,]}></Text>
-                </View>
-                <View style={styles.box}>
-                </View>
-              </View>
-            </View>
-
+        <View style={[styles.box, { flex: 2 }]}>
+          <View style={[styles.row]}>
+            <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
           </View>
+          <View style={[styles.row]}>
+            <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
+          </View>
+
+        </View>
+      </View>
+
+      {/* ============================ */}
+
+      <View style={[styles.row, { padding: 2, borderRadius: 10, }]}>
+        <View style={styles.box}>
+
+          <View style={[styles.msgContainer, { marginTop: 5 }]}>
+            <View style={[styles.row, { flex: 1 }]}>
+              <View style={[styles.box, { flex: 0.3 }]}>
+                <Text style={[styles.msgTxt,]}>{item.case} case</Text>
+              </View>
+              <View style={[styles.box, { flex: 0.4 }]}>
+                <Text style={[styles.msgTxt,]}>{item.paidcase} paid</Text>
+              </View>
+              <View style={[styles.box, { flex: 0.4 }]}>
+                <Text style={[styles.msgTxt,]}>{item.paidtodaycase}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={[styles.msgContainer, { marginTop: 5 }]}>
+            <View style={[styles.row, { flex: 1 }]}>
+              <View style={[styles.box, { flex: 0.3 }]}>
+                <Text style={[styles.msgTxt,]}>{item.visited} đã đi</Text>
+              </View>
+              <View style={[styles.box, { flex: 0.4 }]}>
+                <Text style={[styles.msgTxt,]}>{moneyFormat(item.paidamt)}</Text>
+              </View>
+
+              <View style={[styles.box, { flex: 0.4 }]}>
+                <Text style={[styles.msgTxt,]}>{moneyFormat(item.todayamt)}</Text>
+              </View>
+
+            </View>
+          </View>
+
+          <View style={[styles.msgContainer, { marginTop: 1 }]}>
+            <View style={[styles.row, { flex: 1 }]}>
+              <View style={[styles.box, { flex: 0.8 }]}>
+                <Text style={[styles.msgTxt,]}></Text>
+              </View>
+              <View style={styles.box}>
+              </View>
+            </View>
+          </View>
+
+        </View>
+
+        <View style={[styles.box, { flex: 0.3 }]}>
         </View>
       </View>
 
@@ -178,6 +178,7 @@ function ManagerStaff(props) {
   }
 
   // ========= render =========== //
+
   if (props.staff.staffs.length == 0)
     return (
       <View style={[masterStyles.container, { alignItems: 'center' }]}>
@@ -187,74 +188,119 @@ function ManagerStaff(props) {
     )
 
   else return (
-    <View style={[styles.container, { marginTop: 20 }]} >
-      <View style={[styles.row, { flex: 0.118, }]}>
-        <View style={[styles.box]}>
-          <TouchableOpacity
-            style={{ alignItems: 'center' }}
-            onPress={() => handleShow(props.totalCal.totalCase.applIds, false)}>
-            <Text style={styles.indexLabel}>Tổng số HĐ</Text>
-            <Text
-              style={styles.indexValue}
-            >{props.staff.dash.totalCase.case}
-            </Text>
-          </TouchableOpacity>
+    <View style={[styles.container,]}>
+
+      <View style={[styles.block, { marginTop: 50, }]}>
+
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+
+            <View style={styles.row}>
+              <View style={[styles.box]}>
+                <Text style={styles.label}>Thông tin danh mục:</Text>
+              </View>
+            </View>
+
+            <View style={[styles.row]}>
+              <View style={[styles.box, { flex: 0.618, }]}>
+                <View style={styles.row}>
+                  <View style={[styles.box, { flex: 0.618, }]}>
+                    <Text style={styles.indexLabel}>Tổng HĐ: </Text>
+                  </View>
+                  <View style={[styles.box]}>
+                    <Text style={styles.index}>{props.staff.dash.totalCase.case}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={[styles.box]}>
+                <View style={styles.row}>
+                  <View style={[styles.box, { flex: 0.618, }]}>
+                    <Text style={styles.indexLabel}>Tổng Pos: </Text>
+                  </View>
+                  <View style={[styles.box]}>
+                    <Text style={styles.index}>{moneyFormat(props.staff.dash.totalCase.pos)}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.row]}>
+              <View style={[styles.box, { flex: 0.618, }]}>
+                <View style={styles.row}>
+                  <View style={[styles.box, { flex: 0.618, }]}>
+                    <Text style={styles.indexLabel}>Visited: </Text>
+                  </View>
+                  <View style={[styles.box]}>
+                    <Text style={styles.index}>{props.staff.dash.visited.case}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={[styles.box]}>
+                <View style={styles.row}>
+                  <View style={[styles.box, { flex: 0.618, }]}>
+                    <Text style={styles.indexLabel}>% Visited:</Text>
+                  </View>
+                  <View style={[styles.box]}>
+                    <Text style={styles.index}>{(props.staff.dash.visited.case * 100 / props.staff.dash.totalCase.case).toFixed(2)}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+          </View>
         </View>
 
-        <View style={[styles.box]}>
-          <TouchableOpacity
-            style={{ alignItems: 'center' }}
-            onPress={() => handleShow(props.treeCal[1].applIds, true)}>
-            <Text style={styles.indexLabel}>Pos</Text>
-            <Text
-              style={styles.indexValue}
-            >{moneyFormat(props.staff.dash.totalCase.pos)}
-            </Text>
-          </TouchableOpacity>
+
+        <View style={[styles.row]}>
+          <View style={[styles.box]}>
+            <View style={styles.row}>
+              <View style={[styles.box]}>
+                <Text style={styles.label}>Thông tin thanh toán:</Text>
+              </View>
+            </View>
+
+            <View style={styles.row}>
+              <View style={[styles.box, { flex: 0.618, }]}>
+                <Text style={styles.indexLabel}>Tổng Thu: </Text>
+              </View>
+              <View style={[styles.box]}>
+                <Text style={styles.index}>{props.staff.dash.paidMtd.case} hđ - <Text style={styles.indexSmall}>{moneyFormat(props.staff.dash.paidMtd.value)} vnđ</Text>
+                </Text>
+              </View>
+
+            </View>
+
+            <View style={styles.row}>
+              <View style={[styles.box, { flex: 0.618, }]}>
+                <Text style={styles.indexLabel}>Thu trong ngày: </Text>
+              </View>
+              <View style={[styles.box]}>
+                <Text style={styles.index}>{props.staff.dash.paidToday.case} hđ - <Text style={styles.indexSmall}>{moneyFormat(props.staff.dash.paidToday.value)} vnđ</Text>
+                </Text>
+              </View>
+
+            </View>
+          </View>
+
         </View>
 
-        <View style={[styles.box]}>
-          <TouchableOpacity
-            style={{ alignItems: 'center' }}
-            onPress={() => handleShow(props.totalCal.ptpCase.applIds, true)}>
-            <Text style={styles.indexLabel}>Visited</Text>
-            <Text
-              style={styles.indexValue}
-            >{props.staff.dash.visited.case}
-            </Text>
 
-          </TouchableOpacity>
-        </View>
+
       </View>
 
-      <View style={[styles.row, { flex: 0.118 }]}>
-        <View style={[styles.box, { alignItems: 'center' }]}>
-          <Text style={styles.indexLabel}>Tổng Thu</Text>
-          <Text
-            style={[styles.indexValueSmall, { color: colors.green }]}
-          >{props.staff.dash.paidMtd.case} hđ | {moneyFormat(props.staff.dash.paidMtd.value)} vnđ
-          </Text>
+      <ScrollView style={[styles.container,]}>
+        <FlatList
+          data={props.staff.staffs}
+          horizontal={false}
+          numColumns={1}
+          renderItem={renderItem}
+        />
 
-        </View>
-        <View style={[styles.box, { alignItems: 'center' }]}>
-          <Text style={styles.indexLabel}>Thu trong ngày</Text>
-          <Text
-            style={[styles.indexValueSmall, { color: colors.green }]}
-          >{props.staff.dash.paidToday.case} hđ | {moneyFormat(props.staff.dash.paidToday.value)} vnđ
-          </Text>
-        </View>
-      </View>
 
-      {/* <View style={[styles.row, { flex: 1 }]}> */}
-      <FlatList
-        style={{ flex: 1 }}
-        data={props.staff.staffs}
-        horizontal={false}
-        numColumns={1}
-        renderItem={renderItem}
-      />
-      {/* </View>  */}
-    </View>
+      </ScrollView>
+    </View >
   )
 }
 
@@ -290,25 +336,47 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+  },
+  block: {
+    borderBottomWidth: 0.2,
+    borderBottomColor: colors.grey,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 3,
+    margin: 2,
   },
   row: {
+    width: '95%',
+    marginVertical: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    borderColor: '#DCDCDC',
-    backgroundColor: '#fff',
-
   },
   box: {
-    flex: 1,
     justifyContent: 'center',
-    alignItems: 'stretch',
+    flex: 1
   },
   pic: {
     borderRadius: 30,
-    width: 80,
-    height: 80,
+    width: AVATAR_WIDTH,
+    height: width / 10,
+  },
+  index: {
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  indexSmall: {
+    fontWeight: '600',
+    fontSize: 14,
+    color: colors.textcolor,
+  },
+  indexLabel: {
+    fontSize: 10
+  },
+  label: {
+    fontSize: 10,
+    opacity: 0.5
   },
 
   card: {
@@ -325,19 +393,17 @@ const styles = StyleSheet.create({
     flexBasis: '46%',
     marginHorizontal: 5,
     borderRadius: 10,
+    height: 150,
+    padding: 2
   },
 
   nameContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 280,
   },
   nameTxt: {
-    marginLeft: 10,
     fontWeight: '600',
-    color: '#222',
     fontSize: 13,
-    width: 190,
   },
   mblTxt: {
     fontWeight: '200',
@@ -351,9 +417,7 @@ const styles = StyleSheet.create({
   },
   msgTxt: {
     fontWeight: '400',
-    color: colors.textcolor,
     fontSize: 11,
-    marginLeft: 10,
   },
 });
 
