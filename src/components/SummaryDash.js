@@ -91,15 +91,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     borderLeftWidth: 0,
-    borderLeftColor: '#CCC'
+    borderLeftColor: 'rgba(0,0,0,0.1)'
   },
   header_dash: {
     color: colors.info,
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 20,
     paddingLeft: 30,
-    marginTop: 10,
-    marginBottom: 5
+    marginTop: 5,
   },
   main_frame: {
     flex: 1,
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
     alignContent: 'stretch',
     alignItems: 'center',
     borderTopWidth: 0,
-    borderTopColor: '#CCC'
+    borderTopColor: 'rgba(0,0,0,0.1)'
   },
   sub_frame_l: {
     flex: 1,
@@ -120,23 +119,23 @@ const styles = StyleSheet.create({
   sub_frame_r: {
     flex: 1,
     borderLeftWidth: 0,
-    borderLeftColor: '#CCC'
+    borderLeftColor: 'rgba(0,0,0,1)'
   },
   main_value: {
     fontSize: 35,
     textAlign: 'center',
     color: colors.black,
-    marginTop: 5
+    marginTop: 0
   },
   sub_value: {
     fontSize: 25,
     textAlign: 'center',
     color: colors.black,
-    marginTop: 10
+    marginTop: 5
   },
   title_value: {
     textAlign: 'center',
-    paddingBottom: 5,
+    paddingBottom: 0,
     fontSize: 12,
     color: colors.grey
   },

@@ -105,10 +105,9 @@ const styles = StyleSheet.create({
   header_dash: {
     color: colors.info,
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 20,
     paddingLeft: 30,
-    marginTop: 10,
-    marginBottom: 5
+    marginTop: 5,
   },
   main_frame: {
     flex: 1,
@@ -135,17 +134,17 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'center',
     color: colors.black,
-    marginTop: 5
+    marginTop: 0
   },
   sub_value: {
     fontSize: 25,
     textAlign: 'center',
     color: colors.black,
-    marginTop: 10
+    marginTop: 5
   },
   title_value: {
     textAlign: 'center',
-    paddingBottom: 5,
+    paddingBottom: 0,
     fontSize: 12,
     color: colors.grey
   },
