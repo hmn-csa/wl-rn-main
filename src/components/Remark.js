@@ -47,10 +47,6 @@ function Remark(props) {
   // Location 
   const [location, setLocation] = useState(null);
 
-  const [image1, setImage1] = useState(null);
-  const [image2, setImage2] = useState(null);
-  const [image3, setImage3] = useState(null);
-
   const [images, setImages] = useState([]);
   const [activateImage, setActivateImage] = useState({ uri: null });
 
@@ -759,7 +755,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 2,
     color: colors.primary,
-    opacity: 0.6,
     paddingLeft: 3,
   },
   subLabel: {

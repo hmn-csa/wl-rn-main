@@ -44,8 +44,13 @@ function ContractDetailMap(props) {
   }
 
   const handleGetVsf = () => {
-    if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
-      props.setActiveVsf(content)
+
+    const cur_active = props.vsfs.filter(
+      item => item.appl_id === content.appl_id
+    )[0]
+
+    if (cur_active) {
+      props.setActiveVsf(cur_active)
       props.navigation.navigate('Vsf')
     }
     else {
@@ -58,25 +63,12 @@ function ContractDetailMap(props) {
     }
   }
 
-  const handleGetVsf2 = () => {
-    if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
-      props.setActiveVsf(content)
-      props.navigation.navigate('Vsf')
-    }
-    else {
-      const config = {
-        'appl_id': content.appl_id,
-        'token_value': props.token.token.access
-      }
-      props.apiGetVsf(config)
-      props.navigation.navigate('Vsf')
-    }
-  }
+
 
   const handleGetSkip = () => {
-    if (props.vsf.skips.map(appl => appl.id_no).includes(content.id_no)) {
+    if (props.skips.map(appl => appl.id_no).includes(content.id_no)) {
       props.setActiveSkip(
-        props.vsf.skips.filter(appl => appl.id_no === content.id_no)[0]
+        props.skips.filter(appl => appl.id_no === content.id_no)[0]
       )
       props.navigation.navigate('Skip')
     }
@@ -341,7 +333,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     data: state.data.data,
     token: state.token,
-    vsf: state.vsf
+    vsfs: state.vsf.vsfs,
+    skips: state.vsf.skips
+
   }
 }
 

@@ -10,6 +10,7 @@ const initialState = {
   activeIdno: {
     idno: null
   },
+
   activeApplId: {
     appl_id: '',
     reg_address: '',
@@ -27,7 +28,12 @@ export function vsfReducers(state = initialState, action) {
 
     case constAction.API_VSF_SUCCESS:
       state.vsfs.push(action.content[0])
-      return { ...state, fetching: false, activeApplId: action.content[0] };
+      return {
+        ...state,
+        //vsfs: [...state.vsfs, ...action.content[0]],
+        fetching: false,
+        activeApplId: action.content[0]
+      };
 
     case constAction.API_VSF_FAILURE:
       return { ...state, fetching: false, error: true };
@@ -38,29 +44,35 @@ export function vsfReducers(state = initialState, action) {
 
     case constAction.API_SKIP_SUCCESS:
       state.skips.push(action.content)
-      return { ...state, fetching: false};
+      return { ...state, fetching: false };
 
     case constAction.API_SKIP_FAILURE:
-      return { ...state, 
-        fetching: false,  
-        error: true, 
-        activeIdno: {id_no: null}
+      return {
+        ...state,
+        fetching: false,
+        error: true,
+        activeIdno: { id_no: null }
       };
 
     case constAction.APPLID_VSF_ACTIVE:
-      const cur_active = state.vsfs.filter(
-        item => item.appl_id === action.content.appl_id
-      )[0]
-      if (cur_active)
-        return { ...state, activeApplId: cur_active,fetching: false,  };
-      else
-        return { ...state, activeApplId: action.content, fetching: false,   };
-    
+      return { ...state, activeApplId: action.content, fetching: false, };
+
+    // case constAction.APPLID_VSF_ACTIVE:
+    //   const cur_active = state.vsfs.filter(
+    //     item => item.appl_id === action.content.appl_id
+    //   )[0]
+
+    //   if (cur_active)
+    //     return { ...state, activeApplId: cur_active, fetching: false,  };
+    //   else
+    //     return { ...state, activeApplId: action.content, fetching: false,   };
+
     case constAction.IDNO_SKIP_ACTIVE:
-     
-      return { ...state, 
+
+      return {
+        ...state,
         activeIdno: action.content,
-        fetching: false,  
+        fetching: false,
       };
 
     default:
