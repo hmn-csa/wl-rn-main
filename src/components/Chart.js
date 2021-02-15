@@ -19,27 +19,46 @@ const data = {
   ]
 };
 
-const chartConfig = {
-  backgroundColor: "white",
-  backgroundGradientFrom: "white",
-  backgroundGradientTo: "white",
-  color: (opacity = 1) => 'green',
-  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+function RenBarChart() {
+  return (
+    <BarChart
+      data={{
+        labels: [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+        ],
+        datasets: [
+          {
+            data: [20, 45, 28, 80, 99, 43],
+          },
+        ],
+      }}
+      width={Dimensions.get('window').width - 16}
+      height={220}
+      yAxisLabel={'Rs'}
+      chartConfig={{
+        backgroundColor: 'white',
+        backgroundGradientFrom: 'white',
+        backgroundGradientTo: 'white',
+        decimalPlaces: 2,
+        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        style: {
+          borderRadius: 16,
+        },
+      }}
+      style={{
+        marginVertical: 8,
+        borderRadius: 16,
+      }}
+    />
+  )
 }
 
-export default class App extends Component {
-  render() {
-    return (
-      <BarChart
-        // style={graphStyle}
-        data={data}
-        width={screenWidth}
-        height={220}
-        yAxisLabel="$"
-        chartConfig={chartConfig}
-        verticalLabelRotation={30}
-      />
-    )
-  }
-}
+export {
+  RenBarChart,
+};
 

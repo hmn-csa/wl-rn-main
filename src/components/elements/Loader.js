@@ -7,9 +7,8 @@ import { colors } from '../../styles'
 function Loader(props) {
   return (
     <View style={[styles.container, { alignItems: 'center' }]}>
-      {/* <ActivityIndicator size={80} color={colors.info}/>  */}
       <View style={{ flexDirection: 'row', marginTop: 5 }}>
-        <Text style={{ fontSize: 12 }}>Đang tải dữ liệu </Text>
+        <Text style={{ fontSize: 12 }}>Đang tải</Text>
         <Image source={require('../../images/Loading-page.gif')} style={{ height: 15, width: 50 }}></Image>
       </View>
     </View>
@@ -20,6 +19,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   }
 });
 

@@ -16,11 +16,11 @@ import {
 import * as Location from 'expo-location';
 
 import { Camera } from 'expo-camera';
-import { Entypo } from '@expo/vector-icons';
-import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import ImageView from 'react-native-image-view';
 
 import { EMPTYIMAGE } from '../images';
+
+import Loader from '../components/elements/Loader'
 
 import {
   actUpdateShowlist, calTodoDash, calTotalDash,
@@ -28,7 +28,6 @@ import {
   actUserUptrails
 } from "../actions"
 import * as consts from '../consts'
-import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get("window");
 
@@ -129,8 +128,9 @@ function Remark(props) {
       return <View></View>
     return <View style={{ width: '95%', }}>
       <Text style={[styles.subLabel]}>{consts.REMARK_CODE.filter(item => item.value == code)[0].label}</Text>
-    </View >
+    </View>
   }
+
 
   const renPromisePTP = (payAmount) => {
 
@@ -154,6 +154,11 @@ function Remark(props) {
     return <View style={{ width: '95%', }}>
       <Text style={styles.subLabel}>Địa chỉ mới : {address}</Text>
     </View>
+  }
+
+  const renLoader = () => {
+    if (props.uptrails.userFetching || uptrailStatus)
+      return <Loader />
   }
 
   const getAddressType = (address) => {
@@ -238,6 +243,7 @@ function Remark(props) {
       imageSet[`image${j + 1}`] = "data:image/png;base64," + images[j].base64
       //imageSet = {...imageSet , ...newImage}
     }
+
     let config = {
       ...imageSet,
       'token_value': props.token.token.access,
@@ -259,7 +265,6 @@ function Remark(props) {
     try {
       //console.log(config)
       await props.userUptrails(config);
-
       await props.actChangeFollow({
         'appl_id': props.vsf.activeApplId.appl_id,
         'code': code
@@ -269,14 +274,13 @@ function Remark(props) {
       const curList = props.showlists;
       await props.updateShowlist([])
       await props.updateShowlist(curList)
-      Alert.alert(`Cập nhâp Uptrail thành công !`)
+
       setUptrailStatus(false)
-      await props.navigation.navigate('Portfolio', { screen: 'List' });
+      props.navigation.navigate('Portfolio', { screen: 'List' });
 
     } catch (error) {
       setUptrailStatus(false)
       console.error(error);
-      Alert.alert(`Có lỗi sảy ra, vui lòng thực hiện lại !!!`)
     }
   }
 
@@ -348,170 +352,205 @@ function Remark(props) {
   }
 
 
-  if (props.uptrails.userFetching || uptrailStatus)
-    return <View style={[styles.row, { alignItems: 'center' }]}>
-      <Text>Up Loading ... </Text>
-      <ActivityIndicator size={100} />
-    </View>
-  else
-    return (
-      <ScrollView style={[{ flex: 1 }]}>
 
-        <View style={styles.blockInput}>
-
-          <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
-          <Text style={[styles.smallHeader]}>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
+  return (
+    <ScrollView style={[{ flex: 1 }]}>
+      {renLoader()}
+      <View style={styles.blockInput}>
+        <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
+        <Text style={[styles.smallHeader]}>Hợp đồng: {props.vsf.activeApplId.appl_id}</Text>
 
 
-        </View>
-        {/* Ket qua vieng tham */}
-        <View style={styles.blockInput}>
-          <View style={styles.row}>
-            <View style={[styles.box, styles.label]}>
-              <Text>* Người liên hệ: </Text>
-            </View>
-            <View style={[styles.box, { flex: 0.618 }]}>
-
-              <Button
-                mode="contained"
-                onPress={() => setVisiblePerson(true)}
-                style={[styles.button]}
-                labelStyle={styles.buttonLabel}
-              >
-                {renContentNull(personContact)}
-              </Button>
-            </View>
+      </View>
+      {/* Ket qua vieng tham */}
+      <View style={styles.blockInput}>
+        <View style={styles.row}>
+          <View style={[styles.box, styles.label]}>
+            <Text>* Người liên hệ: </Text>
           </View>
-          {renPersonContact(personContact)}
+          <View style={[styles.box, { flex: 0.618 }]}>
 
-        </View>
-
-        <View style={styles.blockInput}>
-          <View style={styles.row}>
-            <View style={[styles.box, styles.label]}>
-              <Text>* Kết quả viếng thăm: </Text>
-            </View>
-            <View style={[styles.box, { flex: 0.618 }]}>
-              <Button
-                mode="contained"
-                onPress={() => setVisible(true)}
-                style={[styles.button]}
-                labelStyle={styles.buttonLabel}
-              >
-                {renContentNull(code)}
-              </Button>
-            </View>
+            <Button
+              mode="contained"
+              onPress={() => setVisiblePerson(true)}
+              style={[styles.button]}
+              labelStyle={styles.buttonLabel}
+            >
+              {renContentNull(personContact)}
+            </Button>
           </View>
-          {renRemarkCode(code)}
-          {renPromisePTP(payAmount)}
         </View>
+        {renPersonContact(personContact)}
 
-        <View style={styles.blockInput}>
-          <View style={styles.row}>
-            <View style={[styles.box, styles.label]}>
-              <Text>* Địa chỉ viếng thăm: </Text>
-            </View>
-            <View style={[styles.box, { flex: 0.618 }]}>
-              <Button
-                mode="contained"
-                onPress={() => setVisibleAddress(true)}
-                style={[styles.button]}
-                labelStyle={styles.buttonLabel}
-              >
-                {renContentNull(getAddressType(address))}
-              </Button>
-            </View>
+      </View>
+
+      <View style={styles.blockInput}>
+        <View style={styles.row}>
+          <View style={[styles.box, styles.label]}>
+            <Text>* Kết quả viếng thăm: </Text>
           </View>
-
-          {renAddress(address)}
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Button
+              mode="contained"
+              onPress={() => setVisible(true)}
+              style={[styles.button]}
+              labelStyle={styles.buttonLabel}
+            >
+              {renContentNull(code)}
+            </Button>
+          </View>
         </View>
+        {renRemarkCode(code)}
+        {renPromisePTP(payAmount)}
+      </View>
 
-        <View style={styles.blockInput}>
-          <View style={styles.row}>
-            <View style={[styles.box, styles.label,]}>
-              <Text>Ngày viếng thăm lại: </Text>
-            </View>
-            <View style={[styles.box, styles.button, { flex: 0.618 }]}>
-              <DatePicker
-                date={reDate}
-                mode="date"
-                placeholder="Ngày"
-                format="YYYY-MM-DD"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                style={styles.buttonLabel}
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 4,
-                    top: 4,
-                    marginLeft: 0,
-                  },
-                  dateInput: {
-                    marginLeft: 30,
-                    borderWidth: 0,
-                  },
-                  dateText: {
-                    fontWeight: "800",
-                    color: colors.primary,
-                    fontSize: 12,
-                  }
-                }}
-                onDateChange={(date) => setRedate(date)}
-              />
-            </View>
+      <View style={styles.blockInput}>
+        <View style={styles.row}>
+          <View style={[styles.box, styles.label]}>
+            <Text>* Địa chỉ viếng thăm: </Text>
+          </View>
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Button
+              mode="contained"
+              onPress={() => setVisibleAddress(true)}
+              style={[styles.button]}
+              labelStyle={styles.buttonLabel}
+            >
+              {renContentNull(getAddressType(address))}
+            </Button>
           </View>
         </View>
 
-        <View style={styles.blockInput}>
-          <View style={styles.row}>
-            <View style={[styles.box, styles.label]}>
-              <Text>Ghi chú: </Text>
-            </View>
+        {renAddress(address)}
+      </View>
+
+      <View style={styles.blockInput}>
+        <View style={styles.row}>
+          <View style={[styles.box, styles.label,]}>
+            <Text>Ngày viếng thăm lại: </Text>
           </View>
-          <View style={styles.row}>
-            <TextInput
-              style={[styles.box, { color: colors.primary, paddingLeft: 3 }]}
-              placeholder="Nhập ghi chú"
-              value={remark}
-              onChangeText={setRemark}
+          <View style={[styles.box, styles.button, { flex: 0.618 }]}>
+            <DatePicker
+              date={reDate}
+              mode="date"
+              placeholder="Ngày"
+              format="YYYY-MM-DD"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              style={styles.buttonLabel}
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 4,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 30,
+                  borderWidth: 0,
+                },
+                dateText: {
+                  fontWeight: "800",
+                  color: colors.primary,
+                  fontSize: 12,
+                }
+              }}
+              onDateChange={(date) => setRedate(date)}
             />
           </View>
         </View>
+      </View>
 
-        { renImages()}
+      <View style={styles.blockInput}>
+        <View style={styles.row}>
+          <View style={[styles.box, styles.label]}>
+            <Text>Ghi chú: </Text>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <TextInput
+            style={[styles.box, { color: colors.primary, paddingLeft: 3 }]}
+            placeholder="Nhập ghi chú"
+            value={remark}
+            onChangeText={setRemark}
+          />
+        </View>
+      </View>
+
+      { renImages()}
 
 
-        <Button
-          mode="contained"
-          style={[styles.button, {
-            width: "97%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }]}
-          labelStyle={styles.buttonLabel}
-          onPress={handleCommit}>
+      <Button
+        mode="contained"
+        style={[styles.button, {
+          width: "97%",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }]}
+        labelStyle={styles.buttonLabel}
+        onPress={handleCommit}>
 
-          Xác nhận
+        Xác nhận
         </Button>
 
 
 
-        <Portal style={[styles.row]}>
-          <Dialog visible={visiblePerson} onDismiss={() => setVisiblePerson(false)}>
-            {/* <Button onPress={hideDialog}>Done</Button> */}
+      <Portal style={[styles.row]}>
+        <Dialog visible={visiblePerson} onDismiss={() => setVisiblePerson(false)}>
+          {/* <Button onPress={hideDialog}>Done</Button> */}
+          <RadioButton.Group
+            onValueChange={
+              newValue => {
+                setPersonContact(newValue);
+              }
+            }
+            value={personContact}>
+            {
+              consts.PERSON_CONTACT.map(item =>
+                <RadioButton.Item
+                  key={item.value}
+                  style={{ height: 45 }}
+                  value={item.value}
+                  label={item.label}
+                  style={{ height: 40 }}
+                  labelStyle={{
+                    fontSize: 12,
+                  }}
+                  mode='android'
+                />
+              )
+            }
+          </RadioButton.Group>
+
+          <Dialog.Actions>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setVisiblePerson(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+      <Portal style={[styles.row]}>
+        <Dialog
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          style={{ width: null, height: height - 80 }}>
+          {/* <Button onPress={hideDialog}>Done</Button> */}
+          <ScrollView style={{ marginTop: 2 }}>
             <RadioButton.Group
               onValueChange={
                 newValue => {
-                  setPersonContact(newValue);
+                  setCode(newValue);
+                  if (['PTP'].includes(newValue)) setVisiblePayamount(true);
                 }
               }
-              value={personContact}>
+              value={code}>
               {
-                consts.PERSON_CONTACT.map(item =>
+                consts.REMARK_CODE.map(item =>
                   <RadioButton.Item
                     key={item.value}
-                    style={{ height: 45 }}
                     value={item.value}
                     label={item.label}
                     style={{ height: 40 }}
@@ -524,147 +563,106 @@ function Remark(props) {
               }
             </RadioButton.Group>
 
-            <Dialog.Actions>
-              <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setVisiblePerson(false)}>
-                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-              </TouchableOpacity>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+          </ScrollView>
+          <Dialog.Actions>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setVisible(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
-        <Portal style={[styles.row]}>
-          <Dialog
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            style={{ width: null, height: height - 80 }}>
-            {/* <Button onPress={hideDialog}>Done</Button> */}
-            <ScrollView style={{ marginTop: 2 }}>
-              <RadioButton.Group
-                onValueChange={
-                  newValue => {
-                    setCode(newValue);
-                    if (['PTP'].includes(newValue)) setVisiblePayamount(true);
-                  }
-                }
-                value={code}>
-                {
-                  consts.REMARK_CODE.map(item =>
-                    <RadioButton.Item
-                      key={item.value}
-                      value={item.value}
-                      label={item.label}
-                      style={{ height: 40 }}
-                      labelStyle={{
-                        fontSize: 12,
-                      }}
-                      mode='android'
-                    />
-                  )
-                }
-              </RadioButton.Group>
-
-            </ScrollView>
-            <Dialog.Actions>
-              <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setVisible(false)}>
-                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-              </TouchableOpacity>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-
-        <Portal style={[styles.row, { width: width, height: height }]}>
-          <Dialog visible={visiblePayamount} onDismiss={() => setVisiblePayamount(false)}>
-            <Dialog.Content>
-              <TextInput
-                placeholder="Nhập số tiền hứa thanh toán"
-                value={payAmount}
-                onChangeText={setPayAmount}
-                style={{ borderRadius: 0, height: 40, padding: 5 }}
-              />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setVisiblePayamount(false)}>
-                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-              </TouchableOpacity>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-
-
-
-
-        <Portal style={[styles.row, { width: width, height: height }]}>
-          <Dialog visible={visibleAddress} onDismiss={() => setVisibleAddress(false)}>
-            <Dialog.Content>
-              <RadioButton.Group
-                onValueChange={newValue => setAddress(newValue)} value={address}>
-                {
-                  addressItems.map(item =>
-                    <RadioButton.Item
-                      key={item.value}
-                      value={item.value}
-                      label={item.label}
-                      labelStyle={{
-                        fontSize: 12,
-                        marginRight: 40
-                      }}
-                      mode='android'
-                      style={{ height: 60 }}
-                    />
-                  )
-                }
-              </RadioButton.Group>
-
-              <TextInput
-                style={{
-                  fontSize: 12,
-                  marginRight: 40
-                }}
-                mode="flat"
-                label="Dia chi khac"
-                placeholder="Nhập địa chỉ khác"
-                onChangeText={setAddress}
-              />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setVisibleAddress(false)}>
-                <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-              </TouchableOpacity>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-
-
-
-
-
-        <Portal style={[styles.row, { width: width, height: height }]}>
-          <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
-            <ImageView
-              images={[{
-                source: { uri: activateImage.uri },
-                width: 600,
-                height: 800,
-              },]}
-              imageIndex={0}
-              isVisible={visibleImage}
-              onClose={() => setVisibleImage(false)}
-              animationType="slide"
-              isSwipeCloseEnabled={false}
+      <Portal style={[styles.row, { width: width, height: height }]}>
+        <Dialog visible={visiblePayamount} onDismiss={() => setVisiblePayamount(false)}>
+          <Dialog.Content>
+            <TextInput
+              placeholder="Nhập số tiền hứa thanh toán"
+              value={payAmount}
+              onChangeText={setPayAmount}
+              style={{ borderRadius: 0, height: 40, padding: 5 }}
             />
-          </Dialog>
-        </Portal>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setVisiblePayamount(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
-      </ScrollView >
-    )
+
+
+
+      <Portal style={[styles.row, { width: width, height: height }]}>
+        <Dialog visible={visibleAddress} onDismiss={() => setVisibleAddress(false)}>
+          <Dialog.Content>
+            <RadioButton.Group
+              onValueChange={newValue => setAddress(newValue)} value={address}>
+              {
+                addressItems.map(item =>
+                  <RadioButton.Item
+                    key={item.value}
+                    value={item.value}
+                    label={item.label}
+                    labelStyle={{
+                      fontSize: 12,
+                      marginRight: 40
+                    }}
+                    mode='android'
+                    style={{ height: 60 }}
+                  />
+                )
+              }
+            </RadioButton.Group>
+
+            <TextInput
+              style={{
+                fontSize: 12,
+                marginRight: 40
+              }}
+              mode="flat"
+              label="Dia chi khac"
+              placeholder="Nhập địa chỉ khác"
+              onChangeText={setAddress}
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setVisibleAddress(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+
+
+
+
+      <Portal style={[styles.row, { width: width, height: height }]}>
+        <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
+          <ImageView
+            images={[{
+              source: { uri: activateImage.uri },
+              width: 600,
+              height: 800,
+            },]}
+            imageIndex={0}
+            isVisible={visibleImage}
+            onClose={() => setVisibleImage(false)}
+            animationType="slide"
+            isSwipeCloseEnabled={false}
+          />
+        </Dialog>
+      </Portal>
+
+    </ScrollView >
+  )
 
 };
 
@@ -682,21 +680,29 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    calAll: (data) => {
-      dispatch(calTodoDash(data))
-      dispatch(calTotalDash(data))
-      dispatch(calTreeDash(data))
-      dispatch(calCateDash(data))
-
+    calAll: () => {
+      dispatch({ type: consts.CAL_TODO_DASH })
+      dispatch({ type: consts.CAL_TOTAL_DASH })
+      dispatch({ type: consts.CAL_TREE_DASH })
+      dispatch({ type: consts.CAL_CATE_DASH })
     },
     actChangeFollow: (content) => {
-      dispatch(actChangeFollow(content));
+      dispatch({
+        type: consts.CHANGE_FOLLOW,
+        content,
+      });
     },
     userUptrails: (config) => {
-      dispatch(actUserUptrails(config));
+      dispatch({
+        type: consts.USER_UPTRAIL_REQUEST,
+        config
+      });
     },
     updateShowlist: (content) => {
-      dispatch(actUpdateShowlist(content))
+      dispatch({
+        type: consts.SET_TODO_SHOWLIST,
+        content,
+      })
     },
 
   };
@@ -705,7 +711,6 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 
   blockInput: {
-
     borderBottomWidth: 0.2,
     borderBottomColor: colors.grey,
     borderRadius: 5,

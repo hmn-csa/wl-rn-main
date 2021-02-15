@@ -315,6 +315,7 @@ function Uptrail(props) {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+
       <ImageView
         images={renderImg}
         imageIndex={0}
@@ -323,6 +324,7 @@ function Uptrail(props) {
         animationType="slide"
         isSwipeCloseEnabled={false}
       />
+
       <Portal style={{ height: 500 }}>
         <Dialog visible={visibleAddress} onDismiss={visibleAddress} style={{ borderRadius: 10 }}>
           <Dialog.Content>
@@ -354,10 +356,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getUptrails: (config) => {
-      dispatch(actGetUptrails(config))
+      dispatch({
+        type: constAction.API_UPTRAIL_REQUEST,
+        config
+      })
     },
     updateShowlist: (content) => {
-      dispatch(actUpdateShowlist(content))
+      dispatch({
+        type: constAction.UPDATE_SHOWLIST,
+        content,
+      })
     },
   }
 }

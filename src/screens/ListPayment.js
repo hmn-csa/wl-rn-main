@@ -94,7 +94,7 @@ const mapStateToProps = (state) => {
   return {
     token: state.token,
     payments: state.payments.payments,
-    totalCal: state.totalCal,
+    totalCal: state.data.totalCal,
   };
 };
 

@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import {
-  View, Text, Image, Button, StyleSheet, Alert, Linking, Platform, Dimensions
+  View, Text, Image, Button, StyleSheet,
+  Alert, Linking, Platform, Dimensions,
+  TouchableOpacity
 } from 'react-native'
 
 import {
@@ -227,9 +229,6 @@ function ContractDetailMap(props) {
             <View style={[showstyles.box, { flex: 3 }]}>
               {paidIcon(content.total_pay_amount)}
             </View>
-            {/* <View style={[showstyles.box, { flex: 1 }]}>
-              {followIcon(content.followed)}
-            </View> */}
           </View>
         </View>
       </View>
@@ -249,50 +248,61 @@ function ContractDetailMap(props) {
           <Text style={showstyles.msgTxt} >{content.reg_address}</Text>
         </View>
       </View>
+
       {/* BEGIN BUTTONS */}
       <View style={[showstyles.btngroup]}>
-        <View style={[showstyles.btn]}>
+        <TouchableOpacity
+          style={[showstyles.btn]}
+          onPress={handleGetVsf}
+        >
           <FontAwesome
             name='file-text-o'
             style={showstyles.logo}
-            onPress={handleGetVsf}
           />
-        </View>
-        <View style={[showstyles.btn]}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[showstyles.btn]}
+          onPress={handleGetSkip}
+        >
           <FontAwesome
             name='search'
             style={showstyles.logo}
-            onPress={handleGetSkip}
           />
-        </View>
-        <View style={[showstyles.btn]}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[showstyles.btn]}
+          onPress={handleAsyncChangeTodo}>
           <FontAwesome
             name={todoIcon}
             style={[showstyles.logo, { color: todoColor }]}
-            onPress={handleAsyncChangeTodo}
           />
-        </View>
-        <View style={[showstyles.btn]}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[showstyles.btn]}
+          onPress={handleRemark}
+        >
           <FontAwesome
             name="pencil"
             style={[showstyles.logo, { color: followedColor }]}
-            onPress={handleRemark}
           />
-        </View>
-        <View style={[showstyles.btn]}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[showstyles.btn]}
+          onPress={handleMap}>
           <FontAwesome5
             name="directions"
             style={showstyles.logo}
-            onPress={handleMap}
           />
-        </View>
-        <View style={[showstyles.btn]}>
+        </TouchableOpacity>
+        <TouchableOpacity
+
+          style={[showstyles.btn]}
+          onPress={handleCall}>
           <FontAwesome
             name="phone"
             style={showstyles.logo}
-            onPress={handleCall}
           />
-        </View>
+        </TouchableOpacity>
       </View>
     </View >
   )
@@ -357,7 +367,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const showstyles = StyleSheet.create({
   logo: {
-    fontSize: 12,
+    fontSize: 15,
     padding: 8,
     color: colors.grey
   },

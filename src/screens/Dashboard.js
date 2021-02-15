@@ -13,7 +13,7 @@ import { Button } from 'react-native-paper';
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
 import Calendar from '../components/Calendar'
-import BarChart from '../components/Chart'
+import { RenBarChart } from '../components/Chart'
 function Dashboard(props) {
   if (props.fetching || props.data === null)
     return (
@@ -42,6 +42,7 @@ function Dashboard(props) {
         <View style={{ flex: 1 }}>
           <BarChart />
         </View>
+
         {/* <View style={styles.tool_frame}>
           <Controller
             control={control}
@@ -72,18 +73,21 @@ function Dashboard(props) {
           </View>
         </View> */}
         <View style={styles.tool_frame}>
-          <TouchableOpacity style={styles.btn_tool}
+          <TouchableOpacity
+            style={styles.btn_tool}
             onPress={() => props.navigation.navigate('ListPayment')}>
             <FontAwesome5 name="search-dollar" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}
+          <TouchableOpacity
+            style={styles.btn_tool}
             onPress={() => props.navigation.navigate('Uptrail')}>
             <FontAwesome5 name="map-marked-alt" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn_tool}>
             <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool} onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
+          <TouchableOpacity style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
             <MaterialCommunityIcons name="map-clock" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
         </View>
@@ -164,18 +168,18 @@ const styles = StyleSheet.create({
     alignContent: 'stretch',
   },
   tool_frame: {
-    flex: 1,
     width: '80%',
-    alignSelf: 'center',
+    marginVertical: 2,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     flexDirection: 'row',
-    marginTop: 20,
-
+    justifyContent: 'space-between',
+    marginBottom: 5,
   },
   btn_tool: {
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 20,
-    marginRight: 20,
   }
 })
 
