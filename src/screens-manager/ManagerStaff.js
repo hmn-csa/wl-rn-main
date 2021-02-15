@@ -5,6 +5,8 @@ import {
   ImageBackground, Animated, Dimensions
 } from 'react-native';
 import { connect } from "react-redux";
+import { FontAwesome } from '@expo/vector-icons';
+import { ProgressBar } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TimeAgo from 'react-native-timeago'
 
@@ -77,18 +79,17 @@ function ManagerStaff(props) {
   }
 
 
-
-
   const renderItem = ({ item, index }) => {
     return <TouchableOpacity
       key={item.staff_id}
-      style={[styles.block, { flex: 1, }]}
+      style={[styles.block, { flex: 1, padding: 10 }]}
       onPress={() => props.toStaffMode({
         staff_id: item.staff_id,
         token: props.token,
         fc_name: item.info.fc_name,
         avatar: item.info.avatar,
       })} >
+
 
       <View style={[styles.row, { borderBottomWidth: 0.2, borderRadius: 10 }]}>
         <View style={[styles.box, { minWidth: AVATAR_WIDTH, margin: 5, flex: 0.05, }]}>
@@ -113,13 +114,8 @@ function ManagerStaff(props) {
         </View>
 
         <View style={[styles.box, { flex: 2 }]}>
-          <View style={[styles.row]}>
-            <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
-          </View>
-          <View style={[styles.row]}>
-            <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
-          </View>
-
+          <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
+          <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
         </View>
       </View>
 
@@ -145,7 +141,8 @@ function ManagerStaff(props) {
           <View style={[styles.msgContainer, { marginTop: 5 }]}>
             <View style={[styles.row, { flex: 1 }]}>
               <View style={[styles.box, { flex: 0.3 }]}>
-                <Text style={[styles.msgTxt,]}>{item.visited} đã đi</Text>
+                <Text style={[styles.msgTxt,]}>{item.visited} đã đi `1
+                </Text>
               </View>
               <View style={[styles.box, { flex: 0.4 }]}>
                 <Text style={[styles.msgTxt,]}>{moneyFormat(item.paidamt)}</Text>
@@ -189,6 +186,76 @@ function ManagerStaff(props) {
 
   else return (
     <View style={[styles.container,]}>
+      <View style={[styles.block, { marginTop: 50, }]}>
+        <View style={[styles.row]}>
+          <View style={[styles.card, styles.box]}>
+            <View style={[styles.cardHeader, { marginBottom: 10, }]}>
+              <Text style={{ color: colors.primary, fontWeight: 'bold', fontSize: 16 }}>Danh mục</Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', padding: 5 }}>
+              <Text style={{ width: '40%' }}>
+                Tổng: <FontAwesome name="file-text" size={15} color={colors.yellow} /> {props.staff.dash.totalCase.case} HĐ
+              </Text>
+              <Text>
+                <FontAwesome name="dollar" size={15} color={colors.success} /> {moneyFormat(props.staff.dash.totalCase.pos)} dư nợ gốc
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', padding: 5 }}>
+
+              <Text style={{ width: '40%' }}>
+                Đã đi: <FontAwesome name="check" size={15} color={colors.yellow} /> {props.staff.dash.visited.case} HĐ
+              </Text>
+              <Text>
+                <FontAwesome name="check" size={15} color={colors.success} /> {(props.staff.dash.visited.case * 100 / props.staff.dash.totalCase.case).toFixed(1)}% đã viếng thăm
+              </Text>
+            </View>
+
+            <View style={{ paddingLeft: '40%', paddingRight: 10 }}>
+              <ProgressBar
+                progress={props.staff.dash.visited.case / props.staff.dash.totalCase.case}
+                color={colors.success}
+              />
+            </View>
+          </View>
+        </View>
+
+        <View style={[styles.row]}>
+          <View style={[styles.card, styles.box]}>
+            <View style={[styles.cardHeader, { marginBottom: 10, }]}>
+              <Text style={{ color: colors.primary, fontWeight: 'bold', fontSize: 16 }}>Số thu</Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', padding: 5 }}>
+              <Text style={{ width: '40%' }}>
+                Tổng: <FontAwesome name="file-text" size={15} color={colors.yellow} /> {props.staff.dash.totalCase.case} HĐ
+              </Text>
+              <Text>
+                <FontAwesome name="dollar" size={15} color={colors.success} /> {moneyFormat(props.staff.dash.totalCase.pos)} dư nợ gốc
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', padding: 5 }}>
+
+              <Text style={{ width: '40%' }}>
+                Đã đi: <FontAwesome name="check" size={15} color={colors.yellow} /> {props.staff.dash.visited.case} HĐ
+              </Text>
+              <Text>
+                <FontAwesome name="check" size={15} color={colors.success} /> {(props.staff.dash.visited.case * 100 / props.staff.dash.totalCase.case).toFixed(1)}% đã viếng thăm
+              </Text>
+            </View>
+
+            <View style={{ paddingLeft: '40%', paddingRight: 10 }}>
+              <ProgressBar
+                progress={props.staff.dash.visited.case / props.staff.dash.totalCase.case}
+                color={colors.success}
+              />
+            </View>
+          </View>
+        </View>
+
+      </View>
 
       <View style={[styles.block, { marginTop: 50, }]}>
 
@@ -285,9 +352,6 @@ function ManagerStaff(props) {
           </View>
 
         </View>
-
-
-
       </View>
 
       <ScrollView style={[styles.container,]}>
@@ -338,15 +402,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   block: {
+    width: '95%',
     borderBottomWidth: 0.2,
     borderBottomColor: colors.grey,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 3,
     margin: 2,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   row: {
-    width: '95%',
     marginVertical: 1,
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -379,6 +445,13 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
 
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 0.2,
+    marginBottom: 5
+  },
+
   card: {
     shadowColor: '#00000021',
     shadowOffset: {
@@ -388,13 +461,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
     elevation: 12,
-    backgroundColor: 'white',
     marginVertical: 5,
     flexBasis: '46%',
     marginHorizontal: 5,
     borderRadius: 10,
-    height: 150,
-    padding: 2
+    padding: 5
   },
 
   nameContainer: {

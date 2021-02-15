@@ -21,6 +21,7 @@ const CARD_HEIGHT = height / 4.5;
 import { moneyFormat } from '../functions'
 
 function ContractDetailMap(props) {
+
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
@@ -28,7 +29,7 @@ function ContractDetailMap(props) {
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
 
-
+  console.log(contractId)
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {
@@ -42,38 +43,22 @@ function ContractDetailMap(props) {
     props.apiChangeTodo(config)
   }
 
-  const handleChangeTodo = async () => {
-    const todo_new = isTodo === 1 ? 0 : 1
-    let config = {
-      method: 'put',
-      url: `https://beta-fc.lgm.com.vn/rn-ver/api/appls-list/`,
-      headers: {
-        'Authorization': `Bearer ${props.token.token.access}`
-      },
-      data: {
-        'appl_id': content.appl_id,
-        'todo_value': todo_new
-      }
+  const handleGetVsf = () => {
+    if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
+      props.setActiveVsf(content)
+      props.navigation.navigate('Vsf')
     }
-    try {
-
-      setTodoContent(todo_new)
-      props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_new })
-      setTodoColor(todo_new === 1 ? colors.danger : colors.grey)
-      setTodoIcon(todo_new === 1 ? 'heart' : 'heart-o')
-
-      const response = await axios(config);
-      const responseTodo = response.data.todo_flag
-      props.calTodoDash(props.data)
-    } catch (error) {
-      const todo_old = todo_new === 1 ? 0 : 1
-      setTodoContent(todo_old)
-      props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_old })
-
+    else {
+      const config = {
+        'appl_id': content.appl_id,
+        'token_value': props.token.token.access
+      }
+      props.apiGetVsf(config)
+      props.navigation.navigate('Vsf')
     }
   }
 
-  const handleGetVsf = () => {
+  const handleGetVsf2 = () => {
     if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
       props.setActiveVsf(content)
       props.navigation.navigate('Vsf')
@@ -107,10 +92,6 @@ function ContractDetailMap(props) {
   const handleRemark = () => {
     props.setActiveVsf(content)
     props.navigation.navigate('Remark')
-  }
-  const handleSkip = () => {
-    props.setActiveVsf(content)
-    props.navigation.navigate('Skip')
   }
 
   const handleMap = () => {

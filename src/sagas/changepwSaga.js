@@ -25,12 +25,13 @@ export function* workerChangePw(request) {
     }
 
     const response = yield call(axios, config);
-    alert("Mật khẩu mới thành công")
-    yield put({ type: constAction.TOKEN_REMOVE });
+    alert("Đổi mật khẩu mới thành công")
+    //yield put({ type: constAction.TOKEN_REMOVE });
 
   } catch (error) {
     // dispatch a failure action to the store with the error
     yield put({ type: constAction.API_CHANGEPW_FAILURE, error: error });
+    alert("Đổi mật khẩu không thành công, vui lòng thực hiện lại")
   }
 }
 
