@@ -13,7 +13,7 @@ import { Button } from 'react-native-paper';
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
 import Calendar from '../components/Calendar'
-import { RenBarChart } from '../components/Chart'
+import { BarChartPM, LineChartFL } from '../components/Chart'
 function Dashboard(props) {
   if (props.fetching || props.data === null)
     return (
@@ -31,7 +31,7 @@ function Dashboard(props) {
           showsButtons={false}
           autoplay={true}
           autoplayTimeout={6}
-          style={{ height: 190 }}
+          style={{ height: 155 }}
           showsPagination={false}
           autoplayDirection={true}
           navigation={props.navigation}
@@ -40,7 +40,10 @@ function Dashboard(props) {
           <SummaryDash />
         </Swiper>
         <View style={{ flex: 1 }}>
-          <BarChart />
+          <BarChartPM />
+        </View>
+        <View style={{ flex: 1 }}>
+          <LineChartFL />
         </View>
 
         {/* <View style={styles.tool_frame}>
@@ -96,77 +99,6 @@ function Dashboard(props) {
 }
 
 const styles = StyleSheet.create({
-  todo_frame: {
-    flexDirection: 'row',
-    alignContent: 'stretch',
-  },
-  frame_l: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  frame_r: {
-    flex: 1,
-    flexDirection: 'column',
-    borderLeftWidth: 1,
-    borderLeftColor: '#CCC'
-  },
-  header_dash: {
-    color: colors.info,
-    fontWeight: 'bold',
-    fontSize: 25,
-    paddingLeft: 30,
-    marginTop: 10,
-    marginBottom: 5
-  },
-  main_frame: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  sub_frame: {
-    flex: 1,
-    flexDirection: 'row',
-    alignContent: 'stretch',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#CCC'
-  },
-  sub_frame_l: {
-    flex: 1,
-  },
-  sub_frame_r: {
-    flex: 1,
-    borderLeftWidth: 1,
-    borderLeftColor: '#CCC'
-  },
-  main_value: {
-    fontSize: 35,
-    textAlign: 'center',
-    color: colors.black,
-    marginTop: 5
-  },
-  sub_value: {
-    fontSize: 25,
-    textAlign: 'center',
-    color: colors.black,
-    marginTop: 10
-  },
-  title_value: {
-    textAlign: 'center',
-    paddingBottom: 5,
-    fontSize: 12,
-    color: colors.grey
-  },
-  collx_frame: {
-    flex: 1,
-    flexDirection: 'row',
-    alignContent: 'stretch',
-  },
-  past_due_frame: {
-    flex: 1,
-    flexDirection: 'row',
-    alignContent: 'stretch',
-  },
   tool_frame: {
     width: '80%',
     marginVertical: 2,
@@ -175,6 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 5,
+    marginTop: 10
   },
   btn_tool: {
     borderWidth: 1,

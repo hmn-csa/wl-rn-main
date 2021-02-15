@@ -37,7 +37,6 @@ function ListPayment(props) {
 
   useEffect(() => {
     setTimeline(pm2timeline(props.payments))
-    //console.log('timelinePayment: ', timelinePayment)
   }, [props.payments]);
 
   renderDetail = (rowData, sectionID, rowID) => {
@@ -114,7 +113,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   }
 }
-
 
 
 const styles = StyleSheet.create({
