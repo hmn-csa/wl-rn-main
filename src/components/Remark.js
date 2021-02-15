@@ -22,11 +22,7 @@ import { EMPTYIMAGE } from '../images';
 
 import Loader from '../components/elements/Loader'
 
-import {
-  actUpdateShowlist, calTodoDash, calTotalDash,
-  calTreeDash, calCateDash, actChangeFollow,
-  actUserUptrails
-} from "../actions"
+
 import * as consts from '../consts'
 
 const { width, height } = Dimensions.get("window");
@@ -322,7 +318,6 @@ function Remark(props) {
         </View>
         <View style={[styles.box, { flex: 0.618 }]}>
           <View style={styles.row}>
-
             {
               showImages.map((image, index) =>
                 <TouchableOpacity
