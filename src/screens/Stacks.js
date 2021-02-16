@@ -412,7 +412,10 @@ function CategorieStack(props) {
               } >
                 <MaterialIcons name="map" size={30} color="white" />
               </TouchableOpacity> */}
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={
+                  () => props.navigation.navigate('Maps')
+                }>
                 <MaterialIcons name="map" size={30} color="white" />
               </TouchableOpacity>
             </View>
