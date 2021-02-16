@@ -4,6 +4,7 @@ import * as constAction from "../consts/index";
 const initialState = {
   categoryProduct: [],
   categoryBinscore: [],
+  categoryClassify: [],
 }
 
 const categoryReducers = (state = initialState, action) => {
@@ -43,6 +44,7 @@ const categoryReducers = (state = initialState, action) => {
         ...state,
         categoryProduct: groupByArray(appls, 'product_group'),
         categoryBinscore: groupByArray(appls, 'bin_value'),
+        categoryClassify: groupByArray(appls, 'classify_case'),
       }
       return state;
 

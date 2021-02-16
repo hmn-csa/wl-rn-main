@@ -179,6 +179,22 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
+
+      <View style={[showstyles.row]}>
+        <View style={showstyles.box}>
+          <Text style={[showstyles.msgTxt]}>App_id:</Text>
+        </View>
+        <View style={[showstyles.box, { flex: 3.5 }]}>
+          <View style={[showstyles.row]}>
+            <View style={[showstyles.box, { flex: 3 }]}>
+              <Text style={[showstyles.nameTxt, { fontWeight: 'normal' }]}>{content.app_id}</Text>
+            </View>
+            <View style={[showstyles.box, { flex: 1 }]}>
+            </View>
+          </View>
+        </View>
+      </View>
+
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={[showstyles.msgTxt]}>Hợp đồng:</Text>
@@ -193,6 +209,8 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
+
+
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={showstyles.msgTxt}>Thanh toán:</Text>

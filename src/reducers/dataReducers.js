@@ -178,6 +178,7 @@ const initialState = {
   treeCal: initialTree,
   categoryProduct: [],
   categoryBinscore: [],
+  categoryClassify: [],
 };
 
 const dataReducers = (state = initialState, action) => {
@@ -573,6 +574,7 @@ const dataReducers = (state = initialState, action) => {
         ...state,
         categoryProduct: groupByArray(appls2, 'product_group'),
         categoryBinscore: groupByArray(appls2, 'bin_value'),
+        categoryClassify: groupByArray(appls2, 'classify_case'),
       }
       return state;
     // ================ End dash board =================//

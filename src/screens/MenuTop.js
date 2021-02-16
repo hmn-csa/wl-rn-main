@@ -7,6 +7,7 @@ import UserSignout from './userSignout'
 import UserInfo from './userInfo'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
+import ClassifyCategories from './ClassifyCategories'
 import ListUptrail from './ListUptrail'
 import ListUptrailMonth from './ListUptrailMonth'
 
@@ -30,7 +31,7 @@ function Menutop_Categories() {
       />
       <Tab.Screen
         name="Type"
-        component={ProductCategories}
+        component={ClassifyCategories}
         options={{ tabBarLabel: 'Type' }}
       />
       <Tab.Screen
