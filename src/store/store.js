@@ -20,7 +20,7 @@ const store = createStore(
   rootReducer, composeWithDevTools(
     applyMiddleware(
       sagaMiddleware,
-      //createLogger(),
+      createLogger(),
     ),
   )
 );

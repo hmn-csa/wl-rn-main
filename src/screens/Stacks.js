@@ -20,7 +20,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Calendar_ } from './Calendar'
-import { Colors } from 'react-native-paper'
 import { Menutop_Uptrail, Menutop_User } from './MenuTop'
 
 const Stack = createStackNavigator()

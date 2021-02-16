@@ -169,7 +169,7 @@ function ManagerStaff(props) {
     if (checkinData.length == 0)
       return colors.secondary
     if (checkinData[0].runtime.substring(0, 10) === today)
-      return colors.green
+      return colors.success
     return 'orange'
   }
 
@@ -221,7 +221,7 @@ function ManagerStaff(props) {
     if (checkinData.length == 0)
       return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary }]} />
     if (checkinData[0].runtime.substring(0, 10) === today)
-      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.green }]} />
+      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.success }]} />
     return <Ionicons name='ios-remove-circle' style={[{ color: 'orange' }]} />
   }
 

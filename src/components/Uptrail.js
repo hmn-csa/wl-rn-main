@@ -132,7 +132,7 @@ function Uptrail(props) {
   const renCode = (code) => {
     if (['PTP', 'F_OBT', 'WFP', 'TER'].includes(code))
       return <Text
-        style={[stylesTrail.remarkCode, { color: colors.green, }]}>{code}</Text>
+        style={[stylesTrail.remarkCode, { color: colors.success, }]}>{code}</Text>
     else return <Text
       style={[stylesTrail.remarkCode, { color: colors.secondary, }]}>{code}</Text>
   }

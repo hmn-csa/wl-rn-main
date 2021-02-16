@@ -130,7 +130,7 @@ function Remark(props) {
       return <View></View>
 
     return <View style={{ width: '95%', }}>
-      <Text style={[styles.subLabel, { color: colors.green, opacity: 1, fontWeight: "800" }]}>{moneyFormat(payAmount)} vnđ</Text>
+      <Text style={[styles.subLabel, { color: colors.success, opacity: 1, fontWeight: "800" }]}>{moneyFormat(payAmount)} vnđ</Text>
     </View>
   }
 

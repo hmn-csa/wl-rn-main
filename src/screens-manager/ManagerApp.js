@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
+
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper';
 
@@ -15,10 +16,10 @@ import { UserStack } from '../screens/Stacks'
 import { styles, colors } from '../styles'
 
 // import ManagerDash from './ManagerDash'
-import ManagerStaff from './ManagerStaff'
 import ManagerMap from './ManagerMap'
 import Notify from './Notifications'
 
+import { StaffStack } from './Stacks'
 
 enableScreens()
 
@@ -55,9 +56,9 @@ function MagagerApp() {
         }}
       >
         {/* <Tab.Screen name="ManagerDash" component={ManagerDash} /> */}
-        <Tab.Screen name="ManagerStaff" component={ManagerStaff} />
+        <Tab.Screen name="ManagerStaff" component={StaffStack} />
         <Tab.Screen name="ManagerMap" component={ManagerMap} />
-        <Tab.Screen name="UserStack" component={UserStack} />
+        <Tab.Screen name="User" component={UserStack} />
 
       </Tab.Navigator>
       <Notify />
