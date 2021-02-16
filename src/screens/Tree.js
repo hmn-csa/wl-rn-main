@@ -54,7 +54,7 @@ function Tree(props) {
     return null
   }
   return (
-    <ScrollView style={{ padding: 20, backgroundColor: 'white' }} >
+    <ScrollView style={{ paddingRight: 10, backgroundColor: 'white' }} >
       <TreeView
         data={props.tree}
         initialExpanded={true}
