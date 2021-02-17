@@ -90,8 +90,8 @@ function Dashboard(props) {
             <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn_tool}
-            onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
-            <MaterialCommunityIcons name="map-clock" size={24} color={colors.gray} style={{ padding: 15 }} />
+            onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
+            <MaterialCommunityIcons name="database-search" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
         </View>
       </ScrollView >

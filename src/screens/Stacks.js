@@ -240,13 +240,15 @@ function DashboardStack(props) {
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
-                props.navigation.navigate('Portfolio', {
-                  screen: 'Maps'
-                })
-              } >
+              <TouchableOpacity
+                style={{ marginRight: 10 }}
+                onPress={() =>
+                  props.navigation.navigate('Maps', {
+                    name: props.navigation.title
+                  })
+                } >
                 <MaterialIcons name="map" size={30} color="white" />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
               <TouchableOpacity>
                 <MaterialIcons name="search" size={30} color="white" />
               </TouchableOpacity>
@@ -325,7 +327,8 @@ function DashboardStack(props) {
       <Stack.Screen
         name="Maps"
         component={applMap}
-        options={{
+        options={({ route }) => ({
+          title: headerBackTitle,
           headerStyle: {
             backgroundColor: colors.primary,
           },
@@ -342,7 +345,7 @@ function DashboardStack(props) {
               </TouchableOpacity>
             </View>
           )
-        }}
+        })}
       />
     </Stack.Navigator >
   )
@@ -411,13 +414,13 @@ function CategorieStack(props) {
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
+              <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
                 props.navigation.navigate('Portfolio', {
                   screen: 'Maps'
                 })
               } >
                 <MaterialIcons name="map" size={30} color="white" />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
               <TouchableOpacity>
                 <MaterialIcons name="search" size={30} color="white" />
               </TouchableOpacity>

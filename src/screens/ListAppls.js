@@ -21,11 +21,10 @@ function ListAppls(props) {
   const [filtered, setFiltered] = useState(props.showlists.applIds)
   const hangleSearch = (value) => {
     try {
-
       setSearchTerm(value)
       if (value != null && value != "" && value != undefined) {
         setFiltered(
-          Object.values(props.data).filter(createFilter(searchTerm, KEYS_TO_FILTERS))
+          Object.values(props.showlists).filter(createFilter(value, KEYS_TO_FILTERS))
         )
       } else
         setFiltered(props.showlists.applIds)
@@ -50,10 +49,15 @@ function ListAppls(props) {
   if (searchTerm !== null && searchTerm !== "")
     return (
       <View >
+        <Searchbar
+          onChangeText={(value) => hangleSearch(value)}
+          placeholder="Nhập tên (có dấu) hoặc appl_id"
+          onSubmitEditing={(value) => hangleSearch(value)}
+          clearIcon={'alpha-x-box-outline'}
+        />
         <FlatList
-          data={props.showlists.applIds}
+          data={filtered}
           renderItem={_renderItem}
-
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -61,33 +65,37 @@ function ListAppls(props) {
 
   if (props.data !== null)
     return (
-      // {/* <Searchbar
-      //     onChangeText={(value) => hangleSearch(value)}
-      //     placeholder="Nhập tên (có dấu) hoặc appl_id"
-      //     onSubmitEditing={(value) => hangleSearch(value)}
-      //     clearIcon={'alpha-x-box-outline'}
-      //   /> */}
-      //   {/* <View style={{ flexDirection: 'row' }}>
-      //     <Carousel
-      //       layout={'default'}
-      //       vertical={true}
-      //       data={props.showlists.applIds}
-      //       sliderWidth={SliderWidth}
-      //       itemWidth={width * 0.9}
-      //       itemHeight={CARD_HEIGHT}
-      //       sliderHeight={height}
-      //       renderItem={_renderItem}
-      //       useScrollView={true}
-      //       activeSlideAlignment="start"
-      //       currentIndex={0}
-      //     />
-      //   </View > */}
-      <FlatList
-        data={props.showlists.applIds}
-        renderItem={_renderItem}
-        keyExtractor={(item) => item.id}
-        style={{ padding: 5 }}
-      />
+      <View>
+        <Searchbar
+          onChangeText={(value) => hangleSearch(value)}
+          placeholder="Nhập tên (có dấu) hoặc appl_id"
+          onSubmitEditing={(value) => hangleSearch(value)}
+          clearIcon={'alpha-x-box-outline'}
+        />
+
+        {/* // <View style={{ flexDirection: 'row' }}>
+      //   <Carousel
+      //     layout={'default'}
+      //     vertical={true}
+      //     data={props.showlists.applIds}
+      //     sliderWidth={SliderWidth}
+      //     itemWidth={width * 0.9}
+      //     itemHeight={CARD_HEIGHT}
+      //     sliderHeight={height}
+      //     renderItem={_renderItem}
+      //     useScrollView={true}
+      //     activeSlideAlignment="start"
+      //     currentIndex={0}
+      //   />
+      // </View > */}
+
+        <FlatList
+          data={props.showlists.applIds}
+          renderItem={_renderItem}
+          keyExtractor={(item) => item.id}
+          style={{ padding: 5 }}
+        />
+      </View>
     )
   else return (
     <View style={[styles.container, { alignItems: 'center' }]}>

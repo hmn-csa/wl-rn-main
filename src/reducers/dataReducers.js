@@ -576,14 +576,9 @@ const dataReducers = (state = initialState, action) => {
       }
       return state;
     // ================ End dash board =================//
-
-
-
     default:
       return state;
-
   }
 };
-
 
 export default dataReducers;

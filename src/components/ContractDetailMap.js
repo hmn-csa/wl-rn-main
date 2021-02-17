@@ -270,7 +270,7 @@ function ContractDetailMap(props) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn]}
+          style={[showstyles.btn, { borderColor: todoColor }]}
           onPress={handleAsyncChangeTodo}>
           <FontAwesome
             name={todoIcon}
@@ -278,7 +278,7 @@ function ContractDetailMap(props) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn]}
+          style={[showstyles.btn, { borderColor: followedColor }]}
           onPress={handleRemark}
         >
           <FontAwesome
