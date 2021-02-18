@@ -36,6 +36,7 @@ function ListAppls(props) {
 
 
   const _renderItem = ({ item, index }) => {
+
     return (
       <ContractDetailMap
         key={item.appl_id}

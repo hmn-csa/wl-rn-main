@@ -82,7 +82,7 @@ function ManagerStaff(props) {
   }
 
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item }) => {
     return <TouchableOpacity
       key={item.staff_id}
       style={[styles.block, { flex: 1, marginBottom: 5 }]}
@@ -145,7 +145,7 @@ function ManagerStaff(props) {
             Số thu: <FontAwesome name="dollar" size={12} color={colors.info} /> {miniMoneyFormat(item.paidamt)} tr
           </Text>
           <Text style={{ marginBottom: 0, }}>
-            Ngày: <FontAwesome name="dollar" size={12} color={colors.success} /> {miniMoneyFormat(item.todayamt)} tr
+            Today: <FontAwesome name="dollar" size={12} color={colors.success} /> {miniMoneyFormat(item.todayamt)} tr
           </Text>
         </View>
 
@@ -161,7 +161,7 @@ function ManagerStaff(props) {
             color={colors.yellow} />
 
           <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(item.paidamt * 100 / item.pos).toFixed(1)}% pos
+            <FontAwesome name="check" size={10} color={colors.info} /> {(item.paidamt * 100 / item.pos).toFixed(1)}% ROR
           </Text>
           <ProgressBar
             style={{ marginBottom: 10 }}

@@ -12,8 +12,10 @@ import Swiper from 'react-native-swiper';
 import { Button } from 'react-native-paper';
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
+import StaffDash from '../components/StaffDash'
 import Calendar from '../components/Calendar'
 import { BarChartPM, LineChartFL } from '../components/Chart'
+
 function Dashboard(props) {
   if (props.fetching || props.data === null)
     return (
@@ -27,7 +29,8 @@ function Dashboard(props) {
         flexDirection: 'column',
         backgroundColor: 'white',
       }}>
-        <Swiper
+        <StaffDash />
+        {/* <Swiper
           showsButtons={false}
           autoplay={true}
           autoplayTimeout={6}
@@ -38,43 +41,16 @@ function Dashboard(props) {
         >
           <TodoDash />
           <SummaryDash />
-        </Swiper>
-        <View style={{ flex: 1 }}>
+        </Swiper> */}
+
+
+        {/* <View style={{ flex: 1 }}>
           <BarChartPM />
         </View>
         <View style={{ flex: 1 }}>
           <LineChartFL />
-        </View>
-
-        {/* <View style={styles.tool_frame}>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                placeholder=" Nhập mã HD..."
-                style={{
-                  width: '90%', paddingLeft: 5,
-                  borderTopLeftRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderRightWidth: 0,
-                  borderWidth: 1,
-                  borderColor: colors.grey
-                }}
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-              />
-            )}
-            name="searchall"
-            defaultValue=""
-          />
-          <View style={{
-            marginRight: 10, borderTopRightRadius: 5, borderBottomRightRadius: 5,
-            borderWidth: 1, borderLeftWidth: 0, borderColor: colors.grey
-          }}>
-            <FontAwesome name="search" size={15} color="rgba(0,0,0,0.4)" style={{ margin: 5 }} />
-          </View>
         </View> */}
+
         <View style={styles.tool_frame}>
           <TouchableOpacity
             style={styles.btn_tool}
@@ -86,11 +62,13 @@ function Dashboard(props) {
             onPress={() => props.navigation.navigate('Uptrail')}>
             <FontAwesome5 name="map-marked-alt" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
-            <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
+          <TouchableOpacity
+            style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
+            <FontAwesome name="search" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn_tool}
-            onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
+            onPress={() => props.navigation.navigate('Portfolio')}>
             <MaterialCommunityIcons name="map-clock" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
         </View>
@@ -148,6 +126,9 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+
+
+
 
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { View, Text, StyleSheet, TextInput, Animated } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
-import { Remark, Vsf, Skip } from '../components'
+import { Remark, Vsf, Skip, Search } from '../components'
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
@@ -319,6 +319,29 @@ function DashboardStack(props) {
       <Stack.Screen
         name="Maps"
         component={applMap}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+
+      <Stack.Screen
+        name="Search-appl"
+        component={Search}
         options={{
           headerStyle: {
             backgroundColor: colors.primary,

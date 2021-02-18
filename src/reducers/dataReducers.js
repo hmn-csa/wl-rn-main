@@ -5,6 +5,7 @@ import * as constAction from "../consts/index";
 const initialTotal = {
   totalCase: {
     case: 0,
+    value: 0,
     applIds: []
   },
   paidAll: {
@@ -233,12 +234,20 @@ const dataReducers = (state = initialState, action) => {
 
       // ------- total -------//
       let totalCase = appls.length
+      let posValue = appls.map(function (appl) {
+        return appl.principle_outstanding
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0)
+
       let initPaidMtd = appls.filter((appl) => {
         return parseFloat(appl.total_pay_amount) > 0
       })
       let initFollowedAppls = appls.filter((appl) => {
         return appl.followed == 1
       })
+
+
 
       let paidMtdValue = initPaidMtd.map(function (appl) {
         return appl.total_pay_amount
@@ -265,6 +274,7 @@ const dataReducers = (state = initialState, action) => {
         totalCal: {
           totalCase: {
             case: totalCase,
+            value: posValue,
             applIds: appls//.map(appl => appl.appl_id)
           },
           paidAll: {
