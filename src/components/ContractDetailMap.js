@@ -32,7 +32,7 @@ function ContractDetailMap(props) {
   console.log(contractId)
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
-    let config = {
+    let config = { 
       token: props.token.token.access,
       appl_id: content.appl_id,
       todo_value: todo_value

@@ -12,6 +12,7 @@ import Swiper from 'react-native-swiper';
 import { Button } from 'react-native-paper';
 import TodoDash from '../components/TodoDash'
 import SummaryDash from '../components/SummaryDash'
+import { StaffDash_com, StaffTodo_com } from '../components/StaffDash'
 import Calendar from '../components/Calendar'
 import { BarChartPM, LineChartFL } from '../components/Chart'
 
@@ -28,7 +29,9 @@ function Dashboard(props) {
         flexDirection: 'column',
         backgroundColor: 'white',
       }}>
-        <Swiper
+        <StaffDash_com />
+        <StaffTodo_com />
+        {/* <Swiper
           showsButtons={false}
           autoplay={true}
           autoplayTimeout={6}
@@ -39,13 +42,9 @@ function Dashboard(props) {
         >
           <TodoDash />
           <SummaryDash />
-        </Swiper>
-        <View style={{ flex: 1 }}>
-          <BarChartPM />
-        </View>
-        <View style={{ flex: 1 }}>
-          <LineChartFL />
-        </View>
+        </Swiper> */}
+
+
         <View style={styles.tool_frame}>
           <TouchableOpacity
             style={styles.btn_tool}
@@ -57,8 +56,10 @@ function Dashboard(props) {
             onPress={() => props.navigation.navigate('Uptrail')}>
             <FontAwesome5 name="map-marked-alt" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}>
-            <FontAwesome name="calendar" size={24} color={colors.gray} style={{ padding: 15 }} />
+          <TouchableOpacity
+            style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('Portfolio', { screen: 'Uptrail' })}>
+            <FontAwesome name="search" size={24} color={colors.gray} style={{ padding: 15 }} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn_tool}
             onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
@@ -120,6 +121,9 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+
+
+
 
 
 

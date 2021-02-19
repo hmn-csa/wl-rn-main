@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { View, Text, StyleSheet, TextInput, Animated } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
-import { Remark, Vsf, Skip } from '../components'
+import { Remark, Vsf, Skip, Search } from '../components'
 import Tree from './Tree'
 import ProductCategories from './ProductCategories'
 import ScoreCategories from './ScoreCategories'
@@ -35,9 +35,9 @@ function UserStack(props) {
         component={UserSignout}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -65,9 +65,9 @@ function UserStack(props) {
         component={ListPayment}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -87,9 +87,9 @@ function UserStack(props) {
         component={CheckinMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -128,9 +128,9 @@ function DashboardStack(props) {
         component={Dashboard}
         options={{
           headerStyle: {
-            backgroundColor: colors.info,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          headerTintColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -139,10 +139,10 @@ function DashboardStack(props) {
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
               <TouchableOpacity>
-                <MaterialIcons name="chat" size={24} color={colors.white} style={{ marginRight: 10 }} />
+                <MaterialIcons name="chat" size={20} color={colors.gray} style={{ marginRight: 15 }} />
               </TouchableOpacity>
               <TouchableOpacity>
-                <FontAwesome name="bell-o" size={24} color={colors.white} />
+                <FontAwesome name="bell-o" size={20} color={colors.gray} />
               </TouchableOpacity>
             </View >
           ),
@@ -153,9 +153,9 @@ function DashboardStack(props) {
         component={ListPayment}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -201,9 +201,9 @@ function DashboardStack(props) {
         component={Menutop_Uptrail}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -266,9 +266,9 @@ function DashboardStack(props) {
         component={Remark}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -288,9 +288,9 @@ function DashboardStack(props) {
         component={Vsf}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitle: "Visit form",
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -311,9 +311,9 @@ function DashboardStack(props) {
         component={Skip}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -333,9 +333,9 @@ function DashboardStack(props) {
         component={applMap}
         options={({ route }) => ({
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -349,6 +349,29 @@ function DashboardStack(props) {
             </View>
           )
         })}
+      />
+
+      <Stack.Screen
+        name="Search-appl"
+        component={Search}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          backgroundColor: colors.gray,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
       />
     </Stack.Navigator >
   )
@@ -366,9 +389,9 @@ function CalendarStack(props) {
         component={Calendar_}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -391,9 +414,9 @@ function CategorieStack(props) {
         component={Menutop_Categories}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -407,10 +430,10 @@ function CategorieStack(props) {
         options={({ route }) => ({
           title: route.params.name,
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -437,9 +460,9 @@ function CategorieStack(props) {
         component={Menutop_Uptrail}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -459,9 +482,9 @@ function CategorieStack(props) {
         component={Remark}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -481,9 +504,9 @@ function CategorieStack(props) {
         component={Vsf}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitle: "Visit form",
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -504,9 +527,9 @@ function CategorieStack(props) {
         component={Skip}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -526,9 +549,9 @@ function CategorieStack(props) {
         component={applMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -558,9 +581,9 @@ function UserStack2(props) {
         component={Menutop_User}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -574,10 +597,10 @@ function UserStack2(props) {
         options={({ route }) => ({
           title: route.params.name,
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -601,9 +624,9 @@ function UserStack2(props) {
         component={Menutop_Uptrail}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -623,9 +646,9 @@ function UserStack2(props) {
         component={Remark}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -645,9 +668,9 @@ function UserStack2(props) {
         component={Vsf}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitle: "Visit form",
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -668,9 +691,9 @@ function UserStack2(props) {
         component={Skip}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -690,9 +713,9 @@ function UserStack2(props) {
         component={applMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
-          headerTintColor: colors.white,
+          backgroundColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,

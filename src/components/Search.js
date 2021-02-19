@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
-import SearchInput, { createFilter } from 'react-native-search-filter';
+//import SearchInput, { createFilter } from 'react-native-search-filter';
 
 import { connect } from "react-redux";
-import ContractDetail from './ContractDetail'
+import ContractDetailMap from './ContractDetailMap'
 
 const KEYS_TO_FILTERS = ['appl_id', 'app_id', 'cust_name'];
 
@@ -11,18 +11,21 @@ function Search(props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [filtered, setFiltered] = useState([])
   const hangleSearch = (value) => {
-    try {
-      setSearchTerm(value)
-      setFiltered(
-        Object.values(props.data).filter(createFilter(searchTerm, KEYS_TO_FILTERS)).map(
-          appl => appl.appl_id
+    if (props.data) {
+      try {
+        setSearchTerm(value)
+        setFiltered(
+          Object.values(props.data).filter(createFilter(searchTerm, KEYS_TO_FILTERS)).map(
+            appl => appl.appl_id
+          )
         )
-      )
-    } catch (err) {
-      console.log(err)
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
-
+  if (!props.data)
+    return <View style={styles.container}></View>
   return (
     <View style={styles.container}>
       <SearchInput
@@ -31,22 +34,12 @@ function Search(props) {
         placeholder="Nhập tên (có dấu) hoặc hợp đồng để tìm kiếm"
         onSubmitEditing={(value) => hangleSearch(value)}
       />
-      {/*
-        <ScrollView>
-          {filtered.map(
-            appl => <ContractDetail 
-              key={appl}
-              contractId = {appl}
-              navigation={props.navigation}
-            />
-            )
-          }
-        </ScrollView>
-        */}
+
       <FlatList
         data={filtered}
         renderItem={appl_id =>
-          <ContractDetail
+          <ContractDetailMap
+            key={appl_id}
             contractId={appl_id}
             navigation={props.navigation} />}
       />
