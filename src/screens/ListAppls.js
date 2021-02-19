@@ -12,7 +12,7 @@ import { Searchbar } from 'react-native-paper';
 const KEYS_TO_FILTERS = ['appl_id', 'cust_name'];
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
-const SliderWidth = Dimensions.get('screen').width;
+const ScreenWidth = Dimensions.get('screen').width;
 
 
 
@@ -24,7 +24,7 @@ function ListAppls(props) {
       setSearchTerm(value)
       if (value != null && value != "" && value != undefined) {
         setFiltered(
-          Object.values(props.showlists).filter(createFilter(value, KEYS_TO_FILTERS))
+          Object.values(props.data).filter(createFilter(value, KEYS_TO_FILTERS))
         )
       } else
         setFiltered(props.showlists.applIds)
@@ -32,7 +32,6 @@ function ListAppls(props) {
       setFiltered(props.showlists.applIds)
     }
   }
-
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -44,16 +43,12 @@ function ListAppls(props) {
     );
   };
 
-
-
   if (searchTerm !== null && searchTerm !== "")
     return (
       <View >
         <Searchbar
           onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên (có dấu) hoặc appl_id"
           onSubmitEditing={(value) => hangleSearch(value)}
-          clearIcon={'alpha-x-box-outline'}
         />
         <FlatList
           data={filtered}
@@ -62,33 +57,15 @@ function ListAppls(props) {
         />
       </View>
     )
-
   if (props.data !== null)
     return (
       <View>
-        <Searchbar
+        {/* <Searchbar
           onChangeText={(value) => hangleSearch(value)}
-          placeholder="Nhập tên (có dấu) hoặc appl_id"
+          style={{ width: 50, height: 40, borderRadius: 50 }}
+          //placeholder="Nhập tên (có dấu) hoặc appl_id"
           onSubmitEditing={(value) => hangleSearch(value)}
-          clearIcon={'alpha-x-box-outline'}
-        />
-
-        {/* // <View style={{ flexDirection: 'row' }}>
-      //   <Carousel
-      //     layout={'default'}
-      //     vertical={true}
-      //     data={props.showlists.applIds}
-      //     sliderWidth={SliderWidth}
-      //     itemWidth={width * 0.9}
-      //     itemHeight={CARD_HEIGHT}
-      //     sliderHeight={height}
-      //     renderItem={_renderItem}
-      //     useScrollView={true}
-      //     activeSlideAlignment="start"
-      //     currentIndex={0}
-      //   />
-      // </View > */}
-
+        /> */}
         <FlatList
           data={props.showlists.applIds}
           renderItem={_renderItem}
@@ -111,8 +88,6 @@ const mapStateToProps = (state, ownProps) => {
     data: state.data.data
   };
 };
-
-
 
 
 export default connect(mapStateToProps, null)(ListAppls);

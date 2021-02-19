@@ -21,6 +21,7 @@ const CARD_HEIGHT = height / 4.5;
 import { moneyFormat } from '../functions'
 
 function ContractDetailMap(props) {
+
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
@@ -28,7 +29,7 @@ function ContractDetailMap(props) {
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
 
-
+  console.log(contractId)
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {
@@ -42,40 +43,14 @@ function ContractDetailMap(props) {
     props.apiChangeTodo(config)
   }
 
-  const handleChangeTodo = async () => {
-    const todo_new = isTodo === 1 ? 0 : 1
-    let config = {
-      method: 'put',
-      url: `https://beta-fc.lgm.com.vn/rn-ver/api/appls-list/`,
-      headers: {
-        'Authorization': `Bearer ${props.token.token.access}`
-      },
-      data: {
-        'appl_id': content.appl_id,
-        'todo_value': todo_new
-      }
-    }
-    try {
-
-      setTodoContent(todo_new)
-      props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_new })
-      setTodoColor(todo_new === 1 ? colors.danger : colors.grey)
-      setTodoIcon(todo_new === 1 ? 'heart' : 'heart-o')
-
-      const response = await axios(config);
-      const responseTodo = response.data.todo_flag
-      props.calTodoDash(props.data)
-    } catch (error) {
-      const todo_old = todo_new === 1 ? 0 : 1
-      setTodoContent(todo_old)
-      props.changeTodo({ appl_id: content.appl_id, todo_flag: todo_old })
-
-    }
-  }
-
   const handleGetVsf = () => {
-    if (props.vsf.vsfs.map(appl => appl.appl_id).includes(content.appl_id)) {
-      props.setActiveVsf(content)
+
+    const cur_active = props.vsfs.filter(
+      item => item.appl_id === content.appl_id
+    )[0]
+
+    if (cur_active) {
+      props.setActiveVsf(cur_active)
       props.navigation.navigate('Vsf')
     }
     else {
@@ -88,10 +63,12 @@ function ContractDetailMap(props) {
     }
   }
 
+
+
   const handleGetSkip = () => {
-    if (props.vsf.skips.map(appl => appl.id_no).includes(content.id_no)) {
+    if (props.skips.map(appl => appl.id_no).includes(content.id_no)) {
       props.setActiveSkip(
-        props.vsf.skips.filter(appl => appl.id_no === content.id_no)[0]
+        props.skips.filter(appl => appl.id_no === content.id_no)[0]
       )
       props.navigation.navigate('Skip')
     }
@@ -107,10 +84,6 @@ function ContractDetailMap(props) {
   const handleRemark = () => {
     props.setActiveVsf(content)
     props.navigation.navigate('Remark')
-  }
-  const handleSkip = () => {
-    props.setActiveVsf(content)
-    props.navigation.navigate('Skip')
   }
 
   const handleMap = () => {
@@ -180,7 +153,6 @@ function ContractDetailMap(props) {
         padding: 5,
         borderWidth: 0,
         borderColor: colors.grey,
-        // borderTopColor: todoColor,
         borderRadius: 10,
         height: CARD_HEIGHT,
         marginBottom: 10,
@@ -206,6 +178,22 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
+
+      <View style={[showstyles.row]}>
+        <View style={showstyles.box}>
+          <Text style={[showstyles.msgTxt]}>App_id:</Text>
+        </View>
+        <View style={[showstyles.box, { flex: 3.5 }]}>
+          <View style={[showstyles.row]}>
+            <View style={[showstyles.box, { flex: 3 }]}>
+              <Text style={[showstyles.nameTxt, { fontWeight: 'normal' }]}>{content.app_id}</Text>
+            </View>
+            <View style={[showstyles.box, { flex: 1 }]}>
+            </View>
+          </View>
+        </View>
+      </View>
+
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={[showstyles.msgTxt]}>Hợp đồng:</Text>
@@ -220,6 +208,8 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
+
+
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={showstyles.msgTxt}>Thanh toán:</Text>
@@ -360,7 +350,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     data: state.data.data,
     token: state.token,
-    vsf: state.vsf
+    vsfs: state.vsf.vsfs,
+    skips: state.vsf.skips
+
   }
 }
 

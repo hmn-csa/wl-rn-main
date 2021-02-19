@@ -8,12 +8,12 @@ export const calInitialRegion = (listAppls) => {
 
   if (listAppls.length === 0)
     return {
-      latitude: null,
-      longitude: null,
-      latitudeDelta: null,
-      longitudeDelta: null,
+      latitude: 10.7888,
+      longitude: 106.7752,
+      latitudeDelta: 1,
+      longitudeDelta: 1,
     }
-    
+
   const listLat = listAppls.map(appl => appl.lat)
   const listLon = listAppls.map(appl => appl.lon)
   const meanLat = listLat.reduce(function (sum, pay) {

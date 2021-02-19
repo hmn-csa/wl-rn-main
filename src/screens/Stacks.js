@@ -20,8 +20,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Calendar_ } from './Calendar'
-import { Colors } from 'react-native-paper'
 import { Menutop_Uptrail, Menutop_User } from './MenuTop'
+import { Colors, Searchbar } from 'react-native-paper'
 
 const Stack = createStackNavigator()
 
@@ -109,8 +109,7 @@ function UserStack(props) {
 }
 
 function DashboardStack(props) {
-  const { register, setValue, handleSubmit, control, errors } = useForm();
-  const [hidesearch, Sethidesearch] = useState(false);
+  const [hidesearch, Sethidesearch] = useState(true);
   const widthAni = useRef(new Animated.Value(0)).current;
   const fadeIn = () => {
     Animated.timing(widthAni, {
@@ -120,11 +119,6 @@ function DashboardStack(props) {
     }).start();
     Sethidesearch(true)
   };
-
-  const styleAni = {
-    transform: [{ scaleY: widthAni }],
-    flexDirection: 'row'
-  }
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: true, headerTitleAlign: 'center' }}
@@ -224,33 +218,43 @@ function DashboardStack(props) {
           )
         }}
       />
+
       <Stack.Screen
         name="Portfolio"
         component={ListAppls}
         options={({ route }) => ({
           title: route.params.name,
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          headerTintColor: colors.white,
+          headerTintColor: colors.info,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
+              {/* <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color={colors.info} />
+              </TouchableOpacity> */}
+              <Searchbar
+                onChangeText={(value) => hangleSearch(value)}
+                style={{ width: 40, height: 40, borderRadius: 40 }}
+                onIconPress={() => {
+                  alert("!@#")
+                }}
+                onSubmitEditing={(value) => hangleSearch(value)}
+              />
               <TouchableOpacity
                 style={{ marginRight: 10 }}
                 onPress={() =>
-                  props.navigation.navigate('Maps', {
-                    name: props.navigation.title
-                  })
+                  props.navigation.navigate('Maps')
                 } >
-                <MaterialIcons name="map" size={30} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
+                <MaterialIcons name="map" size={25} color={colors.grey}
+                  style={{
+                    borderRadius: 20
+                  }} />
               </TouchableOpacity>
             </View>
           )
@@ -328,7 +332,6 @@ function DashboardStack(props) {
         name="Maps"
         component={applMap}
         options={({ route }) => ({
-          title: headerBackTitle,
           headerStyle: {
             backgroundColor: colors.primary,
           },
@@ -581,15 +584,12 @@ function UserStack2(props) {
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              {/* <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
+              <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
                 props.navigation.navigate('Portfolio', {
                   screen: 'Maps'
                 })
               } >
                 <MaterialIcons name="map" size={30} color="white" />
-              </TouchableOpacity> */}
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
               </TouchableOpacity>
             </View>
           )
@@ -711,6 +711,8 @@ function UserStack2(props) {
   )
 }
 
+
+
 const buttonStyles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
@@ -745,5 +747,4 @@ export {
   UserStack,
   CategorieStack,
   CalendarStack,
-  UserStack2
 }

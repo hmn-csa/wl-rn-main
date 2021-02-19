@@ -30,7 +30,7 @@ function ProductCategories(props) {
           return (
             <TouchableOpacity style={styles.card} onPress={() => { handleShow(item.applIds, item.key) }}>
               <View style={styles.cardHeader}>
-                <Text style={{ color: colors.primary, fontWeight: 'bold', fontSize: 16 }}>{item.key}</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 14 }}>{item.key}</Text>
               </View>
               <View style={{ flexDirection: 'row', paddingTop: 10 }}>
                 <Text style={{ width: '40%' }}>

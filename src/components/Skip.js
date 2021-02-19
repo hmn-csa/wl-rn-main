@@ -207,7 +207,7 @@ function Skip(props) {
 
     const statusColor = (status, appl_id) => {
       if (status === 'Active')
-        return colors.green
+        return colors.success
       if (appl_id !== "")
         return colors.yellow
       return colors.secondary
@@ -352,7 +352,7 @@ function Skip(props) {
             rowData.payment.map((pay, index) => {
               return (
                 <View style={[styles.descriptionContainer]} key={index}>
-                  <Text style={[styles.textDescription, { backgroundColor: colors.green, fontWeight: "bold" }]}>
+                  <Text style={[styles.textDescription, { backgroundColor: colors.success, fontWeight: "bold" }]}>
                     Ngày {pay.pay_date.substring(8, 10)} | Thanh Toán: {moneyFormat(pay.receipt_amt)}
                   </Text>
                 </View>

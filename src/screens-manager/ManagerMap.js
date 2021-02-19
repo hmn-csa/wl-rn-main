@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: 25,
-    color: colors.green,
+    color: colors.success,
     padding: 3,
   },
 

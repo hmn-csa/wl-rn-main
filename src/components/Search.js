@@ -5,7 +5,7 @@ import SearchInput, { createFilter } from 'react-native-search-filter';
 import { connect } from "react-redux";
 import ContractDetail from './ContractDetail'
 
-const KEYS_TO_FILTERS = ['appl_id', 'cust_name'];
+const KEYS_TO_FILTERS = ['appl_id', 'app_id', 'cust_name'];
 
 function Search(props) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -28,7 +28,7 @@ function Search(props) {
       <SearchInput
         onChangeText={(value) => hangleSearch(value)}
         style={styles.searchInput}
-        placeholder="Nhập tên (có dấu) hoặc APPL_ID để tìm kiếm"
+        placeholder="Nhập tên (có dấu) hoặc hợp đồng để tìm kiếm"
         onSubmitEditing={(value) => hangleSearch(value)}
       />
       {/*

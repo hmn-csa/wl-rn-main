@@ -1,18 +1,18 @@
 import {
-  View, Text, Image, TouchableOpacity, Alert, FlatList, StyleSheet
+  View, Text, TouchableOpacity, FlatList, StyleSheet
 } from 'react-native'
-import { Button } from 'react-native-paper';
+import { FontAwesome } from '@expo/vector-icons';
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
+import { ProgressBar } from 'react-native-paper'
 import { actUpdateShowlist } from "../actions"
 import { colors } from '../styles'
-import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { ProgressBar } from 'react-native-paper';
 
-function ScoreCategories(props) {
-  //console.log(props.data.categoryProduct)
+
+
+function ClassifyCategories(props) {
   const handleShow = (list, title) => {
-    props.navigation.navigate('Portfolio', { name: title });
+    props.navigation.navigate('Portfolio', { name: title })
     props.updateShowlist(list)
   }
 
@@ -23,7 +23,7 @@ function ScoreCategories(props) {
   return (
     <View style={[styles.container,]}>
       <FlatList
-        data={props.categoryBinscore}
+        data={props.categoryClassify}
         horizontal={false}
         numColumns={2}
         renderItem={({ item }) => {
@@ -46,7 +46,6 @@ function ScoreCategories(props) {
                 </Text>
                 <ProgressBar progress={item.paidcase / item.case} color={colors.success} />
               </View>
-
               <View style={{ paddingTop: 10 }}>
                 <Text style={{ marginBottom: 2 }}>
                   <FontAwesome name="check" size={15} color="black" /> {item.visited}/{item.case} Visit
@@ -64,7 +63,7 @@ function ScoreCategories(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    categoryBinscore: state.data.categoryBinscore,
+    categoryClassify: state.data.categoryClassify,
     showlists: state.showlists
   };
 };
@@ -76,8 +75,6 @@ const mapDispatchToProps = (dispatch) => {
     }
   };
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -109,5 +106,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScoreCategories);
+export default connect(mapStateToProps, mapDispatchToProps)(ClassifyCategories);
 
