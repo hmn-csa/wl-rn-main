@@ -37,6 +37,7 @@ export function* workerGetToken(request) {
     const response = yield call(axios, config);
     const data = response.data;
 
+    // 
     SecureStore.setItemAsync("username", request.config.username);
     SecureStore.setItemAsync("password", request.config.password);
 
