@@ -238,7 +238,7 @@ function ListUptrail(props) {
           <Carousel
             ref={carouselRef}
             layout={"tinder"}
-            layoutCardOffset={`10`}
+            layoutCardOffset={10}
             data={props.uptrails.dailyUptrails}
             sliderWidth={SliderWidth * 1}
             // sliderHeight={SliderHeight * 0.1}

@@ -13,7 +13,7 @@ export function* watcherSaga() {
 }
 
 
-
+import * as SecureStore from "expo-secure-store";
 
 
 export function* workerGetToken(request) {
@@ -36,6 +36,11 @@ export function* workerGetToken(request) {
 
     const response = yield call(axios, config);
     const data = response.data;
+
+    SecureStore.setItemAsync("username", request.config.username);
+    SecureStore.setItemAsync("password", request.config.password);
+
+    console.log('saga save done')
 
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
     // get appls data
@@ -61,7 +66,8 @@ export function* workerGetToken(request) {
     }
   } catch (error) {
     // dispatch a failure action to the store with the error
-    yield put({ type: constAction.API_TOKEN_FAILURE, error: 'Sai tài khoản hoặc mật khẩu' });
+    alert('Sai tài khoản hoặc mật khẩu')
+    yield put({ type: constAction.API_TOKEN_FAILURE, error: error });
   }
 }
 
