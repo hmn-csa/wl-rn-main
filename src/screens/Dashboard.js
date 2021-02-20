@@ -22,18 +22,26 @@ function Dashboard(props) {
     return (
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <StaffHeader_com />
-        <ScrollView style={{
-          flexDirection: 'column',
-          backgroundColor: 'white',
-          padding: 0,
-        }}>
-          <StaffDash_com />
-          <StaffTodo_com />
+        <View style={{ flex: 3 }}>
           <Swiper
             showsButtons={false}
             autoplay={true}
             autoplayTimeout={6}
-            style={{ height: 220 }}
+            style={{}}
+            showsPagination={false}
+            autoplayDirection={true}
+            navigation={props.navigation}
+          >
+            <StaffDash_com />
+            <StaffTodo_com />
+          </Swiper>
+        </View>
+        <View style={{ flex: 4 }}>
+          <Swiper
+            showsButtons={false}
+            autoplay={true}
+            autoplayTimeout={6}
+            style={{}}
             showsPagination={false}
             autoplayDirection={true}
             navigation={props.navigation}
@@ -41,28 +49,28 @@ function Dashboard(props) {
             <BarChartPM />
             <BarChartFL />
           </Swiper>
-          <View style={styles.tool_frame}>
-            <TouchableOpacity
-              style={styles.btn_tool}
-              onPress={() => props.navigation.navigate('ListPayment')}>
-              <FontAwesome5 name="search-dollar" size={20} color={colors.gray} style={{ padding: 10 }} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn_tool}
-              onPress={() => props.navigation.navigate('Uptrail')}>
-              <FontAwesome5 name="map-marked-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btn_tool}
-              onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
-              <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btn_tool}
-              onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
-              <FontAwesome name="search" size={20} color={colors.gray} style={{ padding: 10 }} />
-            </TouchableOpacity>
-          </View>
-        </ScrollView >
+        </View>
+        <View style={styles.tool_frame}>
+          <TouchableOpacity
+            style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('ListPayment')}>
+            <FontAwesome5 name="search-dollar" size={20} color={colors.gray} style={{ padding: 10 }} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('Uptrail')}>
+            <FontAwesome5 name="map-marked-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
+            <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn_tool}
+            onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
+            <FontAwesome name="search" size={20} color={colors.gray} style={{ padding: 10 }} />
+          </TouchableOpacity>
+        </View>
       </View>
     )
 }
@@ -76,12 +84,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 5,
-    marginTop: 10
+    marginTop: 10,
+    flex: 1
   },
   btn_tool: {
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 15,
+    height: 45
   }
 })
 

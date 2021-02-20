@@ -42,7 +42,7 @@ function CircleTA(props) {
           <Text style={{ paddingTop: 32, fontWeight: 'bold', textAlign: "center" }}>
             {(fill + over).toFixed(1)}%
           </Text>
-          <Text style={{ fontSize: 9, color: colors.grey, textAlign: "center" }}>
+          <Text style={{ fontSize: 9, color: colors.gray, textAlign: "center" }}>
             Hoàn thành{"\n"}chỉ tiêu
           </Text>
         </View>
