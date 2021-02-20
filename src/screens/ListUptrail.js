@@ -1,52 +1,71 @@
-import {
-  View, Text, Image, ScrollView, Alert, FlatList,
-  StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions
-} from 'react-native'
-import { FAB, Portal, Provider } from 'react-native-paper';
-import React, { useState, useEffect, useRef } from "react"
-import { connect } from "react-redux"
-import { colors } from '../styles'
-import axios from "axios"
-import DatePicker from 'react-native-datepicker'
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import Carousel from 'react-native-snap-carousel'
-import { actGetUptrails, actUpdateShowlist } from "../actions/index"
-import Loader from '../components/elements/Loader'
-import Uptrail from '../components/Uptrail'
-import * as constAction from '../consts'
-import { calInitialRegion } from '../functions'
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Text, View, ScrollView, StyleSheet, Dimensions } from "react-native";
+import { Card, Title, Paragraph, Avatar, Button } from "react-native-paper";
+import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
+import { colors } from "../styles";
+import axios from "axios";
+import DatePicker from "react-native-datepicker";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import Carousel from "react-native-snap-carousel";
+import { actGetUptrails, actUpdateShowlist } from "../actions/index";
+import Loader from "../components/elements/Loader";
+import Uptrail from "../components/Uptrail";
+import * as constAction from "../consts";
+import { calInitialRegion } from "../functions";
+import { FontAwesome5 } from "@expo/vector-icons";
+import CalendarStrip from "react-native-calendar-strip";
+import MapViewDirections from "react-native-maps-directions";
+
 // function Uptrail
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 8;
-const SliderWidth = Dimensions.get('screen').width;
-
+const SliderWidth = Dimensions.get("screen").width;
+// const SliderHeight = Dimensions.get('screen').height;
 
 function ListUptrail(props) {
+  const [reDate, setRedate] = useState(() => {
+    var today = new Date(),
+      date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
 
-  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-    const paddingToBottom = 30;
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
-  };
+    return date;
+  });
+  const mapRef = useRef(null);
+  const makerRef = {};
+  const carouselRef = useRef(null);
 
-  const [pageMap, setPageMap] = useState(false)
-  const [reDate, setRedate] = useState(null)
+  // const [cordata] = useState(() => {
+  //   var data = [];
+  //   props.uptrails.dailyUptrails.map((appl, index) => {
+  //     data.push({ latitude: appl.lat, longitude: appl.lon });
+  //   });
+  //   return data;
+  // });
+  const cordata = [];
+  props.uptrails.dailyUptrails.map((appl, index) => {
+    cordata.push({ latitude: appl.lat, longitude: appl.lon });
+  });
 
-  const mapRef = useRef(null)
-  const makerRef = {}
-  const carouselRef = useRef(null)
-
-  const [initialRegion, setInitialRegion] = useState(calInitialRegion(props.uptrails.uptrails));
-  const [activeIndex, setActivateIndex] = useState(0);
-
+  const [Distance, setDistance] = useState(null);
+  const [isDirectError, setIsDirectError] = useState(false);
+  //const [activeIndex, setActivateIndex] = useState(0);
   const getDailyUptrails = (date) => {
     props.getDailyUptrails({
       staff_id: props.token.active_staff,
       token: props.token.token.access,
-      loaddate: date
-    })
-  }
+      loaddate: date,
+    });
+  };
+
+  useEffect(() => {
+    getDailyUptrails(reDate);
+    console.log("useEffect get data", reDate);
+  }, []);
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -54,161 +73,196 @@ function ListUptrail(props) {
         key={item.runtime}
         item={item}
         navigation={props.navigation}
-        type={'marker'}
+        type={""}
       />
     );
   };
 
   const renSelectDate = () => {
-
+    console.log("render lich");
     return (
-      <View style={[styles.row, {}]}>
-        <View style={[styles.box, { backgroundColor: 'white', borderRadius: 5, marginRight: 10, paddingLeft: 5 }]}>
-          <Text>Chọn ngày để xem báo cáo: </Text>
-        </View>
-        <View style={[styles.box, { backgroundColor: colors.secondary, borderRadius: 5, }]}>
-          <DatePicker
-            date={reDate}
-            mode="date"
-            placeholder="ngày"
-            format="YYYY-MM-DD"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: 'absolute',
-                left: 4,
-                top: 4,
-                marginLeft: 0,
-              },
-              dateInput: {
-                marginLeft: 35,
-                borderWidth: 0,
-              },
-              dateText: {
-                fontWeight: "800",
-                color: 'white',
-                fontSize: 12,
-              }
-            }}
-            onDateChange={(date) => {
-              setRedate(date)
-              getDailyUptrails(date)
-            }}
-          />
-        </View>
+      <View style={{ flex: 1 }}>
+        <CalendarStrip
+          scrollable
+          style={{ height: 90, marginRight: 0, paddingLeft: 0 }}
+          calendarColor={"white"}
+          daySelectionAnimation={{
+            type: "border",
+            duration: 200,
+            borderWidth: 1,
+            borderHighlightColor: "black",
+          }}
+          calendarHeaderStyle={{ color: "#787571" }}
+          dateNumberStyle={{ color: "#787571" }}
+          dateNameStyle={{ color: "black" }}
+          iconContainer={{ flex: 0.1 }}
+          selectedDate={reDate}
+          onDateSelected={(date) => {
+            setRedate(date.format("YYYY-MM-DD"));
+            getDailyUptrails(date.format("YYYY-MM-DD"));
+          }}
+        />
       </View>
-    )
+    );
+  };
 
-  }
+  const Map_Derection_result = () => {
+    const d = new Date(reDate);
+    const year = d.getFullYear(); // 2019
+    const date = d.getDate();
+    const months = [
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12",
+    ];
+    const days = [
+      "Chủ Nhật",
+      "Thứ Hai",
+      "Thứ Ba",
+      "Thứ Tư",
+      "Thứ Năm",
+      "Thứ Sáu",
+      "Thứ Bảy",
+    ];
+    const dayName = days[d.getDay()];
+    const monthName = months[d.getMonth()];
+    const dateformatted = `${dayName}, ${date} ${monthName} ${year}`;
+
+    if ((isDirectError == false) & (cordata.length > 1)) {
+      return (
+        <View style={text_map_styles.container}>
+          <Text style={text_map_styles.Title}>Lộ trình di chuyển</Text>
+          <Text style={text_map_styles.dateformat}>{dateformatted}</Text>
+
+          <View style={text_map_styles.boxcover}>
+            <View style={text_map_styles.boxin}>
+              <Text>Quãng đường</Text>
+              <View style={{ flexDirection: "row" }}>
+                <FontAwesome5 name="road" style={text_map_styles.logo} />
+                <Text style={text_map_styles.Content}>
+                  {Math.round(Distance * 100) / 100} km {"    "}
+                </Text>
+              </View>
+            </View>
+            <View style={text_map_styles.boxin}>
+              <Text>Số lần checkin</Text>
+              <View style={{ flexDirection: "row" }}>
+                <FontAwesome5 name="route" style={text_map_styles.logo} />
+                <Text style={text_map_styles.Content}>
+                  {cordata.length} {"   "}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      );
+    }
+    if (cordata.length == 0)
+      return (
+        <View>
+          <Text>Không có dữ liệu</Text>
+        </View>
+      );
+  };
+
   // -------------------------------------
+  if (props.uptrails.dailyFetching) return <View>{renSelectDate()}</View>;
+  else
+    return (
+      <View style={styles.container}>
+        {renSelectDate()}
 
-  if (props.uptrails.dailyFetching)
-    return <Loader />
-  else if (props.uptrails.dailyUptrails.length > 0 && pageMap) {
-    return <View style={styles.container}>
-
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-        <Portal>
-          <FAB
-            style={{
-              position: 'absolute',
-              bottom: 220,
-              right: 20,
-              backgroundColor: 'white',
-            }}
-            icon={(props) => <FontAwesome5 name="list-alt"  {...props} />}
-            color={colors.danger}
-            onPress={() => setPageMap(false)}
-          />
-        </Portal>
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
           ref={mapRef}
           initialRegion={calInitialRegion(props.uptrails.dailyUptrails)}
         >
-          {
-            props.uptrails.dailyUptrails.map((appl, index) => {
-              let description = `${appl.appl_id}`
-              return <Marker
+          {props.uptrails.dailyUptrails.map((appl, index) => {
+            let description = `${appl.appl_id}`;
+            return (
+              <Marker
                 coordinate={{ latitude: appl.lat, longitude: appl.lon }}
                 key={index}
                 description={description}
                 onPress={() => {
-                  setActivateIndex(index)
-                  carouselRef.current.snapToItem(index)
+                  //setActivateIndex(index);
+                  carouselRef.current.snapToItem(index);
                 }}
-                Color={'blue'}
-                ref={(ref) => makerRef[index] = ref}
+                Color={"blue"}
+                ref={(ref) => (makerRef[index] = ref)}
               />
-            }
-            )
-          }
-        </MapView>
-      </View>
+            );
+          })}
 
-      <View
-        style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingBottom: 10 }}>
-        <Carousel
-          ref={carouselRef}
-          layout={'default'}
-          data={props.uptrails.dailyUptrails}
-          sliderWidth={SliderWidth}
-          itemWidth={width * 0.9}
-          itemHeight={CARD_HEIGHT}
-          renderItem={_renderItem}
-          useScrollView={true}
-          onSnapToItem={(index) => {
-            setActivateIndex(index)
-            mapRef.current.animateToCoordinate(
-              { latitude: props.uptrails.dailyUptrails[index].lat, longitude: props.uptrails.uptrails[index].lon }, 0
-            )
-            if (makerRef[index] != undefined)
-              makerRef[index].showCallout()
-          }}
-          activeSlideAlignment="center"
-        />
-      </View>
-    </View >
-  }
-
-  else if (props.uptrails.dailyUptrails.length > 0 && pageMap === false) {
-    return (
-      <ScrollView
-        style={{ padding: 5, paddingBottom: 40 }}
-      >
-        {renSelectDate()}
-
-        <Portal>
-          <FAB
-            style={{
-              position: 'absolute',
-              bottom: 220,
-              right: 20,
-              backgroundColor: 'white',
+          <MapViewDirections
+            origin={cordata[0]}
+            destination={cordata[cordata.length - 1]}
+            waypoints={cordata.slice(1, -1)}
+            mode="DRIVING"
+            apikey="AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
+            language="en"
+            strokeWidth={4}
+            strokeColor="black"
+            onStart={(params) => {
+              console.log(
+                `Started routing between "${params.origin}" and "${params.destination
+                }"${params.waypoints.length
+                  ? " using waypoints: " + params.waypoints.join(", ")
+                  : ""
+                }`
+              );
             }}
-            icon={(props) => <FontAwesome5 name="map-marked-alt"  {...props} />}
-            color={colors.danger}
-            onPress={() => setPageMap(true)}
+            onReady={(result) => {
+              setIsDirectError(false);
+              setDistance(result.distance);
+            }}
+            onError={(errorMessage) => {
+              setIsDirectError(true);
+            }}
           />
-        </Portal>
-        {props.uptrails.dailyUptrails.map(item =>
-          <Uptrail
-            key={item.runtime}
-            item={item}
-            navigation={props.navigation}
-          />)
-        }
-      </ScrollView>
-    )
-  }
-  return (
-    <ScrollView>
+        </MapView>
 
-      {renSelectDate()}
-    </ScrollView>
-  )
+        {Map_Derection_result()}
+
+        <View style={styles.cardStyle}>
+          <Carousel
+            ref={carouselRef}
+            layout={"tinder"}
+            layoutCardOffset={`10`}
+            data={props.uptrails.dailyUptrails}
+            sliderWidth={SliderWidth * 1}
+            // sliderHeight={SliderHeight * 0.1}
+            itemWidth={width}
+            itemHeight={CARD_HEIGHT}
+            renderItem={_renderItem}
+            useScrollView={true}
+            // vertical={true}
+            onSnapToItem={(index) => {
+              // setActivateIndex(index);
+              mapRef.current.animateToCoordinate(
+                {
+                  latitude: props.uptrails.dailyUptrails[index].lat,
+                  longitude: props.uptrails.uptrails[index].lon,
+                },
+                0
+              );
+              if (makerRef[index] != undefined) makerRef[index].showCallout();
+            }}
+            activeSlideAlignment="center"
+          />
+        </View>
+      </View>
+    );
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -218,76 +272,95 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-
 const mapDispatchToProps = (dispatch) => {
   return {
     getDailyUptrails: (config) => {
       dispatch({
         type: constAction.DAILY_UPTRAIL_REQUEST,
-        config
-      })
+        config,
+      });
     },
     updateShowlist: (content) => {
       dispatch({
         type: constAction.SET_TODO_SHOWLIST,
         content,
-      })
+      });
     },
-  }
-}
-
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    backgroundColor: "white",
   },
   mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    flex: 4,
+    marginRight: 5,
+    marginLeft: 5,
+    marginTop: 5,
+  },
+  cardStyle: {
+    flex: 2,
   },
   row: {
-    width: '95%',
+    width: "95%",
     marginVertical: 2,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginLeft: "auto",
+    marginRight: "auto",
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 5,
   },
 
   box: {
-    justifyContent: 'center',
+    justifyContent: "center",
     flex: 1,
-
-  },
-
-})
-
-
-const buttonStyles = StyleSheet.create({
-  buttons: {
-    flexDirection: 'row',
-    padding: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    borderRadius: 10,
-    marginLeft: 5,
-    // backgroundColor: colors.primary,
-    borderColor: null,
-    width: width / 2 - 5
   },
 });
 
-const stylesTrail = StyleSheet.create({
+const text_map_styles = StyleSheet.create({
+  Title: {
+    paddingLeft: 10,
+    paddingTop: 10,
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#787571",
+  },
+
+  dateformat: {
+    paddingLeft: 10,
+    fontSize: 15,
+    color: "gray",
+  },
+  Subtitle: {
+    fontSize: 12,
+  },
+  Content: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  boxin: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  boxcover: {
+    flex: 1,
+    flexDirection: "row",
+    marginLeft: 20,
+    marginRight: 20,
+  },
   container: {
-    backgroundColor: "#DCDCDC",
-  }
+    flex: 2,
+    backgroundColor: "white",
+  },
+  logo: {
+    fontSize: 16,
+    padding: 5,
+    color: colors.grey,
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListUptrail);
-

@@ -16,8 +16,6 @@ import { moneyFormat } from '../functions'
 import { EMPTYAVATAR } from '../images'
 import { ScrollView } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get("window");
-
-
 const AVATAR_WIDTH = width / 9
 
 
