@@ -140,7 +140,9 @@ function Uptrail(props) {
     var result = consts.REMARK_CODE.filter(obj => {
       return obj.value === code
     })
-    return (result[0].label)
+    if (result.length > 0)
+      return (result[0].label)
+    return ("XXX")
   }
 
   const haveimages = (image1, image2, image3) => {

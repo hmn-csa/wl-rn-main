@@ -2,15 +2,10 @@ import {
   View, Text, Image, ScrollView, Alert, FlatList,
   StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions
 } from 'react-native'
-import { Button, Portal, Provider, FAB } from 'react-native-paper';
 import React, { useState, useEffect, useRef } from "react"
 import { connect } from "react-redux"
-import { colors } from '../styles'
-import axios from "axios"
-import DatePicker from 'react-native-datepicker'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel'
-import { actGetUptrails, actUpdateShowlist } from "../actions/index"
 import Loader from '../components/elements/Loader'
 import Uptrail from '../components/Uptrail'
 import * as constAction from '../consts'
@@ -248,7 +243,10 @@ const mapDispatchToProps = (dispatch) => {
       })
     },
     updateShowlist: (content) => {
-      dispatch(actUpdateShowlist(content))
+      dispatch({
+        type: constAction.UPDATE_SHOWLIST,
+        content,
+      })
     },
     getMoreUptrails: (config) => {
       dispatch({

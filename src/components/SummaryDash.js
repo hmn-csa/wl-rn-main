@@ -7,8 +7,7 @@ import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { colors } from '../styles'
 import { moneyFormat } from '../functions';
 import { useNavigation } from '@react-navigation/native';
-import { CategorieStack, CalendarStack, DashboardStack, UserStack, PortStack } from '../screens/Stacks'
-
+import * as constAction from '../consts'
 
 
 
@@ -181,10 +180,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateShowlist: (content) => {
-      dispatch(actUpdateShowlist(content))
+      dispatch({
+        type: constAction.SET_TODO_SHOWLIST,
+        content,
+      })
     },
     setTodoShowlist: (content) => {
-      dispatch(actSetTodoShowlist(content))
+      dispatch({
+        type: constAction.SET_TODO_SHOWLIST,
+        content,
+      })
     },
   };
 };

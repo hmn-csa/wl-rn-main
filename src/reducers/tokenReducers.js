@@ -20,21 +20,21 @@ const initialState = {
 export function tokenReducers(state = initialState, action) {
   switch (action.type) {
 
-    //case "API_TOKEN_CONFIG":
-    //  return { ...state, config: action.config};
-
     case constAction.API_TOKEN_REQUEST:
       return { ...state, fetching: true, error: null };
+
     case constAction.API_TOKEN_SUCCESS:
       return { ...state, fetching: false, token: action.content, error: null };
+
     case constAction.API_TOKEN_FAILURE:
       return { ...state, fetching: false, token: action.content, error: action.error };
+
     case constAction.TOKEN_REMOVE:
       return initialState;
 
-
     case constAction.API_CHANGEPW_REQUEST:
       return { ...state, changePw: true, changePwError: null }
+
     case constAction.API_CHANGEPW_FAILURE:
       return { ...state, changePwError: action.error }
 
@@ -45,8 +45,14 @@ export function tokenReducers(state = initialState, action) {
         active_infos: action.content.info
       };
 
-    case constAction.LOCATION_SET:
+    case constAction.SET_ACTIVE_AVATAR:
+      const active_infos = { ...state.active_infos, avatar: action.content }
+      return {
+        ...state,
+        active_infos: active_infos,
+      };
 
+    case constAction.LOCATION_SET:
       //This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
       function calcCrow(lat1, lon1, lat2, lon2) {
         function toRad(Value) {

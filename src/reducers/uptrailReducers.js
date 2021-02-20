@@ -8,9 +8,11 @@ const initialState = {
   userFetching: false,
   justFetching: false,
   dailyFetching: false,
+  applidFetching: false,
   userError: null,
   uptrails: [],
-  dailyUptrails: []
+  dailyUptrails: [],
+  applidUptrails: {}
 };
 
 const uptrailReducers = (state = initialState, action) => {
@@ -57,6 +59,19 @@ const uptrailReducers = (state = initialState, action) => {
         dailyFetching: false,
         dailyUptrails: action.content
       }
+      return state;
+
+    case constAction.APPLID_UPTRAIL_REQUEST:
+      return { ...state, applidFetching: true, error: null }
+
+    case constAction.APPLID_UPTRAIL_SUCCESS:
+      const applidUptrails = { ...state.applidUptrails, ...action.content }
+      state = {
+        ...state,
+        applidFetching: false,
+        applidUptrails: applidUptrails
+      }
+
       return state;
 
 

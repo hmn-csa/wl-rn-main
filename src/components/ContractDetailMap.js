@@ -7,14 +7,9 @@ import {
   TouchableOpacity
 } from 'react-native'
 
-import {
-  actGetVsfSaga, actSetActiveApplId, actChangeToDo,
-  actChangeTodoSaga, calTodoDash,
-} from "../actions"
 import * as constAction from '../consts'
 import { colors } from '../styles'
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
@@ -32,8 +27,8 @@ function ContractDetailMap(props) {
   console.log(contractId)
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
-    let config = { 
-      token: props.token.token.access,
+    let config = {
+      token: props.token,
       appl_id: content.appl_id,
       todo_value: todo_value
     }
@@ -51,16 +46,25 @@ function ContractDetailMap(props) {
 
     if (cur_active) {
       props.setActiveVsf(cur_active)
-      props.navigation.navigate('Vsf')
     }
     else {
       const config = {
         'appl_id': content.appl_id,
-        'token_value': props.token.token.access
+        'token_value': props.token
       }
       props.apiGetVsf(config)
-      props.navigation.navigate('Vsf')
     }
+
+    // if (!props.applidUptrails[content.appl_id]) {
+    //   const config = {
+    //     loadapplid: content.appl_id,
+    //     token: props.token
+    //   }
+    //   props.apiGetUptrail(config)
+    // }
+
+    props.navigation.navigate('Vsf')
+
   }
 
 
@@ -70,15 +74,23 @@ function ContractDetailMap(props) {
       props.setActiveSkip(
         props.skips.filter(appl => appl.id_no === content.id_no)[0]
       )
-      props.navigation.navigate('Skip')
     }
     else {
       const config = {
         'id_no': content.id_no,
       }
       props.apiGetSkip(config)
-      props.navigation.navigate('Skip')
     }
+    props.navigation.navigate('Skip')
+
+  }
+
+  const handleGetUptrail = () => {
+    const config = {
+      loadapplid: content.appl_id,
+      token: props.token
+    }
+    props.apiGetUptrail(config)
   }
 
   const handleRemark = () => {
@@ -276,6 +288,9 @@ function ContractDetailMap(props) {
             style={[showstyles.logo, { color: followedColor }]}
           />
         </TouchableOpacity>
+
+
+
         <TouchableOpacity
           style={[showstyles.btn]}
           onPress={handleMap}>
@@ -324,6 +339,9 @@ const mapDispatchToProps = (dispatch) => {
         config
       });
     },
+
+
+
     setActiveVsf: (content) => {
       dispatch({
         type: constAction.APPLID_VSF_ACTIVE,
@@ -349,10 +367,9 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state, ownProps) => {
   return {
     data: state.data.data,
-    token: state.token,
+    token: state.token.token.access,
     vsfs: state.vsf.vsfs,
-    skips: state.vsf.skips
-
+    skips: state.vsf.skips,
   }
 }
 
