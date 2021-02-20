@@ -15,7 +15,43 @@ const { width, height } = Dimensions.get("window");
 const AVATAR_WIDTH = width / 8
 import { EMPTYAVATAR } from '../images'
 
+function StaffHeader(props) {
+  const renAvatar = (avatar) => {
+    if (!avatar)
+      return EMPTYAVATAR
+    else return { uri: avatar }
+  }
 
+  const miniMoneyFormat = (n) => {
+    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
+    return money
+  }
+
+  return (
+    <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 10, backgroundColor: 'white', paddingLeft: 20 }]}>
+      <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, marginTop: -5 }]}>
+        <ImageBackground
+          style={[styles.pic]}
+          imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
+          source={renAvatar(props.token.active_infos.avatar)}>
+        </ImageBackground>
+      </View>
+      <View style={[styles.box, { flex: 1, marginLeft: 10, marginBottom: 5, marginTop: -5 },]}>
+        <Text style={[styles.nameTxt, { color: colors.grey }]}
+          ellipsizeMode="tail">
+          {props.token.active_staff}
+        </Text>
+        <Text style={[styles.nameTxt, { fontSize: 12 }]}
+          ellipsizeMode="tail">
+          {props.token.active_infos.fc_name}
+        </Text>
+      </View>
+      <View style={[styles.box, { flex: 2, alignItems: 'center' }]}>
+        <CircleTA />
+      </View>
+    </View>
+  )
+}
 
 function StaffDash(props) {
   const renAvatar = (avatar) => {
@@ -33,55 +69,30 @@ function StaffDash(props) {
     <View
       style={[styles.block, { flex: 1, marginBottom: 5 }]}
     >
-      <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: colors.grey, borderRadius: 10, marginBottom: 10, paddingBottom: 5, paddingTop: 5 }]}>
-        <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, marginTop: -5 }]}>
-          <ImageBackground
-            style={[styles.pic]}
-            imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
-            source={renAvatar(props.token.active_infos.avatar)}>
-          </ImageBackground>
-        </View>
-        <View style={[styles.box, { flex: 1, marginLeft: 10, marginBottom: 5, marginTop: -5 },]}>
-          <Text style={[styles.nameTxt, { color: colors.grey }]}
-            ellipsizeMode="tail">
-            {props.token.active_staff}
-          </Text>
-          <Text style={[styles.nameTxt, { fontSize: 12 }]}
-            ellipsizeMode="tail">
-            {props.token.active_infos.fc_name}
-          </Text>
-        </View>
-        <View style={[styles.box, { flex: 2, alignItems: 'center' }]}>
-          <CircleTA />
-        </View>
-      </View>
-
-      {/* ======================*/}
-
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Tổng danh mục
       </Text>
       <View style={[styles.row]}>
         <View style={[styles.box, { padding: 3, flex: 0.8 }]}>
           <Text style={styles.index}>
-            <FontAwesome name="file-text" size={12} color={colors.info} /> {props.totalCal.totalCase.case}
+            <FontAwesome name="file-text" size={14} color={colors.info} /> {props.totalCal.totalCase.case}
           </Text>
           <Text style={styles.label}>Tổng HĐ</Text>
         </View>
 
         <View style={[styles.box, { padding: 1, flex: 1.618 }]}>
-          <Text style={styles.index, { fontSize: 10, fontWeight: 'bold', position: 'absolute', top: -5, left: 30, color: colors.success }}>
+          <Text style={styles.indexSmall}>
             + 0
           </Text>
           <Text style={styles.index}>
-            <FontAwesome5 name="running" size={12} color={colors.info} /> {props.totalCal.followed.case}
+            <FontAwesome5 name="running" size={14} color={colors.info} /> {props.totalCal.followed.case}
           </Text>
           <Text style={styles.label}>Đã viếng thăm</Text>
         </View>
 
         <View style={[styles.box, { flex: 1.5 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(props.totalCal.followed.case * 100 / props.totalCal.totalCase.case).toFixed(0)}%
+          <Text style={{ fontSize: 12 }}>
+            <FontAwesome name="check" size={14} color={colors.info} /> {(props.totalCal.followed.case * 100 / props.totalCal.totalCase.case).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
@@ -95,28 +106,28 @@ function StaffDash(props) {
 
       <View style={[styles.row]}>
         <View style={[styles.box, { padding: 3, flex: 0.8, paddingTop: 6 }]}>
-          <Text style={styles.index, { fontSize: 10, fontWeight: 'bold', position: 'absolute', top: -5, left: 30, color: colors.success }}>
+          <Text style={styles.indexSmall}>
             + 4
           </Text>
           <Text style={styles.index}>
-            <FontAwesome5 name="money-bill-wave" size={12} color={colors.info} /> {props.totalCal.paidMtd.case}
+            <FontAwesome5 name="money-bill-wave" size={14} color={colors.info} /> {props.totalCal.paidMtd.case}
           </Text>
           <Text style={styles.label}>HĐ có số thu</Text>
         </View>
 
         <View style={[styles.box, { padding: 1, flex: 1.618, paddingTop: 6 }]}>
-          <Text style={styles.index, { fontSize: 10, fontWeight: 'bold', position: 'absolute', top: -5, left: 60, color: colors.success }}>
+          <Text style={styles.indexSmall}>
             + {moneyFormat(props.totalCal.paidMtd.value)}
           </Text>
           <Text style={styles.index}>
-            <FontAwesome name="dollar" size={12} color={colors.info} /> {moneyFormat(props.totalCal.paidMtd.value)}
+            <FontAwesome name="dollar" size={14} color={colors.info} /> {moneyFormat(props.totalCal.paidMtd.value)}
           </Text>
           <Text style={styles.label}>Tổng số thu</Text>
         </View>
 
         <View style={[styles.box, { flex: 1.5 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
+          <Text style={{ fontSize: 12 }}>
+            <FontAwesome name="check" size={14} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
@@ -143,8 +154,8 @@ function StaffDash(props) {
         </View>
 
         <View style={[styles.box, { flex: 1.5 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
+          <Text style={{ fontSize: 12 }}>
+            <FontAwesome name="check" size={14} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
@@ -181,24 +192,24 @@ function StaffTodo(props) {
       <View style={[styles.row]}>
         <View style={[styles.box, { padding: 3, flex: 0.8 }]}>
           <Text style={styles.index}>
-            <FontAwesome name="file-text" size={12} color={colors.info} /> {props.totalCal.totalCase.case}
+            <FontAwesome name="file-text" size={14} color={colors.info} /> {props.totalCal.totalCase.case}
           </Text>
           <Text style={styles.label}>Tổng HĐ</Text>
         </View>
 
         <View style={[styles.box, { padding: 1, flex: 1.618 }]}>
-          <Text style={styles.index, { fontSize: 10, fontWeight: 'bold', position: 'absolute', top: -5, left: 30, color: colors.success }}>
+          <Text style={styles.indexSmall}>
             + 0
           </Text>
           <Text style={styles.index}>
-            <FontAwesome5 name="running" size={12} color={colors.info} /> {props.totalCal.followed.case}
+            <FontAwesome5 name="running" size={14} color={colors.info} /> {props.totalCal.followed.case}
           </Text>
           <Text style={styles.label}>Đã viếng thăm</Text>
         </View>
 
         <View style={[styles.box, { flex: 1.5 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(props.totalCal.followed.case * 100 / props.totalCal.totalCase.case).toFixed(0)}%
+          <Text style={{ fontSize: 12 }}>
+            <FontAwesome name="check" size={14} color={colors.info} /> {(props.totalCal.followed.case * 100 / props.totalCal.totalCase.case).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
@@ -212,28 +223,28 @@ function StaffTodo(props) {
 
       <View style={[styles.row]}>
         <View style={[styles.box, { padding: 3, flex: 0.8, paddingTop: 6 }]}>
-          <Text style={styles.index, { fontSize: 10, fontWeight: 'bold', position: 'absolute', top: -5, left: 30, color: colors.success }}>
+          <Text style={styles.indexSmall}>
             + 4
           </Text>
           <Text style={styles.index}>
-            <FontAwesome5 name="money-bill-wave" size={12} color={colors.info} /> {props.totalCal.paidMtd.case}
+            <FontAwesome5 name="money-bill-wave" size={14} color={colors.info} /> {props.totalCal.paidMtd.case}
           </Text>
           <Text style={styles.label}>HĐ có số thu</Text>
         </View>
 
         <View style={[styles.box, { padding: 1, flex: 1.618, paddingTop: 6 }]}>
-          <Text style={styles.index, { fontSize: 10, fontWeight: 'bold', position: 'absolute', top: -5, left: 60, color: colors.success }}>
+          <Text style={styles.indexSmall}>
             + {moneyFormat(props.totalCal.paidMtd.value)}
           </Text>
           <Text style={styles.index}>
-            <FontAwesome name="dollar" size={12} color={colors.info} /> {moneyFormat(props.totalCal.paidMtd.value)}
+            <FontAwesome name="dollar" size={14} color={colors.info} /> {moneyFormat(props.totalCal.paidMtd.value)}
           </Text>
           <Text style={styles.label}>Tổng số thu</Text>
         </View>
 
         <View style={[styles.box, { flex: 1.5 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
+          <Text style={{ fontSize: 12 }}>
+            <FontAwesome name="check" size={14} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
@@ -260,8 +271,8 @@ function StaffTodo(props) {
         </View>
 
         <View style={[styles.box, { flex: 1.5 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
+          <Text style={{ fontSize: 12 }}>
+            <FontAwesome name="check" size={14} color={colors.info} /> {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
@@ -315,15 +326,18 @@ const styles = StyleSheet.create({
   },
   index: {
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 16,
   },
   indexSmall: {
-    fontWeight: '600',
-    fontSize: 14,
-    color: colors.textcolor,
+    fontSize: 12,
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: -7,
+    left: 40,
+    color: colors.success
   },
   indexLabel: {
-    fontSize: 10
+    fontSize: 12
   },
   label: {
     fontSize: 9,
@@ -381,9 +395,11 @@ const styles = StyleSheet.create({
 
 const StaffDash_com = connect(mapStateToProps, null)(StaffDash)
 const StaffTodo_com = connect(mapStateToProps, null)(StaffTodo)
+const StaffHeader_com = connect(mapStateToProps, null)(StaffHeader)
 
 export {
   StaffDash_com,
-  StaffTodo_com
+  StaffTodo_com,
+  StaffHeader_com
 }
 
