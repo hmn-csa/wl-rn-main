@@ -10,7 +10,7 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import * as Device from "expo-device";
 import { connect } from "react-redux";
@@ -256,15 +256,14 @@ function Login(props) {
                 ĐĂNG NHẬP
               </Button>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-
-              <View style={{ paddingRight: 40 }}>
+            <View style={{ flexDirection: "row", justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
+              <View style={{ paddingRight: '15%' }}>
                 <Button onPress={() => handleAuthentication()}>
-                  <FontAwesome5 name="fingerprint" style={icon_style.logo} />
+                  <MaterialCommunityIcons name="fingerprint" size={40} color="black" />
                 </Button>
               </View>
               <Text
-                style={{ marginBottom: 8, fontSize: 12, marginRight: "5%" }}
+                style={{ marginBottom: 8, fontSize: 12, right: 10 }}
               >
                 Quên mật khẩu ?
               </Text>

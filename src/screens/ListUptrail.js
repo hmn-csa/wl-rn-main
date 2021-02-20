@@ -79,7 +79,6 @@ function ListUptrail(props) {
   };
 
   const renSelectDate = () => {
-    console.log("render lich");
     return (
       <View style={{ flex: 1 }}>
         <CalendarStrip
