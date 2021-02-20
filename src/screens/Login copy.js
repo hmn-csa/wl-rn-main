@@ -10,18 +10,19 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
+// import CheckBox from '@react-native-community/checkbox';
+import { useForm, Controller } from "react-hook-form";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import * as Device from "expo-device";
 import { connect } from "react-redux";
+import { actloginUser, actLocationSet } from "../actions/index";
 import { styles, colors } from "../styles";
 import { Ionicons } from "@expo/vector-icons";
 import Loader from "../components/elements/Loader";
 import { Button } from "react-native-paper";
 import * as LocalAuthentication from "expo-local-authentication";
 import * as SecureStore from "expo-secure-store";
-
-import * as constAction from '../consts'
 
 async function savekeychain(key, value) {
   // save pw
@@ -36,17 +37,17 @@ async function savekeychain(key, value) {
 async function getValueFor(key) {
 
   let result = await SecureStore.getItemAsync(key);
-  if (!result) {
-    //alert("🔐 Here's your value 🔐 \n" + result);
+  if (result) {
+    alert("🔐 Here's your value 🔐 \n" + result);
     return result;
   } else {
     alert("No values stored under that key.");
-    return null
-  } c
+  }
 }
 
 function Login(props) {
   //============ Get IP user
+  const [sccaned, setSccaned] = React.useState(false);
 
   // const getIP = async () => {
   //   fetch('https://api.ipify.org?format=json')
@@ -56,9 +57,9 @@ function Login(props) {
   // }
   //=============================
 
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [fetching, setFetching] = useState(false)
+  const [ip, setIP] = React.useState(null);
+
+
 
   const checkDeviceForHardware = async () => {
     let compatible = await LocalAuthentication.hasHardwareAsync();
@@ -66,7 +67,6 @@ function Login(props) {
       console.log("Compatible Device!");
     } else console.log("Current device does not have the necessary hardware!");
   };
-
   const checkForBiometrics = async () => {
     let biometricRecords = await LocalAuthentication.isEnrolledAsync();
     if (!biometricRecords) {
@@ -76,44 +76,40 @@ function Login(props) {
     }
   };
 
+  // useEffect(() => {
+  //   checkDeviceForHardware();
+  //   checkForBiometrics();
+  //   // handleLoginPress();
+  //   // handleAuthentication(props.token);
+  // }, []);
 
-  const handleAuthentication = async () => {
+  // const handleLoginPress = async () => {
+  //   handleAuthentication(props.token);
+  // };
+
+  const handleAuthentication = async (cor) => {
     let result = await LocalAuthentication.authenticateAsync();
-
+    console.log("kết quả auth", result);
     if (result.success) {
-      setFetching(true)
+      // setSccaned(true);
+
       let username = await SecureStore.getItemAsync("username");
       let password = await SecureStore.getItemAsync("password");
+      console.log("datakeychain", username, password);
 
-      if (!username || !password) {
-        alert("Chưa lưu mật khẩu! Vui lòng nhập tài khoản và mật khẩu !");
-        setFetching(false)
-        return null
-      }
-
-      let data = {
+      let data_login = {
         username: username,
         password: password,
-        lat: props.token.lat,
-        lon: props.token.lat,
+        lat: cor.lat,
+        lon: cor.lon,
         device_brand: Device.brand,
         device_os: Device.osName,
         device_name: Device.modelName,
-      }
-
-      if (!data.lat) {
-        let coords = await getLocation();
-        data = {
-          ...data,
-          lat: coords.latitude,
-          lon: coords.longitude,
-        }
-      }
-      props.login(data);
-      setFetching(false)
-
+      };
+      props.login(data_login);
+      storeToken(data_login);
     } else {
-      alert("Xác thưc không thành công");
+      alert("Error! Enter your username and password!");
     }
   };
 
@@ -125,68 +121,81 @@ function Login(props) {
     }
     let locationC = await Location.getCurrentPositionAsync({});
     props.locationSet(locationC.coords);
-
-    return locationC.coords
   };
 
   const getToken = async () => {
     try {
-      let username = await SecureStore.getItemAsync("username")
-      let password = await SecureStore.getItemAsync("password")
-
-      if (username) setUsername(username)
-      if (password) setPassword(password)
-
-      //console.log(username, password)
+      let userData = await AsyncStorage.getItem("userData");
+      let data = JSON.parse(userData);
+      if (data !== null) {
+        setValue("username", data.username);
+        setValue("password", data.password);
+      }
     } catch (error) {
       alert(error);
     }
   };
 
+  //=========================
   //======= Run fisrt times after load page
   useEffect(() => {
     getLocation();
-    //getToken();
+    //getIP();
+    getToken();
   }, []);
 
-  const onSubmit = async () => {
+  // useEffect(() => {
+  //   if (!props.token.fetching && props.token.token === undefined)
+  //     Alert.alert('username hoặc password không đúng')
+  //   else if (props.token.token) {
+  //     // if ({ isSelected }.isSelected == true)
 
-    setFetching(true)
-    let data = {
-      username: username,
-      password: password,
+  //     // else removeToken('userData')
+  //   }
+  // }, [props.token.fetching]);
+
+  //==========================
+  //======== Submit login
+  // const [isSelected, setSelection] = useState(false);
+  const { register, setValue, handleSubmit, control, errors } = useForm();
+  const onSubmit = (data) => {
+    data = {
+      // username: user,
+      // password: Pass,
+      ...data,
       lat: props.token.lat,
       lon: props.token.lon,
       device_brand: Device.brand,
       device_os: Device.osName,
       device_name: Device.modelName,
     };
-
-    if (!data.lat) {
-      let coords = await getLocation();
-      data = {
-        ...data,
-        lat: coords.latitude,
-        lon: coords.longitude,
-      }
+    if (data.lat === null || data.lon === null) getLocation();
+    else {
+      props.login(data);
+      storeToken(data);
+      savekeychain("username", data.username);
+      savekeychain("password", data.password);
     }
-    props.login(data);
-    //savekeychain("username", data.username);
-    //savekeychain("password", data.password);
-    setFetching(false)
   };
 
+  const storeToken = async (data) => {
+    try {
+      await AsyncStorage.setItem("userData", JSON.stringify(data));
+    } catch (error) {
+      alert("Something went wrong", error);
+    }
+  };
 
-  const renWarning = (value, content) => {
-    if (!value && props.token.error)
-      return (
-        <Text style={styles.alertlogin}>
-          {content}
-        </Text>
-      )
-  }
+  const removeToken = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  };
 
-  if (props.data.fetching || fetching) return <Loader />;
+  if (props.data.fetching) return <Loader />;
 
   return (
     <ImageBackground
@@ -204,8 +213,10 @@ function Login(props) {
             <Image
               source={require("../images/logo-LGM.png")}
               style={styles.logologin}
-            />
-
+            ></Image>
+            {props.token.error ? (
+              <Text style={styles.alertlogin}>{props.token.error}</Text>
+            ) : null}
             <View style={styles.inputView}>
               <View style={styles.iconinput}>
                 <Ionicons
@@ -216,17 +227,27 @@ function Login(props) {
                 />
               </View>
 
-              <TextInput
-                placeholder="Tài khoản"
-                style={styles.inputTextBlack}
-                onChangeText={(value) => setUsername(value)}
-                value={username}
+              <Controller
+                control={control}
+                render={({ onChange, onBlur, value }) => (
+                  <TextInput
+                    placeholder="Tài khoản"
+                    style={styles.inputTextBlack}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                    value={value}
+                  />
+                )}
+                name="username"
+                rules={{ required: true }}
+                defaultValue=""
               />
-
             </View>
-
-            {renWarning(username, "Tài khản không được để trống")}
-
+            {errors.username && (
+              <Text style={styles.alertlogin}>
+                Tài khoản không được để trống
+              </Text>
+            )}
             <View style={styles.inputView}>
               <View style={styles.iconinput}>
                 <Ionicons
@@ -236,30 +257,51 @@ function Login(props) {
                   style={{ marginLeft: "auto", marginRight: "auto" }}
                 />
               </View>
-
-              <TextInput
-                placeholder="Mật khẩu"
-                style={styles.inputTextBlack}
-                onChangeText={(value) => setPassword(value)}
-                value={password}
-                secureTextEntry={true}
+              <Controller
+                control={control}
+                render={({ onChange, onBlur, value }) => (
+                  <TextInput
+                    secureTextEntry={true}
+                    placeholder="Mật khẩu"
+                    style={styles.inputTextBlack}
+                    onBlur={onBlur}
+                    onChangeText={(value) => {
+                      onChange(value);
+                    }}
+                    value={value}
+                  />
+                )}
+                name="password"
+                rules={{ required: true }}
+                defaultValue=""
               />
             </View>
-            {renWarning(password, "Mật khẩu không được để trống")}
-
+            {errors.password && (
+              <Text style={styles.alertlogin}>
+                Mật khẩu không được để trống
+              </Text>
+            )}
             <View style={styles.loginBtn}>
               <Button
                 color={colors.info}
                 mode="contained"
-                onPress={() => onSubmit()}
+                onPress={handleSubmit(onSubmit)}
               >
                 ĐĂNG NHẬP
               </Button>
             </View>
             <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+              {/* <View style={{ flexDirection: 'row', marginLeft: '5%' }}>
+                <CheckBox
+                  value={isSelected}
+                  onValueChange={setSelection}
+                  style={styles.checkbox}
+                />
+                <Text style={{ marginTop: 8, fontSize: 12 }}>Lưu mật khẩu</Text>
+              </View> */}
 
               <View style={{ paddingRight: 40 }}>
-                <Button onPress={() => handleAuthentication()}>
+                <Button onPress={() => handleAuthentication(props.token)}>
                   <FontAwesome5 name="fingerprint" style={icon_style.logo} />
                 </Button>
               </View>
@@ -283,7 +325,8 @@ function Login(props) {
               model: {Device.brand}
               {"\n"}
               position: {props.token.lat},{props.token.lon}
-
+              {"\n"}
+              ip: {ip}
             </Text>
           </View>
         </View>
@@ -302,16 +345,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (config) => {
-      dispatch({
-        type: constAction.API_TOKEN_REQUEST,
-        config
-      });
+      dispatch(actloginUser(config));
     },
     locationSet: (content) => {
-      dispatch({
-        type: constAction.LOCATION_SET,
-        content
-      });
+      dispatch(actLocationSet(content));
     },
   };
 };
