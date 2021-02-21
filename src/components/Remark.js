@@ -167,18 +167,18 @@ function Remark(props) {
     };
 
     try {
-      console.log(config)
-      // props.userUptrails(config);
-      // props.actChangeFollow({
-      //   appl_id: props.vsf.activeApplId.appl_id,
-      //   code: code,
-      // });
-      // props.calAll();
-      // const curList = props.showlists;
-      // props.updateShowlist([]);
-      // props.updateShowlist(curList);
-      // setUptrailStatus(false);
-      // props.navigation.navigate("Portfolio", { screen: "List" });
+      //console.log(config)
+      props.userUptrails(config);
+      props.actChangeFollow({
+        appl_id: props.vsf.activeApplId.appl_id,
+        code: code,
+      });
+      props.calAll();
+      const curList = props.showlists;
+      props.updateShowlist([]);
+      props.updateShowlist(curList);
+      setUptrailStatus(false);
+      props.navigation.navigate("Portfolio", { screen: "List" });
 
     } catch (error) {
       setUptrailStatus(false);
