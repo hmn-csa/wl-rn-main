@@ -5,7 +5,7 @@ import { Alert } from 'react-native'
 import { takeLatest, call, put, take } from "redux-saga/effects";
 import axios from "axios";
 
-export function* watcherChangePassword() {
+export function* watcherChangeInfo() {
   yield takeLatest(constAction.API_CHANGEPW_REQUEST, workerChangePw);
   yield takeLatest(constAction.API_CHANGE_AVATAR_REQUEST, workerChangeAvatar);
 }
@@ -50,6 +50,7 @@ export function* workerChangeAvatar(request) {
     }
     const response = yield call(axios, config);
     yield put({ type: constAction.API_CHANGE_AVATAR_SUCCESS });
+    yield put({ type: constAction.SET_ACTIVE_AVATAR, content: request.config.avatar });
 
   } catch (error) {
     // dispatch a failure action to the store with the error

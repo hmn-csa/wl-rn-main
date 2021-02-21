@@ -23,27 +23,8 @@ import * as SecureStore from "expo-secure-store";
 
 import * as constAction from '../consts'
 
-async function savekeychain(key, value) {
-  // save pw
-  console.log("key", key);
-  console.log("value", value);
-  await SecureStore.setItemAsync(key, value);
 
-  let result = await SecureStore.getItemAsync(key);
-  console.log("luu data keychain", result);
-}
 
-async function getValueFor(key) {
-
-  let result = await SecureStore.getItemAsync(key);
-  if (!result) {
-    //alert("🔐 Here's your value 🔐 \n" + result);
-    return result;
-  } else {
-    alert("No values stored under that key.");
-    return null
-  } c
-}
 
 function Login(props) {
   //============ Get IP user

@@ -8,9 +8,11 @@ const initialState = {
   userFetching: false,
   justFetching: false,
   dailyFetching: false,
+  applidFetching: false,
   userError: null,
   uptrails: [],
-  dailyUptrails: []
+  dailyUptrails: [],
+  applidUptrails: {}
 };
 
 const uptrailReducers = (state = initialState, action) => {
@@ -59,6 +61,19 @@ const uptrailReducers = (state = initialState, action) => {
       }
       return state;
 
+    case constAction.APPLID_UPTRAIL_REQUEST:
+      return { ...state, applidFetching: true, error: null }
+
+    case constAction.APPLID_UPTRAIL_SUCCESS:
+      const applidUptrails = { ...state.applidUptrails, ...action.content }
+      state = {
+        ...state,
+        applidFetching: false,
+        applidUptrails: applidUptrails
+      }
+
+      return state;
+
 
     case constAction.API_UPTRAIL_FAILURE:
       state = {
@@ -76,11 +91,18 @@ const uptrailReducers = (state = initialState, action) => {
     case constAction.USER_UPTRAIL_SUCCESS:
       // const newUptrails = action.content.concat(state.uptrails);
       const newUptrails = [action.content, ...state.uptrails]
+
+
       state = {
         ...state,
         userFetching: false,
         uptrails: newUptrails,
         userError: null
+      }
+
+      if (state.applidUptrails[action.content.appl_id]) {
+        const newApplidUptrails = [action.content, ...state.applidUptrails[action.content.appl_id]]
+        state.applidUptrails[action.content.appl_id] = newApplidUptrails
       }
       return state;
 

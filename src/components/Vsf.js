@@ -9,6 +9,8 @@ import { styles, colors } from '../styles'
 
 import Loader from '../components/elements/Loader'
 
+import ApplUptrail from './ApplUptrail'
+
 function Vsf(props) {
 
   const moneyFormat = (n) => {
@@ -24,6 +26,7 @@ function Vsf(props) {
 
   return (
     <ScrollView style={{ padding: 5 }}>
+      <ApplUptrail />
       <View style={[vsfStyles.blockInput]}>
 
         <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>

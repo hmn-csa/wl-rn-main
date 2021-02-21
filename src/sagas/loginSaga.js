@@ -7,7 +7,6 @@ import { decode as atob, encode as btoa } from 'base-64'
 export function* watcherSaga() {
   yield takeLatest(constAction.API_TOKEN_REQUEST, workerGetToken);
   yield takeLatest(constAction.STAFF_CHECKIN_PULL, workerGetStaffCheckinUpdate);
-
   yield takeLatest(constAction.SET_STAFF_MODE, workerGetDataFCMode);
   // yield takeLatest(constAction.MANAGER_CLEAR_STATE, workerManagerClearState);
 }
@@ -40,8 +39,6 @@ export function* workerGetToken(request) {
     // 
     SecureStore.setItemAsync("username", request.config.username);
     SecureStore.setItemAsync("password", request.config.password);
-
-    console.log('saga save done')
 
     yield put({ type: constAction.API_TOKEN_SUCCESS, content: data });
     // get appls data

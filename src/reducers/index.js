@@ -9,7 +9,6 @@ import managerReducers from './managerReducers'
 import mapReducers from './mapReducers'
 import paymentReducers from './paymentReducers'
 import staffReducers from './staffreducers'
-import activeReducers from './activeReducers'
 
 
 const rootReducer = combineReducers({
@@ -22,7 +21,6 @@ const rootReducer = combineReducers({
   manager: managerReducers,
   map: mapReducers,
   staff: staffReducers,
-  //active: activeReducers,
 })
 
 
