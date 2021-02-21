@@ -67,6 +67,9 @@ function Remark(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
+  const [image1, setImage1] = useState(null);
+
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -342,7 +345,24 @@ function Remark(props) {
     </View>
   }
 
+  const renPicture = () => {
 
+    return (
+      <View style={[styles.row]}>
+        <Image
+          source={image}
+          style={{
+            width: width * 0.618 / 3 - 10,
+            height: width * 0.618 / 3 - 10,
+            borderRadius: 10,
+            margin: 2
+          }}
+          onLoadStart={() => <ActivityIndicator size={10} color='black' />}
+        />
+      </View>
+    )
+
+  }
 
   return (
     <ScrollView style={[{ flex: 1 }]}>
