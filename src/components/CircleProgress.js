@@ -7,7 +7,7 @@ import { exp } from 'react-native-reanimated';
 
 function CircleTA(props) {
 
-  var MAX_POINTS = 44.8;
+  var MAX_POINTS = 128;
   const [colorTA, setColorTA] = useState(colors.success)
   const [over, setOver] = useState(0)
   useEffect(() => {

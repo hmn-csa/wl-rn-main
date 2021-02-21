@@ -181,7 +181,7 @@ function Customer(props) {
                         <Text>CMND:</Text>
                     </View>
                     <View style={[styles.box2]}>
-                        <Text>{props.vsf.activeApplId.appl_id} </Text>
+                        <Text>{props.vsf.activeApplId.id_no} </Text>
                     </View>
                 </View>
 

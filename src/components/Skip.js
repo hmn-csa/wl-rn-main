@@ -23,8 +23,6 @@ const CARD_HEIGHT = height / 5;
 const SliderWidth = Dimensions.get('screen').width;
 
 
-//ion-md-remove
-
 
 const BOOK = [
   {
@@ -247,7 +245,6 @@ function Skip(props) {
         padding: 10
       }}
       >
-
         <View style={[styles.row]}>
           <View style={[styles.box]}>
             <Text style={[styles.textContent, { fontWeight: 'bold', backgroundColor: statusColor(item.status, item.appl_id) }]}>
@@ -332,8 +329,6 @@ function Skip(props) {
     )
   }
 
-
-
   renderDetail = (rowData, sectionID, rowID) => {
     let title = <Text style={[styles.title]}>{rowData.month_dt} | DPD: {rowData.dpd}</Text>
     var payment = null
@@ -379,8 +374,6 @@ function Skip(props) {
           }
         </View>
       )
-
-
     return (
       <View style={{ flex: 1, backgroundColor: 'white', padding: 0 }}>
         {title}
@@ -393,31 +386,39 @@ function Skip(props) {
   }
 
   const renTree = () => {
-    function getIndicator(isExpanded, hasChildrenNodes, node) {
+    function getIndicator(isExpanded, hasChildrenNodes, node, type) {
       if (!hasChildrenNodes) {
-        return (
-          <TouchableOpacity
-            onPress={() => handleCall(node.phone)}
-          >
-            <Entypo name="phone" size={18} color={colors.info} />
-          </TouchableOpacity>
-        )
-      } else if (isExpanded) {
-        return <Ionicons
-          style={{
-            fontWeight: "bold",
-            fontSize: 20,
-            color: colors.secondary
-          }}
-          name='ios-arrow-dropdown-circle' />
+        if (type == 'good') {
+          return <FontAwesome name="user" size={15} color={colors.success} />
+        }
+        else if (type == 'bad') {
+          return <FontAwesome name="user" size={15} color={colors.danger} />
+        }
+        else {
+          return <FontAwesome name="user" size={15} color={colors.grey} />
+        }
+
+      }
+      else if (isExpanded) {
+        if (type == 'good') {
+          return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.success} /></Text>
+        }
+        else if (type == 'bad') {
+          return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.danger} /></Text>
+        }
+        else {
+          return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.grey} /></Text>
+        }
       } else {
-        return <Ionicons
-          style={{
-            fontWeight: "bold",
-            fontSize: 20,
-            color: colors.secondary
-          }}
-          name='ios-arrow-dropright' />
+        if (type == 'good') {
+          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <FontAwesome name="user" size={15} color={colors.success} /></Text>
+        }
+        else if (type == 'bad') {
+          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.danger} /></Text>
+        }
+        else {
+          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.grey} /></Text>
+        }
       }
     }
 
@@ -432,31 +433,29 @@ function Skip(props) {
     return <TreeView
       data={phoneBook}
       initialExpanded={true}
+      getCollapsedNodeHeight={() => { 40 }}
       renderNode={({ node, level, isExpanded, hasChildrenNodes }) => {
         return (
-          <View style={{
-            height: 35,
-            marginLeft: 25 * level + 5,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
+          <View
+            style={{
+              height: 40,
+              marginLeft: 20 * level,
+              fontSize: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
           >
-            <View >
-              <Text style={[styles.textContent, { fontWeight: 'bold', }]} >
-                {getIndicator(isExpanded, hasChildrenNodes)} {node.name}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => handleCall(node.phone)}
-            >
-              <Text style={[styles.textContent, { fontWeight: 'bold', }]}>
-                <Text style={{ color: colors.black }}>
-                  {node.phone}
-                </Text>{"\t"}
-
-              </Text>
-            </TouchableOpacity>
-
+            <Text>
+              {getIndicator(isExpanded, hasChildrenNodes, node.type, level)} {node.name}
+            </Text>
+            <Text style={{ fontWeight: 'bold' }}>
+              <Text style={{ color: colors.black }}>
+                {node.case}
+              </Text>{"\t"}
+              <Text style={{ color: colors.info }}>
+                {node.share} %
+                  </Text>
+            </Text>
           </View>
         )
       }}
@@ -481,7 +480,6 @@ function Skip(props) {
         const payments = paymentsF.length > 0 ? paymentsF[0].value : []
         const follows = followF.length > 0 ? followF[0].value : []
         const dpds = dpdsF[0].value
-
         const data = []
         for (let i = 0; i < dpds.length; i++) {
           data.push(
@@ -498,7 +496,6 @@ function Skip(props) {
       setDataAppl([])
     }
   }
-
   useEffect(() => {
     if (props.vsf.activeIdno.main_infos !== undefined && !props.vsf.fetching)
       setPhoneBook(renPhonBook(props.vsf.activeIdno))
@@ -508,10 +505,6 @@ function Skip(props) {
   useEffect(() => {
     setInit()
   }, [activeIndex]);
-
-
-
-
   if (props.vsf.fetching)
     return <Loader />
   if (props.vsf.activeIdno.main_infos === undefined)
@@ -520,7 +513,6 @@ function Skip(props) {
         <Text>Không có thông tin khách hàng</Text>
       </View>
     )
-
   if (!props.vsf.fetching && props.vsf.activeIdno.main_infos !== undefined)
     return (
       <View>
@@ -534,7 +526,6 @@ function Skip(props) {
             {renTree()}
             {renMainInfo(props.vsf.activeIdno.main_infos)}
           </View>
-
           <View style={{ flexDirection: 'row', }}>
             <Carousel
               layout={'default'}
@@ -550,13 +541,7 @@ function Skip(props) {
 
             />
           </View>
-
-          {/* {renPaymentInfo(props.vsf.activeIdno.appl_infos[activeIndex].appl_id)} */}
-
-
-
         </ScrollView>
-
       </View>
     )
 
