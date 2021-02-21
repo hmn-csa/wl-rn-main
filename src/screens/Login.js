@@ -10,7 +10,7 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import * as Device from "expo-device";
 import { connect } from "react-redux";
@@ -59,10 +59,11 @@ function Login(props) {
 
 
   const handleAuthentication = async () => {
+    setFetching(true)
     let result = await LocalAuthentication.authenticateAsync();
 
     if (result.success) {
-      setFetching(true)
+
       let username = await SecureStore.getItemAsync("username");
       let password = await SecureStore.getItemAsync("password");
 
@@ -90,10 +91,11 @@ function Login(props) {
           lon: coords.longitude,
         }
       }
-      props.login(data);
+      await props.login(data);
       setFetching(false)
 
     } else {
+      setFetching(false)
       alert("Xác thưc không thành công");
     }
   };
@@ -151,7 +153,7 @@ function Login(props) {
         lon: coords.longitude,
       }
     }
-    props.login(data);
+    await props.login(data);
     //savekeychain("username", data.username);
     //savekeychain("password", data.password);
     setFetching(false)
@@ -237,14 +239,15 @@ function Login(props) {
                 ĐĂNG NHẬP
               </Button>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
-              <View style={{ paddingRight: '15%' }}>
+            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+
+              <View style={{ paddingRight: 40 }}>
                 <Button onPress={() => handleAuthentication()}>
-                  <MaterialCommunityIcons name="fingerprint" size={40} color="black" />
+                  <FontAwesome5 name="fingerprint" style={icon_style.logo} />
                 </Button>
               </View>
               <Text
-                style={{ marginBottom: 8, fontSize: 12, right: 10 }}
+                style={{ marginBottom: 8, fontSize: 12, marginRight: "5%" }}
               >
                 Quên mật khẩu ?
               </Text>

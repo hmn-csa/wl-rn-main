@@ -25,14 +25,7 @@ const SliderWidth = Dimensions.get("screen").width;
 
 function ListUptrail(props) {
   const [reDate, setRedate] = useState(() => {
-    var today = new Date(),
-      date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-
+    var today = new Date()
     return today;
   });
   const mapRef = useRef(null);
