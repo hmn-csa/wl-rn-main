@@ -59,10 +59,11 @@ function Login(props) {
 
 
   const handleAuthentication = async () => {
+    setFetching(true)
     let result = await LocalAuthentication.authenticateAsync();
 
     if (result.success) {
-      setFetching(true)
+
       let username = await SecureStore.getItemAsync("username");
       let password = await SecureStore.getItemAsync("password");
 
@@ -90,10 +91,11 @@ function Login(props) {
           lon: coords.longitude,
         }
       }
-      props.login(data);
+      await props.login(data);
       setFetching(false)
 
     } else {
+      setFetching(false)
       alert("Xác thưc không thành công");
     }
   };
@@ -151,7 +153,7 @@ function Login(props) {
         lon: coords.longitude,
       }
     }
-    props.login(data);
+    await props.login(data);
     //savekeychain("username", data.username);
     //savekeychain("password", data.password);
     setFetching(false)

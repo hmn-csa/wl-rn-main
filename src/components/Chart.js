@@ -33,7 +33,7 @@ function BarChartPM() {
         marginLeft: 5,
       }}>
       <Text style={{
-        color: colors.info,
+        color: colors.black,
         textAlign: 'left',
         marginLeft: 20,
         fontWeight: 'bold',
@@ -60,7 +60,59 @@ function BarChartPM() {
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
           fillShadowGradient: colors.info,
-          fillShadowGradientOpacity: 1,
+          fillShadowGradientOpacity: 0.4,
+          barPercentage: 0.8,
+          color: (opacity = 1) => colors.black,
+          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          decimalPlaces: 0
+        }}
+        withOuterLines={false}
+        withInnerLines={false}
+        withHorizontalLabels={false}
+        fromZero={true}
+      />
+    </View>
+  )
+}
+
+function BarChartFL() {
+  return (
+    <View
+      style={{
+        marginTop: 10,
+        backgroundColor: colors.white,
+        borderRadius: 10,
+        marginLeft: 5,
+      }}>
+      <Text style={{
+        color: colors.black,
+        textAlign: 'left',
+        marginLeft: 20,
+        fontWeight: 'bold',
+        fontSize: 14,
+        backgroundColor: colors.white,
+        borderRadius: 5
+      }}>
+        Daily Follow
+      </Text>
+      <BarChart
+        data={{
+          labels: ["01/02", "02/02", "03/02", "04/02", "05/02", "06/02", "07/02"],
+          datasets: [
+            {
+              data: [7, 0, 3, 10, 9, 2, 4]
+            }
+          ],
+        }}
+        style={{ borderRadius: 10, marginLeft: -40 }}
+        width={Dimensions.get('window').width}
+        height={180}
+        showValuesOnTopOfBars={true}
+        chartConfig={{
+          backgroundGradientFrom: colors.white,
+          backgroundGradientTo: colors.white,
+          fillShadowGradient: colors.success,
+          fillShadowGradientOpacity: 0.4,
           barPercentage: 0.8,
           color: (opacity = 1) => colors.black,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -135,6 +187,7 @@ function LineChartFL() {
 
 export {
   BarChartPM,
+  BarChartFL,
   LineChartFL
 };
 

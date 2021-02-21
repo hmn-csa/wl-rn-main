@@ -300,15 +300,12 @@ function Vsf(props) {
         <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
           <Text style={vsfStyles.header}>Thông tin tác động</Text>
         </View>
-
-
         <View style={[vsfStyles.row]}>
           <View style={[styles.box]}>
             <Text>{props.vsf.activeApplId.last_action_fv} </Text>
           </View>
         </View>
       </View>
-
     </ScrollView >
   )
 }

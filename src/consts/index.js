@@ -32,6 +32,7 @@ export const REMARK_CODE = [
 
   { label: 'F_CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần', value: 'F_CGI' },
   { label: 'DIE - Đã qua đời', value: 'DIE' },
+
 ];
 
 

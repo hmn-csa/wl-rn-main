@@ -224,13 +224,13 @@ function Uptrail(props) {
     borderColor: colors.lightGray,
     padding: 10,
   } : {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: colors.lightGray,
-    margin: 5,
-    padding: 10,
-  }
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderRadius: 15,
+      borderColor: colors.lightGray,
+      margin: 5,
+      padding: 10,
+    }
   return (
     <View
       style={cardStyle}

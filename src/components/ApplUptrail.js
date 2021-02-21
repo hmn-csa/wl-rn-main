@@ -14,9 +14,6 @@ const CARD_HEIGHT = height / 8;
 
 function ApplUptrail(props) {
 
-
-
-
   useEffect(() => {
     if (!props.uptrails[props.active_applid]) {
       const config = {
