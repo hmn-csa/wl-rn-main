@@ -4,10 +4,10 @@ import {
 
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-
 import { styles, colors } from '../styles'
-
 import Loader from './elements/Loader'
+import ApplUptrail from './ApplUptrail'
+
 
 function Contract(props) {
 
@@ -16,12 +16,10 @@ function Contract(props) {
         const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
         return money.substring(0, money.length - 2)
     }
-
     if (props.vsf.fetching)
         return (
             <Loader />
         )
-
     return (
         <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
             <View style={vsfStyles.blockInput}>
@@ -329,7 +327,14 @@ function Follow(props) {
         <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
             <View style={vsfStyles.blockInput}>
                 <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
-                    <Text style={vsfStyles.header}>Thông tin tác động</Text>
+                    <Text style={vsfStyles.header}>Tác động trong tháng</Text>
+                </View>
+                <ApplUptrail />
+            </View>
+
+            <View style={vsfStyles.blockInput}>
+                <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
+                    <Text style={vsfStyles.header}>Lịch sử tác động</Text>
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
