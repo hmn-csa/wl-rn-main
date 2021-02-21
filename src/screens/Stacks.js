@@ -20,7 +20,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Calendar_ } from './Calendar'
-import { Menutop_Uptrail, Menutop_User } from './MenuTop'
+import { Menutop_Uptrail, Menutop_User, Menutop_Vsf } from './MenuTop'
 import { Colors, Searchbar } from 'react-native-paper'
 
 const Stack = createStackNavigator()
@@ -181,7 +181,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          headerTintColor: colors.info,
+          headerTintColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -190,7 +190,7 @@ function DashboardStack(props) {
           headerRight: () => (
             <View style={{ paddingRight: 20 }}>
               <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color={colors.info} />
+                <MaterialIcons name="search" size={30} color={colors.gray} />
               </TouchableOpacity>
             </View>
           )
@@ -228,7 +228,7 @@ function DashboardStack(props) {
             backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          headerTintColor: colors.info,
+          headerTintColor: colors.gray,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -236,7 +236,7 @@ function DashboardStack(props) {
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
               {/* <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color={colors.info} />
+                <MaterialIcons name="search" size={30} color={colors.gray} />
               </TouchableOpacity> */}
               <Searchbar
                 onChangeText={(value) => hangleSearch(value)}
@@ -285,7 +285,7 @@ function DashboardStack(props) {
       />
       <Stack.Screen
         name="Vsf"
-        component={Vsf}
+        component={Menutop_Vsf}
         options={{
           headerStyle: {
             backgroundColor: colors.white,
@@ -501,7 +501,7 @@ function CategorieStack(props) {
       />
       <Stack.Screen
         name="Vsf"
-        component={Vsf}
+        component={Menutop_Vsf}
         options={{
           headerStyle: {
             backgroundColor: colors.white,

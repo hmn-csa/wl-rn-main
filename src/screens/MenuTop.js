@@ -10,6 +10,7 @@ import ScoreCategories from './ScoreCategories'
 import ClassifyCategories from './ClassifyCategories'
 import ListUptrail from './ListUptrail'
 import ListUptrailMonth from './ListUptrailMonth'
+import { Contract_com, Customer_com, Payment_com, Follow_com } from '../components/Vsf_detail'
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -99,10 +100,47 @@ function Menutop_User() {
 
     </Tab.Navigator>
   );
+} function Menutop_Vsf() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Contracts"
+      tabBarOptions={{
+        activeTintColor: colors.info,
+        inactiveTintColor: colors.black,
+        labelStyle: { fontSize: 12, fontWeight: 'bold' },
+        style: { backgroundColor: 'white' },
+      }}
+    >
+      <Tab.Screen
+        name="Contracts"
+        component={Contract_com}
+        options={{ tabBarLabel: 'Hợp đồng' }}
+      />
+      <Tab.Screen
+        name="Customer"
+        component={Customer_com}
+        options={{ tabBarLabel: 'Khách hàng' }}
+      />
+      <Tab.Screen
+        name="Payment"
+        component={Payment_com}
+        options={{ tabBarLabel: 'Thanh toán' }}
+      />
+      <Tab.Screen
+        name="Follow"
+        component={Follow_com}
+        options={{ tabBarLabel: 'Viếng thăm' }}
+      />
+
+    </Tab.Navigator>
+  );
 }
+
+
 
 export {
   Menutop_Categories,
   Menutop_Uptrail,
-  Menutop_User
+  Menutop_User,
+  Menutop_Vsf
 };

@@ -33,7 +33,7 @@ function ListUptrail(props) {
         "-" +
         today.getDate();
 
-    return date;
+    return today;
   });
   const mapRef = useRef(null);
   const makerRef = {};
@@ -83,22 +83,25 @@ function ListUptrail(props) {
       <View style={{ flex: 1 }}>
         <CalendarStrip
           scrollable
-          style={{ height: 90, marginRight: 0, paddingLeft: 0 }}
+          style={{ height: 90, marginRight: 0, paddingLeft: 0, paddingTop: 5, paddingBottom: 20 }}
           calendarColor={"white"}
           daySelectionAnimation={{
             type: "border",
             duration: 200,
-            borderWidth: 1,
-            borderHighlightColor: "black",
+            borderWidth: 0,
+            borderHighlightColor: "grey",
           }}
-          calendarHeaderStyle={{ color: "#787571" }}
-          dateNumberStyle={{ color: "#787571" }}
+          highlightDateNumberStyle={{ color: "red" }}
+          highlightDateNameStyle={{ color: 'red', fontWeight: 'bold' }}
+          calendarHeaderStyle={{ color: "black" }}
+          dateNumberStyle={{ color: "black", fontWeight: 'normal' }}
           dateNameStyle={{ color: "black" }}
           iconContainer={{ flex: 0.1 }}
           selectedDate={reDate}
           onDateSelected={(date) => {
-            setRedate(date.format("YYYY-MM-DD"));
-            getDailyUptrails(date.format("YYYY-MM-DD"));
+            setRedate(date);
+            getDailyUptrails(date.format('YYYY-MM-DD'));
+
           }}
         />
       </View>
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   cardStyle: {
-    flex: 2,
+    flex: 3,
   },
   row: {
     width: "95%",
@@ -323,15 +326,15 @@ const text_map_styles = StyleSheet.create({
   Title: {
     paddingLeft: 10,
     paddingTop: 10,
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#787571",
+    color: colors.gray,
   },
 
   dateformat: {
     paddingLeft: 10,
-    fontSize: 15,
-    color: "gray",
+    fontSize: 12,
+    color: "grey",
   },
   Subtitle: {
     fontSize: 12,
@@ -346,10 +349,11 @@ const text_map_styles = StyleSheet.create({
     alignItems: "center",
   },
   boxcover: {
-    flex: 1,
+    flex: 0.5,
     flexDirection: "row",
     marginLeft: 20,
     marginRight: 20,
+    paddingTop: 20
   },
   container: {
     flex: 2,

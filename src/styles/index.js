@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
 
   box2: {
-    flex: 2,
+    flex: 1.5,
     justifyContent: 'center',
     alignItems: 'stretch',
   },

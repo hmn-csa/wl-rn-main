@@ -27,7 +27,6 @@ function Dashboard(props) {
             showsButtons={false}
             autoplay={true}
             autoplayTimeout={6}
-            style={{}}
             showsPagination={false}
             autoplayDirection={true}
             navigation={props.navigation}
@@ -40,8 +39,7 @@ function Dashboard(props) {
           <Swiper
             showsButtons={false}
             autoplay={true}
-            autoplayTimeout={6}
-            style={{}}
+            autoplayTimeout={3}
             showsPagination={false}
             autoplayDirection={true}
             navigation={props.navigation}
@@ -54,12 +52,12 @@ function Dashboard(props) {
           <TouchableOpacity
             style={styles.btn_tool}
             onPress={() => props.navigation.navigate('ListPayment')}>
-            <FontAwesome5 name="search-dollar" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="funnel-dollar" size={20} color={colors.gray} style={{ padding: 10 }} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_tool}
             onPress={() => props.navigation.navigate('Uptrail')}>
-            <FontAwesome5 name="map-marked-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="route" size={20} color={colors.gray} style={{ padding: 10 }} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_tool}
