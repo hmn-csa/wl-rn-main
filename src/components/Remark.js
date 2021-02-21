@@ -11,6 +11,7 @@ import {
   Alert,
   ActivityIndicator,
   TextInput,
+  KeyboardAvoidingView
 } from "react-native";
 import { connect } from "react-redux";
 import { styles as masterStyle, colors } from "../styles";
@@ -56,6 +57,10 @@ function Remark(props) {
       label: `Tạm trú : ${props.vsf.activeApplId.act_address}`,
       value: props.vsf.activeApplId.act_address,
     },
+    {
+      label: `Địa chỉ khác`,
+      value: null,
+    },
   ];
   if (
     props.vsf.activeApplId.new_address != null &&
@@ -69,7 +74,6 @@ function Remark(props) {
   // Location
   const [location, setLocation] = useState(null);
 
-  const [images, setImages] = useState([]);
   const [activateImage, setActivateImage] = useState({ uri: null });
 
   const [personContact, setPersonContact] = useState(null);
@@ -83,16 +87,12 @@ function Remark(props) {
   const [image2, setImage2] = useState(null)
   const [image3, setImage3] = useState(null)
 
-
-  const [visible, setVisible] = useState(false);
-  const [visiblePayamount, setVisiblePayamount] = useState(false);
-  const [visiblePerson, setVisiblePerson] = useState(false);
-  const [visibleAddress, setVisibleAddress] = useState(false);
   const [visibleImage, setVisibleImage] = useState(false);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [reDate, setRedate] = useState(null)
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -126,36 +126,15 @@ function Remark(props) {
     })();
   }, []);
 
-  // ========= Render label ============//
-
-  const renContentNull = (item) => {
-    if (!item) return "***";
-    return item;
-  };
-  const renPersonContact = (personContact) => {
-    if (!personContact) return <View></View>;
-    return (
-      <View style={{ width: "95%" }}>
-        <Text style={styles.subLabel}>
-          {
-            consts.PERSON_CONTACT.filter(
-              (item) => item.value == personContact
-            )[0].label
-          }
-        </Text>
-      </View>
-    );
-  };
 
 
   const getAddressType = (address) => {
-    if (!address) return "";
     if (address == addressItems[0].value && address == addressItems[1].value)
       return "same_address";
     if (address == addressItems[0].value) return "reg_address";
     if (address == addressItems[1].value) return "act_address";
 
-    return "orther_address";
+    return "other_address";
   };
 
   // ======== Render Image ===========//
@@ -163,7 +142,7 @@ function Remark(props) {
   const handleCommit = async () => {
     if (!personContact) return Alert.alert("Vui lòng chọn người liên hệ !");
     if (!code) return Alert.alert("Vui lòng chọn kết quả viếng thăm !");
-    if (!address) return Alert.alert("Vui lòng chọn địa chỉ viếng thăm !");
+    if (!address) return Alert.alert("Vui lòng nhập địa chỉ viếng thăm !");
 
     setUptrailStatus(true);
     let locationCurrrent = await Location.getCurrentPositionAsync({});
@@ -186,19 +165,20 @@ function Remark(props) {
       image2: !image2 ? null : "data:image/png;base64," + image2.base64,
       image3: !image3 ? null : "data:image/png;base64," + image3.base64,
     };
+
     try {
-      //console.log(config)
-      props.userUptrails(config);
-      props.actChangeFollow({
-        appl_id: props.vsf.activeApplId.appl_id,
-        code: code,
-      });
-      props.calAll();
-      const curList = props.showlists;
-      props.updateShowlist([]);
-      props.updateShowlist(curList);
-      setUptrailStatus(false);
-      props.navigation.navigate("Portfolio", { screen: "List" });
+      console.log(config)
+      // props.userUptrails(config);
+      // props.actChangeFollow({
+      //   appl_id: props.vsf.activeApplId.appl_id,
+      //   code: code,
+      // });
+      // props.calAll();
+      // const curList = props.showlists;
+      // props.updateShowlist([]);
+      // props.updateShowlist(curList);
+      // setUptrailStatus(false);
+      // props.navigation.navigate("Portfolio", { screen: "List" });
 
     } catch (error) {
       setUptrailStatus(false);
@@ -368,6 +348,26 @@ function Remark(props) {
 
   }
 
+  const renderOtherAddress = () => {
+
+    if (getAddressType(address) === "other_address")
+      return (
+        <View>
+          <Text style={styles.title}>Địa chỉ khác</Text>
+          <View style={styles.row}>
+            <TextInput
+              style={[styles.row, styles.selectInput]}
+              placeholder="Nhập địa chỉ khác"
+              value={address}
+              onChangeText={setAddress}
+              clearButtonMode="always"
+            />
+          </View>
+        </View>
+      )
+
+  }
+
   const renPcontact = (datalist) => {
     let item = datalist;
     return (
@@ -417,6 +417,7 @@ function Remark(props) {
         onChangeItem={(item) => setAddress(item.value)}
         zIndex={4000}
       />
+
     );
   };
 
@@ -460,7 +461,7 @@ function Remark(props) {
         >
           <CalendarStrip
             scrollable
-            style={{ height: 90, marginRight: 0, paddingLeft: 0 }}
+            style={{ height: 60, marginRight: 0, paddingLeft: 0 }}
             calendarColor={"white"}
             daySelectionAnimation={{
               type: "border",
@@ -509,7 +510,6 @@ function Remark(props) {
         <View style={styles.box}>
           <Text>{dateformatted}</Text>
         </View>
-
         <View style={[styles.box, { flex: 0.1, maxWidth: 15 }]}>
           <FontAwesome name="remove"
             size={15}
@@ -615,91 +615,98 @@ function Remark(props) {
   }
 
   return (
-    <ScrollView
-      style={{
-        padding: 10,
-        backgroundColor: "white",
-        flex: 1,
-        ...(Platform.OS !== "android" && {
-          zIndex: 10,
-        }),
-      }}
+    <KeyboardAvoidingView
+      behavior="height"
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={1}
     >
-      {renLoader()}
+      <ScrollView
+        style={{
+          padding: 10,
+          backgroundColor: "white",
+          flex: 1,
+          ...(Platform.OS !== "android" && {
+            zIndex: 10,
+          }),
+        }}
+      >
+        {renLoader()}
 
-      <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
-      <Text style={[styles.smallHeader]}>
-        Hợp đồng : {props.vsf.activeApplId.appl_id}
-      </Text>
+        <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
+        <Text style={[styles.smallHeader]}>
+          Hợp đồng : {props.vsf.activeApplId.appl_id}
+        </Text>
 
-      <Text style={styles.title}>Người liên hệ</Text>
-      {renPcontact(consts.PERSON_CONTACT)}
+        <Text style={styles.title}>Người liên hệ</Text>
+        {renPcontact(consts.PERSON_CONTACT)}
 
-      <Text style={styles.title}>Địa chỉ viếng thăm</Text>
-      {renaddresslist(addressItems)}
+        <Text style={styles.title}>Địa chỉ viếng thăm</Text>
+        {renaddresslist(addressItems)}
+        {renderOtherAddress()}
 
-      <Text style={styles.title}>Kết quả viếng thăm</Text>
-      {renderActionCode()}
-      {renderPromisePTP()}
+        <Text style={styles.title}>Kết quả viếng thăm</Text>
+        {renderActionCode()}
+        {renderPromisePTP()}
 
-      <View style={styles.blockInput}>
-        <Text style={styles.title}>Ngày tác động lại</Text>
-        {renSelectDate(reDate)}
-      </View>
-
-      <View style={styles.blockInput}>
-        <Text style={styles.title}>Ghi chú</Text>
-
-        <View style={styles.row}>
-          <TextInput
-            style={[styles.box, styles.selectInput, { color: colors.primary, paddingLeft: 3 }]}
-            placeholder="Nhập ghi chú"
-            value={remark}
-            onChangeText={setRemark}
-            clearButtonMode="always"
-          />
+        <View style={styles.blockInput}>
+          <Text style={styles.title}>Ngày tác động lại</Text>
+          {renSelectDate(reDate)}
         </View>
-      </View>
 
-      <View style={styles.blockInput}>
-        <View style={styles.row}>
-          {renPicture(image1, setImage1)}
-          {renPicture(image2, setImage2)}
-          {renPicture(image3, setImage3)}
+        <View style={styles.blockInput}>
+          <Text style={styles.title}>Ghi chú</Text>
+
+          <View style={styles.row}>
+            <TextInput
+              style={[styles.box, styles.selectInput, { color: colors.primary, paddingLeft: 3 }]}
+              placeholder="Nhập ghi chú"
+              value={remark}
+              onChangeText={setRemark}
+              clearButtonMode="always"
+            />
+          </View>
         </View>
-      </View>
+
+        <View style={styles.blockInput}>
+          <View style={styles.row}>
+            {renPicture(image1, setImage1)}
+            {renPicture(image2, setImage2)}
+            {renPicture(image3, setImage3)}
+          </View>
+        </View>
 
 
-      <Button
-        mode="contained"
-        style={[styles.button, {
-          width: "97%",
-          marginLeft: "auto",
-          marginRight: "auto",
-        }]}
-        labelStyle={styles.buttonLabel}
-        onPress={handleCommit}>
+        <Button
+          mode="contained"
+          style={[styles.button, {
+            width: "97%",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }]}
+          labelStyle={styles.buttonLabel}
+          onPress={handleCommit}>
 
-        Xác nhận
+          Xác nhận
         </Button>
 
-      <Portal style={[styles.row, { width: width, height: height }]}>
-        <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
-          <ImageView
-            images={[{
-              source: { uri: activateImage.uri },
-              width: 600,
-              height: 800,
-            },]}
-            imageIndex={0}
-            isVisible={visibleImage}
-            onClose={() => setVisibleImage(false)}
-            animationType="slide"
-            isSwipeCloseEnabled={false}
-          />
-        </Dialog>
-      </Portal>
-    </ScrollView>
+        <Portal style={[styles.row, { width: width, height: height }]}>
+          <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
+            <ImageView
+              images={[{
+                source: { uri: activateImage.uri },
+                width: 600,
+                height: 800,
+              },]}
+              imageIndex={0}
+              isVisible={visibleImage}
+              onClose={() => setVisibleImage(false)}
+              animationType="slide"
+              isSwipeCloseEnabled={false}
+            />
+          </Dialog>
+        </Portal>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

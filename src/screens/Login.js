@@ -68,7 +68,7 @@ function Login(props) {
       let password = await SecureStore.getItemAsync("password");
 
       if (!username || !password) {
-        alert("Chưa lưu mật khẩu! Vui lòng nhập tài khoản và mật khẩu !");
+        alert("Chưa lưu mật khẩu! Vui lòng nhập tài khoản và mật khẩu cho lần đầu đăng nhập!");
         setFetching(false)
         return null
       }
@@ -82,6 +82,9 @@ function Login(props) {
         device_os: Device.osName,
         device_name: Device.modelName,
       }
+
+      setUsername(username)
+      setPassword(password)
 
       if (!data.lat) {
         let coords = await getLocation();
