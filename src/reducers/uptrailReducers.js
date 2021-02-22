@@ -57,7 +57,7 @@ const uptrailReducers = (state = initialState, action) => {
       state = {
         ...state,
         dailyFetching: false,
-        dailyUptrails: action.content
+        dailyUptrails: action.content.reverse()
       }
       return state;
 

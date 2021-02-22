@@ -297,7 +297,7 @@ function ListUptrail(props) {
               mapRef.current.animateToCoordinate(
                 {
                   latitude: props.uptrails.dailyUptrails[index].lat,
-                  longitude: props.uptrails.uptrails[index].lon,
+                  longitude: props.uptrails.dailyUptrails[index].lon,
                 },
                 0
               );
