@@ -168,7 +168,6 @@ function ListUptrail(props) {
           selectedDate={reDate}
           onDateSelected={(date) => {
             setRedate(date.format('YYYY-MM-DD'));
-            console.log(reDate)
             getDailyUptrails(date.format('YYYY-MM-DD'));
           }}
         />
