@@ -37,7 +37,6 @@ function getIndicator(isExpanded, hasChildrenNodes, type, level) {
       return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /></Text>
     }
   }
-
 }
 
 function Tree(props) {
@@ -54,7 +53,7 @@ function Tree(props) {
     return null
   }
   return (
-    <ScrollView style={{ paddingRight: 20, paddingTop: 10, backgroundColor: 'white' }} >
+    <ScrollView style={{ paddingLeft: 10, paddingRight: 20, paddingTop: 10, backgroundColor: 'white' }} >
       <TreeView
         data={props.tree}
         initialExpanded={true}

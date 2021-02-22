@@ -10,7 +10,7 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import * as Device from "expo-device";
 import { connect } from "react-redux";
@@ -244,9 +244,9 @@ function Login(props) {
             </View>
             <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
 
-              <View style={{ paddingRight: 40 }}>
+              <View style={{ paddingRight: '10%' }}>
                 <Button onPress={() => handleAuthentication()}>
-                  <FontAwesome5 name="fingerprint" style={icon_style.logo} />
+                  <MaterialCommunityIcons name="fingerprint" style={icon_style.logo} />
                 </Button>
               </View>
               <Text
@@ -304,7 +304,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const icon_style = StyleSheet.create({
   logo: {
-    fontSize: 60,
+    fontSize: 40,
     padding: 5,
     color: colors.grey,
   },

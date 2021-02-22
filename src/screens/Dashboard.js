@@ -52,7 +52,7 @@ function Dashboard(props) {
           <TouchableOpacity
             style={styles.btn_tool}
             onPress={() => props.navigation.navigate('ListPayment')}>
-            <FontAwesome5 name="funnel-dollar" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="dollar-sign" size={20} color={colors.gray} style={{ padding: 10, paddingLeft: 15, paddingRight: 15 }} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_tool}
@@ -63,10 +63,6 @@ function Dashboard(props) {
             style={styles.btn_tool}
             onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
             <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_tool}
-            onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
-            <FontAwesome name="search" size={20} color={colors.gray} style={{ padding: 10 }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -80,7 +76,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginBottom: 5,
     marginTop: 10,
     flex: 1

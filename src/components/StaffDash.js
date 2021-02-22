@@ -8,7 +8,7 @@ import { FontAwesome, FontAwesome5, MaterialCommunityIcons, Ionicons } from '@ex
 import { ProgressBar } from 'react-native-paper'
 import { colors, styles as masterStyles } from '../styles'
 import * as constAction from '../consts'
-
+import { useNavigation } from '@react-navigation/native';
 import { moneyFormat } from '../functions'
 
 const { width, height } = Dimensions.get("window");
@@ -28,7 +28,7 @@ function StaffHeader(props) {
   }
 
   return (
-    <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 10, backgroundColor: 'white', paddingLeft: 20 }]}>
+    <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 20, paddingBottom: 15, backgroundColor: 'white', paddingLeft: 20 }]}>
       <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, marginTop: -5 }]}>
         <ImageBackground
           style={[styles.pic]}
@@ -59,7 +59,11 @@ function StaffDash(props) {
       return EMPTYAVATAR
     else return { uri: avatar }
   }
-
+  const navigation = useNavigation();
+  const handleShow = (list, title) => {
+    navigation.navigate('Portfolio', { name: title })
+    props.updateShowlist(list)
+  }
   const miniMoneyFormat = (n) => {
     const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
     return money
@@ -67,27 +71,31 @@ function StaffDash(props) {
 
   return (
     <View
-      style={[styles.block, { flex: 1, marginBottom: 5 }]}
+      style={[styles.block, { flex: 1, justifyContent: 'space-between' }]}
     >
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Tổng danh mục
       </Text>
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 3, flex: 0.8 }]}>
+        <TouchableOpacity style={[styles.box, { padding: 3, flex: 0.8 }]}
+          onPress={() => handleShow(props.totalCal.totalCase.case, 'Tổng HD')}
+        >
           <Text style={styles.index}>
             {props.totalCal.totalCase.case}
           </Text>
           <Text style={styles.label}>Tổng HĐ</Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={[styles.box, { padding: 1, flex: 1.618 }]}>
           <Text style={styles.indexSmall}>
             + 0
           </Text>
-          <Text style={styles.index}>
-            {props.totalCal.followed.case}
-          </Text>
-          <Text style={styles.label}>Đã viếng thăm</Text>
+          <TouchableOpacity onPress={() => handleShow(props.totalCal.followed.case, 'HD đã viếng thăm')}>
+            <Text style={styles.index}>
+              {props.totalCal.followed.case}
+            </Text>
+            <Text style={styles.label}>Đã viếng thăm</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={[styles.box, { flex: 1.2 }]}>
@@ -109,20 +117,24 @@ function StaffDash(props) {
           <Text style={styles.indexSmall}>
             + 4
           </Text>
-          <Text style={styles.index}>
-            {props.totalCal.paidMtd.case}
-          </Text>
-          <Text style={styles.label}>HĐ có số thu</Text>
+          <TouchableOpacity onPress={() => handleShow(props.totalCal.paidMtd.case, 'HD có số thu')}>
+            <Text style={styles.index}>
+              {props.totalCal.paidMtd.case}
+            </Text>
+            <Text style={styles.label}>HĐ có số thu</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={[styles.box, { flex: 1.618, paddingTop: 6 }]}>
           <Text style={[styles.indexSmall, { left: 60 }]}>
             + {moneyFormat(props.totalCal.paidMtd.value)}
           </Text>
-          <Text style={[styles.index, { color: colors.info, fontWeight: 'bold' }]}>
-            {moneyFormat(props.totalCal.paidMtd.value)}
-          </Text>
-          <Text style={[styles.label]}>Tổng số thu</Text>
+          <TouchableOpacity onPress={() => handleShow(props.totalCal.paidMtd.case, 'HD có số thu')}>
+            <Text style={[styles.index, { color: colors.info, fontWeight: 'bold' }]}>
+              {moneyFormat(props.totalCal.paidMtd.value)}
+            </Text>
+            <Text style={[styles.label]}>Tổng số thu</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={[styles.box, { flex: 1.2 }]}>
@@ -183,19 +195,19 @@ function StaffTodo(props) {
 
   return (
     <View
-      style={[styles.block, { flex: 1 }]}
+      style={[styles.block, { flex: 1, justifyContent: 'space-between' }]}
     >
       {/* ======================*/}
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Danh mục tự chọn
       </Text>
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 3, flex: 0.8 }]}>
+        <TouchableOpacity onPress={() => handleShow(props.todoCal.TotalCase.case, 'Danh mục tự chọn')} style={[styles.box, { padding: 3, flex: 0.8 }]}>
           <Text style={styles.index}>
             {props.totalCal.totalCase.case}
           </Text>
           <Text style={styles.label}>Tổng HĐ</Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={[styles.box, { padding: 1, flex: 1.618 }]}>
           <Text style={styles.indexSmall}>
@@ -287,10 +299,34 @@ function StaffTodo(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    fetching: state.data.fetching,
+    data: state.data.data,
+    showlists: state.showlists.applIds,
+    todoCal: state.data.todoCal,
     totalCal: state.data.totalCal,
+    treeCal: state.treeCal,
+    uptrails: state.uptrails,
     token: state.token,
   };
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateShowlist: (content) => {
+      dispatch({
+        type: constAction.SET_TODO_SHOWLIST,
+        content,
+      })
+    },
+    setTodoShowlist: (content) => {
+      dispatch({
+        type: constAction.SET_TODO_SHOWLIST,
+        content,
+      })
+    },
+  };
+};
+
 
 
 const styles = StyleSheet.create({
@@ -392,9 +428,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const StaffDash_com = connect(mapStateToProps, null)(StaffDash)
-const StaffTodo_com = connect(mapStateToProps, null)(StaffTodo)
-const StaffHeader_com = connect(mapStateToProps, null)(StaffHeader)
+const StaffDash_com = connect(mapStateToProps, mapDispatchToProps)(StaffDash)
+const StaffTodo_com = connect(mapStateToProps, mapDispatchToProps)(StaffTodo)
+const StaffHeader_com = connect(mapStateToProps, mapDispatchToProps)(StaffHeader)
 
 export {
   StaffDash_com,
