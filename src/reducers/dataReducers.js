@@ -5,9 +5,8 @@ import * as constAction from "../consts/index";
 const initialTotal = {
   totalCase: {
     case: 0,
-    value: 0,
-    applIds: [],
-    pos: 1
+    pos: 0,
+    applIds: []
   },
   paidAll: {
     value: 0,
@@ -29,6 +28,7 @@ const initialTotal = {
   },
   followed: {
     case: 0,
+    value: 0,
     applIds: []
   },
   followedToday: {
@@ -53,6 +53,7 @@ const initialTodo = {
   },
   todoFollowed: {
     case: 0,
+    value: 0,
     applIds: []
   },
   todoFollowedToday: {
@@ -279,6 +280,13 @@ const dataReducers = (state = initialState, action) => {
         return sum = sum + pay;
       }, 0)
 
+      let followMtdValue = initFollowedAppls.map(function (appl) {
+        return appl.total_pay_amount
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0)
+
+
       let initPaidTodayAppls = appls.filter((appl) => {
         return appl.paid_today_amt > 0
       })
@@ -325,6 +333,7 @@ const dataReducers = (state = initialState, action) => {
           },
           followed: {
             case: initFollowedAppls.length,
+            value: followMtdValue,
             applIds: initFollowedAppls//.map(appl => appl.appl_id)
           },
           followedToday: {
@@ -570,6 +579,12 @@ const dataReducers = (state = initialState, action) => {
         return sum = sum + pay;
       }, 0);
 
+      let todoFollowMtdValue = todoFollowedAppls.map(function (appl) {
+        return appl.total_pay_amount
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0)
+
 
       let todoPtpAppls = todoAppls.filter((appl) => {
         return appl.last_action_code === 'PTP'
@@ -595,8 +610,9 @@ const dataReducers = (state = initialState, action) => {
             pos: 1
           },
           'todoFollowed': {
-            'case': todoFollowedAppls.length,
-            'applIds': todoFollowedAppls//.map(appl => appl.appl_id)
+            case: todoFollowedAppls.length,
+            value: todoFollowMtdValue,
+            applIds: todoFollowedAppls//.map(appl => appl.appl_id)
           },
           'todoPaid': {
             'case': todoPaidAppls.length,

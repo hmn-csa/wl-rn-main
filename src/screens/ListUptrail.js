@@ -50,6 +50,12 @@ function ListUptrail(props) {
 
 
   const [reDate, setRedate] = useState(today)
+
+
+  const [initRegion, setInitRegion] = useState(
+    calInitialRegion(props.dailyUptrails[reDate], props.token.lat, props.token.lon)
+  )
+
   const mapRef = useRef(null)
   const makerRef = {}
   const carouselRef = useRef(null)
@@ -90,6 +96,18 @@ function ListUptrail(props) {
         cors.push({ latitude: appl.lat, longitude: appl.lon });
       })
       setCordata(cors)
+      setActivateIndex(0);
+      if (props.dailyUptrails[reDate].length > 0) {
+        mapRef.current.animateToCoordinate(
+          {
+            latitude: props.dailyUptrails[reDate][0].lat,
+            longitude: props.dailyUptrails[reDate][0].lon,
+          },
+          0
+        );
+        carouselRef.current.snapToItem(0);
+        setInitRegion(calInitialRegion(props.dailyUptrails[reDate]), props.token.lat, props.token.lon)
+      }
     }
   }, [props.dailyUptrails, reDate]);
 
@@ -175,35 +193,49 @@ function ListUptrail(props) {
     );
   };
 
+
+  const _renderDirection = () => {
+    if (props.dailyUptrails[reDate].length > 0)
+      return <MapViewDirections
+        origin={cordata[0]}
+        destination={cordata[cordata.length - 1]}
+        waypoints={cordata.slice(1, -1)}
+        mode="DRIVING"
+        apikey="AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
+        language="en"
+        strokeWidth={4}
+        strokeColor="black"
+        onReady={(result) => {
+          setIsDirectError(false);
+          setDistance(result.distance);
+        }}
+        onError={(errorMessage) => {
+          setIsDirectError(true);
+        }}
+      />
+  }
   const renderMapView = () => {
-    if (props.dailyUptrails[reDate])
+
+
+
+    if (props.dailyUptrails[reDate]) {
       return (
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
           ref={mapRef}
-          initialRegion={calInitialRegion(props.dailyUptrails[reDate])}
+          region={initRegion}
+          zoomTapEnabled={true}
+          zoomControlEnabled={true}
+          loadingEnabled={true}
+          fitToSuppliedMarkers={cordata}
         >
           {props.dailyUptrails[reDate].map((appl, index) => _renderMarker(appl, index))}
-          <MapViewDirections
-            origin={cordata[0]}
-            destination={cordata[cordata.length - 1]}
-            waypoints={cordata.slice(1, -1)}
-            mode="DRIVING"
-            apikey="AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
-            language="en"
-            strokeWidth={4}
-            strokeColor="black"
-            onReady={(result) => {
-              setIsDirectError(false);
-              setDistance(result.distance);
-            }}
-            onError={(errorMessage) => {
-              setIsDirectError(true);
-            }}
-          />
+          {_renderDirection()}
         </MapView>
       )
+
+    }
   }
   const Map_Derection_result = () => {
     const d = new Date(reDate);

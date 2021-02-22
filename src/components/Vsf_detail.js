@@ -7,15 +7,12 @@ import { connect } from "react-redux"
 import { styles, colors } from '../styles'
 import Loader from './elements/Loader'
 import ApplUptrail from './ApplUptrail'
+import { moneyFormat } from '../functions';
 
 
 function Contract(props) {
 
-    const moneyFormat = (n) => {
-        //return  n.toLocaleString().split(".")[0]
-        const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
-        return money.substring(0, money.length - 2)
-    }
+
     if (props.vsf.fetching)
         return (
             <Loader />
@@ -161,14 +158,100 @@ function Contract(props) {
 }
 
 function Customer(props) {
-    const moneyFormat = (n) => {
-        //return  n.toLocaleString().split(".")[0]
-        const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
-        return money.substring(0, money.length - 2)
-    }
+
     if (props.vsf.fetching)
         return (
-            <Loader />
+            <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
+                <View style={[vsfStyles.blockInput]}>
+                    <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
+                        <Text style={[vsfStyles.header]}>{props.vsf.activeApplId.cust_name} </Text>
+                    </View>
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>CMND:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.id_no} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Ngày sinh:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.dob} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Giới tính:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.gender} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Mobile:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.act_mobile} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Thường trú:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.reg_address} </Text>
+                        </View>
+                    </View>
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Tạm trú:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.act_address} </Text>
+                        </View>
+                    </View>
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Tham chiếu:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.phone_all} </Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={vsfStyles.blockInput}>
+                    <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
+                        <Text style={vsfStyles.header}>Nghề nghiệp: {props.vsf.activeApplId.job_description} </Text>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Tên công ty:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.company_name} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Địa chỉ:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.off_address} </Text>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView >
         )
     return (
         <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
@@ -178,7 +261,7 @@ function Customer(props) {
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>CMND:</Text>
+                        <Text>CMND:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.id_no} </Text>
@@ -187,7 +270,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Ngày sinh:</Text>
+                        <Text>Ngày sinh:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.dob} </Text>
@@ -196,7 +279,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Giới tính:</Text>
+                        <Text>Giới tính:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.gender} </Text>
@@ -205,7 +288,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Mobile:</Text>
+                        <Text>Mobile:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.act_mobile} </Text>
@@ -214,7 +297,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Thường trú:</Text>
+                        <Text>Thường trú:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.reg_address} </Text>
@@ -222,7 +305,7 @@ function Customer(props) {
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Tạm trú:</Text>
+                        <Text>Tạm trú:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.act_address} </Text>
@@ -230,7 +313,7 @@ function Customer(props) {
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Tham chiếu:</Text>
+                        <Text>Tham chiếu:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.phone_all} </Text>
@@ -245,7 +328,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Tên công ty:</Text>
+                        <Text>Tên công ty:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.company_name} </Text>
@@ -254,7 +337,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Địa chỉ:</Text>
+                        <Text>Địa chỉ:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.off_address} </Text>
@@ -273,7 +356,40 @@ function Payment(props) {
     }
     if (props.vsf.fetching)
         return (
-            <Loader />
+            <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
+                <View style={vsfStyles.blockInput}>
+                    <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
+                        <Text style={vsfStyles.header}>Thông tin thanh toán</Text>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Tổng thanh toán:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{moneyFormat(props.vsf.activeApplId.total_paid)} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Tổng kỳ đóng:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.paid_term} </Text>
+                        </View>
+                    </View>
+
+                    <View style={[vsfStyles.row]}>
+                        <View style={[styles.box]}>
+                            <Text style={vsfStyles.title}>Chi tiết:</Text>
+                        </View>
+                        <View style={[styles.box2]}>
+                            <Text>{props.vsf.activeApplId.last_pay} </Text>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView >
         )
     return (
         <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
@@ -284,7 +400,7 @@ function Payment(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Tổng thanh toán:</Text>
+                        <Text>Tổng thanh toán:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{moneyFormat(props.vsf.activeApplId.total_paid)} </Text>
@@ -293,7 +409,7 @@ function Payment(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Tổng kỳ đóng:</Text>
+                        <Text>Tổng kỳ đóng:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.paid_term} </Text>
@@ -302,7 +418,7 @@ function Payment(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text style={vsfStyles.title}>Chi tiết:</Text>
+                        <Text>Chi tiết:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.last_pay} </Text>
@@ -313,35 +429,32 @@ function Payment(props) {
     )
 }
 
+
+
+
 function Follow(props) {
-    const moneyFormat = (n) => {
-        //return  n.toLocaleString().split(".")[0]
-        const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
-        return money.substring(0, money.length - 2)
-    }
+
     if (props.vsf.fetching)
         return (
             <Loader />
         )
     return (
+
         <ScrollView style={{ padding: 5, backgroundColor: 'white' }}>
-            <View style={vsfStyles.blockInput}>
-                <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
-                    <Text style={vsfStyles.header}>Tác động trong tháng</Text>
+            <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
+                <Text style={vsfStyles.header}>Tác động trong tháng</Text>
+            </View>
+            <ApplUptrail />
+
+            <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
+                <Text style={vsfStyles.header}>Lịch sử tác động</Text>
+            </View>
+            <View style={[vsfStyles.row]}>
+                <View style={[styles.box]}>
+                    <Text>{props.vsf.activeApplId.last_action_fv} </Text>
                 </View>
-                <ApplUptrail />
             </View>
 
-            <View style={vsfStyles.blockInput}>
-                <View style={[vsfStyles.row, { borderBottomWidth: 0.4 }]}>
-                    <Text style={vsfStyles.header}>Lịch sử tác động</Text>
-                </View>
-                <View style={[vsfStyles.row]}>
-                    <View style={[styles.box]}>
-                        <Text>{props.vsf.activeApplId.last_action_fv} </Text>
-                    </View>
-                </View>
-            </View>
         </ScrollView >
     )
 }

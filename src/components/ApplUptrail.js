@@ -7,12 +7,19 @@ import { connect } from "react-redux"
 import Loader from './elements/Loader'
 import Uptrail from './Uptrail'
 import * as constAction from '../consts'
+import { colors } from '../styles'
+import Timeline from 'react-native-timeline-flatlist'
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 8;
 
 
+
+
 function ApplUptrail(props) {
+
+
+  const [timelineFollow, setTimeline] = useState([])
 
   useEffect(() => {
     if (!props.uptrails[props.active_applid]) {
@@ -25,23 +32,86 @@ function ApplUptrail(props) {
   }, []);
 
 
+  const pm2timeline = (arr) => {
+    if (!arr) return []
+    let timeline = []
+    for (let i = 0; i < arr.length; i++) {
+      timeline.push({
+        time: arr[i].runtime.substring(5, 10),
+        title: arr[i].runtime,
+        description: 'Hợp đồng : ' + arr[i].appl_id,
+        ...arr[i]
+      })
+    }
+    return timeline
+  }
+
+  useEffect(() => {
+    setTimeline(pm2timeline(props.uptrails[props.active_applid]))
+    console.log(timelineFollow)
+  }, [props.uptrails]);
+
+
+
+
+  const renderDetail = (rowData, sectionID, rowID) => {
+    let title = <Text style={[styles.title]}>{rowData.title}</Text>
+    let desc = (
+      <View style={styles.descriptionContainer}>
+        <Text style={[styles.textDescription]}>{rowData.description}</Text>
+      </View>
+    )
+
+    return (
+      <View style={{ flex: 1 }}>
+        <Uptrail
+          key={rowData.runtime}
+          item={rowData}
+          navigation={props.navigation}
+        />
+      </View>
+    )
+  }
+
+
   if (props.uptrailStatus)
     return <Loader />
 
   else if (props.uptrails[props.active_applid]) {
     return (
-      <ScrollView
-        style={{ backgroundColor: 'white', padding: 10, paddingBottom: 40 }}
-      >
-        {props.uptrails[props.active_applid].map(
+      <View style={styles.container}>
+        {/* {props.uptrails[props.active_applid].map(
           item =>
             <Uptrail
               key={item.runtime}
               item={item}
               navigation={props.navigation}
             />)
-        }
-      </ScrollView>
+        } */}
+
+        <Timeline
+          style={styles.list}
+          data={timelineFollow}
+          separator={false}
+          circleSize={20}
+          innerCircle={'dot'}
+          circleColor={colors.info}
+          lineColor={colors.info}
+          timeContainerStyle={{ minWidth: 12, marginTop: -5 }}
+          timeStyle={{
+            textAlign: 'center',
+            backgroundColor: colors.info, color: 'white',
+            padding: 5, borderRadius: 13
+          }}
+          descriptionStyle={{ color: colors.success }}
+          options={{
+            style: { paddingTop: 2 }
+          }}
+          renderDetail={renderDetail}
+          showTime={true}
+        />
+
+      </View>
     )
   }
   return (
@@ -82,15 +152,30 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 5,
+    backgroundColor: 'white'
   },
-  mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+  list: {
+    flex: 1,
   },
-})
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  descriptionContainer: {
+    paddingRight: 5
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 25
+  },
+  textDescription: {
+    marginLeft: 0,
+    color: 'gray'
+  }
+});
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApplUptrail);

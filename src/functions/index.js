@@ -4,12 +4,20 @@ export const moneyFormat = n => {
   return money.substring(0, money.length - 2)
 }
 
-export const calInitialRegion = (listAppls) => {
+export const calInitialRegion = (listAppls, defaullat=10.7888, defaullon=106.7752) => {
+
+  if (!listAppls)
+  return {
+    latitude: defaullat,
+    longitude: defaullon,
+    latitudeDelta: 1,
+    longitudeDelta: 1,
+  }
 
   if (listAppls.length === 0)
     return {
-      latitude: 10.7888,
-      longitude: 106.7752,
+      latitude: defaullat,
+      longitude: defaullon,
       latitudeDelta: 1,
       longitudeDelta: 1,
     }
