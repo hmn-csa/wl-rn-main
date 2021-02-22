@@ -70,7 +70,8 @@ function ListAppls(props) {
         <FlatList
           data={props.showlists.applIds}
           renderItem={_renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.appl_id}
+          key={(item) => item.appl_id}
           style={{ padding: 5 }}
         />
       </View>

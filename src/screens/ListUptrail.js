@@ -1,18 +1,14 @@
-import { Text, View, ScrollView, StyleSheet, Dimensions } from "react-native";
-import { Card, Title, Paragraph, Avatar, Button } from "react-native-paper";
+import { Text, View, ScrollView, StyleSheet, Dimensions, Animated } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { colors } from "../styles";
-import axios from "axios";
-import DatePicker from "react-native-datepicker";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Carousel from "react-native-snap-carousel";
-import { actGetUptrails, actUpdateShowlist } from "../actions/index";
 import Loader from "../components/elements/Loader";
 import Uptrail from "../components/Uptrail";
 import * as constAction from "../consts";
 import { calInitialRegion } from "../functions";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import CalendarStrip from "react-native-calendar-strip";
 import MapViewDirections from "react-native-maps-directions";
 
@@ -23,22 +19,42 @@ const CARD_HEIGHT = height / 8;
 const SliderWidth = Dimensions.get("screen").width;
 // const SliderHeight = Dimensions.get('screen').height;
 
-function ListUptrail(props) {
-  const [reDate, setRedate] = useState(() => {
-    var today = new Date()
-    return today;
-  });
-  const mapRef = useRef(null);
-  const makerRef = {};
-  const carouselRef = useRef(null);
 
-  // const [cordata] = useState(() => {
-  //   var data = [];
-  //   props.uptrails.dailyUptrails.map((appl, index) => {
-  //     data.push({ latitude: appl.lat, longitude: appl.lon });
-  //   });
-  //   return data;
-  // });
+const usePulse = (startDelay = 500) => {
+  const opacity = useRef(new Animated.Value(1)).current;
+
+  const pulse = () => {
+    Animated.sequence([
+      Animated.timing(opacity, { toValue: 1, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0.6, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0.3, useNativeDriver: true }),
+    ]).start(() => pulse());
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => pulse(), startDelay);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return opacity;
+};
+
+
+
+function ListUptrail(props) {
+  const dateObj = new Date()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const year = dateObj.getFullYear();
+  const today = year + '-' + month + '-' + day;
+
+
+  const [reDate, setRedate] = useState(today)
+  const mapRef = useRef(null)
+  const makerRef = {}
+  const carouselRef = useRef(null)
+  const opacity = usePulse()
+
   const cordata = [];
   props.uptrails.dailyUptrails.map((appl, index) => {
     cordata.push({ latitude: appl.lat, longitude: appl.lon });
@@ -46,7 +62,8 @@ function ListUptrail(props) {
 
   const [Distance, setDistance] = useState(null);
   const [isDirectError, setIsDirectError] = useState(false);
-  //const [activeIndex, setActivateIndex] = useState(0);
+  const [activeIndex, setActivateIndex] = useState(0);
+
   const getDailyUptrails = (date) => {
     props.getDailyUptrails({
       staff_id: props.token.active_staff,
@@ -56,9 +73,52 @@ function ListUptrail(props) {
   };
 
   useEffect(() => {
-    getDailyUptrails(reDate);
     console.log("useEffect get data", reDate);
+    getDailyUptrails(reDate);
+
   }, []);
+
+  const _renderMarker = (appl, index) => {
+
+    if (index !== activeIndex)
+      return (
+        <Marker
+          coordinate={{ latitude: appl.lat, longitude: appl.lon }}
+          key={index}
+          description={appl.appl_id}
+          onPress={() => {
+            setActivateIndex(index);
+            carouselRef.current.snapToItem(index);
+          }}
+          ref={(ref) => (makerRef[index] = ref)}
+        >
+          <MaterialCommunityIcons name="map-marker" size={24} color={colors.secondary} />
+        </Marker>
+      );
+    else
+      return (
+        <Marker
+          coordinate={{ latitude: appl.lat, longitude: appl.lon }}
+          key={index}
+          description={appl.appl_id}
+          onPress={() => {
+            setActivateIndex(index);
+            carouselRef.current.snapToItem(index);
+          }}
+          ref={(ref) => (makerRef[index] = ref)}
+        >
+          <Animated.View opacity={opacity}>
+            <MaterialCommunityIcons
+              name="map-marker-check"
+              size={24}
+              color={colors.success}
+
+            />
+          </Animated.View>
+        </Marker>
+      );
+
+  };
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -92,9 +152,9 @@ function ListUptrail(props) {
           iconContainer={{ flex: 0.1 }}
           selectedDate={reDate}
           onDateSelected={(date) => {
-            setRedate(date);
+            setRedate(date.format('YYYY-MM-DD'));
+            console.log(reDate)
             getDailyUptrails(date.format('YYYY-MM-DD'));
-
           }}
         />
       </View>
@@ -170,7 +230,12 @@ function ListUptrail(props) {
   };
 
   // -------------------------------------
-  if (props.uptrails.dailyFetching) return <View>{renSelectDate()}</View>;
+  if (props.uptrails.dailyFetching) return <View style={styles.container}>
+
+    {renSelectDate()}
+    <View style={{ flex: 9 }}><Loader /></View>
+
+  </View>;
   else
     return (
       <View style={styles.container}>
@@ -182,22 +247,7 @@ function ListUptrail(props) {
           ref={mapRef}
           initialRegion={calInitialRegion(props.uptrails.dailyUptrails)}
         >
-          {props.uptrails.dailyUptrails.map((appl, index) => {
-            let description = `${appl.appl_id}`;
-            return (
-              <Marker
-                coordinate={{ latitude: appl.lat, longitude: appl.lon }}
-                key={index}
-                description={description}
-                onPress={() => {
-                  //setActivateIndex(index);
-                  carouselRef.current.snapToItem(index);
-                }}
-                Color={"blue"}
-                ref={(ref) => (makerRef[index] = ref)}
-              />
-            );
-          })}
+          {props.uptrails.dailyUptrails.map((appl, index) => _renderMarker(appl, index))}
 
           <MapViewDirections
             origin={cordata[0]}
@@ -243,7 +293,7 @@ function ListUptrail(props) {
             useScrollView={true}
             // vertical={true}
             onSnapToItem={(index) => {
-              // setActivateIndex(index);
+              setActivateIndex(index);
               mapRef.current.animateToCoordinate(
                 {
                   latitude: props.uptrails.dailyUptrails[index].lat,
@@ -251,6 +301,7 @@ function ListUptrail(props) {
                 },
                 0
               );
+              console.log(index)
               if (makerRef[index] != undefined) makerRef[index].showCallout();
             }}
             activeSlideAlignment="center"

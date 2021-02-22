@@ -9,7 +9,8 @@ import * as constAction from '../consts'
 import Timeline from 'react-native-timeline-flatlist'
 import { actUpdateShowlist } from "../actions/index"
 import { moneyFormat } from '../functions'
-
+import { colors } from "../styles";
+import { color } from 'react-native-reanimated';
 
 function ListPayment(props) {
   useEffect(() => {
@@ -29,7 +30,8 @@ function ListPayment(props) {
         time: arr[i].rundate.substring(5, 10),
         title: arr[i].cust_name,
         appl_id: arr[i].appl_id,
-        description: 'Hợp đồng : ' + arr[i].appl_id + '\n' + 'Tiền đóng : ' + moneyFormat(arr[i].receipt_amt),
+        description: 'Hợp đồng : ' + arr[i].appl_id,
+        money: moneyFormat(arr[i].receipt_amt),
       })
     }
     return timeline
@@ -39,20 +41,24 @@ function ListPayment(props) {
     setTimeline(pm2timeline(props.payments))
   }, [props.payments]);
 
-  renderDetail = (rowData, sectionID, rowID) => {
+  const renderDetail = (rowData, sectionID, rowID) => {
     let title = <Text style={[styles.title]}>{rowData.title}</Text>
-    var desc = null
-    if (rowData.description)
-      desc = (
-        <View style={styles.descriptionContainer}>
-          <Text style={[styles.textDescription]}>{rowData.description}</Text>
-        </View>
-      )
+    let desc = (
+      <View style={styles.descriptionContainer}>
+        <Text style={[styles.textDescription]}>{rowData.description}</Text>
+      </View>
+    )
+    let money = (
+      <View style={styles.descriptionContainer}>
+        <Text style={[styles.textDescription, { color: colors.success }]}>Tiền đóng : {rowData.money}</Text>
+      </View>
+    )
 
     return (
       <View style={{ flex: 1 }}>
         {title}
         {desc}
+        {money}
       </View>
     )
   }
@@ -72,11 +78,11 @@ function ListPayment(props) {
         separator={true}
         circleSize={20}
         innerCircle={'dot'}
-        circleColor='rgb(45,156,219)'
-        lineColor='rgb(45,156,219)'
+        circleColor={colors.info}
+        lineColor={colors.info}
         timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-        timeStyle={{ textAlign: 'center', backgroundColor: '#ff9797', color: 'white', padding: 5, borderRadius: 13 }}
-        descriptionStyle={{ color: 'green' }}
+        timeStyle={{ textAlign: 'center', backgroundColor: colors.info, color: 'white', padding: 5, borderRadius: 13 }}
+        descriptionStyle={{ color: colors.success }}
         options={{
           style: { paddingTop: 5 }
         }}

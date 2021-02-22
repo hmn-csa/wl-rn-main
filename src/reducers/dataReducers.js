@@ -30,11 +30,16 @@ const initialTotal = {
     case: 0,
     applIds: []
   },
+  revisit: {
+    case: 0,
+    applIds: []
+  },
 }
 const initialTodo = {
   todoCase: {
     case: 0,
-    applIds: []
+    applIds: [],
+    value: 0,
   },
   todoFollowed: {
     case: 0,
@@ -42,6 +47,12 @@ const initialTodo = {
   },
   todoPaid: {
     case: 0,
+    value: 0,
+    applIds: []
+  },
+  todoPaidToday: {
+    case: 0,
+    value: 0,
     applIds: []
   },
   todoPtp: {
@@ -248,7 +259,6 @@ const dataReducers = (state = initialState, action) => {
       })
 
 
-
       let paidMtdValue = initPaidMtd.map(function (appl) {
         return appl.total_pay_amount
       }).reduce(function (sum, pay) {
@@ -267,6 +277,10 @@ const dataReducers = (state = initialState, action) => {
       // ptp_lag
       let initPtp = appls.filter((appl) => {
         return appl.last_action_code === 'PTP'
+      })
+
+      let totalReVisitAppls = appls.filter((appl) => {
+        return ['F_NAH', 'LEM'].includes(appl.last_action_code)
       })
 
       state = {
@@ -299,6 +313,10 @@ const dataReducers = (state = initialState, action) => {
             case: initFollowedAppls.length,
             applIds: initFollowedAppls//.map(appl => appl.appl_id)
           },
+          'revisit': {
+            'case': totalReVisitAppls.length,
+            'applIds': totalReVisitAppls//.map(appl => appl.appl_id)
+          },
         },
       }
       return state;
@@ -317,6 +335,7 @@ const dataReducers = (state = initialState, action) => {
         'WAS', 'LST', 'MCW', 'CTI',
         'RTP', 'GSF', 'IGN1', 'IGN2'
       ]
+
       let initPaidAppls = listAppls.filter((appl) => {
         return parseFloat(appl.total_pay_amount) > 0
       })
@@ -509,9 +528,27 @@ const dataReducers = (state = initialState, action) => {
       let todoFollowedAppls = todoAppls.filter((appl) => {
         return appl.followed == 1
       })
+
       let todoPaidAppls = todoAppls.filter((appl) => {
         return appl.total_pay_amount > 0
       })
+      let todoPaidValue = todoPaidAppls.map((appl) => {
+        return appl.paid_today_amt
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0);
+
+
+      let todoTodayPaidAppls = todoAppls.filter((appl) => {
+        return appl.paid_today_amt > 0
+      })
+      let todoTodayPaidValue = todoTodayPaidAppls.map((appl) => {
+        return appl.paid_today_amt
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0);
+
+
       let todoPtpAppls = todoAppls.filter((appl) => {
         return appl.last_action_code === 'PTP'
       })
@@ -520,12 +557,19 @@ const dataReducers = (state = initialState, action) => {
         return ['F_NAH', 'LEM'].includes(appl.last_action_code)
       })
 
+      let paidValue = todoPaidAppls.map((appl) => {
+        return appl.total_pay_amount
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0);
+
       state = {
         ...state,
         todoCal: {
           'todoCase': {
-            'case': todoAppls.length,
-            'applIds': todoAppls//.map(appl => appl.appl_id)
+            case: todoAppls.length,
+            applIds: todoAppls,//.map(appl => appl.appl_id)
+            value: paidValue
           },
           'todoFollowed': {
             'case': todoFollowedAppls.length,
@@ -533,8 +577,16 @@ const dataReducers = (state = initialState, action) => {
           },
           'todoPaid': {
             'case': todoPaidAppls.length,
+            value: todoPaidValue,
             'applIds': todoPaidAppls//.map(appl => appl.appl_id)
           },
+
+          todoPaidToday: {
+            case: todoTodayPaidAppls.length,
+            value: todoTodayPaidValue,
+            applIds: todoTodayPaidAppls,
+          },
+
           'todoPtp': {
             'case': todoPtpAppls.length,
             'applIds': todoPtpAppls//.map(appl => appl.appl_id)

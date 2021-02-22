@@ -39,6 +39,7 @@ import { EMPTYIMAGE } from "../images";
 import Loader from "../components/elements/Loader";
 
 import * as consts from "../consts";
+import { add } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 
@@ -129,10 +130,14 @@ function Remark(props) {
 
 
   const getAddressType = (address) => {
+    if (address === "")
+      return null
     if (address == addressItems[0].value && address == addressItems[1].value)
       return "same_address";
-    if (address == addressItems[0].value) return "reg_address";
-    if (address == addressItems[1].value) return "act_address";
+    if (address == addressItems[0].value)
+      return "reg_addressi";
+    if (address == addressItems[1].value)
+      return "act_address";
 
     return "other_address";
   };
@@ -353,7 +358,7 @@ function Remark(props) {
     if (getAddressType(address) === "other_address")
       return (
         <View>
-          <Text style={styles.title}>Địa chỉ khác</Text>
+          <Text style={styles.title}>*Địa chỉ khác</Text>
           <View style={styles.row}>
             <TextInput
               style={[styles.row, styles.selectInput]}
@@ -637,14 +642,14 @@ function Remark(props) {
           Hợp đồng : {props.vsf.activeApplId.appl_id}
         </Text>
 
-        <Text style={styles.title}>Người liên hệ</Text>
+        <Text style={styles.title}>*Người liên hệ</Text>
         {renPcontact(consts.PERSON_CONTACT)}
 
-        <Text style={styles.title}>Địa chỉ viếng thăm</Text>
+        <Text style={styles.title}>*Địa chỉ viếng thăm</Text>
         {renaddresslist(addressItems)}
         {renderOtherAddress()}
 
-        <Text style={styles.title}>Kết quả viếng thăm</Text>
+        <Text style={styles.title}>*Kết quả viếng thăm</Text>
         {renderActionCode()}
         {renderPromisePTP()}
 
