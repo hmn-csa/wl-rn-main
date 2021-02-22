@@ -59,6 +59,7 @@ function Menutop_Uptrail() {
         labelStyle: { fontSize: 12, fontWeight: 'bold' },
         style: { backgroundColor: 'white' },
       }}
+      swipeEnabled={false}
     >
       <Tab.Screen
         name="Day"
