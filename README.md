@@ -49,7 +49,8 @@ https://icons.expo.fyi/MaterialIcons/contacts
 https://github.com/archriss/react-native-snap-carousel/#showcase
 
 
-https://www.reactnativeschool.com/building-an-animation-hook-in-react-native
+htt
+p   `1` s://www.reactnativeschool.com/building-an-animation-hook-in-react-native
 
 
 

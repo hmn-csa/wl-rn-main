@@ -289,7 +289,7 @@ function ContractDetailMap(props) {
           />
         </TouchableOpacity>
 
-
+     
 
         <TouchableOpacity
           style={[showstyles.btn]}
@@ -340,7 +340,7 @@ const mapDispatchToProps = (dispatch) => {
       });
     },
 
-
+    
 
     setActiveVsf: (content) => {
       dispatch({

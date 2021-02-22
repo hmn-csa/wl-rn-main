@@ -5,7 +5,7 @@ import * as constAction from "../consts/index";
 const initialTotal = {
   totalCase: {
     case: 0,
-    value: 0,
+    pos: 0,
     applIds: []
   },
   paidAll: {
@@ -28,6 +28,7 @@ const initialTotal = {
   },
   followed: {
     case: 0,
+    value: 0,
     applIds: []
   },
   revisit: {
@@ -43,6 +44,7 @@ const initialTodo = {
   },
   todoFollowed: {
     case: 0,
+    value: 0,
     applIds: []
   },
   todoPaid: {
@@ -265,6 +267,13 @@ const dataReducers = (state = initialState, action) => {
         return sum = sum + pay;
       }, 0)
 
+      let followMtdValue = initFollowedAppls.map(function (appl) {
+        return appl.total_pay_amount
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0)
+
+
       let initPaidTodayAppls = appls.filter((appl) => {
         return appl.paid_today_amt > 0
       })
@@ -311,6 +320,7 @@ const dataReducers = (state = initialState, action) => {
           },
           followed: {
             case: initFollowedAppls.length,
+            value: followMtdValue,
             applIds: initFollowedAppls//.map(appl => appl.appl_id)
           },
           'revisit': {
@@ -548,6 +558,12 @@ const dataReducers = (state = initialState, action) => {
         return sum = sum + pay;
       }, 0);
 
+      let todoFollowMtdValue = todoFollowedAppls.map(function (appl) {
+        return appl.total_pay_amount
+      }).reduce(function (sum, pay) {
+        return sum = sum + pay;
+      }, 0)
+
 
       let todoPtpAppls = todoAppls.filter((appl) => {
         return appl.last_action_code === 'PTP'
@@ -572,8 +588,9 @@ const dataReducers = (state = initialState, action) => {
             value: paidValue
           },
           'todoFollowed': {
-            'case': todoFollowedAppls.length,
-            'applIds': todoFollowedAppls//.map(appl => appl.appl_id)
+            case: todoFollowedAppls.length,
+            value: todoFollowMtdValue,
+            applIds: todoFollowedAppls//.map(appl => appl.appl_id)
           },
           'todoPaid': {
             'case': todoPaidAppls.length,
