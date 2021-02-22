@@ -178,7 +178,7 @@ function Customer(props) {
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>CMND:</Text>
+                        <Text style={vsfStyles.title}>CMND:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.id_no} </Text>
@@ -187,7 +187,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Ngày sinh:</Text>
+                        <Text style={vsfStyles.title}>Ngày sinh:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.dob} </Text>
@@ -196,7 +196,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Giới tính:</Text>
+                        <Text style={vsfStyles.title}>Giới tính:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.gender} </Text>
@@ -205,7 +205,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Mobile:</Text>
+                        <Text style={vsfStyles.title}>Mobile:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.act_mobile} </Text>
@@ -214,7 +214,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Thường trú:</Text>
+                        <Text style={vsfStyles.title}>Thường trú:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.reg_address} </Text>
@@ -222,7 +222,7 @@ function Customer(props) {
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Tạm trú:</Text>
+                        <Text style={vsfStyles.title}>Tạm trú:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.act_address} </Text>
@@ -230,7 +230,7 @@ function Customer(props) {
                 </View>
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Tham chiếu:</Text>
+                        <Text style={vsfStyles.title}>Tham chiếu:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.phone_all} </Text>
@@ -245,7 +245,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Tên công ty:</Text>
+                        <Text style={vsfStyles.title}>Tên công ty:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.company_name} </Text>
@@ -254,7 +254,7 @@ function Customer(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Địa chỉ:</Text>
+                        <Text style={vsfStyles.title}>Địa chỉ:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.off_address} </Text>
@@ -284,7 +284,7 @@ function Payment(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Tổng thanh toán:</Text>
+                        <Text style={vsfStyles.title}>Tổng thanh toán:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{moneyFormat(props.vsf.activeApplId.total_paid)} </Text>
@@ -293,7 +293,7 @@ function Payment(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Tổng kỳ đóng:</Text>
+                        <Text style={vsfStyles.title}>Tổng kỳ đóng:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.paid_term} </Text>
@@ -302,7 +302,7 @@ function Payment(props) {
 
                 <View style={[vsfStyles.row]}>
                     <View style={[styles.box]}>
-                        <Text>Chi tiết:</Text>
+                        <Text style={vsfStyles.title}>Chi tiết:</Text>
                     </View>
                     <View style={[styles.box2]}>
                         <Text>{props.vsf.activeApplId.last_pay} </Text>

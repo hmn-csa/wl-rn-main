@@ -61,7 +61,7 @@ function Dashboard(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_tool}
-            onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
+            onPress={() => props.navigation.navigate('Portfolio', { name: 'Tổng HD' })}>
             <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
           </TouchableOpacity>
         </View>

@@ -31,6 +31,8 @@ function BarChartPM() {
         backgroundColor: colors.white,
         borderRadius: 10,
         marginLeft: 5,
+        flex: 1,
+        justifyContent: 'space-around'
       }}>
       <Text style={{
         color: colors.black,
@@ -83,6 +85,8 @@ function BarChartFL() {
         backgroundColor: colors.white,
         borderRadius: 10,
         marginLeft: 5,
+        flex: 1,
+        justifyContent: 'space-around'
       }}>
       <Text style={{
         color: colors.black,
