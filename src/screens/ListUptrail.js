@@ -55,28 +55,43 @@ function ListUptrail(props) {
   const carouselRef = useRef(null)
   const opacity = usePulse()
 
-  const cordata = [];
-  props.uptrails.dailyUptrails.map((appl, index) => {
-    cordata.push({ latitude: appl.lat, longitude: appl.lon });
-  });
+  const [cordata, setCordata] = useState([])
 
   const [Distance, setDistance] = useState(null);
   const [isDirectError, setIsDirectError] = useState(false);
   const [activeIndex, setActivateIndex] = useState(0);
 
-  const getDailyUptrails = (date) => {
-    props.getDailyUptrails({
-      staff_id: props.token.active_staff,
-      token: props.token.token.access,
-      loaddate: date,
-    });
+  const getDailyUptrails = async (date) => {
+    if (!props.dailyUptrails[date])
+      await props.getDailyUptrails({
+        staff_id: props.token.active_staff,
+        token: props.token.token.access,
+        loaddate: date,
+      });
+
+    if (props.dailyUptrails[date]) {
+      const cors = []
+      props.dailyUptrails[date].map((appl, index) => {
+        cors.push({ latitude: appl.lat, longitude: appl.lon });
+      })
+      setCordata(cors)
+    }
   };
 
   useEffect(() => {
     console.log("useEffect get data", reDate);
     getDailyUptrails(reDate);
-
   }, []);
+
+  useEffect(() => {
+    if (props.dailyUptrails[reDate]) {
+      const cors = []
+      props.dailyUptrails[reDate].map((appl, index) => {
+        cors.push({ latitude: appl.lat, longitude: appl.lon });
+      })
+      setCordata(cors)
+    }
+  }, [props.dailyUptrails, reDate]);
 
   const _renderMarker = (appl, index) => {
 
@@ -161,6 +176,36 @@ function ListUptrail(props) {
     );
   };
 
+  const renderMapView = () => {
+    if (props.dailyUptrails[reDate])
+      return (
+        <MapView
+          style={styles.mapStyle}
+          provider={PROVIDER_GOOGLE}
+          ref={mapRef}
+          initialRegion={calInitialRegion(props.dailyUptrails[reDate])}
+        >
+          {props.dailyUptrails[reDate].map((appl, index) => _renderMarker(appl, index))}
+          <MapViewDirections
+            origin={cordata[0]}
+            destination={cordata[cordata.length - 1]}
+            waypoints={cordata.slice(1, -1)}
+            mode="DRIVING"
+            apikey="AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
+            language="en"
+            strokeWidth={4}
+            strokeColor="black"
+            onReady={(result) => {
+              setIsDirectError(false);
+              setDistance(result.distance);
+            }}
+            onError={(errorMessage) => {
+              setIsDirectError(true);
+            }}
+          />
+        </MapView>
+      )
+  }
   const Map_Derection_result = () => {
     const d = new Date(reDate);
     const year = d.getFullYear(); // 2019
@@ -192,6 +237,14 @@ function ListUptrail(props) {
     const monthName = months[d.getMonth()];
     const dateformatted = `${dayName}, ${date} ${monthName} ${year}`;
 
+
+    if (cordata.length == 0)
+      return (
+        <View>
+          <Text>Không có dữ liệu</Text>
+        </View>
+      );
+
     if ((isDirectError == false) & (cordata.length > 1)) {
       return (
         <View style={text_map_styles.container}>
@@ -221,16 +274,10 @@ function ListUptrail(props) {
         </View>
       );
     }
-    if (cordata.length == 0)
-      return (
-        <View>
-          <Text>Không có dữ liệu</Text>
-        </View>
-      );
   };
 
   // -------------------------------------
-  if (props.uptrails.dailyFetching) return <View style={styles.container}>
+  if (props.dailyFetching) return <View style={styles.container}>
 
     {renSelectDate()}
     <View style={{ flex: 9 }}><Loader /></View>
@@ -241,41 +288,7 @@ function ListUptrail(props) {
       <View style={styles.container}>
         {renSelectDate()}
 
-        <MapView
-          style={styles.mapStyle}
-          provider={PROVIDER_GOOGLE}
-          ref={mapRef}
-          initialRegion={calInitialRegion(props.uptrails.dailyUptrails)}
-        >
-          {props.uptrails.dailyUptrails.map((appl, index) => _renderMarker(appl, index))}
-
-          <MapViewDirections
-            origin={cordata[0]}
-            destination={cordata[cordata.length - 1]}
-            waypoints={cordata.slice(1, -1)}
-            mode="DRIVING"
-            apikey="AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
-            language="en"
-            strokeWidth={4}
-            strokeColor="black"
-            onStart={(params) => {
-              console.log(
-                `Started routing between "${params.origin}" and "${params.destination
-                }"${params.waypoints.length
-                  ? " using waypoints: " + params.waypoints.join(", ")
-                  : ""
-                }`
-              );
-            }}
-            onReady={(result) => {
-              setIsDirectError(false);
-              setDistance(result.distance);
-            }}
-            onError={(errorMessage) => {
-              setIsDirectError(true);
-            }}
-          />
-        </MapView>
+        {renderMapView()}
 
         {Map_Derection_result()}
 
@@ -284,7 +297,7 @@ function ListUptrail(props) {
             ref={carouselRef}
             layout={"tinder"}
             layoutCardOffset={10}
-            data={props.uptrails.dailyUptrails}
+            data={props.dailyUptrails[reDate]}
             sliderWidth={SliderWidth * 1}
             // sliderHeight={SliderHeight * 0.1}
             itemWidth={width}
@@ -296,8 +309,8 @@ function ListUptrail(props) {
               setActivateIndex(index);
               mapRef.current.animateToCoordinate(
                 {
-                  latitude: props.uptrails.dailyUptrails[index].lat,
-                  longitude: props.uptrails.dailyUptrails[index].lon,
+                  latitude: props.dailyUptrails[reDate][index].lat,
+                  longitude: props.dailyUptrails[reDate][index].lon,
                 },
                 0
               );
@@ -314,7 +327,8 @@ function ListUptrail(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token,
-    uptrails: state.uptrails,
+    dailyUptrails: state.uptrails.dailyUptrails,
+    dailyFetching: state.uptrails.dailyFetching,
   };
 };
 

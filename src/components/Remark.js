@@ -114,18 +114,8 @@ function Remark(props) {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== "web") {
-        const {
-          status,
-        } = await ImagePicker.requestCameraRollPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
-        }
-      }
-    })();
-  }, []);
+
+  
 
 
 
@@ -172,16 +162,16 @@ function Remark(props) {
     };
 
     try {
-      //console.log(config)
+      console.log(config)
       props.userUptrails(config);
       props.actChangeFollow({
         appl_id: props.vsf.activeApplId.appl_id,
         code: code,
       });
-      props.calAll();
-      const curList = props.showlists;
-      props.updateShowlist([]);
-      props.updateShowlist(curList);
+      //props.calAll();
+      //const curList = props.showlists;
+      //props.updateShowlist([]);
+      //props.updateShowlist(curList);
       setUptrailStatus(false);
       props.navigation.navigate("Portfolio", { screen: "List" });
 

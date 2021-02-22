@@ -11,7 +11,7 @@ const initialState = {
   applidFetching: false,
   userError: null,
   uptrails: [],
-  dailyUptrails: [],
+  dailyUptrails: {},
   applidUptrails: {}
 };
 
@@ -54,10 +54,11 @@ const uptrailReducers = (state = initialState, action) => {
       return { ...state, dailyFetching: true, error: null }
 
     case constAction.DAILY_UPTRAIL_SUCCESS:
+      const dailyUptrails = { ...state.dailyUptrails, ...action.content }
       state = {
         ...state,
         dailyFetching: false,
-        dailyUptrails: action.content.reverse()
+        dailyUptrails: dailyUptrails
       }
       return state;
 
@@ -104,6 +105,20 @@ const uptrailReducers = (state = initialState, action) => {
         const newApplidUptrails = [action.content, ...state.applidUptrails[action.content.appl_id]]
         state.applidUptrails[action.content.appl_id] = newApplidUptrails
       }
+
+      const dateObj = new Date()
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const year = dateObj.getFullYear();
+      const today = year + '-' + month + '-' + day;
+
+      if (state.dailyUptrails[today]) {
+
+        const newDailyUptrails = [...state.dailyUptrails[today], action.content]
+        state.dailyUptrails[today] = newDailyUptrails
+        console.log(' daily :', newDailyUptrails)
+      }
+
       return state;
 
     case constAction.USER_UPTRAIL_FAILURE:

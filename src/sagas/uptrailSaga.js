@@ -114,9 +114,9 @@ export function* workerGetMoreUptrail(request) {
 export function* workerUserUptrail(request) {
   try {
 
-    let dataContent = {
-      ...request.config,
-    }
+    // let dataContent = {
+    //   ...request.config,
+    // }
 
     let config = {
       method: 'post',
@@ -124,14 +124,13 @@ export function* workerUserUptrail(request) {
       headers: {
         'Authorization': `Bearer ${request.config.token_value}`
       },
-      data: dataContent
+      data: request.config,
     }
 
     const response = yield call(axios, config);
     // dispatch a success action to the store with the new content
-    dataContent = { ...dataContent, runtime: response.data.message }
+    let dataContent = { ...request.config, runtime: response.data.message }
     yield put({ type: constAction.USER_UPTRAIL_SUCCESS, content: dataContent });
-
     alert(`Uptrail thành công: \nHợp đồng: ${dataContent.appl_id}\nKhách hàng: ${dataContent.cust_name}`)
     // dispatch CAL-DASH
 
@@ -140,7 +139,7 @@ export function* workerUserUptrail(request) {
     console.log(error)
     // dispatch a failure action to the store with the error
     yield put({ type: constAction.USER_UPTRAIL_FAILURE, error });
-    alert(`Uptrail không thành công vui lòng thực hiện lại: \nHợp đồng: ${dataContent.appl_id}\nKhách hàng: ${dataContent.cust_name}`)
+    alert(`Uptrail không thành công vui lòng thực hiện lại: \nHợp đồng: ${request.config.appl_id}\nKhách hàng: ${request.config.cust_name}`)
   }
 }
 
