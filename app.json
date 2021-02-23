@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "F-Bee",
-    "slug": "F-Bee",
+    "slug": "worklist-app",
     "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/paid.png",

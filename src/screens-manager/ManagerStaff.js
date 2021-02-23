@@ -432,7 +432,6 @@ const styles = StyleSheet.create({
 
   card: {
     justifyContent: 'center',
-    elevation: 12,
     marginVertical: 5,
     flexBasis: '46%',
     marginHorizontal: 5,

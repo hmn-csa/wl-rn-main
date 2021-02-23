@@ -61,6 +61,8 @@ function ManagerMap(props) {
     longitudeDelta: null,
   });
 
+  const [cordata, setCordata] = useState([])
+
   const [listStaff, setListStaff] = useState(
     [{ label: "tất cả nv", value: "all" }, ...props.staff.staffs.map(staff => {
       return { label: 'nv: ' + staff.staff_id, value: staff.staff_id }
@@ -96,7 +98,12 @@ function ManagerMap(props) {
 
 
   useEffect(() => {
-    // change date
+    // change date  
+
+    const cors = []
+
+
+    console.log('chay lan 2', reDate)
     if (!props.staff.fetchingDaily && reDate !== today) {
       const dailyCheckinItems = props.staff.dailyChekin.filter(item => item.date === reDate)
       if (dailyCheckinItems.length > 0) {
@@ -116,7 +123,14 @@ function ManagerMap(props) {
         )
 
         setInitialRegion(calInitialRegion(newlistApplDaily))
-        console.log(dailyCheckinItems[0].date)
+
+        newlistApplDaily.map((appl, index) => {
+          cors.push({ latitude: appl.lat, longitude: appl.lon });
+        })
+        setCordata(cors)
+        console.log('cors', cors)
+
+        console.log('date: ', dailyCheckinItems[0].date)
       }
     }
 
@@ -135,11 +149,18 @@ function ManagerMap(props) {
       setListStaffNotChecked(
         props.staff.staffs.filter(staff => !tmpChecked.includes(staff.staff_id))
       )
-      console.log(listStaffNotChecked)
+      console.log('not checkin :', listStaffNotChecked)
       setInitialRegion(calInitialRegion(newlistAppl))
+      newlistAppl.map((appl, index) => {
+        cors.push({ latitude: appl.lat, longitude: appl.lon });
+      })
+      console.log('cors', cors)
+      setCordata(cors)
     }
 
-  }, [reDate, props.staff.fetchingDaily, filterStaffs, filterType]);
+    console.log('chay lan 2', reDate, listAppls)
+
+  }, [reDate, props.staff.fetchingDaily, filterStaffs, filterType, props.staff.data_done]);
 
   useEffect(() => {
     // change date
@@ -160,7 +181,7 @@ function ManagerMap(props) {
       console.log(listStaffNotChecked)
       setInitialRegion(calInitialRegion(newlistAppl))
     }
-
+    console.log('chay lan pull', listAppls)
   }, [props.staff.pullcnt]);
 
 
@@ -235,7 +256,7 @@ function ManagerMap(props) {
         dropDownMaxHeight={300}
         itemStyle={{ justifyContent: "flex-start" }}
         placeholderStyle={{ fontWeight: "normal", color: "grey" }}
-        style={[styles.box, { width: width * 0.5, borderRadius: 30 }]}
+        style={[styles.boxz, { width: width * 0.5, borderRadius: 30 }]}
         labelStyle={{
           paddingTop: 5,
           fontSize: 16,
@@ -255,6 +276,17 @@ function ManagerMap(props) {
       />
     );
   };
+
+  const handleSelectDate = async (date) => {
+    setRedate(date.format('YYYY-MM-DD'));
+    setShowDate(false)
+    if (date.format('YYYY-MM-DD') !== today)
+      await props.getDailyStaffCheckin({
+        query_date: date.format('YYYY-MM-DD'),
+        token: props.token
+      })
+
+  }
 
   const renSelectDate = () => {
     if (isShowDate)
@@ -439,17 +471,19 @@ function ManagerMap(props) {
       console.log(array)
     }
 
+
+
     return (
       <TouchableOpacity
         onPress={() => handlePress()}
         style={{
           ///backgroundColor: filterStaffs.includes(item.staff_id) ? colors.success : 'white',
           borderRadius: 20,
-          borderWidth: 2.5,
-          borderColor: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? colors.success : 'gray',
+          borderWidth: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? 2 : 1,
+          borderColor: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? colors.success : colors.lightGray,
           padding: 5,
-          margin: 5,
-          width: width / 3.5
+          margin: 2,
+          width: width * 0.95 / 3
         }}>
 
         <View style={[styles.row, { borderRadius: 20, }]}>
@@ -484,11 +518,11 @@ function ManagerMap(props) {
         style={{
           ///backgroundColor: filterStaffs.includes(item.staff_id) ? colors.success : 'white',
           borderRadius: 20,
-          borderWidth: 2,
+          borderWidth: 1,
           borderColor: colors.secondary,
           padding: 5,
-          margin: 5,
-          width: width / 3.5
+          margin: 2,
+          width: width * 0.95 / 3
         }}>
         <View style={[styles.row, { borderRadius: 20, }]}>
           <View style={[styles.box, { flex: 0.3 }]}>
@@ -551,6 +585,7 @@ function ManagerMap(props) {
         zoomTapEnabled={true}
         zoomControlEnabled={true}
         loadingEnabled={true}
+        fitToSuppliedMarkers={cordata}
       >
         {
           listAppls.map((marker, index) => {
@@ -593,6 +628,7 @@ function ManagerMap(props) {
             }}>Các nhân viên đã checkin: {listStaffChecked.length}/{props.staff.staffs.length}</Text>
           </View>
           <FlatList
+            style={{ marginLeft: 5 }}
             data={listStaffChecked}
             renderItem={_renderItemCheckin}
             key={(item) => item.staff_id}
@@ -607,6 +643,7 @@ function ManagerMap(props) {
             color: colors.gray,
           }}> Các nhân viên Chưa checkin: {listStaffNotChecked.length}/{props.staff.staffs.length}</Text>
           <FlatList
+            style={{ marginLeft: 5 }}
             data={listStaffNotChecked}
             renderItem={_renderItemNotCheckin}
             key={(item) => item.staff_id}
@@ -618,7 +655,7 @@ function ManagerMap(props) {
   }
 
   if (!listAppls) {
-    console.log(listAppls)
+    console.log('listapp ', listAppls)
     return (
       <View style={[{ alignItems: 'center' }]}>
         <ActivityIndicator size={100} color={colors.primary} />
@@ -727,7 +764,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
   },
-
+  boxz: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    ...(Platform.OS !== "android" && {
+      zIndex: 10,
+    }),
+  },
   mapStyle: {
     minHeight: height * 0.5,
     flex: 6,
@@ -753,10 +797,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     backgroundColor: "#FFF",
     marginHorizontal: 10,
-    shadowColor: "#000",
-    shadowRadius: 5,
-    shadowOpacity: 0.3,
-    shadowOffset: { x: 2, y: -2 },
     height: CARD_HEIGHT,
     width: CARD_WIDTH,
     overflow: "hidden",
