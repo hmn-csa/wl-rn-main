@@ -31,9 +31,10 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     width: 120,
-    height: 80,
+    height: 50,
     marginTop: -60,
-    marginBottom: 10
+    marginBottom: 10,
+    resizeMode: 'stretch',
   },
   bglogin: {
     flex: 1,
@@ -71,13 +72,13 @@ const styles = StyleSheet.create({
     margin: 1
   },
   box: {
-    flex: 1,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'stretch',
   },
 
   box2: {
-    flex: 1.5,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'stretch',
   },
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.secondary,
     padding: 3,
+
   },
   sologan: {
     fontWeight: "bold",
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
   },
   iconinput: {
     position: 'absolute',
-    backgroundColor: colors.info,
+    backgroundColor: 'rgba(255,255,255,0.4)',
     width: 40,
     height: 40,
     borderTopLeftRadius: 5,

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Worklist App",
-    "slug": "worklist-app",
+    "name": "F-Bee",
+    "slug": "F-Bee",
     "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/paid.png",
@@ -18,17 +18,20 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "io.exp.exponent"
+      "bundleIdentifier": "io.exp.exponent",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBSY0RMRAvp0K43FpHjecLmBvSC-op15d8",
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "com.lgm.wlapp", 
+      "package": "com.lgm.wlapp",
       "useNextNotificationsApi": true,
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBziEaKJvR3y3Z6pxzX54vTSCcPpFsr8f0"
+          "apiKey": "AIzaSyBSY0RMRAvp0K43FpHjecLmBvSC-op15d8"
         }
       }
     }

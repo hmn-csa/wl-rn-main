@@ -188,7 +188,7 @@ function Login(props) {
           <View></View>
           <View style={styles.boxlogin}>
             <Image
-              source={require("../images/logo-LGM.png")}
+              source={require("../images/logo.jpg")}
               style={styles.logologin}
             />
 
@@ -197,7 +197,7 @@ function Login(props) {
                 <Ionicons
                   name="md-person"
                   size={20}
-                  color="white"
+                  color={colors.main}
                   style={{ marginLeft: "auto", marginRight: "auto" }}
                 />
               </View>
@@ -218,7 +218,7 @@ function Login(props) {
                 <Ionicons
                   name="ios-key"
                   size={20}
-                  color="white"
+                  color={colors.main}
                   style={{ marginLeft: "auto", marginRight: "auto" }}
                 />
               </View>
@@ -235,8 +235,9 @@ function Login(props) {
 
             <View style={styles.loginBtn}>
               <Button
-                color={colors.info}
-                mode="contained"
+                style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}
+                labelStyle={{ color: colors.main, fontWeight: 'bold' }}
+                mode="text"
                 onPress={() => onSubmit()}
               >
                 ĐĂNG NHẬP

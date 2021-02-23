@@ -37,7 +37,7 @@ function UserStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -67,7 +67,7 @@ function UserStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -89,7 +89,7 @@ function UserStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -130,7 +130,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          headerTintColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -139,10 +139,10 @@ function DashboardStack(props) {
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
               <TouchableOpacity>
-                <MaterialIcons name="chat" size={20} color={colors.gray} style={{ marginRight: 15 }} />
+                <MaterialIcons name="chat" size={20} color={colors.main} style={{ marginRight: 15 }} />
               </TouchableOpacity>
               <TouchableOpacity>
-                <FontAwesome name="bell-o" size={20} color={colors.gray} />
+                <FontAwesome name="bell-o" size={20} color={colors.main} />
               </TouchableOpacity>
             </View >
           ),
@@ -155,7 +155,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -181,7 +181,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          headerTintColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -190,7 +190,7 @@ function DashboardStack(props) {
           headerRight: () => (
             <View style={{ paddingRight: 20 }}>
               <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color={colors.gray} />
+                <MaterialIcons name="search" size={30} color={colors.main} />
               </TouchableOpacity>
             </View>
           )
@@ -203,7 +203,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -228,30 +228,22 @@ function DashboardStack(props) {
             backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          headerTintColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              {/* <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color={colors.gray} />
-              </TouchableOpacity> */}
-              <Searchbar
-                onChangeText={(value) => hangleSearch(value)}
-                style={{ width: 40, height: 40, borderRadius: 40 }}
-                onIconPress={() => {
-                  alert("!@#")
-                }}
-                onSubmitEditing={(value) => hangleSearch(value)}
-              />
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={25} color={colors.main} />
+              </TouchableOpacity>
               <TouchableOpacity
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 10, marginLeft: 10 }}
                 onPress={() =>
                   props.navigation.navigate('Maps')
                 } >
-                <MaterialIcons name="map" size={25} color={colors.grey}
+                <MaterialIcons name="map" size={25} color={colors.main}
                   style={{
                     borderRadius: 20
                   }} />
@@ -268,7 +260,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -290,7 +282,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitle: "Visit form",
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -313,7 +305,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -335,7 +327,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -358,7 +350,7 @@ function DashboardStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -391,7 +383,7 @@ function CalendarStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -416,7 +408,7 @@ function CategorieStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -433,7 +425,7 @@ function CategorieStack(props) {
             backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -462,7 +454,7 @@ function CategorieStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -484,7 +476,7 @@ function CategorieStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -506,7 +498,7 @@ function CategorieStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitle: "Visit form",
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -529,7 +521,7 @@ function CategorieStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -551,7 +543,7 @@ function CategorieStack(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -583,7 +575,7 @@ function UserStack2(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -600,7 +592,7 @@ function UserStack2(props) {
             backgroundColor: colors.white,
           },
           headerTitleAlign: 'center',
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -626,7 +618,7 @@ function UserStack2(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -648,7 +640,7 @@ function UserStack2(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -670,7 +662,7 @@ function UserStack2(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitle: "Visit form",
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -693,7 +685,7 @@ function UserStack2(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,
@@ -715,7 +707,7 @@ function UserStack2(props) {
           headerStyle: {
             backgroundColor: colors.white,
           },
-          backgroundColor: colors.gray,
+          headerTintColor: colors.main,
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 18,

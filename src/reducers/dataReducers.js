@@ -31,7 +31,15 @@ const initialTotal = {
     value: 0,
     applIds: []
   },
+  followedToday: {
+    case: 0,
+    applIds: []
+  },
   revisit: {
+    case: 0,
+    applIds: []
+  },
+  Bptp: {
     case: 0,
     applIds: []
   },
@@ -41,10 +49,15 @@ const initialTodo = {
     case: 0,
     applIds: [],
     value: 0,
+    pos: 1
   },
   todoFollowed: {
     case: 0,
     value: 0,
+    applIds: []
+  },
+  todoFollowedToday: {
+    case: 0,
     applIds: []
   },
   todoPaid: {
@@ -323,9 +336,17 @@ const dataReducers = (state = initialState, action) => {
             value: followMtdValue,
             applIds: initFollowedAppls//.map(appl => appl.appl_id)
           },
-          'revisit': {
-            'case': totalReVisitAppls.length,
-            'applIds': totalReVisitAppls//.map(appl => appl.appl_id)
+          followedToday: {
+            case: 0,
+            applIds: []
+          },
+          revisit: {
+            case: totalReVisitAppls.length,
+            applIds: totalReVisitAppls//.map(appl => appl.appl_id)
+          },
+          Bptp: {
+            case: 0,
+            applIds: []
           },
         },
       }
@@ -585,7 +606,8 @@ const dataReducers = (state = initialState, action) => {
           'todoCase': {
             case: todoAppls.length,
             applIds: todoAppls,//.map(appl => appl.appl_id)
-            value: paidValue
+            value: paidValue,
+            pos: 1
           },
           'todoFollowed': {
             case: todoFollowedAppls.length,
@@ -615,6 +637,10 @@ const dataReducers = (state = initialState, action) => {
           'todoRevisit': {
             'case': reVisitAppls.length,
             'applIds': reVisitAppls//.map(appl => appl.appl_id)
+          },
+          todoFollowedToday: {
+            case: 0,
+            applIds: []
           },
         }
       }
