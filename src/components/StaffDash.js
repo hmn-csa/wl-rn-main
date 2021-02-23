@@ -389,13 +389,6 @@ const styles = StyleSheet.create({
 
   card: {
     justifyContent: 'center',
-    shadowColor: '#00000021',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
     elevation: 12,
     marginVertical: 5,
     flexBasis: '46%',

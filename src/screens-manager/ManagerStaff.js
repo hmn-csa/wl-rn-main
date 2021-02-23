@@ -19,30 +19,14 @@ const { width, height } = Dimensions.get("window");
 const AVATAR_WIDTH = width / 9
 
 
-function ManagerStaff(props) {
 
-  // =========== hooks ============== //
-  useEffect(() => {
-    const interval = setInterval(() => {
-      props.countManager()
-    }, 1 * 60 * 1000)
-    return () => clearInterval(interval)
-  }, []);
-
-  useEffect(() => {
-    let config = {
-      token: props.token,
-      last_pull: props.staff.last_pull
-    }
-    if (config.last_pull !== null)
-      props.pullManager(config)
-  }, [props.staff.pullcnt])
-
-  const miniMoneyFormat = (n) => {
-    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
-    return money
+function StaffDash({ item }) {
+  const renAvatar = (avatar) => {
+    if (!avatar)
+      return EMPTYAVATAR
+    else return { uri: avatar }
   }
-  // =========== render ============== //
+
   const renIcon = (checkinData) => {
     if (!checkinData || checkinData.length == 0)
       return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary, fontSize: 16 }]} />
@@ -73,17 +57,15 @@ function ManagerStaff(props) {
   }
 
 
-  const renAvatar = (avatar) => {
-    if (!avatar)
-      return EMPTYAVATAR
-    else return { uri: avatar }
+  const miniMoneyFormat = (n) => {
+    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
+    return money
   }
 
-
-  const renderItem = ({ item }) => {
-    return <TouchableOpacity
+  return (
+    <TouchableOpacity
       key={item.staff_id}
-      style={[styles.block, { flex: 1, marginBottom: 5 }]}
+      style={[styles.block, { flex: 1, marginBottom: 5, padding: 10 }]}
       onPress={() => props.toStaffMode({
         staff_id: item.staff_id,
         token: props.token,
@@ -121,67 +103,107 @@ function ManagerStaff(props) {
       </View>
 
 
-      {/* ======================*/}
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 1, margin: 10 }]}>
-          <Text style={{ marginBottom: 10 }}>
-            Tổng: <FontAwesome name="file-text" size={12} color={colors.yellow} /> {item.case} HĐ
+        <TouchableOpacity style={[styles.box, { flex: 0.618 }]}
+        >
+          <Text style={styles.indexSmall}>
+            {miniMoneyFormat(item.pos)} tr
           </Text>
-          <Text style={{ marginBottom: 10 }}>
-            Đã đi: <FontAwesome name="check" size={12} color={colors.info} /> {item.visited}
+          <Text style={styles.index}>
+            {item.case}
           </Text>
-          <Text style={{ marginBottom: 0, }}>
-            Paid: <FontAwesome name="dollar" size={12} color={colors.success} /> {item.paidcase}
+          <Text style={styles.label}>Tổng HĐ</Text>
+        </TouchableOpacity>
+
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={styles.indexSmall}>
+            + {!item.uptrail ? 0 : item.uptrail.length}
           </Text>
+          <TouchableOpacity >
+            <Text style={styles.index}>
+              {item.visited}
+            </Text>
+            <Text style={styles.label}>Đã viếng thăm</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { padding: 1, margin: 10 }]}>
-          <Text style={{ marginBottom: 10 }}>
-            Pos: <FontAwesome name="dollar" size={12} color={colors.yellow} /> {miniMoneyFormat(item.pos)} tr
-          </Text>
-          <Text style={{ marginBottom: 10 }}>
-            Số thu: <FontAwesome name="dollar" size={12} color={colors.info} /> {miniMoneyFormat(item.paidamt)} tr
-          </Text>
-          <Text style={{ marginBottom: 0, }}>
-            Today: <FontAwesome name="dollar" size={12} color={colors.success} /> {miniMoneyFormat(item.todayamt)} tr
-          </Text>
-        </View>
-
-
-        <View style={[styles.box, { padding: 1, margin: 10, flex: 0.8 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.yellow} /> {(item.visited * 100 / item.case).toFixed(1)}% visited
-          </Text>
-
-          <ProgressBar
-            style={{ marginBottom: 10 }}
-            progress={item.visited / item.case}
-            color={colors.yellow} />
-
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(item.paidamt * 100 / item.pos).toFixed(1)}% ROR
-          </Text>
-          <ProgressBar
-            style={{ marginBottom: 10 }}
-            progress={item.paidamt / item.pos}
-            color={colors.info} />
-
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.success} /> {(item.paidcase * 100 / item.case).toFixed(1)}% case
+        <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+          <Text style={{ fontSize: 12 }}>
+            {(item.visited * 100 / item.case).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
-            progress={item.paidcase / item.case}
-            color={colors.success} />
+            progress={item.visited / item.case}
+            color={colors.info} />
+          <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
+        </View>
+      </View>
 
+      {/* ======================*/}
+
+      <View style={[styles.row]}>
+        <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
+          <Text style={styles.indexSmall}>
+            + {item.paidtodaycase}
+          </Text>
+          <TouchableOpacity>
+            <Text style={styles.index}>
+              {item.paidcase}
+            </Text>
+            <Text style={styles.label}>HĐ có số thu</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
+          <Text style={[styles.indexSmall,]}>
+            + {miniMoneyFormat(item.todayamt)} tr
+          </Text>
+          <TouchableOpacity >
+            <Text style={[styles.index, { color: colors.info, fontWeight: 'bold' }]}>
+              {miniMoneyFormat(item.paidamt)} tr
+            </Text>
+            <Text style={[styles.label]}>Tổng số thu</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+          <Text style={{ fontSize: 12 }}>
+            {(item.paidcase * 100 / item.case).toFixed(0)}%
+          </Text>
+          <ProgressBar
+            style={{ marginBottom: 0 }}
+            progress={item.paidamt / item.pos}
+            color={colors.info} />
+          <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
         </View>
       </View>
       {/* ======================*/}
 
-    </TouchableOpacity >
-  }
 
-  // ========= render =========== //
+    </TouchableOpacity>
+  )
+}
+
+
+function ManagerStaff(props) {
+
+  // =========== hooks ============== //
+  useEffect(() => {
+    const interval = setInterval(() => {
+      props.countManager()
+    }, 3 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, []);
+
+  useEffect(() => {
+    let config = {
+      token: props.token,
+      last_pull: props.staff.last_pull
+    }
+    if (config.last_pull !== null)
+      props.pullManager(config)
+  }, [props.staff.pullcnt])
+
 
   if (props.staff.staffs.length == 0)
     return (
@@ -198,7 +220,7 @@ function ManagerStaff(props) {
         marginRight: 0,
         marginLeft: 0,
         marginBottom: 10,
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         borderBottomColor: colors.grey,
       }]}>
         <View style={[styles.row, {
@@ -317,9 +339,8 @@ function ManagerStaff(props) {
           data={props.staff.staffs}
           horizontal={false}
           numColumns={1}
-          renderItem={renderItem}
+          renderItem={StaffDash}
         />
-
 
       </ScrollView>
     </View >
@@ -390,8 +411,9 @@ const styles = StyleSheet.create({
   },
   indexSmall: {
     fontWeight: '600',
-    fontSize: 14,
-    color: colors.textcolor,
+    fontSize: 12,
+    color: colors.success,
+    left: 20,
   },
   indexLabel: {
     fontSize: 10
@@ -410,13 +432,6 @@ const styles = StyleSheet.create({
 
   card: {
     justifyContent: 'center',
-    shadowColor: '#00000021',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
     elevation: 12,
     marginVertical: 5,
     flexBasis: '46%',

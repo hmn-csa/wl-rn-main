@@ -93,20 +93,18 @@ function ApplUptrail(props) {
           style={styles.list}
           data={timelineFollow}
           separator={false}
-          circleSize={20}
+          circleSize={15}
           innerCircle={'dot'}
           circleColor={colors.info}
           lineColor={colors.info}
-          timeContainerStyle={{ minWidth: 12, marginTop: -5 }}
+          timeContainerStyle={{ minWidth: 50, marginTop: -5 }}
           timeStyle={{
             textAlign: 'center',
             backgroundColor: colors.info, color: 'white',
-            padding: 5, borderRadius: 13
+            padding: 1, borderRadius: 13
           }}
           descriptionStyle={{ color: colors.success }}
-          options={{
-            style: { paddingTop: 2 }
-          }}
+
           renderDetail={renderDetail}
           showTime={true}
         />

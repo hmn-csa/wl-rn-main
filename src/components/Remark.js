@@ -15,10 +15,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { styles as masterStyle, colors } from "../styles";
-import DatePicker from "react-native-datepicker";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
-import Icon from "react-native-vector-icons/Feather";
 import CalendarStrip from "react-native-calendar-strip";
 
 import {
@@ -39,8 +37,6 @@ import { EMPTYIMAGE } from "../images";
 import Loader from "../components/elements/Loader";
 
 import * as consts from "../consts";
-import { add } from "react-native-reanimated";
-
 const { width, height } = Dimensions.get("window");
 
 function Remark(props) {
@@ -115,7 +111,7 @@ function Remark(props) {
   }, []);
 
 
-  
+
 
 
 
