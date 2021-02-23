@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 // import MapView from 'react-native-map-clustering';
-import { FAB, Portal, Chip, Button } from 'react-native-paper';
 import {
   StyleSheet, Text, View, Dimensions, TouchableOpacity, Animated, ScrollView,
   Image, ImageBackground, FlatList, ActivityIndicator, Platform,
@@ -14,15 +13,17 @@ import { EMPTYAVATAR } from '../images';
 import CalendarStrip from "react-native-calendar-strip";
 import DropDownPicker from "react-native-dropdown-picker";
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = width / 6;
+const CARD_HEIGHT = width / 6.2;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 const SliderWidth = Dimensions.get('screen').width;
 
 import { calInitialRegion } from '../functions'
 import * as constAction from '../consts'
-import { clockRunning, set } from 'react-native-reanimated';
 
-
+import {
+  Button, Paragraph,
+  Dialog, Portal, RadioButton,
+} from 'react-native-paper';
 
 
 
@@ -71,9 +72,9 @@ function ManagerMap(props) {
 
   const [listType, setListType] = useState(
     [
-      { label: "Tất cả checkin", value: "all" },
-      { label: "Lần cuối checkin", value: "last" },
-      { label: "Lần đầu checkin", value: "first" },
+      { label: "XEM TẤT CẢ CÁC ĐIỂM CHECKIN", value: "all" },
+      { label: "XEM LẦN CUỐI CHECKIN", value: "last" },
+      { label: "XEM LẦN ĐẦU CHECKIN", value: "first" },
     ]
   )
   const [filterStaffs, setFilterStaffs] = useState([])
@@ -96,94 +97,95 @@ function ManagerMap(props) {
 
   const opacity = usePulse();
 
+  const setToday = () => {
+    const cors = []
+    let newlistAppl = filterListAppl(
+      filterStaffs,
+      filterType,
+      props.staff.listCheckin,
+      props.staff.lastCheckin,
+      props.staff.firstCheckin,
+    )
+    setListappls(newlistAppl)
+    setListStaffChecked(props.staff.firstCheckin)
+    let tmpChecked = props.staff.firstCheckin.map(item => item.staff_id)
+    setListStaffNotChecked(
+      props.staff.staffs.filter(staff => !tmpChecked.includes(staff.staff_id))
+    )
+    console.log('not checkin :', listStaffNotChecked)
+    setInitialRegion(calInitialRegion(newlistAppl))
+    newlistAppl.map((appl, index) => {
+      cors.push({ latitude: appl.lat, longitude: appl.lon });
+    })
+    console.log('cors', cors)
+    setCordata(cors)
+
+    // reset index
+    setActivateIndex(0)
+    if (listAppls)
+      if (listAppls.length > 0) {
+        mapRef.current.animateToCoordinate(
+          { latitude: listAppls[0].lat, longitude: listAppls[0].lon }, 0
+        )
+        carouselRef.current.snapToItem(0)
+        makerRef[0].showCallout()
+      }
+
+  }
+
+  const setOtherDay = () => {
+    const cors = []
+    const dailyCheckinItems = props.staff.dailyChekin.filter(item => item.date === reDate)
+    if (dailyCheckinItems.length > 0) {
+      let newlistApplDaily = filterListAppl(
+        filterStaffs,
+        filterType,
+        dailyCheckinItems[0].listCheckin,
+        dailyCheckinItems[0].lastCheckin,
+        dailyCheckinItems[0].firstCheckin,
+      )
+      setListappls(newlistApplDaily)
+      setListStaffChecked(dailyCheckinItems[0].firstCheckin)
+      let tmpDailyChecked = dailyCheckinItems[0].firstCheckin.map(item => item.staff_id)
+      setListStaffNotChecked(
+        props.staff.staffs.filter(staff => !tmpDailyChecked.includes(staff.staff_id))
+      )
+      setInitialRegion(calInitialRegion(newlistApplDaily))
+      newlistApplDaily.map((appl, index) => {
+        cors.push({ latitude: appl.lat, longitude: appl.lon });
+      })
+      setCordata(cors)
+      setActivateIndex(0)
+      // console.log('cors', cors)
+      // console.log('date: ', dailyCheckinItems[0].date)
+      // reset index
+      setActivateIndex(0)
+      if (listAppls)
+        if (listAppls.length > 0) {
+          mapRef.current.animateToCoordinate(
+            { latitude: listAppls[0].lat, longitude: listAppls[0].lon }, 0
+          )
+          carouselRef.current.snapToItem(0)
+          makerRef[0].showCallout()
+        }
+    }
+  }
 
   useEffect(() => {
     // change date  
-
-    const cors = []
-
-
-    console.log('chay lan 2', reDate)
-    if (!props.staff.fetchingDaily && reDate !== today) {
-      const dailyCheckinItems = props.staff.dailyChekin.filter(item => item.date === reDate)
-      if (dailyCheckinItems.length > 0) {
-        let newlistApplDaily = filterListAppl(
-          filterStaffs,
-          filterType,
-          dailyCheckinItems[0].listCheckin,
-          dailyCheckinItems[0].lastCheckin,
-          dailyCheckinItems[0].firstCheckin,
-        )
-        setListappls(newlistApplDaily)
-        setListStaffChecked(dailyCheckinItems[0].firstCheckin)
-
-        let tmpDailyChecked = dailyCheckinItems[0].firstCheckin.map(item => item.staff_id)
-        setListStaffNotChecked(
-          props.staff.staffs.filter(staff => !tmpDailyChecked.includes(staff.staff_id))
-        )
-
-        setInitialRegion(calInitialRegion(newlistApplDaily))
-
-        newlistApplDaily.map((appl, index) => {
-          cors.push({ latitude: appl.lat, longitude: appl.lon });
-        })
-        setCordata(cors)
-        console.log('cors', cors)
-
-        console.log('date: ', dailyCheckinItems[0].date)
-      }
-    }
-
-    if (props.staff.data_done && reDate === today) {
-      let newlistAppl = filterListAppl(
-        filterStaffs,
-        filterType,
-        props.staff.listCheckin,
-        props.staff.lastCheckin,
-        props.staff.firstCheckin,
-      )
-      setListappls(newlistAppl)
-      setListStaffChecked(props.staff.firstCheckin)
-
-      let tmpChecked = props.staff.firstCheckin.map(item => item.staff_id)
-      setListStaffNotChecked(
-        props.staff.staffs.filter(staff => !tmpChecked.includes(staff.staff_id))
-      )
-      console.log('not checkin :', listStaffNotChecked)
-      setInitialRegion(calInitialRegion(newlistAppl))
-      newlistAppl.map((appl, index) => {
-        cors.push({ latitude: appl.lat, longitude: appl.lon });
-      })
-      console.log('cors', cors)
-      setCordata(cors)
-    }
-
+    if (!props.staff.fetchingDaily && reDate !== today)
+      setOtherDay()
+    if (props.staff.data_done && reDate === today)
+      setToday()
     console.log('chay lan 2', reDate, listAppls)
 
   }, [reDate, props.staff.fetchingDaily, filterStaffs, filterType, props.staff.data_done]);
 
   useEffect(() => {
     // change date
-    if (props.staff.data_done && reDate === today) {
-      let newlistAppl = filterListAppl(
-        filterStaffs,
-        filterType,
-        props.staff.listCheckin,
-        props.staff.lastCheckin,
-        props.staff.firstCheckin,
-      )
-      setListappls(newlistAppl)
-      setListStaffChecked(props.staff.firstCheckin)
-      let tmpChecked = props.staff.firstCheckin.map(item => item.staff_id)
-      setListStaffNotChecked(
-        props.staff.staffs.filter(staff => !tmpChecked.includes(staff.staff_id))
-      )
-      console.log(listStaffNotChecked)
-      setInitialRegion(calInitialRegion(newlistAppl))
-    }
-    console.log('chay lan pull', listAppls)
+    if (props.staff.data_done && reDate === today)
+      setToday()
   }, [props.staff.pullcnt]);
-
 
 
   const sortTime = (list) => {
@@ -213,40 +215,6 @@ function ManagerMap(props) {
     return newAppl
   }
 
-  const renStaffMap = () => {
-
-    return (
-      <DropDownPicker
-        items={listStaff}
-        style={[styles.box, { width: width / 3 }]}
-        multiple={true}
-        placeholder="Staff"
-        multipleText={!filterStaffs.includes("all") ? "%d nv" : "tất cả nv"}
-        min={0}
-        max={20}
-        defaultValue={"all"}
-        labelStyle={{
-          paddingTop: 5,
-          fontSize: 16,
-          textAlign: "center",
-          color: "black",
-        }}
-        selectedLabelStyle={{
-          color: "#39739d",
-        }}
-        dropDownStyle={{ backgroundColor: "white" }}
-        containerStyle={{ height: 40 }}
-        itemStyle={{
-          justifyContent: 'flex-start'
-        }}
-        zIndex={5000}
-        onChangeItem={item =>
-          setFilterStaffs(item)
-        }
-      />
-    );
-  };
-
   const renTypeMap = () => {
     return (
       <DropDownPicker
@@ -256,12 +224,14 @@ function ManagerMap(props) {
         dropDownMaxHeight={300}
         itemStyle={{ justifyContent: "flex-start" }}
         placeholderStyle={{ fontWeight: "normal", color: "grey" }}
-        style={[styles.boxz, { width: width * 0.5, borderRadius: 30 }]}
+        style={[styles.row, { borderRadius: 30 }]}
         labelStyle={{
           paddingTop: 5,
-          fontSize: 16,
+          fontSize: 15,
+          fontWeight: '900',
           textAlign: "center",
           color: "black",
+          zIndex: 10,
         }}
         selectedLabelStyle={{
           color: colors.primary,
@@ -272,28 +242,19 @@ function ManagerMap(props) {
           setFilterType(value.value)
         }}
         //onChangeItem={(item) => setPersonContact(item.value)}
-        zIndex={5000}
+        zIndex={100}
       />
     );
   };
 
-  const handleSelectDate = async (date) => {
-    setRedate(date.format('YYYY-MM-DD'));
-    setShowDate(false)
-    if (date.format('YYYY-MM-DD') !== today)
-      await props.getDailyStaffCheckin({
-        query_date: date.format('YYYY-MM-DD'),
-        token: props.token
-      })
 
-  }
 
   const renSelectDate = () => {
     if (isShowDate)
       return (
         <CalendarStrip
           scrollable
-          style={{ height: 90, marginRight: 0, paddingLeft: 0, }}
+          style={{ height: 70, marginRight: 0, paddingLeft: 0, }}
           calendarColor={"white"}
           daySelectionAnimation={{
             type: "border",
@@ -404,19 +365,19 @@ function ManagerMap(props) {
             backgroundColor: 'white',
             borderRadius: 20,
             minHeight: CARD_HEIGHT,
-            padding: 10
+            padding: 5
           }}
         >
           <View style={styles.row}>
-            <View style={[styles.box, { flex: 0.2 }]}>
+            <View style={[styles.box, { flex: 0.25, }]}>
               <Image source={avatar}
                 imageStyle={{ borderRadius: 50 }}
                 style={[{ height: 40, width: 40, borderRadius: 50, resizeMode: "cover" }]} />
             </View>
             <View style={[styles.box]}>
-              <Text style={{ fontSize: 14 }}>{item.staff_id} - {item.fc_name}</Text>
+              <Text style={{ fontSize: 14, }}>{item.staff_id} - {item.fc_name}</Text>
               <Text style={{ fontSize: 10, marginTop: 5 }}>{item.starttime.substring(0, 10)} | Từ {item.starttime.substring(11, 16)} đến {item.endtime.substring(11, 16)} </Text>
-              <Text style={{ fontSize: 10 }}>Đã ở khu vực này khoảng {item.time}</Text>
+              <Text style={{ fontSize: 10, }}>Đã ở khu vực này khoảng {item.time}</Text>
             </View>
           </View>
 
@@ -481,7 +442,7 @@ function ManagerMap(props) {
           borderRadius: 20,
           borderWidth: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? 2 : 1,
           borderColor: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? colors.success : colors.lightGray,
-          padding: 5,
+          padding: 3,
           margin: 2,
           width: width * 0.95 / 3
         }}>
@@ -520,7 +481,7 @@ function ManagerMap(props) {
           borderRadius: 20,
           borderWidth: 1,
           borderColor: colors.secondary,
-          padding: 5,
+          padding: 3,
           margin: 2,
           width: width * 0.95 / 3
         }}>
@@ -670,13 +631,13 @@ function ManagerMap(props) {
 
       {renderMap()}
 
-      <View style={{ flex: 2, marginTop: 10 }}>
+      <View style={{ flex: 2, marginTop: 5 }}>
         <Carousel
           layout={'default'}
           ref={carouselRef}
           data={listAppls}
           sliderWidth={SliderWidth}
-          itemWidth={SliderWidth * 0.7}
+          itemWidth={SliderWidth * 0.8}
           itemHeight={CARD_HEIGHT}
           renderItem={_renderItem}
           useScrollView={false}
@@ -699,16 +660,15 @@ function ManagerMap(props) {
           mode={"outlined"}
           style={{
             borderRadius: 30,
-            marginRight: 5,
           }}
           labelStyle={{
             color: colors.primary,
             fontSize: 15,
-            padding: 1
           }}
           style={[styles.box,]}
           onPress={() => setShowDate(isShowDate ? false : true)}
-        > {reDate}</Button>
+        > Dữ liệu trong ngày {reDate}</Button>
+        {renSelectDate()}
         {/* {renStaffMap()} */}
         {renTypeMap()}
         {/* <Button
@@ -722,7 +682,7 @@ function ManagerMap(props) {
           Xem tất cả
           </Button> */}
       </View>
-      { renSelectDate()}
+
 
       { Map_Derection_result()}
 
@@ -750,11 +710,6 @@ const styles = StyleSheet.create({
 
   },
   rowz: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderColor: '#DCDCDC',
-    backgroundColor: '#fff',
     ...(Platform.OS !== "android" && {
       zIndex: 10,
     }),
@@ -777,7 +732,6 @@ const styles = StyleSheet.create({
     flex: 6,
     marginRight: 5,
     marginLeft: 5,
-    marginTop: 5,
   },
   logo: {
     fontSize: 25,
