@@ -54,7 +54,7 @@ function BarChartPM() {
             }
           ],
         }}
-        style={{ borderRadius: 10, marginLeft: -40 }}
+        style={{ borderRadius: 10, marginLeft: -30 }}
         width={Dimensions.get('window').width}
         height={180}
         showValuesOnTopOfBars={true}
@@ -62,7 +62,7 @@ function BarChartPM() {
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
           fillShadowGradient: colors.info,
-          fillShadowGradientOpacity: 0.4,
+          fillShadowGradientOpacity: 1,
           barPercentage: 0.8,
           color: (opacity = 1) => colors.black,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -108,15 +108,15 @@ function BarChartFL() {
             }
           ],
         }}
-        style={{ borderRadius: 10, marginLeft: -40 }}
+        style={{ borderRadius: 10, marginLeft: -30 }}
         width={Dimensions.get('window').width}
         height={180}
         showValuesOnTopOfBars={true}
         chartConfig={{
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
-          fillShadowGradient: colors.success,
-          fillShadowGradientOpacity: 0.4,
+          fillShadowGradient: colors.main,
+          fillShadowGradientOpacity: 1,
           barPercentage: 0.8,
           color: (opacity = 1) => colors.black,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

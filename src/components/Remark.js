@@ -610,40 +610,33 @@ function Remark(props) {
     >
       <ScrollView
         style={{
-          padding: 10,
           backgroundColor: "white",
           flex: 1,
           ...(Platform.OS !== "android" && {
             zIndex: 10,
           }),
         }}
+        contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 10 }}
       >
         {renLoader()}
-
         <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
         <Text style={[styles.smallHeader]}>
           Hợp đồng : {props.vsf.activeApplId.appl_id}
         </Text>
-
         <Text style={styles.title}>*Người liên hệ</Text>
         {renPcontact(consts.PERSON_CONTACT)}
-
         <Text style={styles.title}>*Địa chỉ viếng thăm</Text>
         {renaddresslist(addressItems)}
         {renderOtherAddress()}
-
         <Text style={styles.title}>*Kết quả viếng thăm</Text>
         {renderActionCode()}
         {renderPromisePTP()}
-
         <View style={styles.blockInput}>
           <Text style={styles.title}>Ngày tác động lại</Text>
           {renSelectDate(reDate)}
         </View>
-
         <View style={styles.blockInput}>
           <Text style={styles.title}>Ghi chú</Text>
-
           <View style={styles.row}>
             <TextInput
               style={[styles.box, styles.selectInput, { color: colors.main, paddingLeft: 3 }]}
@@ -654,7 +647,6 @@ function Remark(props) {
             />
           </View>
         </View>
-
         <View style={styles.blockInput}>
           <View style={styles.row}>
             {renPicture(image1, setImage1)}
@@ -662,8 +654,6 @@ function Remark(props) {
             {renPicture(image3, setImage3)}
           </View>
         </View>
-
-
         <Button
           mode="contained"
           style={[styles.button, {
@@ -673,7 +663,6 @@ function Remark(props) {
           }]}
           labelStyle={styles.buttonLabel}
           onPress={handleCommit}>
-
           Xác nhận
         </Button>
 

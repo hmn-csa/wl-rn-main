@@ -49,58 +49,58 @@ function Skip(props) {
         ref_relation: info.main_ref[i].ref_relation
       })
 
-    const fatherRef = []
-    for (let i = 0; i < info.father_ref.length; i++)
+    const childRef = []
+    for (let i = 0; i < info.child_ref.length; i++)
       fatherRef.push({
         id: info.main_ref[i].ref_phone,
-        name: info.father_ref[i].ref_name,
-        phone: info.father_ref[i].ref_phone,
-        ref_relation: info.father_ref[i].ref_relation
+        name: info.child_ref[i].ref_name,
+        phone: info.child_ref[i].ref_phone,
+        ref_relation: info.child_ref[i].ref_relation
       })
 
     const mainPhone = []
 
-    if (info.main_infos.s37_phone !== null && info.main_infos.s37_phone !== undefined && info.main_infos.s37_phone !== "")
-      mainPhone.push({
-        id: "s37_phone",
-        name: "s37_phone",
-        phone: info.main_infos.s37_phone
-      })
+    // if (info.main_infos.s37_phone !== null && info.main_infos.s37_phone !== undefined && info.main_infos.s37_phone !== "")
+    //   mainPhone.push({
+    //     id: "s37_phone",
+    //     name: "s37_phone",
+    //     phone: info.main_infos.s37_phone
+    //   })
 
-    if (info.main_infos.cash24_phone !== null && info.main_infos.cash24_phone !== undefined && info.main_infos.cash24_phone !== "")
-      mainPhone.push({
-        id: "cash24_phone",
-        name: "cash24_phone",
-        phone: info.main_infos.cash24_phone
-      })
+    // if (info.main_infos.cash24_phone !== null && info.main_infos.cash24_phone !== undefined && info.main_infos.cash24_phone !== "")
+    //   mainPhone.push({
+    //     id: "cash24_phone",
+    //     name: "cash24_phone",
+    //     phone: info.main_infos.cash24_phone
+    //   })
 
-    if (info.main_infos.pcb_phone !== null && info.main_infos.pcb_phone !== undefined && info.main_infos.pcb_phone !== "")
-      mainPhone.push({
-        id: "pcb_phone",
-        name: "pcb_phone",
-        phone: info.main_infos.pcb_phone
-      })
+    // if (info.main_infos.pcb_phone !== null && info.main_infos.pcb_phone !== undefined && info.main_infos.pcb_phone !== "")
+    //   mainPhone.push({
+    //     id: "pcb_phone",
+    //     name: "pcb_phone",
+    //     phone: info.main_infos.pcb_phone
+    //   })
 
-    if (info.main_infos.vmg_phone !== null && info.main_infos.vmg_phone !== undefined && info.main_infos.vmg_phone !== "")
-      mainPhone.push({
-        id: "vmg_phone",
-        name: "vmg_phone",
-        phone: info.main_infos.vmg_phone
-      })
+    // if (info.main_infos.vmg_phone !== null && info.main_infos.vmg_phone !== undefined && info.main_infos.vmg_phone !== "")
+    //   mainPhone.push({
+    //     id: "vmg_phone",
+    //     name: "vmg_phone",
+    //     phone: info.main_infos.vmg_phone
+    //   })
 
-    if (mainPhone.length > 0)
-      return [
-        {
-          id: 'mainPhone',
-          name: 'Thông tin liên lạc',
-          children: mainPhone
-        },
-        {
-          id: 'mainRef',
-          name: 'Người tham chiếu',
-          children: [...mainRef, ...fatherRef]
-        },
-      ]
+    // if (mainPhone.length > 0)
+    //   return [
+    //     {
+    //       id: 'mainPhone',
+    //       name: 'Thông tin liên lạc',
+    //       children: mainPhone
+    //     },
+    //     {
+    //       id: 'mainRef',
+    //       name: 'Người tham chiếu',
+    //       children: [...mainRef, ...fatherRef]
+    //     },
+    //   ]
     return [
       {
         id: 'mainRef',

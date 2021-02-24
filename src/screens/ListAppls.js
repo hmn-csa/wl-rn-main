@@ -36,6 +36,7 @@ function ListAppls(props) {
 
   useEffect(() => {
     setFiltered(props.showlists.applIds)
+
   }, []);
 
   // const hangleSearch = (value) => {
