@@ -39,27 +39,11 @@ function Login(props) {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [fetching, setFetching] = useState(false)
+  //const [fetching, setFetching] = useState(false)
 
-  const checkDeviceForHardware = async () => {
-    let compatible = await LocalAuthentication.hasHardwareAsync();
-    if (compatible) {
-      console.log("Compatible Device!");
-    } else console.log("Current device does not have the necessary hardware!");
-  };
-
-  const checkForBiometrics = async () => {
-    let biometricRecords = await LocalAuthentication.isEnrolledAsync();
-    if (!biometricRecords) {
-      console.log("No Biometrics Found");
-    } else {
-      console.log("Biometrics Found");
-    }
-  };
 
 
   const handleAuthentication = async () => {
-    setFetching(true)
     let result = await LocalAuthentication.authenticateAsync();
 
     if (result.success) {
@@ -69,7 +53,6 @@ function Login(props) {
 
       if (!username || !password) {
         alert("Chưa lưu mật khẩu! Vui lòng nhập tài khoản và mật khẩu cho lần đầu đăng nhập!");
-        setFetching(false)
         return null
       }
 
@@ -83,8 +66,8 @@ function Login(props) {
         device_name: Device.modelName,
       }
 
-      setUsername(username)
-      setPassword(password)
+      //setUsername(username)
+      //setPassword(password)
 
       if (!data.lat) {
         let coords = await getLocation();
@@ -95,10 +78,8 @@ function Login(props) {
         }
       }
       await props.login(data);
-      setFetching(false)
 
     } else {
-      setFetching(false)
       alert("Xác thưc không thành công");
     }
   };
@@ -109,7 +90,9 @@ function Login(props) {
     if (status !== "granted") {
       alert("Vui lòng bật định vị và cấp quyền để tiếp tục");
     }
-    let locationC = await Location.getCurrentPositionAsync({});
+    let locationC = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Balanced,
+    });
     props.locationSet(locationC.coords);
 
     return locationC.coords
@@ -137,7 +120,6 @@ function Login(props) {
 
   const onSubmit = async () => {
 
-    setFetching(true)
     let data = {
       username: username,
       password: password,
@@ -159,7 +141,6 @@ function Login(props) {
     await props.login(data);
     //savekeychain("username", data.username);
     //savekeychain("password", data.password);
-    setFetching(false)
   };
 
 
@@ -172,7 +153,7 @@ function Login(props) {
       )
   }
 
-  if (props.data.fetching || fetching) return <Loader />;
+  //if (props.data.fetching || fetching) return <Loader />;
 
   return (
     <ImageBackground
@@ -282,7 +263,7 @@ function Login(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token,
-    data: state.data,
+    //data: state.data,
   };
 };
 

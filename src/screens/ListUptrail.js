@@ -201,7 +201,7 @@ function ListUptrail(props) {
         destination={cordata[cordata.length - 1]}
         waypoints={cordata.slice(1, -1)}
         mode="DRIVING"
-        apikey="AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
+        apikey={constAction.GOOGLEMAPKEY}
         language="en"
         strokeWidth={4}
         strokeColor="black"

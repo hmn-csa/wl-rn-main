@@ -2,6 +2,7 @@
 // Root backend api
 export const WORKLIST_API = "https://beta-fc.lgm.com.vn/rn-ver/api"
 
+export const GOOGLEMAPKEY = "AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
 
 export const REMARK_CODE = [
   { label: 'PTP - Hứa thanh toán', value: 'PTP' },
@@ -177,6 +178,10 @@ export const STAFF_CHECKIN_SUCCESS = "STAFF_CHECKIN_SUCCESS"
 
 export const STAFF_CHECKIN_COUNT = "STAFF_CHECKIN_COUNT"
 export const STAFF_CHECKIN_PULL = "STAFF_CHECKIN_PULL"
+
+export const STAFF_DAILY_CHECKIN_REQUEST = "STAFF_DAILY_CHECKIN_REQUEST"
+export const STAFF_DAILY_CHECKIN_SUCCESS = "STAFF_DAILY_CHECKIN_SUCCESS"
+
 export const STAFF_CHECKIN_UPDATE = "STAFF_CHECKIN_UPDATE"
 export const STAFF_CAL_DASH = "STAFF_CAL_DASH"
 

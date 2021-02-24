@@ -89,7 +89,7 @@ function ListAppls(props) {
   else return (
     <View style={[styles.container, { alignItems: 'center' }]}>
       <Text>Loading ... </Text>
-      <ActivityIndicator size={100} color={colors.primary} />
+      <ActivityIndicator size={100} color={colors.main} />
     </View>
   )
 }

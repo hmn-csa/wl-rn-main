@@ -15,39 +15,29 @@ import * as constAction from '../consts'
 import { moneyFormat } from '../functions'
 import { EMPTYAVATAR } from '../images'
 import { ScrollView } from 'react-native-gesture-handler';
+import Loader from "../components/elements/Loader";
 const { width, height } = Dimensions.get("window");
+
 const AVATAR_WIDTH = width / 9
 
 
-function ManagerStaff(props) {
+const miniMoneyFormat = (n) => {
+  const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
+  return money
+}
 
-  // =========== hooks ============== //
-  useEffect(() => {
-    const interval = setInterval(() => {
-      props.countManager()
-    }, 1 * 60 * 1000)
-    return () => clearInterval(interval)
-  }, []);
-
-  useEffect(() => {
-    let config = {
-      token: props.token,
-      last_pull: props.staff.last_pull
-    }
-    if (config.last_pull !== null)
-      props.pullManager(config)
-  }, [props.staff.pullcnt])
-
-  const miniMoneyFormat = (n) => {
-    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
-    return money
+function StaffDash({ item }) {
+  const renAvatar = (avatar) => {
+    if (!avatar)
+      return EMPTYAVATAR
+    else return { uri: avatar }
   }
-  // =========== render ============== //
+
   const renIcon = (checkinData) => {
     if (!checkinData || checkinData.length == 0)
       return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary, fontSize: 16 }]} />
     else
-      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.success, fontSize: 16 }]} />
+      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.main, fontSize: 16 }]} />
   }
 
   const renCheckin = (checkinData) => {
@@ -57,7 +47,7 @@ function ManagerStaff(props) {
       return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Checkin</Text>
     else {
       const lastCheckin = checkinData[checkinData.length - 1].endtime
-      return <Text style={{ color: colors.success, fontSize: 11 }}>Checkin: {lastCheckin.substring(11, 16)} | <TimeAgo time={lastCheckin} /></Text> //<Text><Moment fromNow date={checkinData[0].runtime}></Moment></Text>
+      return <Text style={{ color: colors.main, fontSize: 11 }}>Checkin: {lastCheckin.substring(11, 16)} | <TimeAgo time={lastCheckin} /></Text> //<Text><Moment fromNow date={checkinData[0].runtime}></Moment></Text>
     }
   }
 
@@ -68,22 +58,18 @@ function ManagerStaff(props) {
       return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Uptrail</Text>
     else {
       const lastUptrail = uptrailData[uptrailData.length - 1].runtime
-      return <Text style={{ color: colors.success, fontSize: 11 }}>Uptrail: {uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
+      return <Text style={{ color: colors.main, fontSize: 11 }}>Uptrail: {uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
     }
   }
 
 
-  const renAvatar = (avatar) => {
-    if (!avatar)
-      return EMPTYAVATAR
-    else return { uri: avatar }
-  }
-
-
-  const renderItem = ({ item }) => {
-    return <TouchableOpacity
+  return (
+    <TouchableOpacity
       key={item.staff_id}
-      style={[styles.block, { flex: 1, marginBottom: 5 }]}
+      style={[styles.block, {
+        flex: 1,
+        marginBottom: 5,
+      }]}
       onPress={() => props.toStaffMode({
         staff_id: item.staff_id,
         token: props.token,
@@ -92,7 +78,11 @@ function ManagerStaff(props) {
       })
       } >
 
-      <View style={[styles.row, { borderBottomWidth: 0.2, borderRadius: 10 }]}>
+      <View style={[styles.row, {
+        borderBottomWidth: 0.2,
+        borderRadius: 10,
+        borderColor: !item.checkin || item.checkin.length == 0 ? colors.secondary : colors.main
+      }]}>
         <View style={[styles.box, { minWidth: AVATAR_WIDTH, margin: 5, flex: 0.05, }]}>
           <ImageBackground
             style={[styles.pic]}
@@ -121,208 +111,218 @@ function ManagerStaff(props) {
       </View>
 
 
-      {/* ======================*/}
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 1, margin: 10 }]}>
-          <Text style={{ marginBottom: 10 }}>
-            Tổng: <FontAwesome name="file-text" size={12} color={colors.yellow} /> {item.case} HĐ
+        <TouchableOpacity style={[styles.box, { flex: 0.618 }]}
+        >
+          <Text style={[styles.indexSmall, { color: 'black' }]}>
+            {miniMoneyFormat(item.pos)} tr
           </Text>
-          <Text style={{ marginBottom: 10 }}>
-            Đã đi: <FontAwesome name="check" size={12} color={colors.info} /> {item.visited}
+          <Text style={styles.index}>
+            {item.case}
           </Text>
-          <Text style={{ marginBottom: 0, }}>
-            Paid: <FontAwesome name="dollar" size={12} color={colors.success} /> {item.paidcase}
+          <Text style={styles.label}>Tổng HĐ</Text>
+        </TouchableOpacity>
+
+        <View style={[styles.box, { flex: 0.618 }]}>
+          <Text style={styles.indexSmall}>
+            + {!item.uptrail ? 0 : item.uptrail.length}
           </Text>
+          <TouchableOpacity >
+            <Text style={styles.index}>
+              {item.visited}
+            </Text>
+            <Text style={styles.label}>Đã viếng thăm</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { padding: 1, margin: 10 }]}>
-          <Text style={{ marginBottom: 10 }}>
-            Pos: <FontAwesome name="dollar" size={12} color={colors.yellow} /> {miniMoneyFormat(item.pos)} tr
-          </Text>
-          <Text style={{ marginBottom: 10 }}>
-            Số thu: <FontAwesome name="dollar" size={12} color={colors.info} /> {miniMoneyFormat(item.paidamt)} tr
-          </Text>
-          <Text style={{ marginBottom: 0, }}>
-            Today: <FontAwesome name="dollar" size={12} color={colors.success} /> {miniMoneyFormat(item.todayamt)} tr
-          </Text>
-        </View>
-
-
-        <View style={[styles.box, { padding: 1, margin: 10, flex: 0.8 }]}>
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.yellow} /> {(item.visited * 100 / item.case).toFixed(1)}% visited
-          </Text>
-
-          <ProgressBar
-            style={{ marginBottom: 10 }}
-            progress={item.visited / item.case}
-            color={colors.yellow} />
-
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.info} /> {(item.paidamt * 100 / item.pos).toFixed(1)}% ROR
-          </Text>
-          <ProgressBar
-            style={{ marginBottom: 10 }}
-            progress={item.paidamt / item.pos}
-            color={colors.info} />
-
-          <Text style={{ fontSize: 10 }}>
-            <FontAwesome name="check" size={10} color={colors.success} /> {(item.paidcase * 100 / item.case).toFixed(1)}% case
+        <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+          <Text style={[styles.indexBar]}>
+            {(item.visited * 100 / item.case).toFixed(1)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
-            progress={item.paidcase / item.case}
-            color={colors.success} />
+            progress={item.visited / item.case}
+            color={colors.main} />
+          <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
+        </View>
+      </View>
 
+      {/* ======================*/}
+
+      <View style={[styles.row]}>
+        <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
+          <Text style={styles.indexSmall}>
+            + {item.paidtodaycase} HĐ
+          </Text>
+          <TouchableOpacity>
+            <Text style={styles.index}>
+              {item.paidcase}
+            </Text>
+            <Text style={styles.label}>HĐ có số thu</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
+          <Text style={[styles.indexSmall,]}>
+            + {miniMoneyFormat(item.todayamt)} tr
+          </Text>
+          <TouchableOpacity >
+            <Text style={[styles.index, { color: colors.main, fontWeight: 'bold' }]}>
+              {miniMoneyFormat(item.paidamt)} tr
+            </Text>
+            <Text style={[styles.label]}>Tổng số thu</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+          <Text style={[styles.indexBar]}>
+            {(item.paidcase * 100 / item.case).toFixed(1)}%
+          </Text>
+          <ProgressBar
+            style={{ marginBottom: 0 }}
+            progress={item.paidamt / item.pos}
+            color={colors.main} />
+          <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
         </View>
       </View>
       {/* ======================*/}
 
-    </TouchableOpacity >
-  }
 
-  // ========= render =========== //
+    </TouchableOpacity>
+  )
+}
+
+
+function ManagerStaff(props) {
+
+  // =========== hooks ============== //
+  useEffect(() => {
+    const interval = setInterval(() => {
+      props.countManager()
+    }, 1 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, []);
+
+  useEffect(() => {
+    let config = {
+      token: props.token,
+      last_pull: props.staff.last_pull
+    }
+    if (config.last_pull !== null)
+      props.pullManager(config)
+  }, [props.staff.pullcnt])
+
+  const renderPort = () => {
+
+    return (
+      <View style={[{ backgroundColor: 'white', borderRadius: 15, marginBottom: 5 }]}>
+        <TouchableOpacity
+          style={[styles.block, { flex: 1, padding: 10 }]}
+        >
+          <View style={[styles.cardHeader,]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, color: colors.main }}>TỔNG DANH MỤC:</Text>
+          </View>
+          <View style={[styles.row]}>
+            <TouchableOpacity style={[styles.box, { flex: 0.618 }]}
+            >
+              <Text style={[styles.indexSmall, { color: 'black' }]}>
+                {miniMoneyFormat(props.staff.dash.totalCase.pos)} tr
+              </Text>
+              <Text style={styles.index}>
+                {props.staff.dash.totalCase.case}
+              </Text>
+              <Text style={styles.label}>Tổng HĐ</Text>
+            </TouchableOpacity>
+
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Text style={styles.indexSmall}>
+              </Text>
+              <TouchableOpacity >
+                <Text style={styles.index}>
+                  {props.staff.dash.visited.case}
+                </Text>
+                <Text style={styles.label}>Đã viếng thăm</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+              <Text style={[styles.indexBar]}>
+                {(props.staff.dash.visited.case * 100 / props.staff.dash.totalCase.case).toFixed(1)}%
+              </Text>
+              <ProgressBar
+                style={{ marginBottom: 0 }}
+                progress={props.staff.dash.visited.case / props.staff.dash.totalCase.case}
+                color={colors.main} />
+              <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.block, { flex: 1, padding: 10 }]}
+        >
+          <View style={[styles.cardHeader,]}>
+            <Text style={{ fontWeight: 'bold', fontSize: 16, color: colors.main }}>TỔNG SỐ THU:</Text>
+          </View>
+          <View style={[styles.row]}>
+            <TouchableOpacity style={[styles.box, { flex: 0.618 }]}
+            >
+              <Text style={styles.indexSmall}>
+                + {props.staff.dash.paidToday.value} HĐ
+              </Text>
+              <Text style={styles.index}>
+                {props.staff.dash.paidMtd.case}
+              </Text>
+              <Text style={styles.label}>Tổng HĐ</Text>
+            </TouchableOpacity>
+
+            <View style={[styles.box, { flex: 0.618 }]}>
+              <Text style={styles.indexSmall}>
+                + {miniMoneyFormat(props.staff.dash.paidToday.value)} tr
+              </Text>
+              <TouchableOpacity >
+                <Text style={styles.index}>
+                  {miniMoneyFormat(props.staff.dash.paidMtd.value)} tr
+                </Text>
+                <Text style={styles.label}>Tổng số thu</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+              <Text style={[styles.indexBar]}>
+                {(props.staff.dash.paidMtd.value * 100 / props.staff.dash.totalCase.pos).toFixed(1)}%
+              </Text>
+              <ProgressBar
+                style={{ marginBottom: 0 }}
+                progress={props.staff.dash.paidMtd.value / props.staff.dash.totalCase.pos}
+                color={colors.main} />
+              <Text style={styles.label}>Tỉ lệ thu hổi nợ</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+      </View>
+    )
+  }
 
   if (props.staff.staffs.length == 0)
     return (
-      <View style={[masterStyles.container, { alignItems: 'center' }]}>
-        <ActivityIndicator size={100} color={colors.primary} />
-        <Text>Loading ... </Text>
-      </View>
+      <Loader />
     )
 
   else return (
-    <View style={[styles.container,]}>
-      <View style={[styles.block, {
-        width: '100%',
-        marginRight: 0,
-        marginLeft: 0,
-        marginBottom: 10,
-        borderBottomWidth: 2,
-        borderBottomColor: colors.grey,
-      }]}>
-        <View style={[styles.row, {
-          marginBottom: 5,
-          paddingBottom: 0,
-          marginTop: 0,
-          paddingTop: 0
-        }]}>
-          <View style={[styles.card, styles.box, { marginBottom: 0, paddingBottom: 0 }]}>
+    <ScrollView style={[styles.container,]} >
 
-            <View style={[styles.cardHeader, { marginBottom: 10, }]}>
-              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Danh mục</Text>
-            </View>
+      {renderPort()}
 
-            <View style={{ flexDirection: 'row', padding: 5 }}>
-              <Text style={{ width: '50%' }}>
-                Tổng: <FontAwesome name="file-text" size={15} color={colors.yellow} /> {props.staff.dash.totalCase.case} HĐ
-              </Text>
-              <Text>
-                <FontAwesome name="dollar" size={15} color={colors.yellow} /> {moneyFormat(props.staff.dash.totalCase.pos)} dư nợ gốc
-              </Text>
-            </View>
+      <FlatList
+        data={props.staff.staffs}
+        horizontal={false}
+        numColumns={1}
+        renderItem={StaffDash}
+      />
 
-            <View style={{ flexDirection: 'row', padding: 5 }}>
-
-              <Text style={{ width: '50%' }}>
-                Đã đi: <FontAwesome name="check" size={15} color={colors.yellow} /> {props.staff.dash.visited.case} HĐ
-              </Text>
-              <Text>
-                <FontAwesome name="check" size={15} color={colors.yellow} /> {(props.staff.dash.visited.case * 100 / props.staff.dash.totalCase.case).toFixed(1)}% đã viếng thăm
-              </Text>
-            </View>
-
-            <View style={{ paddingLeft: '50%', paddingRight: 10, paddingBottom: 0 }}>
-              <ProgressBar
-                progress={props.staff.dash.visited.case / props.staff.dash.totalCase.case}
-                color={colors.yellow} />
-            </View>
-          </View>
-        </View>
-
-        <View style={[styles.row, {
-          marginTop: 0,
-          paddingTop: 0,
-          marginBottom: 0,
-          paddingBottom: 0,
-        }]}>
-          <View style={[styles.card, styles.box, {
-            marginTop: 0, paddingTop: 0, marginBottom: 0,
-            paddingBottom: 0,
-          }]}>
-            <View style={[styles.cardHeader, { marginBottom: 10, }]}>
-              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Số thu</Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', padding: 5 }}>
-              <Text style={{ width: '50%' }}>
-                Ngày: <FontAwesome name="file-text" size={15} color={colors.info} /> {props.staff.dash.paidToday.case} HĐ
-              </Text>
-              <Text>
-                <FontAwesome name="dollar" size={15} color={colors.success} /> {moneyFormat(props.staff.dash.paidToday.value)}
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', padding: 5 }}>
-
-              <Text style={{ width: '50%' }}>
-                Tổng: <FontAwesome name="check" size={15} color={colors.info} /> {props.staff.dash.paidMtd.case} HĐ
-              </Text>
-              <Text>
-                <FontAwesome name="dollar" size={15} color={colors.success} /> {moneyFormat(props.staff.dash.paidMtd.value)}
-              </Text>
-
-            </View>
-
-            <View style={{ flexDirection: 'row' }}>
-
-              <View style={[styles.card, {
-                paddingTop: 0,
-                paddingBottom: 0,
-              }]}>
-                <Text>
-                  <FontAwesome name="check" size={15} color={colors.info} /> {(props.staff.dash.paidMtd.value * 100 / props.staff.dash.totalCase.pos).toFixed(1)}% pos
-                </Text>
-                <ProgressBar
-                  progress={props.staff.dash.paidMtd.case / props.staff.dash.totalCase.case}
-                  color={colors.info}
-                />
-              </View>
-              <View style={[styles.card, {
-                paddingTop: 0,
-                paddingBottom: 0,
-              }]}>
-                <Text>
-                  <FontAwesome name="check" size={15} color={colors.success} /> {(props.staff.dash.paidMtd.case * 100 / props.staff.dash.totalCase.case).toFixed(1)}% case
-                </Text>
-                <ProgressBar
-                  progress={props.staff.dash.paidMtd.case / props.staff.dash.totalCase.case}
-                  color={colors.success}
-                />
-              </View>
-
-
-            </View>
-
-
-          </View>
-        </View>
-
-      </View>
-
-
-      <ScrollView style={[styles.container,]}>
-
-        <FlatList
-          data={props.staff.staffs}
-          horizontal={false}
-          numColumns={1}
-          renderItem={renderItem}
-        />
-
-
-      </ScrollView>
-    </View >
+    </ScrollView>
   )
 }
 
@@ -360,12 +360,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   block: {
-    width: '95%',
+    width: '98%',
     borderBottomWidth: 0.2,
-    borderBottomColor: colors.grey,
+    borderBottomColor: colors.lightgray,
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 3,
+    padding: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
@@ -386,13 +386,20 @@ const styles = StyleSheet.create({
   },
   index: {
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 16,
   },
   indexSmall: {
     fontWeight: '600',
-    fontSize: 14,
-    color: colors.textcolor,
+    fontSize: 12,
+    color: colors.main,
+    left: 20,
   },
+  indexBar: {
+    fontWeight: '600',
+    fontSize: 14,
+    color: colors.main,
+  },
+
   indexLabel: {
     fontSize: 10
   },
@@ -404,20 +411,10 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 0.2,
-    marginBottom: 5
   },
 
   card: {
     justifyContent: 'center',
-    shadowColor: '#00000021',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
     marginVertical: 5,
     flexBasis: '46%',
     marginHorizontal: 5,

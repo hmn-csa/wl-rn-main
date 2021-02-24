@@ -20,7 +20,32 @@ function StaffStack(props) {
         component={ManagerStaff}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.main,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+        }}
+      />
+
+    </Stack.Navigator>
+  )
+}
+
+function MapCheckinStack(props) {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: true, headerTitleAlign: 'center', }}
+    >
+      <Stack.Screen
+        name="Lộ trình di chuyển"
+        component={ManagerMap}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.main,
           },
           headerTintColor: colors.white,
           headerTitleStyle: {
@@ -36,5 +61,6 @@ function StaffStack(props) {
 }
 
 export {
-  StaffStack
+  StaffStack,
+  MapCheckinStack
 }

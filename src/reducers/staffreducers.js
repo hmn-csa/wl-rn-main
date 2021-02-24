@@ -7,10 +7,16 @@ const initialState = {
   uptrail: [],
   last_pull: null,
   data_done: false,
+
+  dailyChekin: [],
   listCheckin: [],
   lastCheckin: [],
+  firstCheckin: [],
+
   fetchingInfo: false,
   fetchingCheckin: false,
+  fetchingDaily: false,
+
   mode_staff: false,
   active_staff: null,
   dash: {
@@ -32,6 +38,8 @@ const initialState = {
   },
   pullcnt: 0,
   notCheckin: null,
+
+
 }
 
 function calcDistance(lat1, lon1, lat2, lon2) {
@@ -136,6 +144,28 @@ const renLastMarker = (staffs) => {
   return listMap
 }
 
+const renFirstMarker = (staffs) => {
+  let listMap = []
+  for (let i = 0; i < staffs.length; i++) {
+    let checkin = staffs[i].checkin
+    if (checkin !== undefined) {
+      if (checkin.length > 0) {
+        let checpoint = {
+          ...checkin[0],
+          fc_name: staffs[i].info.fc_name,
+          isLast: true
+        }
+        listMap.push(checpoint)
+      }
+    }
+  }
+  listMap.sort(function (a, b) {
+    return Date.parse(a.endtime) - Date.parse(b.endtime);
+  })
+  return listMap
+}
+
+
 const staffReducers = (state = initialState, action) => {
 
   switch (action.type) {
@@ -145,6 +175,9 @@ const staffReducers = (state = initialState, action) => {
 
     case constAction.STAFF_CHECKIN_REQUEST:
       return { ...state, fetchingCheckin: true }
+
+    case constAction.STAFF_DAILY_CHECKIN_REQUEST:
+      return { ...state, fetchingDaily: true }
 
     case constAction.STAFF_INFO_SUCCESS:
       let totalCase = 0
@@ -228,7 +261,33 @@ const staffReducers = (state = initialState, action) => {
         data_done: true,
         listCheckin: renListMarker(staffCook),
         lastCheckin: renLastMarker(staffCook),
+        firstCheckin: renFirstMarker(staffCook),
         notCheckin: notCheckin,
+      }
+
+    case constAction.STAFF_DAILY_CHECKIN_SUCCESS:
+
+      let staffCookDaily = []
+      for (let i = 0; i < state.staffs.length; i++) {
+        let staffDaily = state.staffs[i]
+        let checkinDaily = action.content.checkin.filter(item => item.staff_id === staffDaily.staff_id)
+        staffDaily = { ...staffDaily, checkin: cookCheckin(checkinDaily) }
+        staffCookDaily.push(staffDaily)
+      }
+
+      // staffCookDaily.sort(function (a, b) {
+      //   return b.paidamt - a.paidamt;
+      // })
+
+      state.dailyChekin.push({
+        date: action.content.last_pull,
+        listCheckin: renListMarker(staffCookDaily),
+        lastCheckin: renLastMarker(staffCookDaily),
+        firstCheckin: renFirstMarker(staffCookDaily),
+      })
+      return {
+        ...state,
+        fetchingDaily: false
       }
 
     case constAction.STAFF_CHECKIN_COUNT:

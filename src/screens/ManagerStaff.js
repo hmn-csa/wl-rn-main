@@ -301,7 +301,7 @@ function ManagerStaff(props) {
   if (props.status.length == 0)
     return (
       <View style={[masterStyles.container, { alignItems: 'center' }]}>
-        <ActivityIndicator size={100} color={colors.primary} />
+        <ActivityIndicator size={100} color={colors.main} />
         <Text>Loading ... </Text>
       </View>
     )

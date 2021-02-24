@@ -19,7 +19,7 @@ import { styles, colors } from '../styles'
 import ManagerMap from './ManagerMap'
 import Notify from './Notifications'
 
-import { StaffStack } from './Stacks'
+import { StaffStack, MapCheckinStack } from './Stacks'
 
 enableScreens()
 
@@ -57,7 +57,7 @@ function MagagerApp() {
       >
         {/* <Tab.Screen name="ManagerDash" component={ManagerDash} /> */}
         <Tab.Screen name="ManagerStaff" component={StaffStack} />
-        <Tab.Screen name="ManagerMap" component={ManagerMap} />
+        <Tab.Screen name="ManagerMap" component={MapCheckinStack} />
         <Tab.Screen name="User" component={UserStack} />
 
       </Tab.Navigator>

@@ -8,6 +8,7 @@ export function* watcherSaga() {
   yield takeLatest(constAction.API_TOKEN_REQUEST, workerGetToken);
   yield takeLatest(constAction.STAFF_CHECKIN_PULL, workerGetStaffCheckinUpdate);
   yield takeLatest(constAction.SET_STAFF_MODE, workerGetDataFCMode);
+  yield takeLatest(constAction.STAFF_DAILY_CHECKIN_REQUEST, workerGetStaffDailyCheckin);
   // yield takeLatest(constAction.MANAGER_CLEAR_STATE, workerManagerClearState);
 }
 
@@ -254,6 +255,29 @@ export function* workerGetStaffCheckin(token) {
     // dispatch a failure action to the store with the error
     console.log(error)
     //yield put({ type: constAction.API_PAYMENT_FAILURE, error: error });
+  }
+}
+
+export function* workerGetStaffDailyCheckin(request) {
+  try {
+    const config = {
+      method: 'post',
+      url: `${constAction.WORKLIST_API}/manager-view?type=checkin`,
+      headers: {
+        'Authorization': `Bearer ${request.config.token}`,
+      },
+      data: {
+        query_date: request.config.query_date
+      }
+    };
+
+    const response = yield call(axios, config);
+    const data = response.data
+    yield put({ type: constAction.STAFF_DAILY_CHECKIN_SUCCESS, content: data });
+
+  } catch (error) {
+    // dispatch a failure action to the store with the error
+    console.log(error)
   }
 }
 
