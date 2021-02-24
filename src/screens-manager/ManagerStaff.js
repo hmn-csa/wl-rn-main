@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.lightgray,
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 5,
+    padding: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     height: width / 10,
   },
   index: {
-    fontWeight: '800',
+    fontWeight: '600',
     fontSize: 16,
   },
   indexSmall: {

@@ -20,10 +20,13 @@ import Loader from "../components/elements/Loader";
 import { calInitialRegion } from '../functions'
 import * as constAction from '../consts'
 
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+
 import {
-  Button, Paragraph,
+  Button, Paragraph, Provider, FAB,
   Dialog, Portal, RadioButton,
 } from 'react-native-paper';
+import DeprecatedViewPropTypes from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes';
 
 
 
@@ -89,7 +92,7 @@ function ManagerMap(props) {
   const day = String(dateObj.getDate()).padStart(2, '0');
   const year = dateObj.getFullYear();
   const today = year + '-' + month + '-' + day;
-
+  const [open, setOpen] = useState(false)
 
   const [reDate, setRedate] = useState(today)
   const [isShowDate, setShowDate] = useState(false)
@@ -230,7 +233,7 @@ function ManagerMap(props) {
         style={[styles.row, { borderRadius: 30 }]}
         labelStyle={{
           paddingTop: 5,
-          fontSize: 15,
+          fontSize: 14,
           fontWeight: '500',
           textAlign: "center",
           color: "black",
@@ -253,36 +256,35 @@ function ManagerMap(props) {
 
 
   const renSelectDate = () => {
-    if (isShowDate)
-      return (
-        <CalendarStrip
-          scrollable
-          style={{ height: 70, marginRight: 0, paddingLeft: 0, }}
-          calendarColor={"white"}
-          daySelectionAnimation={{
-            type: "border",
-            duration: 200,
-            borderWidth: 0,
-            borderHighlightColor: "grey",
-          }}
-          highlightDateNumberStyle={{ color: "red" }}
-          highlightDateNameStyle={{ color: 'red', fontWeight: 'bold' }}
-          calendarHeaderStyle={{ color: "black" }}
-          dateNumberStyle={{ color: "black", fontWeight: 'normal' }}
-          dateNameStyle={{ color: "black" }}
-          iconContainer={{ flex: 0.1 }}
-          selectedDate={reDate}
-          onDateSelected={(date) => {
-            setRedate(date.format('YYYY-MM-DD'));
-            setShowDate(false)
-            if (date.format('YYYY-MM-DD') !== today)
-              props.getDailyStaffCheckin({
-                query_date: date.format('YYYY-MM-DD'),
-                token: props.token
-              })
-          }}
-        />
-      );
+    return (
+      <CalendarStrip
+        scrollable
+        style={{ height: 70, marginRight: 0, paddingLeft: 0, }}
+        calendarColor={"white"}
+        daySelectionAnimation={{
+          type: "border",
+          duration: 200,
+          borderWidth: 0,
+          borderHighlightColor: "grey",
+        }}
+        highlightDateNumberStyle={{ color: "red" }}
+        highlightDateNameStyle={{ color: 'red', fontWeight: 'bold' }}
+        calendarHeaderStyle={{ color: "black" }}
+        dateNumberStyle={{ color: "black", fontWeight: 'normal' }}
+        dateNameStyle={{ color: "black" }}
+        iconContainer={{ flex: 0.1 }}
+        selectedDate={reDate}
+        onDateSelected={(date) => {
+          setRedate(date.format('YYYY-MM-DD'));
+          setShowDate(false)
+          if (date.format('YYYY-MM-DD') !== today)
+            props.getDailyStaffCheckin({
+              query_date: date.format('YYYY-MM-DD'),
+              token: props.token
+            })
+        }}
+      />
+    );
   };
 
   const Map_Derection_result = () => {
@@ -317,32 +319,19 @@ function ManagerMap(props) {
     const dateformatted = `${dayName}, ${date} ${monthName} ${year}`;
 
     return (
-      <View style={styles.row}>
-        <View style={styles.box} >
-          <Text style={{
-            paddingLeft: 10,
-            paddingTop: 10,
-            fontSize: 20,
-            fontWeight: "bold",
-            color: colors.gray,
-          }}>Lộ trình di chuyển</Text>
-          <Text style={{
-            paddingLeft: 10,
-            fontSize: 12,
-            color: "grey",
-          }}>{dateformatted}</Text>
+      <View style={{ marginTop: 5 }}>
+        <Text style={{
+          paddingLeft: 10,
+          fontSize: 20,
+          fontWeight: "bold",
+          color: colors.gray,
+        }}>Lộ trình di chuyển : </Text>
 
-        </View >
-        <Button
-          mode={"outlined"}
-          labelStyle={{
-            color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.main : colors.lightGray,
-            fontSize: 12
-          }}
-          onPress={() => setFilterStaffs([])}
-        >
-          Xem tất cả
-          </Button>
+        <Text style={{
+          paddingLeft: 10,
+          fontSize: 12,
+          color: "grey",
+        }}>{dateformatted}</Text>
       </View>
     );
   };
@@ -434,9 +423,6 @@ function ManagerMap(props) {
       setFilterStaffs(array)
       console.log(array)
     }
-
-
-
     return (
       <TouchableOpacity
         onPress={() => handlePress()}
@@ -449,7 +435,6 @@ function ManagerMap(props) {
           margin: 2,
           width: width * 0.95 / 3
         }}>
-
         <View style={[styles.row, { borderRadius: 20, }]}>
           <View style={[styles.box, { flex: 0.3 }]}>
             <Image source={avatar}
@@ -463,7 +448,6 @@ function ManagerMap(props) {
         </View>
 
       </TouchableOpacity>
-
     );
   };
 
@@ -537,6 +521,22 @@ function ManagerMap(props) {
 
   }
 
+  const viewAllBtn = () => {
+    return (
+      <Button
+        style={{ borderRadius: 13, }}
+        mode={"text"}
+        icon={"menu"}
+        labelStyle={{
+          color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.lightGray : colors.main,
+          fontSize: 9
+        }}
+        onPress={() => setFilterStaffs([])}
+      >
+        Xem tất cả
+      </Button>
+    )
+  }
 
 
   const renderMap = () => {
@@ -550,7 +550,7 @@ function ManagerMap(props) {
         zoomTapEnabled={true}
         zoomControlEnabled={true}
         loadingEnabled={true}
-        fitToSuppliedMarkers={cordata}
+      //fitToSuppliedMarkers={cordata}
       >
         {
           listAppls.map((marker, index) => {
@@ -590,7 +590,8 @@ function ManagerMap(props) {
               color: colors.main,
               paddingLeft: 10,
               fontSize: 12,
-            }}>Các nhân viên đã checkin: {listStaffChecked.length}/{props.staff.staffs.length}</Text>
+            }}>Các nhân viên đã checkin: {listStaffChecked.length}/{props.staff.staffs.length},  hiển thị {filterStaffs.length === 0 ? listStaffChecked.length : filterStaffs.length} </Text>
+            {viewAllBtn()}
           </View>
           <FlatList
             style={{ marginLeft: 5 }}
@@ -627,33 +628,41 @@ function ManagerMap(props) {
         <Dialog
           visible={visible}
           onDismiss={() => setVisible(false)}
-          style={{ width: null, height: height - 80 }}>
-          {/* <Button onPress={hideDialog}>Done</Button> */}
-          <ScrollView style={{ marginTop: 2 }}>
-            <RadioButton.Group
-              onValueChange={
-                newValue => {
-                  setCode(newValue);
-                  if (['PTP'].includes(newValue)) setVisiblePayamount(true);
-                }
-              }
-              value={code}>
-              {
-                consts.REMARK_CODE.map(item =>
-                  <RadioButton.Item
-                    key={item.value}
-                    value={item.value}
-                    label={item.label}
-                    style={{ height: 40 }}
-                    labelStyle={{
-                      fontSize: 12,
-                    }}
-                    mode='android'
-                  />
-                )
-              }
-            </RadioButton.Group>
-
+          style={{ width: null, height: 'auto' }}>
+          <ScrollView style={styles.rowz} >
+            <Button
+              mode={"outlined"}
+              style={{
+                borderRadius: 30,
+              }}
+              labelStyle={{
+                color: colors.main,
+                fontSize: 15,
+              }}
+              style={[styles.box,]}
+              onPress={() => setShowDate(isShowDate ? false : true)}
+            > Dữ liệu trong ngày {reDate}</Button>
+            {renSelectDate()}
+            {renTypeMap()}
+            <View style={{ marginTop: 10 }}>
+              <View style={styles.row}>
+                <Text style={{
+                  color: colors.main,
+                  paddingLeft: 10,
+                  fontSize: 12,
+                }}>Chọn các nhân viên để xem: {filterStaffs.length === 0 ? listStaffChecked.length : filterStaffs.length}/{listStaffChecked.length}</Text>
+                {viewAllBtn()}
+              </View>
+              <View style={styles.row}>
+                <FlatList
+                  style={{ marginLeft: 5, alignContent: "space-between", }}
+                  data={listStaffChecked}
+                  renderItem={_renderItemCheckin}
+                  key={(item) => item.staff_id}
+                  numColumns={2}
+                />
+              </View>
+            </View>
           </ScrollView>
           <Dialog.Actions>
             <TouchableOpacity
@@ -672,73 +681,73 @@ function ManagerMap(props) {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {renderMap()}
-      <View style={{ flex: 2, marginTop: 5 }}>
-        <Carousel
-          layout={'default'}
-          ref={carouselRef}
-          data={listAppls}
-          sliderWidth={SliderWidth}
-          itemWidth={SliderWidth * 0.8}
-          itemHeight={CARD_HEIGHT}
-          renderItem={_renderItem}
-          useScrollView={false}
+    <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        {renderMap()}
+        <View style={{ flex: 2, marginTop: 5 }}>
+          <Carousel
+            layout={'default'}
+            ref={carouselRef}
+            data={listAppls}
+            sliderWidth={SliderWidth}
+            itemWidth={SliderWidth * 0.8}
+            itemHeight={CARD_HEIGHT}
+            renderItem={_renderItem}
+            useScrollView={false}
 
-          onSnapToItem={(index) => {
-            setActivateIndex(index)
-            mapRef.current.animateToCoordinate(
-              { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
-            )
-            makerRef[index].showCallout()
-            // makerRef[index].redrawCallout()
-            // mapRef.current.fitToElements()
-            // mapRef.current.fitToSuppliedMarkers([index]) // mapRef.current.fitToSuppliedMarkers([index])
-          }}
-          activeSlideAlignment="center"
-        />
-      </View>
-      <View style={[styles.rowz, { padding: 5, }]}>
-        <Button
-          mode={"outlined"}
-          style={{
-            borderRadius: 30,
-          }}
-          labelStyle={{
-            color: colors.main,
-            fontSize: 15,
-          }}
-          style={[styles.box,]}
-          onPress={() => setShowDate(isShowDate ? false : true)}
-        > Dữ liệu trong ngày {reDate}</Button>
-        {renSelectDate()}
-        {/* {renStaffMap()} */}
-        {renTypeMap()}
-        {/* <Button
-          mode={"outlined"}
-          labelStyle={{
-            color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.main : colors.lightGray,
-            fontSize: 1
-          }}
-          onPress={() => setFilterStaffs([])}
-        >
-          Xem tất cả
-          </Button> */}
-      </View>
+            onSnapToItem={(index) => {
+              setActivateIndex(index)
+              mapRef.current.animateToCoordinate(
+                { latitude: listAppls[index].lat, longitude: listAppls[index].lon }, 0
+              )
+              makerRef[index].showCallout()
+              // makerRef[index].redrawCallout()
+              //mapRef.current.fitToElements()
+              // mapRef.current.fitToSuppliedMarkers([index]) // mapRef.current.fitToSuppliedMarkers([index])
+            }}
+            activeSlideAlignment="center"
+          />
+        </View>
+
+        {Map_Derection_result()}
+        {renderInfos()}
 
 
-      { Map_Derection_result()}
-
-      {renderInfos()}
 
 
-    </ScrollView >
+      </ScrollView >
+      {renderPortal()}
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.touchableOpacityStyle}
+        onPress={() => { visible ? setVisible(false) : setVisible(true) }} >
+        {/* <Ionicons name="ios-settings" size={34} color={colors.main} style={styles.floatingButtonStyle} /> */}
+        <AntDesign name="pluscircle" size={34} color={colors.main} style={styles.floatingButtonStyle} />
+      </TouchableOpacity>
+
+    </View>
   );
 }
 
 
 
 const styles = StyleSheet.create({
+  touchableOpacityStyle: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 0,
+    bottom: 1,
+  },
+  floatingButtonStyle: {
+    opacity: 0.7,
+    resizeMode: 'contain',
+    width: 50,
+    height: 50,
+  },
+
   container: {
     flex: 1,
     flexDirection: "column",
