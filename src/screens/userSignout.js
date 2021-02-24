@@ -85,10 +85,11 @@ function UserSignout(props) {
       return (
         <View style={[
           {
-            width: '88%',
+            width: '85%',
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginBottom: 10
+            marginBottom: 10,
+            backgroundColor: 'white'
           },]} >
           <View style={styles.inputView} >
             <TextInput
@@ -111,7 +112,7 @@ function UserSignout(props) {
           <Button
             mode="contained"
             style={{
-              width: "85%",
+              width: "75%",
               marginLeft: 'auto',
               marginRight: 'auto',
             }}
@@ -219,33 +220,31 @@ function UserSignout(props) {
         </View>
       </View>
 
-      <View style={[styles.loginBtn, { marginTop: 20 }]}>
-        <Button
-          mode="contained"
-          icon="key-change"
-          color={colors.info}
-          labelStyle={styles.buttonLabel}
-          onPress={
-            () => {
-              changePw ? setChangePw(false) : setChangePw(true)
-            }}
+      <Button
+        mode="contained"
+        icon="key-change"
+        color={colors.info}
+        labelStyle={styles.buttonLabel}
+        style={styles.loginBtn}
+        onPress={
+          () => {
+            changePw ? setChangePw(false) : setChangePw(true)
+          }}
 
-        >
-          Đổi mật khẩu
+      >
+        Đổi mật khẩu
         </Button>
-      </View>
       {renChangPassword(changePw)}
-      <View style={styles.loginBtn}>
-        <Button
-          mode="contained"
-          icon="logout"
-          color={colors.info}
-          labelStyle={styles.buttonLabel}
-          onPress={() => outUsers()}
-        >
-          ĐĂNG XUẤT
+      <Button
+        mode="contained"
+        icon="logout"
+        color={colors.info}
+        style={styles.loginBtn}
+        labelStyle={styles.buttonLabel}
+        onPress={() => outUsers()}
+      >
+        ĐĂNG XUẤT
         </Button>
-      </View>
 
     </ScrollView>
   )
@@ -313,14 +312,21 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: '7.5%',
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius: 5,
+    color: "white",
+    backgroundColor: colors.light,
+    borderColor: colors.grey,
+    borderWidth: 0.3,
   },
   inputTextBlack: {
     height: 50,
     color: "black"
   },
   buttonLabel: {
-    fontSize: 12
+    color: colors.main,
+    fontSize: 12,
+    fontWeight: "800",
   },
 })
 

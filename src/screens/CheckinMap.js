@@ -82,7 +82,7 @@ function CheckinMap(props) {
       return <View>
         <Text style={styles.msgTxt}>
           {/* Finish {appl.endtime.substring(11, 16)} */}
-          <Entypo name="location-pin" style={{ fontSize: 40, color: colors.primary }} />
+          <Entypo name="location-pin" style={{ fontSize: 40, color: colors.main }} />
 
         </Text>
         {/* {showTime(appl.time)} */}

@@ -44,12 +44,12 @@ function User(props) {
           />
           <TextInput
             mode="Flat"
-            style={{ color: colors.primary }}
+            style={{ color: colors.main }}
             label="Mật khẩu mới 2"
           />
           <TextInput
             mode="flat"
-            style={{ color: colors.primary }}
+            style={{ color: colors.main }}
             label="Nhập lại mật khẩu mới"
           />
           <Button

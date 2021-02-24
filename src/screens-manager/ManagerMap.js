@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = width / 6.2;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 const SliderWidth = Dimensions.get('screen').width;
-
+import Loader from "../components/elements/Loader";
 import { calInitialRegion } from '../functions'
 import * as constAction from '../consts'
 
@@ -54,8 +54,9 @@ function ManagerMap(props) {
 
   const [listAppls, setListappls] = useState(null)
   const [activeIndex, setActivateIndex] = useState(0);
-  const [initialRegion, setInitialRegion] = useState({
 
+  const [visible, setVisible] = useState(false);
+  const [initialRegion, setInitialRegion] = useState({
     latitude: null,
     longitude: null,
     latitudeDelta: null,
@@ -69,6 +70,8 @@ function ManagerMap(props) {
       return { label: 'nv: ' + staff.staff_id, value: staff.staff_id }
     })]
   )
+
+
 
   const [listType, setListType] = useState(
     [
@@ -228,13 +231,13 @@ function ManagerMap(props) {
         labelStyle={{
           paddingTop: 5,
           fontSize: 15,
-          fontWeight: '900',
+          fontWeight: '500',
           textAlign: "center",
           color: "black",
           zIndex: 10,
         }}
         selectedLabelStyle={{
-          color: colors.primary,
+          color: colors.main,
         }}
         dropDownStyle={{ backgroundColor: "white" }}
         defaultValue={"last"}
@@ -333,7 +336,7 @@ function ManagerMap(props) {
         <Button
           mode={"outlined"}
           labelStyle={{
-            color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.success : colors.lightGray,
+            color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.main : colors.lightGray,
             fontSize: 12
           }}
           onPress={() => setFilterStaffs([])}
@@ -438,10 +441,10 @@ function ManagerMap(props) {
       <TouchableOpacity
         onPress={() => handlePress()}
         style={{
-          ///backgroundColor: filterStaffs.includes(item.staff_id) ? colors.success : 'white',
+          ///backgroundColor: filterStaffs.includes(item.staff_id) ? colors.main : 'white',
           borderRadius: 20,
           borderWidth: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? 2 : 1,
-          borderColor: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? colors.success : colors.lightGray,
+          borderColor: filterStaffs.includes(item.staff_id) || filterStaffs.length === 0 ? colors.main : colors.lightGray,
           padding: 3,
           margin: 2,
           width: width * 0.95 / 3
@@ -477,7 +480,7 @@ function ManagerMap(props) {
     return (
       <TouchableOpacity
         style={{
-          ///backgroundColor: filterStaffs.includes(item.staff_id) ? colors.success : 'white',
+          ///backgroundColor: filterStaffs.includes(item.staff_id) ? colors.main : 'white',
           borderRadius: 20,
           borderWidth: 1,
           borderColor: colors.secondary,
@@ -542,6 +545,7 @@ function ManagerMap(props) {
         style={styles.mapStyle}
         provider={PROVIDER_GOOGLE}
         initialRegion={initialRegion}
+        //region={calInitialRegion(listAppls)}
         ref={mapRef}
         zoomTapEnabled={true}
         zoomControlEnabled={true}
@@ -583,7 +587,7 @@ function ManagerMap(props) {
         <View style={{ marginTop: 10 }}>
           <View style={styles.row}>
             <Text style={{
-              color: colors.success,
+              color: colors.main,
               paddingLeft: 10,
               fontSize: 12,
             }}>Các nhân viên đã checkin: {listStaffChecked.length}/{props.staff.staffs.length}</Text>
@@ -615,22 +619,61 @@ function ManagerMap(props) {
     )
   }
 
-  if (!listAppls) {
-    console.log('listapp ', listAppls)
+
+  const renderPortal = () => {
+
     return (
-      <View style={[{ alignItems: 'center' }]}>
-        <ActivityIndicator size={100} color={colors.primary} />
-        <Text>Loading ... </Text>
-      </View>
+      <Portal style={[styles.row]}>
+        <Dialog
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          style={{ width: null, height: height - 80 }}>
+          {/* <Button onPress={hideDialog}>Done</Button> */}
+          <ScrollView style={{ marginTop: 2 }}>
+            <RadioButton.Group
+              onValueChange={
+                newValue => {
+                  setCode(newValue);
+                  if (['PTP'].includes(newValue)) setVisiblePayamount(true);
+                }
+              }
+              value={code}>
+              {
+                consts.REMARK_CODE.map(item =>
+                  <RadioButton.Item
+                    key={item.value}
+                    value={item.value}
+                    label={item.label}
+                    style={{ height: 40 }}
+                    labelStyle={{
+                      fontSize: 12,
+                    }}
+                    mode='android'
+                  />
+                )
+              }
+            </RadioButton.Group>
+
+          </ScrollView>
+          <Dialog.Actions>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setVisible(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     )
+  }
+
+  if (!listAppls) {
+    return <Loader />;
   }
 
   return (
     <ScrollView style={styles.container}>
-
-
       {renderMap()}
-
       <View style={{ flex: 2, marginTop: 5 }}>
         <Carousel
           layout={'default'}
@@ -662,7 +705,7 @@ function ManagerMap(props) {
             borderRadius: 30,
           }}
           labelStyle={{
-            color: colors.primary,
+            color: colors.main,
             fontSize: 15,
           }}
           style={[styles.box,]}
@@ -674,7 +717,7 @@ function ManagerMap(props) {
         {/* <Button
           mode={"outlined"}
           labelStyle={{
-            color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.success : colors.lightGray,
+            color: [0, listStaffChecked.length].includes(filterStaffs.length) ? colors.main : colors.lightGray,
             fontSize: 1
           }}
           onPress={() => setFilterStaffs([])}
@@ -735,7 +778,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: 25,
-    color: colors.success,
+    color: colors.main,
     padding: 3,
   },
 

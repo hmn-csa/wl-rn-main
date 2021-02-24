@@ -117,7 +117,7 @@ function ContractDetailMap(props) {
   //   // if (istodo == 1)
   //   //   return <Ionicons
   //   //     name="ios-bulb"
-  //   //     style={[showstyles.logo, { color: colors.primary, textAlign: 'right' }]}
+  //   //     style={[showstyles.logo, { color: colors.main, textAlign: 'right' }]}
   //   //   />
   // }
   const paidIcon = (paid) => {
@@ -289,7 +289,7 @@ function ContractDetailMap(props) {
           />
         </TouchableOpacity>
 
-     
+
 
         <TouchableOpacity
           style={[showstyles.btn]}
@@ -340,7 +340,7 @@ const mapDispatchToProps = (dispatch) => {
       });
     },
 
-    
+
 
     setActiveVsf: (content) => {
       dispatch({

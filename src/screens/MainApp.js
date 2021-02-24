@@ -30,21 +30,16 @@ function MainApp(props) {
       // setErrorMsg('Permission to access location was denied');
       alert('Vui lòng bật định vị và cấp quyền để tiếp tục');
     }
-    let locationC = await Location.getCurrentPositionAsync({});
+    let locationC = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
     props.locationSet(locationC.coords)
   }
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        // setErrorMsg('Permission to access location was denied');
-        Alert.alert('Vui lòng bật định vị và cấp quyền để tiếp tục');
-      }
-      let locationC = await Location.getCurrentPositionAsync({});
-      props.locationSet(locationC.coords)
-    })();
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     upLocation()
+  //   }, 5 * 60 * 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const [oldlat, setOldlat] = useState(props.token.lat)
   const [oldlon, setOldlon] = useState(props.token.lon)
@@ -77,12 +72,6 @@ function MainApp(props) {
     }
   }
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     upLocation()
-  //   }, 1 * 60 * 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   return (
     <NavigationContainer>

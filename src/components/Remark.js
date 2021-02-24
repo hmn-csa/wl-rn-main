@@ -105,13 +105,10 @@ function Remark(props) {
         Alert.alert("Permission to access location was denied");
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
       setLocation(location);
     })();
   }, []);
-
-
-
 
 
 
@@ -309,7 +306,7 @@ function Remark(props) {
           color: "black",
         }}
         selectedLabelStyle={{
-          color: "#39739d",
+          color: colors.main,
         }}
         dropDownStyle={{ backgroundColor: "lightgrey" }}
         onChangeItem={(item) => setCode(item.value)}
@@ -376,7 +373,7 @@ function Remark(props) {
           color: "black",
         }}
         selectedLabelStyle={{
-          color: "#39739d",
+          color: colors.main,
         }}
         dropDownStyle={{ backgroundColor: "lightgrey" }}
         // dropDownStyle={{ backgroundColor: "white" }}
@@ -402,7 +399,7 @@ function Remark(props) {
           color: "black",
         }}
         selectedLabelStyle={{
-          color: "#39739d",
+          color: colors.main,
         }}
         dropDownStyle={{ backgroundColor: "lightgrey" }}
         onChangeItem={(item) => setAddress(item.value)}
@@ -649,7 +646,7 @@ function Remark(props) {
 
           <View style={styles.row}>
             <TextInput
-              style={[styles.box, styles.selectInput, { color: colors.primary, paddingLeft: 3 }]}
+              style={[styles.box, styles.selectInput, { color: colors.main, paddingLeft: 3 }]}
               placeholder="Nhập ghi chú"
               value={remark}
               onChangeText={setRemark}
@@ -816,15 +813,14 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 5,
-    color: "white",
-    backgroundColor: colors.light,
+    backgroundColor: 'white',
     borderColor: colors.grey,
     borderWidth: 0.3,
   },
   label: {
     borderRadius: 5,
     margin: 2,
-    color: colors.primary,
+    color: colors.main,
     paddingLeft: 3,
   },
   subLabel: {
@@ -834,7 +830,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   buttonLabel: {
-    color: colors.primary,
+    color: colors.main,
     fontSize: 12,
     fontWeight: "800",
   },

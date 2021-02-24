@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     margin: 8,
     justifyContent: 'center',
-    color: colors.primary,
+    color: colors.main,
   },
   header2: {
     fontWeight: 'bold',
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     margin: 8,
     justifyContent: 'center',
-    color: colors.primary,
+    color: colors.main,
   },
   logo: {
     fontWeight: "bold",

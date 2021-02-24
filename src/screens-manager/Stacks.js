@@ -20,7 +20,7 @@ function StaffStack(props) {
         component={ManagerStaff}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.main,
           },
           headerTintColor: colors.white,
           headerTitleStyle: {
@@ -45,7 +45,7 @@ function MapCheckinStack(props) {
         component={ManagerMap}
         options={{
           headerStyle: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.main,
           },
           headerTintColor: colors.white,
           headerTitleStyle: {

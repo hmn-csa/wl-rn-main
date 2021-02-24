@@ -282,7 +282,7 @@ const buttonStyles = StyleSheet.create({
   button: {
     borderRadius: 10,
     marginLeft: 5,
-    // backgroundColor: colors.primary,
+    // backgroundColor: colors.main,
     borderColor: null,
     width: width / 2 - 5
   },
