@@ -1,10 +1,11 @@
 import React from 'react'
-import { Text, View, StyleSheet, ScrollView, ImageBackground } from 'react-native'
+import { Text, View, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from 'react-native'
 import TreeView from 'react-native-final-tree-view'
 import { FontAwesome, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { connect } from "react-redux"
 import { actUpdateShowlist, actSetTodoShowlist } from "../actions"
 import { colors } from '../styles'
+import { useNavigation } from '@react-navigation/native';
 
 
 //ion-md-remove
@@ -41,9 +42,9 @@ function getIndicator(isExpanded, hasChildrenNodes, type, level) {
 
 function Tree(props) {
 
-  const handleShow = list => {
-    props.setTodoShowlist(true)
-    props.navigation.navigate('Portfolio', { screen: 'List' });
+  const navigation = useNavigation();
+  const handleShow = (list, title) => {
+    navigation.navigate('Portfolio', { name: title })
     props.updateShowlist(list)
   }
   function getstyle_txttree(name) {
@@ -72,14 +73,16 @@ function Tree(props) {
               <Text style={getstyle_txttree(node.name)}>
                 {getIndicator(isExpanded, hasChildrenNodes, node.type, level)} {node.name}
               </Text>
-              <Text style={{ fontWeight: 'bold' }}>
-                <Text style={{ color: colors.black }}>
-                  {node.case}
-                </Text>{"\t"}
-                <Text style={{ color: colors.info }}>
-                  {node.share} %
+              <TouchableOpacity onPress={() => handleShow(node.applIds, node.name)}>
+                <Text style={{ fontWeight: 'bold' }}>
+                  <Text style={{ color: colors.black }}>
+                    {node.case}
+                  </Text>{"\t"}
+                  <Text style={{ color: colors.info }}>
+                    {node.share} %
                   </Text>
-              </Text>
+                </Text>
+              </TouchableOpacity>
             </View>
           )
         }}

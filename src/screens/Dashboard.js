@@ -61,7 +61,10 @@ function Dashboard(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_tool}
-            onPress={() => props.navigation.navigate('Portfolio', { name: 'Tổng HD' })}>
+            onPress={() => {
+              props.navigation.navigate('Portfolio', { name: 'Tổng HD' })
+              props.updateShowlist(props.totalCal.totalCase.applIds)
+            }}>
             <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
           </TouchableOpacity>
         </View>
@@ -121,12 +124,5 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-
-
-
-
-
-
-
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

@@ -19,7 +19,8 @@ const ScreenWidth = Dimensions.get('screen').width;
 function ListAppls(props) {
   const [searchTerm, setSearchTerm] = useState("")
   const [filtered, setFiltered] = useState(props.showlists.applIds)
-  const hangleSearch = (value) => {
+  useEffect(() => {
+    var value = props.search
     try {
       setSearchTerm(value)
       if (value != null && value != "" && value != undefined) {
@@ -31,10 +32,27 @@ function ListAppls(props) {
     } catch (err) {
       setFiltered(props.showlists.applIds)
     }
-  }
+  }, [props.search]);
+
+  useEffect(() => {
+    setFiltered(props.showlists.applIds)
+  }, []);
+
+  // const hangleSearch = (value) => {
+  //   try {
+  //     setSearchTerm(value)
+  //     if (value != null && value != "" && value != undefined) {
+  //       setFiltered(
+  //         Object.values(props.data).filter(createFilter(value, KEYS_TO_FILTERS))
+  //       )
+  //     } else
+  //       setFiltered(props.showlists.applIds)
+  //   } catch (err) {
+  //     setFiltered(props.showlists.applIds)
+  //   }
+  // }
 
   const _renderItem = ({ item, index }) => {
-
     return (
       <ContractDetailMap
         key={item.appl_id}
@@ -47,26 +65,18 @@ function ListAppls(props) {
   if (searchTerm !== null && searchTerm !== "")
     return (
       <View >
-        <Searchbar
-          onChangeText={(value) => hangleSearch(value)}
-          onSubmitEditing={(value) => hangleSearch(value)}
-        />
         <FlatList
           data={filtered}
           renderItem={_renderItem}
           keyExtractor={(item) => item.id}
+          key={(item) => item.appl_id}
+          style={{ padding: 5 }}
         />
       </View>
     )
   if (props.data !== null)
     return (
       <View>
-        {/* <Searchbar
-          onChangeText={(value) => hangleSearch(value)}
-          style={{ width: 50, height: 40, borderRadius: 50 }}
-          //placeholder="Nhập tên (có dấu) hoặc appl_id"
-          onSubmitEditing={(value) => hangleSearch(value)}
-        /> */}
         <FlatList
           data={props.showlists.applIds}
           renderItem={_renderItem}
@@ -87,7 +97,8 @@ function ListAppls(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     showlists: state.showlists,
-    data: state.data.data
+    data: state.data.data,
+    search: state.searchbar.value,
   };
 };
 

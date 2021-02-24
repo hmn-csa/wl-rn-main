@@ -24,7 +24,6 @@ function ContractDetailMap(props) {
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
 
-  console.log(contractId)
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {
@@ -39,11 +38,9 @@ function ContractDetailMap(props) {
   }
 
   const handleGetVsf = () => {
-
     const cur_active = props.vsfs.filter(
       item => item.appl_id === content.appl_id
     )[0]
-
     if (cur_active) {
       props.setActiveVsf(cur_active)
     }
@@ -54,20 +51,8 @@ function ContractDetailMap(props) {
       }
       props.apiGetVsf(config)
     }
-
-    // if (!props.applidUptrails[content.appl_id]) {
-    //   const config = {
-    //     loadapplid: content.appl_id,
-    //     token: props.token
-    //   }
-    //   props.apiGetUptrail(config)
-    // }
-
     props.navigation.navigate('Vsf')
-
   }
-
-
 
   const handleGetSkip = () => {
     if (props.skips.map(appl => appl.id_no).includes(content.id_no)) {
@@ -84,6 +69,35 @@ function ContractDetailMap(props) {
     props.navigation.navigate('Skip')
 
   }
+
+  const cardstyle =
+    props.type != 'map' ? {
+      backgroundColor: 'white',
+      padding: 5,
+      borderWidth: 0,
+      borderColor: colors.grey,
+      borderRadius: 10,
+      height: CARD_HEIGHT,
+      marginBottom: 10,
+      shadowColor: '#CCC',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 10,
+      elevation: 1,
+    }
+      :
+      {
+        backgroundColor: 'white',
+        padding: 5,
+        borderWidth: 0,
+        borderColor: colors.grey,
+        borderRadius: 10,
+        height: CARD_HEIGHT,
+        marginBottom: 10,
+      }
 
   const handleGetUptrail = () => {
     const config = {
@@ -113,13 +127,6 @@ function ContractDetailMap(props) {
     return Linking.openURL(phoneNumber)
   }
 
-  // const todoIcon = (istodo) => {
-  //   // if (istodo == 1)
-  //   //   return <Ionicons
-  //   //     name="ios-bulb"
-  //   //     style={[showstyles.logo, { color: colors.primary, textAlign: 'right' }]}
-  //   //   />
-  // }
   const paidIcon = (paid) => {
     if (paid > 0) {
       const valuex = parseFloat(paid, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
@@ -146,37 +153,11 @@ function ContractDetailMap(props) {
       }}>{lastCode}</Text>
   }
 
-  const followIcon = (isFollowed) => {
-    if (isFollowed == 1)
-      return <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 9,
-          color: colors.warning,
-          textAlign: 'right'
-        }}>Followed</Text>
-  }
   if (props.data[contractId] === undefined)
     return <View></View>
   return (
     <View
-      style={{
-        backgroundColor: 'white',
-        padding: 5,
-        borderWidth: 0,
-        borderColor: colors.grey,
-        borderRadius: 10,
-        height: CARD_HEIGHT,
-        marginBottom: 10,
-        shadowColor: '#00000021',
-        shadowOffset: {
-          width: 0,
-          height: 4,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 2,
-      }}
+      style={cardstyle}
     >
       <View style={[showstyles.row, { borderBottomWidth: 1, borderColor: '#CCC' }]}>
         <View style={[showstyles.box, { flex: 3.5 }]}>
@@ -190,7 +171,6 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
-
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
           <Text style={[showstyles.msgTxt]}>App_id:</Text>
@@ -200,8 +180,7 @@ function ContractDetailMap(props) {
             <View style={[showstyles.box, { flex: 3 }]}>
               <Text style={[showstyles.nameTxt, { fontWeight: 'normal' }]}>{content.app_id}</Text>
             </View>
-            <View style={[showstyles.box, { flex: 1 }]}>
-            </View>
+            <View style={[showstyles.box, { flex: 1 }]}></View>
           </View>
         </View>
       </View>
@@ -242,11 +221,11 @@ function ContractDetailMap(props) {
           <Text style={[showstyles.msgTxt, { fontWeight: 'bold', color: colors.info }]} >{moneyFormat(content.principle_outstanding)}</Text>
         </View>
       </View>
-      <View style={[showstyles.row]}>
+      <View style={[showstyles.row]} >
         <View style={showstyles.box}>
           <Text style={showstyles.msgTxt}>Địa chỉ:</Text>
         </View>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
+        <View style={[showstyles.box, { flex: 3.5, flexShrink: 1 }]}>
           <Text style={showstyles.msgTxt} >{content.reg_address}</Text>
         </View>
       </View>
@@ -288,9 +267,6 @@ function ContractDetailMap(props) {
             style={[showstyles.logo, { color: followedColor }]}
           />
         </TouchableOpacity>
-
-     
-
         <TouchableOpacity
           style={[showstyles.btn]}
           onPress={handleMap}>
@@ -332,16 +308,12 @@ const mapDispatchToProps = (dispatch) => {
         config
       });
     },
-
     apiGetSkip: (config) => {
       dispatch({
         type: constAction.API_SKIP_REQUEST,
         config
       });
     },
-
-    
-
     setActiveVsf: (content) => {
       dispatch({
         type: constAction.APPLID_VSF_ACTIVE,
@@ -362,7 +334,6 @@ const mapDispatchToProps = (dispatch) => {
     },
   }
 }
-
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -405,6 +376,7 @@ const showstyles = StyleSheet.create({
   box: {
     flex: 1,
     justifyContent: 'center',
+
   },
   btngroup: {
     flexDirection: 'row',

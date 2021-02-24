@@ -187,3 +187,7 @@ export const OUT_STAFF_MODE = "OUT_STAFF_MODE"
 // map checkin uptrail 
 
 export const SET_MAP_STAFF = "SET_MAP_STAFF"
+
+// Searchbar
+
+export const SEND_VALUE_SEARCH = "SEND_VALUE_SEARCH"

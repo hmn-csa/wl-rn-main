@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { View, Text, StyleSheet, TextInput, Animated } from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
+import { View, Text, StyleSheet, TextInput, Animated, Dimensions, StatusBar, Button } from 'react-native'
 import { Remark, Vsf, Skip, Search } from '../components'
-import Tree from './Tree'
-import ProductCategories from './ProductCategories'
-import ScoreCategories from './ScoreCategories'
 import ListAppls from './ListAppls'
 import Dashboard from './Dashboard'
 import UserSignout from './userSignout'
@@ -13,17 +9,21 @@ import ListPayment from './ListPayment'
 import applMap from './applMap'
 import CheckinMap from './CheckinMap'
 import TodoDash from '../components/TodoDash'
-import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
-import ListUptrail from './ListUptrail'
-import { styles, colors } from '../styles'
+import { MaterialIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { colors } from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { DrawerActions } from '@react-navigation/native';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import { Calendar_ } from './Calendar'
 import { Menutop_Uptrail, Menutop_User, Menutop_Vsf } from './MenuTop'
-import { Colors, Searchbar } from 'react-native-paper'
+import { useNavigation } from '@react-navigation/native';
+import { SearchBar } from 'react-native-elements';
+import * as constAction from '../consts'
+import { connect } from "react-redux"
+
 
 const Stack = createStackNavigator()
+const DEVICE_WIDTH = Dimensions.get(`window`).width;
+
 
 function UserStack(props) {
   return (
@@ -110,15 +110,8 @@ function UserStack(props) {
 
 function DashboardStack(props) {
   const [hidesearch, Sethidesearch] = useState(true);
-  const widthAni = useRef(new Animated.Value(0)).current;
-  const fadeIn = () => {
-    Animated.timing(widthAni, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Sethidesearch(true)
-  };
+  const navigation = useNavigation();
+  const [valueee, Setvalueee] = useState(true);
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: true, headerTitleAlign: 'center' }}
@@ -234,22 +227,50 @@ function DashboardStack(props) {
             fontSize: 18,
           },
           headerRight: () => (
-            <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={25} color={colors.main} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ marginRight: 10, marginLeft: 10 }}
-                onPress={() =>
-                  props.navigation.navigate('Maps')
-                } >
-                <MaterialIcons name="map" size={25} color={colors.main}
-                  style={{
-                    borderRadius: 20
-                  }} />
-              </TouchableOpacity>
-            </View>
-          )
+            hidesearch === true ?
+              <View style={{ paddingRight: 20, flexDirection: 'row' }}>
+                <TouchableOpacity onPress={() => { Setvalueee(''), Sethidesearch(false) }} style={{ marginHorizontal: 10 }}>
+                  <FontAwesome name="search" size={20} color={colors.main} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginRight: 10, marginLeft: 10 }}
+                  onPress={() => props.navigation.navigate('Maps')} >
+                  <MaterialIcons name="map" size={25} color={colors.main}
+                    style={{ borderRadius: 20 }} />
+                </TouchableOpacity>
+              </View>
+              :
+              <View style={{ paddingRight: 20, flexDirection: 'row', alignItems: 'center' }}>
+                <SearchBar
+                  placeholder="Tìm kiếm..."
+                  style={{ height: 20, backgroundColor: 'white' }}
+                  onChangeText={(search) => {
+                    Setvalueee(search),
+                      props.sendSearch(search)
+                  }}
+                  searchIcon={<TouchableOpacity onPress={() => { Sethidesearch(true), Setvalueee('') }}><FontAwesome5 name="arrow-left" size={20} color="grey" /></TouchableOpacity>}
+                  value={valueee}
+                  showCancel={true}
+                  lightTheme={true}
+                  leftIconContainerStyle={{ width: 50 }}
+                  // platform='android'
+                  cancelIcon={<TouchableOpacity onPress={() => { Sethidesearch(true), Setvalueee('') }}><FontAwesome5 name="arrow-left" size={20} color="grey" /></TouchableOpacity>}
+                  containerStyle={{ backgroundColor: 'white' }}
+                  inputContainerStyle={{ backgroundColor: 'white', width: DEVICE_WIDTH - 50, height: 30, right: 0 }}
+                  onCancel={() => { Sethidesearch(true), Setvalueee('') }}
+                  onSubmitEditing={() => {
+                    Sethidesearch(true),
+                      props.sendSearch({ valueee }.valueee)
+                  }}
+                />
+                <TouchableOpacity
+                  style={{}}
+                  onPress={() => props.navigation.navigate('Maps')} >
+                  <MaterialIcons name="map" size={25} color={colors.main}
+                    style={{ borderRadius: 20 }} />
+                </TouchableOpacity>
+              </View>
+          ),
         })
         }
       />
@@ -396,6 +417,9 @@ function CalendarStack(props) {
 }
 
 function CategorieStack(props) {
+  const [hidesearch, Sethidesearch] = useState(true);
+  const navigation = useNavigation();
+  const [valueee, Setvalueee] = useState(true);
   return (
     <Stack.Navigator
       initialRouteName="Categories"
@@ -431,18 +455,49 @@ function CategorieStack(props) {
             fontSize: 18,
           },
           headerRight: () => (
-            <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
-                props.navigation.navigate('Portfolio', {
-                  screen: 'Maps'
-                })
-              } >
-                <MaterialIcons name="map" size={30} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="search" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
+            hidesearch === true ?
+              <View style={{ paddingRight: 20, flexDirection: 'row' }}>
+                <TouchableOpacity onPress={() => { Setvalueee(''), Sethidesearch(false) }} style={{ marginHorizontal: 10 }}>
+                  <FontAwesome name="search" size={20} color={colors.main} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginRight: 10, marginLeft: 10 }}
+                  onPress={() => props.navigation.navigate('Maps')} >
+                  <MaterialIcons name="map" size={25} color={colors.main}
+                    style={{ borderRadius: 20 }} />
+                </TouchableOpacity>
+              </View>
+              :
+              <View style={{ paddingRight: 20, flexDirection: 'row', alignItems: 'center' }}>
+                <SearchBar
+                  placeholder="Tìm kiếm..."
+                  style={{ height: 20, backgroundColor: 'white' }}
+                  onChangeText={(search) => {
+                    Setvalueee(search),
+                      props.sendSearch(search)
+                  }}
+                  searchIcon={<TouchableOpacity onPress={() => { Sethidesearch(true), Setvalueee('') }}><FontAwesome5 name="arrow-left" size={20} color="grey" /></TouchableOpacity>}
+                  value={valueee}
+                  showCancel={true}
+                  lightTheme={true}
+                  // platform='android'
+                  leftIconContainerStyle={{ width: 50 }}
+                  cancelIcon={<TouchableOpacity onPress={() => { Sethidesearch(true), Setvalueee('') }}><FontAwesome5 name="arrow-left" size={20} color="grey" /></TouchableOpacity>}
+                  containerStyle={{ backgroundColor: 'white', borderWidth: 0, }}
+                  inputContainerStyle={{ backgroundColor: 'white', borderWidth: 0, width: DEVICE_WIDTH - 50, height: 30, right: 0 }}
+                  onCancel={() => { Sethidesearch(true), Setvalueee('') }}
+                  onSubmitEditing={() => {
+                    Sethidesearch(true),
+                      props.sendSearch({ valueee }.valueee)
+                  }}
+                />
+                <TouchableOpacity
+                  style={{}}
+                  onPress={() => props.navigation.navigate('Maps')} >
+                  <MaterialIcons name="map" size={25} color={colors.main}
+                    style={{ borderRadius: 20 }} />
+                </TouchableOpacity>
+              </View>
           )
         })
         }
@@ -599,12 +654,18 @@ function UserStack2(props) {
           },
           headerRight: () => (
             <View style={{ paddingRight: 20, flexDirection: 'row' }}>
-              <TouchableOpacity style={{ marginRight: 10 }} onPress={() =>
-                props.navigation.navigate('Portfolio', {
-                  screen: 'Maps'
-                })
-              } >
-                <MaterialIcons name="map" size={30} color="white" />
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={25} color={colors.main} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ marginRight: 10, marginLeft: 10 }}
+                onPress={() =>
+                  props.navigation.navigate('Maps')
+                } >
+                <MaterialIcons name="map" size={25} color={colors.main}
+                  style={{
+                    borderRadius: 20
+                  }} />
               </TouchableOpacity>
             </View>
           )
@@ -726,7 +787,16 @@ function UserStack2(props) {
   )
 }
 
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sendSearch: (content) => {
+      dispatch({
+        type: constAction.SEND_VALUE_SEARCH,
+        content
+      })
+    },
+  }
+}
 
 const buttonStyles = StyleSheet.create({
   buttons: {
@@ -756,10 +826,13 @@ const buttonStyles = StyleSheet.create({
 
 });
 
+const Dashboard_st = connect(null, mapDispatchToProps)(DashboardStack)
+const Categorie_st = connect(null, mapDispatchToProps)(CategorieStack)
+
 
 export {
-  DashboardStack,
+  Dashboard_st,
   UserStack,
-  CategorieStack,
+  Categorie_st,
   CalendarStack,
 }

@@ -83,19 +83,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   card: {
-    shadowColor: '#00000021',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 1,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 4,
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    elevation: 2,
     marginVertical: 5,
     backgroundColor: "white",
     flexBasis: '46%',
     marginHorizontal: 5,
-    borderColor: colors.lightGray,
     borderRadius: 10,
     padding: 10
   },

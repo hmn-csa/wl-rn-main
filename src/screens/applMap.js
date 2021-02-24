@@ -9,7 +9,6 @@ import {
 import { connect } from "react-redux"
 import Carousel from 'react-native-snap-carousel'
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-
 import ContractDetailMap from '../components/ContractDetailMap'
 import { colors } from "../styles";
 import { calInitialRegion } from '../functions'
@@ -17,7 +16,6 @@ import { calInitialRegion } from '../functions'
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 10;
 const SliderWidth = Dimensions.get('screen').width;
-
 
 const usePulse = (startDelay = 500) => {
   const opacity = useRef(new Animated.Value(1)).current;
@@ -57,7 +55,6 @@ function applMap(props) {
   const [initialRegion, setInitialRegion] = useState(calInitialRegion(listAppls));
   const [activeIndex, setActivateIndex] = useState(0);
 
-
   const _renderMarker = (appl, index) => {
 
     if (index !== activeIndex)
@@ -92,7 +89,6 @@ function applMap(props) {
               name="map-marker-check"
               size={24}
               color={colors.success}
-
             />
           </Animated.View>
         </Marker>
@@ -102,10 +98,10 @@ function applMap(props) {
   const _renderItem = ({ item, index }) => {
     return (
       <ContractDetailMap
-        opacity={0.2}
         key={index}
         contractId={item.appl_id}
         navigation={props.navigation}
+        type={"map"}
       />
     );
   };
@@ -127,7 +123,7 @@ function applMap(props) {
           </MapView>
         </View>
         <View
-          opacity={0.8}
+          opacity={0.9}
           style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 5 }}>
           <Carousel
             ref={carouselRef}

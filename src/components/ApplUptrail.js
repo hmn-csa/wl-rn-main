@@ -48,7 +48,6 @@ function ApplUptrail(props) {
 
   useEffect(() => {
     setTimeline(pm2timeline(props.uptrails[props.active_applid]))
-    console.log(timelineFollow)
   }, [props.uptrails]);
 
 
@@ -61,9 +60,8 @@ function ApplUptrail(props) {
         <Text style={[styles.textDescription]}>{rowData.description}</Text>
       </View>
     )
-
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, }}>
         <Uptrail
           key={rowData.runtime}
           item={rowData}
@@ -93,19 +91,23 @@ function ApplUptrail(props) {
           style={styles.list}
           data={timelineFollow}
           separator={false}
-          circleSize={20}
+          circleSize={10}
           innerCircle={'dot'}
-          circleColor={colors.info}
-          lineColor={colors.info}
-          timeContainerStyle={{ minWidth: 12, marginTop: -5 }}
+          circleColor={colors.main}
+          lineColor={colors.main}
+          timeContainerStyle={{ width: 0, marginTop: 0, marginRight: -10 }}
           timeStyle={{
             textAlign: 'center',
-            backgroundColor: colors.info, color: 'white',
-            padding: 5, borderRadius: 13
+            backgroundColor: colors.main,
+            color: 'white',
+            padding: 5, borderRadius: 5,
+            fontSize: 12,
+            width: 45
           }}
+          eventDetailStyle={{ left: -20, marginRight: -25 }}
           descriptionStyle={{ color: colors.success }}
           options={{
-            style: { paddingTop: 2 }
+            style: { paddingTop: 10 }
           }}
           renderDetail={renderDetail}
           showTime={true}

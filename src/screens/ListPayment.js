@@ -10,13 +10,11 @@ import Timeline from 'react-native-timeline-flatlist'
 import { actUpdateShowlist } from "../actions/index"
 import { moneyFormat } from '../functions'
 import { colors } from "../styles";
-import { color } from 'react-native-reanimated';
 
 function ListPayment(props) {
   useEffect(() => {
     props.getPayments({
       token: props.token.token.access,
-      // staff_id: props.token.active_staff,
       applids: ''.concat(props.totalCal.paidAll.applIds.map(item => item.appl_id))
     })
   }, []);
@@ -64,7 +62,6 @@ function ListPayment(props) {
   }
 
   const onEventPress = (rowData) => {
-    //console.log(rowData)
     props.updateShowlist([{ appl_id: rowData.appl_id, cust_name: rowData.title }])
     props.navigation.navigate('Portfolio', { screen: 'List' })
 
@@ -92,7 +89,6 @@ function ListPayment(props) {
       />
     </View>
   )
-
 };
 
 const mapStateToProps = (state) => {

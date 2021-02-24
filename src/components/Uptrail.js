@@ -82,6 +82,9 @@ function Uptrail(props) {
     props.navigation.navigate('Portfolio', { screen: 'List' })
   }
 
+  const [applPm, setApplPm] = useState(props.payments.map(item => item.appl_id))
+
+
 
   const reVisit = (next_visit_time) => {
     if (next_visit_time != null)
@@ -95,8 +98,9 @@ function Uptrail(props) {
       </View>
   }
 
-  const NotePM = (result) => {
-    if (result == 'paid')
+  const NotePM = (appl) => {
+    const appls = props.payments.map(item => item.appl_id)
+    if (appls.includes(appl))
       return (
         <View style={{ flexDirection: 'row', backgroundColor: 'rgba(9,135,101,0.3)', borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}>
           <Text style={{ fontSize: 12, color: colors.success, fontWeight: 'bold' }}>Đã thanh toán</Text>
@@ -140,9 +144,7 @@ function Uptrail(props) {
     var result = consts.REMARK_CODE.filter(obj => {
       return obj.value === code
     })
-    if (result.length > 0)
-      return (result[0].label)
-    return ("XXX")
+    return (result[0].label)
   }
 
   const haveimages = (image1, image2, image3) => {
@@ -229,7 +231,7 @@ function Uptrail(props) {
       borderRadius: 15,
       borderColor: colors.lightGray,
       margin: 5,
-      padding: 10,
+      padding: 10
     }
   return (
     <View
@@ -238,27 +240,21 @@ function Uptrail(props) {
         openwide ? setOpenwide(false) : setOpenwide(true)
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <View>
-          <Text style={[stylesTrail.nameTxt]}>{splitDate(runtime)}</Text>
-        </View>
+        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{splitDate(runtime)}</Text>
         <View>
           <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{splitTime(runtime)}</Text>
         </View>
       </View>
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+        <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold', color: colors.info, flexShrink: 1 }]}>{getCodeLabel(code)}</Text>
         <View>
-          <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold', color: colors.info }]}>{getCodeLabel(code)}</Text>
-        </View>
-        <View>
-          {['PTP', 'OBT', 'WFP', 'TER'].includes(code) ? NotePM('paid') : NotePM('nopaid')}
+          {NotePM(appl_id)}
         </View>
       </View>
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <View>
-          <Text style={[stylesTrail.nameTxt,]}>{cust_name}</Text>
-        </View>
+        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{cust_name}</Text>
         <View>
           <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{appl_id}</Text>
         </View>
@@ -273,9 +269,7 @@ function Uptrail(props) {
       </View>
       {remark != "" ?
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-          <View>
-            <Text style={[stylesTrail.nameTxt]}>Ghi chú : {remark}</Text>
-          </View>
+          <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>Ghi chú : {remark}</Text>
         </View>
         : null}
 
@@ -351,6 +345,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token.token.access,
     uptrails: state.uptrails.uptrails,
+    payments: state.payments.payments
   };
 };
 

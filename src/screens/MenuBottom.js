@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../styles'
-import { CategorieStack, CalendarStack, DashboardStack, UserStack } from './Stacks'
+import { Categorie_st, CalendarStack, Dashboard_st, UserStack } from './Stacks'
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -35,8 +35,8 @@ function MenuBottom() {
         })
       }
     >
-      <Tab.Screen name="Dashboard" component={DashboardStack} />
-      <Tab.Screen name="Categories" component={CategorieStack} />
+      <Tab.Screen name="Dashboard" component={Dashboard_st} />
+      <Tab.Screen name="Categories" component={Categorie_st} />
       <Tab.Screen name="Calendar" component={CalendarStack} />
       <Tab.Screen name="User" component={UserStack} />
     </Tab.Navigator>

@@ -11,6 +11,7 @@ import * as constAction from '../consts'
 import { useNavigation } from '@react-navigation/native';
 import { moneyFormat } from '../functions'
 
+
 const { width, height } = Dimensions.get("window");
 const AVATAR_WIDTH = width / 8
 import { EMPTYAVATAR } from '../images'
@@ -21,12 +22,6 @@ function StaffHeader(props) {
       return EMPTYAVATAR
     else return { uri: avatar }
   }
-
-  const miniMoneyFormat = (n) => {
-    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
-    return money
-  }
-
   return (
     <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 20, paddingBottom: 15, backgroundColor: 'white', paddingLeft: 20 }]}>
       <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, marginTop: -5 }]}>
@@ -58,10 +53,6 @@ function StaffDash(props) {
   const handleShow = (list, title) => {
     navigation.navigate('Portfolio', { name: title })
     props.updateShowlist(list)
-  }
-  const miniMoneyFormat = (n) => {
-    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
-    return money
   }
 
   return (
@@ -191,10 +182,6 @@ function StaffTodo(props) {
   const handleShow = (list, title) => {
     navigation.navigate('Portfolio', { name: title })
     props.updateShowlist(list)
-  }
-  const miniMoneyFormat = (n) => {
-    const money = (parseFloat(n, 10) / 1000000).toFixed(1).toString()
-    return money
   }
 
   return (
