@@ -42,7 +42,7 @@ function StaffHeader(props) {
         </Text>
       </View>
       <View style={[styles.box, { flex: 1.618, alignItems: 'center' }]}>
-        {/* <CircleTA /> */}
+        <CircleTA />
       </View>
     </View>
   )
@@ -169,7 +169,7 @@ function StaffDash(props) {
             style={{ marginBottom: 0 }}
             progress={0.4}
             color={colors.main} />
-          <Text style={styles.label}>Tỉ lệ viếng thăm có số thu</Text>
+          <Text style={styles.label}>Viếng thăm có số thu</Text>
         </View>
       </View>
     </View >
@@ -298,7 +298,7 @@ function StaffTodo(props) {
             style={{ marginBottom: 0 }}
             progress={0.4}
             color={colors.main} />
-          <Text style={styles.label}>Tỉ lệ viếng thăm có số thu</Text>
+          <Text style={styles.label}>Viếng thăm có số thu</Text>
         </View>
       </View>
     </View >

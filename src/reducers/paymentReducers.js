@@ -46,22 +46,16 @@ const paymentReducers = (state = initialState, action) => {
 
       const pmGr = groupByArray(action.content, 'rundate')
 
-      // var numOfDays = new Date(2012, 10, 0).getDate(); //use 0 here and the actual month
-      // var days = new Array();
 
-      // for (var i = 0; i <= numOfDays; i++) {
-      //   days[i] = new Date(2012, 9, i + 1).getDay(); //use month-1 here            
-      // }
-      // alert(days[29]);
-      var today = new Date();
+      var today = new Date()
       var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
       var labels = []
       var datasets = []
       var filter
-      for (let i = 0; i < 28; i++) {
+      for (let i = today.getDate() > 10 ? today.getDate() - 10 : 0; i < today.getDate(); i++) {
 
         filter = pmGr.filter(item => item.key === String(i).padStart(2, '0'))
-        labels.push(String(i).padStart(2, '0'))
+        labels.push(String(i + 1).padStart(2, '0'))
         if (filter.length > 0)
           datasets.push(miniMoneyFormat(filter[0].paidamt))
         else datasets.push(0)
@@ -76,7 +70,6 @@ const paymentReducers = (state = initialState, action) => {
           labels: labels,
           datasets: [{ data: datasets }],
         },
-        lastDayOfMonth: lastDayOfMonth
       }
 
       return state;

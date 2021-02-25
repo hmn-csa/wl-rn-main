@@ -13,7 +13,7 @@ import { MaterialIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { colors } from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
-import { Calendar_ } from './Calendar'
+import Calendar_ from './Calendar'
 import { Menutop_Uptrail, Menutop_User, Menutop_Vsf } from './MenuTop'
 import { useNavigation } from '@react-navigation/native';
 import { SearchBar } from 'react-native-elements';

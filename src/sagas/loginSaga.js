@@ -109,7 +109,10 @@ export function* workerGetDataFC(token) {
     // get payment
     yield put({
       type: constAction.API_PAYMENT_REQUEST,
-      config: { token: token.token, staff_id: token.staff_id }
+      config: {
+        token: token.token,
+        staff_id: token.staff_id
+      }
     });
 
     // dispatch CAL-DASH
@@ -141,6 +144,15 @@ export function* workerGetDataFC(token) {
         staff_id: token.staff_id,
         token: token.token,
         loaddate: "",
+      }
+    });
+
+    // Get Calendar
+    yield put({
+      type: constAction.API_CALENDAR_REQUEST,
+      config: {
+        staff_id: token.staff_id,
+        token: token.token,
       }
     });
 
@@ -219,6 +231,17 @@ export function* workerGetDataFCMode(request) {
         loaddate: "",
       }
     });
+
+    // Get Calendar
+    yield put({
+      type: constAction.API_CALENDAR_REQUEST,
+      config: {
+        staff_id: request.token.staff_id,
+        token: request.token.token,
+      }
+    });
+
+
   } catch (error) {
     console.log(error)
     // dispatch a failure action to the store with the error

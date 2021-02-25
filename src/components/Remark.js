@@ -118,7 +118,7 @@ function Remark(props) {
     if (address == addressItems[0].value && address == addressItems[1].value)
       return "same_address";
     if (address == addressItems[0].value)
-      return "reg_addressi";
+      return "reg_address";
     if (address == addressItems[1].value)
       return "act_address";
 

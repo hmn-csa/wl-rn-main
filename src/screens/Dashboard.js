@@ -38,34 +38,35 @@ function Dashboard(props) {
             <StaffTodo_com />
           </Swiper>
         </View>
-        <View style={[styles.row, { flex: 1 }]}>
-          {/* <Swiper
+        <View style={[styles.row, { flex: 1.382 }]}>
+          <Swiper
             showsButtons={false}
             autoplay={true}
             autoplayTimeout={3}
             showsPagination={false}
             autoplayDirection={true}
             navigation={props.navigation}
-          > */}
-          {BarChartPM(props.paymentCal)}
-          {/* {LineChartFL(props.paymentCal)} */}
-          {/* </Swiper> */}
+          >
+            {BarChartPM(props.paymentCal, "Thanh toán 10 ngày:")}
+            {BarChartPM(props.paymentCal, "Viếng thăm 10 ngày:")}
+            {/* {LineChartFL(props.paymentCal)} */}
+          </Swiper>
         </View>
-        <View style={[styles.row, styles.tool_frame]}>
+        <View style={[styles.row, styles.toolFrame, { flex: 0.382 }]}>
           <TouchableOpacity
-            style={styles.btn_tool}
+            style={styles.toolBtn}
             onPress={() => props.navigation.navigate('ListPayment')}>
-            <FontAwesome5 name="dollar-sign" size={20} color={colors.gray} style={{ padding: 10, paddingLeft: 15, paddingRight: 15 }} />
+            <FontAwesome5 name="dollar-sign" size={30} color={colors.gray} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btn_tool}
+            style={styles.toolBtn}
             onPress={() => props.navigation.navigate('Uptrail')}>
-            <FontAwesome5 name="route" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="route" size={30} color={colors.gray} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btn_tool}
+            style={styles.toolBtn}
             onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
-            <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="list" size={30} color={colors.gray} />
           </TouchableOpacity>
         </View>
       </View >
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  tool_frame: {
+  toolFrame: {
     width: '80%',
     marginVertical: 2,
     marginLeft: 'auto',
@@ -95,11 +96,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10,
   },
-  btn_tool: {
+  toolBtn: {
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 15,
-    height: 45
+    height: 60,
+    width: 60,
+    paddingTop: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   }
 })
 

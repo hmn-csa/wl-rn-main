@@ -21,7 +21,7 @@ function ContractDetailMap(props) {
   const [content, setContent] = useState(props.data[contractId])
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
-  const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
+  const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.main : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
   console.log(props.contractId)
   const handleAsyncChangeTodo = () => {
@@ -218,7 +218,7 @@ function ContractDetailMap(props) {
           <Text style={showstyles.msgTxt}>Dư nợ gốc:</Text>
         </View>
         <View style={[showstyles.box, { flex: 3.5 }]}>
-          <Text style={[showstyles.msgTxt, { fontWeight: 'bold', color: colors.info }]} >{moneyFormat(content.principle_outstanding)}</Text>
+          <Text style={[showstyles.msgTxt, { fontWeight: 'bold', color: colors.main }]} >{moneyFormat(content.principle_outstanding)}</Text>
         </View>
       </View>
       <View style={[showstyles.row]} >
