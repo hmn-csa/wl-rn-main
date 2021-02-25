@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, TextInput, ScrollView, ActivityIndicator
+  View, Text, Dimensions, TouchableOpacity, StyleSheet, TextInput, ScrollView, ActivityIndicator
 } from 'react-native'
 import { connect } from "react-redux"
 import { FontAwesome5, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,10 +10,13 @@ import { moneyFormat } from '../functions';
 import Loader from '../components/elements/Loader'
 import Swiper from 'react-native-swiper';
 import { StaffDash_com, StaffTodo_com, StaffHeader_com } from '../components/StaffDash'
-import { BarChartPM, BarChartFL } from '../components/Chart'
+import { BarChartPM, BarChartFL, LineChartFL } from '../components/Chart'
+
+const { width, height } = Dimensions.get("window");
 
 function Dashboard(props) {
-  if (props.fetching || props.data === null)
+  console.log(props.paymentCal)
+  if (props.fetching || !props.data || props.paymentFetching)
     return (
       <Loader />
     )
@@ -22,7 +25,7 @@ function Dashboard(props) {
     return (
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <StaffHeader_com />
-        <View style={{ flex: 3 }}>
+        <View style={[styles.row, { flex: 1 }]}>
           <Swiper
             showsButtons={false}
             autoplay={true}
@@ -35,20 +38,20 @@ function Dashboard(props) {
             <StaffTodo_com />
           </Swiper>
         </View>
-        <View style={{ flex: 4 }}>
-          <Swiper
+        <View style={[styles.row, { flex: 1 }]}>
+          {/* <Swiper
             showsButtons={false}
             autoplay={true}
             autoplayTimeout={3}
             showsPagination={false}
             autoplayDirection={true}
             navigation={props.navigation}
-          >
-            <BarChartPM />
-            <BarChartFL />
-          </Swiper>
+          > */}
+          {BarChartPM(props.paymentCal)}
+          {/* {LineChartFL(props.paymentCal)} */}
+          {/* </Swiper> */}
         </View>
-        <View style={styles.tool_frame}>
+        <View style={[styles.row, styles.tool_frame]}>
           <TouchableOpacity
             style={styles.btn_tool}
             onPress={() => props.navigation.navigate('ListPayment')}>
@@ -61,18 +64,27 @@ function Dashboard(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn_tool}
-            onPress={() => {
-              props.navigation.navigate('Portfolio', { name: 'Tổng HD' })
-              props.updateShowlist(props.totalCal.totalCase.applIds)
-            }}>
+            onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
             <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
           </TouchableOpacity>
         </View>
-      </View>
+      </View >
     )
 }
 
 const styles = StyleSheet.create({
+  row: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+    paddingLeft: 5,
+  },
+  box: {
+    justifyContent: 'center',
+    flex: 1
+  },
   tool_frame: {
     width: '80%',
     marginVertical: 2,
@@ -82,7 +94,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 5,
     marginTop: 10,
-    flex: 1
   },
   btn_tool: {
     borderWidth: 1,
@@ -96,6 +107,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     fetching: state.data.fetching,
     data: state.data.data,
+    paymentCal: state.payments.paymentCal,
+    paymentFetching: state.payments.fetching,
     showlists: state.showlists.applIds,
     todoCal: state.data.todoCal,
     totalCal: state.data.totalCal,
@@ -124,5 +137,12 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+
+
+
+
+
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

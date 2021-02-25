@@ -361,10 +361,10 @@ function ManagerMap(props) {
           }}
         >
           <View style={styles.row}>
-            <View style={[styles.box, { flex: 0.25, }]}>
+            <View style={[styles.box, { minWidth: 50, flex: 0.05 }]}>
               <Image source={avatar}
                 imageStyle={{ borderRadius: 50 }}
-                style={[{ height: 40, width: 40, borderRadius: 50, resizeMode: "cover" }]} />
+                style={[{ height: 50, width: 50, borderRadius: 50, resizeMode: "cover" }]} />
             </View>
             <View style={[styles.box]}>
               <Text style={{ fontSize: 14, }}>{item.staff_id} - {item.fc_name}</Text>
@@ -686,11 +686,12 @@ function ManagerMap(props) {
         {renderMap()}
         <View style={{ flex: 2, marginTop: 5 }}>
           <Carousel
-            layout={'default'}
+            layout={"tinder"}
             ref={carouselRef}
+            layoutCardOffset={10}
             data={listAppls}
             sliderWidth={SliderWidth}
-            itemWidth={SliderWidth * 0.8}
+            itemWidth={SliderWidth * 0.85}
             itemHeight={CARD_HEIGHT}
             renderItem={_renderItem}
             useScrollView={false}

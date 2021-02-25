@@ -17,7 +17,7 @@ export function* workerGetPayment(request) {
   try {
     const config = {
       method: 'post',
-      url: `${constAction.WORKLIST_API}/portfolio-list/?type=payments&applids=${request.config.applids}&staff_id=${request.config.staff_id}`,
+      url: `${constAction.WORKLIST_API}/portfolio-list/?type=staff-payments&staff_id=${request.config.staff_id}`,
       headers: {
         'Authorization': `Bearer ${request.config.token}`,
       },
@@ -25,6 +25,8 @@ export function* workerGetPayment(request) {
 
     const response = yield call(axios, config);
     const data = response.data
+    // console.log('payment', data)
+    // console.log(request.config.applids)
     //console.log(data)
     yield put({ type: constAction.API_PAYMENT_SUCCESS, content: data });
 

@@ -103,6 +103,7 @@ export function* workerGetMoreUptrail(request) {
     //const data = response.data;
     // dispatch a success action to the store with the new dog
     yield put({ type: constAction.MORE_UPTRAIL_SUCCESS, content: response.data });
+    yield put({ type: constAction.CAL_TOTAL_DASH });
 
   } catch (error) {
     // dispatch a failure action to the store with the error

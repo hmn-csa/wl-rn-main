@@ -26,175 +26,176 @@ const miniMoneyFormat = (n) => {
   return money
 }
 
-function StaffDash({ item }) {
-  const renAvatar = (avatar) => {
-    if (!avatar)
-      return EMPTYAVATAR
-    else return { uri: avatar }
-  }
-
-  const renIcon = (checkinData) => {
-    if (!checkinData || checkinData.length == 0)
-      return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary, fontSize: 16 }]} />
-    else
-      return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.main, fontSize: 16 }]} />
-  }
-
-  const renCheckin = (checkinData) => {
-    if (!checkinData)
-      return <ActivityIndicator size={10} color='black' />
-    else if (checkinData.length === 0)
-      return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Checkin</Text>
-    else {
-      const lastCheckin = checkinData[checkinData.length - 1].endtime
-      return <Text style={{ color: colors.main, fontSize: 11 }}>Checkin: {lastCheckin.substring(11, 16)} | <TimeAgo time={lastCheckin} /></Text> //<Text><Moment fromNow date={checkinData[0].runtime}></Moment></Text>
-    }
-  }
-
-  const renUptrail = (uptrailData) => {
-    if (!uptrailData)
-      return <ActivityIndicator size={10} color='black' />
-    else if (uptrailData.length === 0)
-      return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Uptrail</Text>
-    else {
-      const lastUptrail = uptrailData[uptrailData.length - 1].runtime
-      return <Text style={{ color: colors.main, fontSize: 11 }}>Uptrail: {uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
-    }
-  }
-
-
-  return (
-    <TouchableOpacity
-      key={item.staff_id}
-      style={[styles.block, {
-        flex: 1,
-        marginBottom: 5,
-      }]}
-      onPress={() => props.toStaffMode({
-        staff_id: item.staff_id,
-        token: props.token,
-        fc_name: item.info.fc_name,
-        avatar: item.info.avatar,
-      })
-      } >
-
-      <View style={[styles.row, {
-        borderBottomWidth: 0.2,
-        borderRadius: 10,
-        borderColor: !item.checkin || item.checkin.length == 0 ? colors.secondary : colors.main
-      }]}>
-        <View style={[styles.box, { minWidth: AVATAR_WIDTH, margin: 5, flex: 0.05, }]}>
-          <ImageBackground
-            style={[styles.pic]}
-            imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
-            source={renAvatar(item.info.avatar)}>
-            {renIcon(item.checkin)}
-          </ImageBackground>
-        </View>
-        <View style={[styles.box, { flex: 1, },]}>
-          <Text style={[styles.nameTxt,]}
-            numberOfLines={1}
-            ellipsizeMode="tail">
-            {item.info.staff_id}
-          </Text>
-          <Text style={[styles.nameTxt, { fontSize: 10.5 }]}
-            numberOfLines={1}
-            ellipsizeMode="tail">
-            {item.info.fc_name}
-          </Text>
-        </View>
-
-        <View style={[styles.box, { flex: 2 }]}>
-          <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
-          <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
-        </View>
-      </View>
-
-
-      <View style={[styles.row]}>
-        <TouchableOpacity style={[styles.box, { flex: 0.618 }]}
-        >
-          <Text style={[styles.indexSmall, { color: 'black' }]}>
-            {miniMoneyFormat(item.pos)} tr
-          </Text>
-          <Text style={styles.index}>
-            {item.case}
-          </Text>
-          <Text style={styles.label}>Tổng HĐ</Text>
-        </TouchableOpacity>
-
-        <View style={[styles.box, { flex: 0.618 }]}>
-          <Text style={styles.indexSmall}>
-            + {!item.uptrail ? 0 : item.uptrail.length}
-          </Text>
-          <TouchableOpacity >
-            <Text style={styles.index}>
-              {item.visited}
-            </Text>
-            <Text style={styles.label}>Đã viếng thăm</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
-          <Text style={[styles.indexBar]}>
-            {(item.visited * 100 / item.case).toFixed(1)}%
-          </Text>
-          <ProgressBar
-            style={{ marginBottom: 0 }}
-            progress={item.visited / item.case}
-            color={colors.main} />
-          <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
-        </View>
-      </View>
-
-      {/* ======================*/}
-
-      <View style={[styles.row]}>
-        <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
-          <Text style={styles.indexSmall}>
-            + {item.paidtodaycase} HĐ
-          </Text>
-          <TouchableOpacity>
-            <Text style={styles.index}>
-              {item.paidcase}
-            </Text>
-            <Text style={styles.label}>HĐ có số thu</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
-          <Text style={[styles.indexSmall,]}>
-            + {miniMoneyFormat(item.todayamt)} tr
-          </Text>
-          <TouchableOpacity >
-            <Text style={[styles.index, { color: colors.main, fontWeight: 'bold' }]}>
-              {miniMoneyFormat(item.paidamt)} tr
-            </Text>
-            <Text style={[styles.label]}>Tổng số thu</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
-          <Text style={[styles.indexBar]}>
-            {(item.paidcase * 100 / item.case).toFixed(1)}%
-          </Text>
-          <ProgressBar
-            style={{ marginBottom: 0 }}
-            progress={item.paidamt / item.pos}
-            color={colors.main} />
-          <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
-        </View>
-      </View>
-      {/* ======================*/}
-
-
-    </TouchableOpacity>
-  )
-}
 
 
 function ManagerStaff(props) {
 
+
+  function StaffDash({ item }) {
+    const renAvatar = (avatar) => {
+      if (!avatar)
+        return EMPTYAVATAR
+      else return { uri: avatar }
+    }
+
+    const renIcon = (checkinData) => {
+      if (!checkinData || checkinData.length == 0)
+        return <Ionicons name='ios-close-circle' style={[{ color: colors.secondary, fontSize: 16 }]} />
+      else
+        return <Ionicons name='ios-checkmark-circle' style={[{ color: colors.main, fontSize: 16 }]} />
+    }
+
+    const renCheckin = (checkinData) => {
+      if (!checkinData)
+        return <ActivityIndicator size={10} color='black' />
+      else if (checkinData.length === 0)
+        return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Checkin</Text>
+      else {
+        const lastCheckin = checkinData[checkinData.length - 1].endtime
+        return <Text style={{ color: colors.main, fontSize: 11 }}>Checkin: {lastCheckin.substring(11, 16)} | <TimeAgo time={lastCheckin} /></Text> //<Text><Moment fromNow date={checkinData[0].runtime}></Moment></Text>
+      }
+    }
+
+    const renUptrail = (uptrailData) => {
+      if (!uptrailData)
+        return <ActivityIndicator size={10} color='black' />
+      else if (uptrailData.length === 0)
+        return <Text style={{ color: colors.secondary, fontSize: 10 }}>Chưa Uptrail</Text>
+      else {
+        const lastUptrail = uptrailData[uptrailData.length - 1].runtime
+        return <Text style={{ color: colors.main, fontSize: 11 }}>Uptrail: {uptrailData.length} lần  | <TimeAgo time={lastUptrail} /></Text>
+      }
+    }
+
+
+    return (
+      <TouchableOpacity
+        key={item.staff_id}
+        style={[styles.block, {
+          flex: 1,
+          marginBottom: 5,
+        }]}
+        onPress={() => props.toStaffMode({
+          staff_id: item.staff_id,
+          token: props.token,
+          fc_name: item.info.fc_name,
+          avatar: item.info.avatar,
+        })
+        } >
+
+        <View style={[styles.row, {
+          borderBottomWidth: 0.2,
+          borderRadius: 10,
+          borderColor: !item.checkin || item.checkin.length == 0 ? colors.secondary : colors.main
+        }]}>
+          <View style={[styles.box, { minWidth: AVATAR_WIDTH, margin: 5, flex: 0.05, }]}>
+            <ImageBackground
+              style={[styles.pic]}
+              imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
+              source={renAvatar(item.info.avatar)}>
+              {renIcon(item.checkin)}
+            </ImageBackground>
+          </View>
+          <View style={[styles.box, { flex: 1, },]}>
+            <Text style={[styles.nameTxt,]}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              {item.info.staff_id}
+            </Text>
+            <Text style={[styles.nameTxt, { fontSize: 10.5 }]}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              {item.info.fc_name}
+            </Text>
+          </View>
+
+          <View style={[styles.box, { flex: 2 }]}>
+            <Text style={[styles.msgTxt,]}>{renCheckin(item.checkin)}</Text>
+            <Text style={[styles.msgTxt,]}>{renUptrail(item.uptrail)}</Text>
+          </View>
+        </View>
+
+
+        <View style={[styles.row]}>
+          <TouchableOpacity style={[styles.box, { flex: 0.618 }]}
+          >
+            <Text style={[styles.indexSmall, { color: 'black' }]}>
+              {miniMoneyFormat(item.pos)} tr
+          </Text>
+            <Text style={styles.index}>
+              {item.case}
+            </Text>
+            <Text style={styles.label}>Tổng HĐ</Text>
+          </TouchableOpacity>
+
+          <View style={[styles.box, { flex: 0.618 }]}>
+            <Text style={styles.indexSmall}>
+              + {!item.uptrail ? 0 : item.uptrail.length}
+            </Text>
+            <TouchableOpacity >
+              <Text style={styles.index}>
+                {item.visited}
+              </Text>
+              <Text style={styles.label}>Đã viếng thăm</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+            <Text style={[styles.indexBar]}>
+              {(item.visited * 100 / item.case).toFixed(1)}%
+          </Text>
+            <ProgressBar
+              style={{ marginBottom: 0 }}
+              progress={item.visited / item.case}
+              color={colors.main} />
+            <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
+          </View>
+        </View>
+
+        {/* ======================*/}
+
+        <View style={[styles.row]}>
+          <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
+            <Text style={styles.indexSmall}>
+              + {item.paidtodaycase} HĐ
+          </Text>
+            <TouchableOpacity>
+              <Text style={styles.index}>
+                {item.paidcase}
+              </Text>
+              <Text style={styles.label}>HĐ có số thu</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={[styles.box, { flex: 0.618, paddingTop: 6 }]}>
+            <Text style={[styles.indexSmall,]}>
+              + {miniMoneyFormat(item.todayamt)} tr
+          </Text>
+            <TouchableOpacity >
+              <Text style={[styles.index, { color: colors.main, fontWeight: 'bold' }]}>
+                {miniMoneyFormat(item.paidamt)} tr
+            </Text>
+              <Text style={[styles.label]}>Tổng số thu</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+            <Text style={[styles.indexBar]}>
+              {(item.paidcase * 100 / item.case).toFixed(1)}%
+          </Text>
+            <ProgressBar
+              style={{ marginBottom: 0 }}
+              progress={item.paidamt / item.pos}
+              color={colors.main} />
+            <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
+          </View>
+        </View>
+        {/* ======================*/}
+
+
+      </TouchableOpacity>
+    )
+  }
   // =========== hooks ============== //
   useEffect(() => {
     const interval = setInterval(() => {

@@ -12,12 +12,13 @@ import { moneyFormat } from '../functions'
 import { colors } from "../styles";
 
 function ListPayment(props) {
-  useEffect(() => {
-    props.getPayments({
-      token: props.token.token.access,
-      applids: ''.concat(props.totalCal.paidAll.applIds.map(item => item.appl_id))
-    })
-  }, []);
+  // useEffect(() => {
+  //   props.getPayments({
+  //     token: props.token.token.access,
+  //     staff_id: "",
+  //     applids: ''.concat(props.paidList.map(item => item.appl_id))
+  //   })
+  // }, []);
 
   const [timelinePayment, setTimeline] = useState([])
 
@@ -48,7 +49,7 @@ function ListPayment(props) {
     )
     let money = (
       <View style={styles.descriptionContainer}>
-        <Text style={[styles.textDescription, { color: colors.success }]}>Tiền đóng : {rowData.money}</Text>
+        <Text style={[styles.textDescription, { color: colors.main }]}>Tiền đóng : {rowData.money}</Text>
       </View>
     )
 
@@ -75,11 +76,11 @@ function ListPayment(props) {
         separator={true}
         circleSize={20}
         innerCircle={'dot'}
-        circleColor={colors.info}
-        lineColor={colors.info}
+        circleColor={colors.main}
+        lineColor={colors.main}
         timeContainerStyle={{ minWidth: 52, marginTop: -5 }}
-        timeStyle={{ textAlign: 'center', backgroundColor: colors.info, color: 'white', padding: 5, borderRadius: 13 }}
-        descriptionStyle={{ color: colors.success }}
+        timeStyle={{ textAlign: 'center', backgroundColor: colors.main, color: 'white', padding: 5, borderRadius: 13 }}
+        descriptionStyle={{ color: colors.main }}
         options={{
           style: { paddingTop: 5 }
         }}
@@ -93,9 +94,7 @@ function ListPayment(props) {
 
 const mapStateToProps = (state) => {
   return {
-    token: state.token,
     payments: state.payments.payments,
-    totalCal: state.data.totalCal,
   };
 };
 

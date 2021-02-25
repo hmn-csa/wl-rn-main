@@ -23,7 +23,7 @@ function ContractDetailMap(props) {
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
-
+  console.log(props.contractId)
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {

@@ -126,7 +126,6 @@ function Remark(props) {
   };
 
   // ======== Render Image ===========//
-
   const handleCommit = async () => {
     if (!personContact) return Alert.alert("Vui lòng chọn người liên hệ !");
     if (!code) return Alert.alert("Vui lòng chọn kết quả viếng thăm !");
@@ -161,10 +160,10 @@ function Remark(props) {
         appl_id: props.vsf.activeApplId.appl_id,
         code: code,
       });
-      //props.calAll();
-      //const curList = props.showlists;
-      //props.updateShowlist([]);
-      //props.updateShowlist(curList);
+      // props.calAll();
+      // const curList = props.showlists;
+      // //props.updateShowlist([]);
+      // props.updateShowlist(curList);
       setUptrailStatus(false);
       props.navigation.navigate("Portfolio", { screen: "List" });
 
