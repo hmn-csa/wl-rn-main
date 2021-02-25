@@ -100,7 +100,7 @@ function ApplUptrail(props) {
             textAlign: 'center',
             backgroundColor: colors.main,
             color: 'white',
-            padding: 5, borderRadius: 5,
+            paddingTop: 5, paddingBottom: 5, borderRadius: 5,
             fontSize: 12,
             width: 45
           }}
