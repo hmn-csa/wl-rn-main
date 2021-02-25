@@ -40,23 +40,29 @@ const BOOK = [
 function Skip(props) {
 
   const renPhonBook = (info) => {
+
+    var childRef = []
     const mainRef = []
-    for (let i = 0; i < info.main_ref.length; i++)
+    for (let i = 0; i < info.main_ref.length; i++) {
+      childRef = []
+      for (let j = 0; j < info.child_ref.length; j++) {
+        if (info.child_ref[j].nid_no === info.main_ref[i].ref_nid_no) {
+          childRef.push({
+            id: info.main_ref[j].ref_nid_no,
+            name: info.child_ref[j].ref_name,
+            phone: info.child_ref[j].ref_phone,
+            ref_relation: info.child_ref[j].ref_relation
+          })
+        }
+      }
       mainRef.push({
-        id: info.main_ref[i].ref_phone,
+        id: info.main_ref[i].ref_nid_no,
         name: info.main_ref[i].ref_name,
         phone: info.main_ref[i].ref_phone,
-        ref_relation: info.main_ref[i].ref_relation
+        ref_relation: info.main_ref[i].ref_relation,
+        children: childRef,
       })
-
-    const childRef = []
-    for (let i = 0; i < info.child_ref.length; i++)
-      fatherRef.push({
-        id: info.main_ref[i].ref_phone,
-        name: info.child_ref[i].ref_name,
-        phone: info.child_ref[i].ref_phone,
-        ref_relation: info.child_ref[i].ref_relation
-      })
+    }
 
     const mainPhone = []
 
@@ -101,18 +107,14 @@ function Skip(props) {
     //       children: [...mainRef, ...fatherRef]
     //     },
     //   ]
-    return [
-      {
-        id: 'mainRef',
-        name: 'Người tham chiếu',
-        children: [...mainRef, ...fatherRef]
-      },
-      // {
-      //   id: 'fatherRef',
-      //   name: 'fatherRef',
-      //   children: fatherRef
-      // },
-    ]
+
+
+    return ([{
+      id: '',
+      name: <Text style={{ color: colors.main, fontSize: 18, fontWeight: 'bold' }}>Thông tin tham chiếu</Text >,
+      children: mainRef,
+      type: 'none'
+    }])
   }
 
 
@@ -126,8 +128,6 @@ function Skip(props) {
         justifyContent: 'space-between',
         padding: 10,
         backgroundColor: "white",
-        // borderRadius: 10,
-        // borderLeftWidth: 2,
       }}>
         <View style={[styles.row, { marginBottom: 10 }]}>
           <View style={[styles.box]}>
@@ -197,9 +197,6 @@ function Skip(props) {
       </View>
     )
   }
-
-
-
 
   const renApplInfo = ({ item, index }) => {
 
@@ -386,38 +383,41 @@ function Skip(props) {
   }
 
   const renTree = () => {
-    function getIndicator(isExpanded, hasChildrenNodes, node, type) {
+    function getIndicator(isExpanded, hasChildrenNodes, type, idno) {
       if (!hasChildrenNodes) {
-        if (type == 'good') {
+        if (idno !== '') {
           return <FontAwesome name="user" size={15} color={colors.success} />
         }
-        else if (type == 'bad') {
-          return <FontAwesome name="user" size={15} color={colors.danger} />
-        }
+        // else if (idno === '') {
+        //   return <FontAwesome name="user" size={15} color={colors.danger} />
+        // }
         else {
           return <FontAwesome name="user" size={15} color={colors.grey} />
         }
 
       }
       else if (isExpanded) {
-        if (type == 'good') {
-          return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.success} /></Text>
+        if (idno !== '') {
+          return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.success} /></Text>
         }
-        else if (type == 'bad') {
-          return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.danger} /></Text>
+        // else if (type == 'bad') {
+        //   return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.danger} /></Text>
+        // }
+        else if (type == 'none') {
+          return <Text> <FontAwesome name="caret-down" size={16} color="black" /></Text>
         }
         else {
-          return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.grey} /></Text>
+          return <Text> <FontAwesome name="caret-down" size={16} color="black" />  <FontAwesome name="user" size={15} color={colors.grey} /></Text>
         }
       } else {
-        if (type == 'good') {
-          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <FontAwesome name="user" size={15} color={colors.success} /></Text>
+        if (idno !== '') {
+          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.success} /></Text>
         }
-        else if (type == 'bad') {
-          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.danger} /></Text>
-        }
-        else {
-          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /><FontAwesome name="user" size={15} color={colors.grey} /></Text>
+        // else if (type == 'bad') {
+        //   return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.danger} /></Text>
+        // }
+        else if (type != 'none') {
+          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.grey} /></Text>
         }
       }
     }
@@ -430,36 +430,38 @@ function Skip(props) {
       return Linking.openURL(phoneNumber)
     }
 
-    return <TreeView
-      data={phoneBook}
-      initialExpanded={true}
-      getCollapsedNodeHeight={() => { 40 }}
-      renderNode={({ node, level, isExpanded, hasChildrenNodes }) => {
-        return (
-          <View
-            style={{
-              height: 40,
-              marginLeft: 20 * level,
-              fontSize: 15,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Text>
-              {getIndicator(isExpanded, hasChildrenNodes, node.type, level)} {node.name}
-            </Text>
-            <Text style={{ fontWeight: 'bold' }}>
-              <Text style={{ color: colors.black }}>
-                {node.case}
-              </Text>{"\t"}
-              <Text style={{ color: colors.info }}>
-                {node.share} %
+    return <View>
+      <TreeView
+        data={phoneBook}
+        initialExpanded={true}
+        getCollapsedNodeHeight={() => { 40 }}
+        renderNode={({ node, level, isExpanded, hasChildrenNodes }) => {
+          return (
+            <View
+              style={{
+                height: 40,
+                marginLeft: 30 * level,
+                fontSize: 15,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Text>
+                {getIndicator(isExpanded, hasChildrenNodes, node.type, node.id)} {node.name}
+              </Text>
+              <Text style={{ fontWeight: 'bold' }}>
+                <Text style={{ color: colors.black }}>
+                  {node.case}
+                </Text>{"\t"}
+                <Text style={{ color: colors.info }}>
+                  {node.share} %
                   </Text>
-            </Text>
-          </View>
-        )
-      }}
-    />
+              </Text>
+            </View>
+          )
+        }}
+      />
+    </View>
   }
 
   // ====================================================== // 
@@ -515,34 +517,32 @@ function Skip(props) {
     )
   if (!props.vsf.fetching && props.vsf.activeIdno.main_infos !== undefined)
     return (
-      <View>
-        <ScrollView>
-          <View style={{
-            backgroundColor: 'white',
-            margin: 10,
-            borderRadius: 10,
-            padding: 5,
-          }}>
-            {renTree()}
-            {renMainInfo(props.vsf.activeIdno.main_infos)}
-          </View>
-          <View style={{ flexDirection: 'row', }}>
-            <Carousel
-              layout={'default'}
-              data={props.vsf.activeIdno.appl_infos}
-              sliderWidth={SliderWidth}
-              itemWidth={width * 0.95}
-              renderItem={renApplInfo}
-              useScrollView={false}
-              activeSlideAlignment="center"
-              onSnapToItem={(index) => {
-                setActivateIndex(index)
-              }}
+      <ScrollView style={{ backgroundColor: 'white' }}>
+        <View style={{
+          backgroundColor: 'white',
+          margin: 10,
+          borderRadius: 10,
+          padding: 5,
+        }}>
+          {renTree()}
+          {renMainInfo(props.vsf.activeIdno.main_infos)}
+        </View>
+        <View style={{ flexDirection: 'row', }}>
+          <Carousel
+            layout={'default'}
+            data={props.vsf.activeIdno.appl_infos}
+            sliderWidth={SliderWidth}
+            itemWidth={width * 0.95}
+            renderItem={renApplInfo}
+            useScrollView={false}
+            activeSlideAlignment="center"
+            onSnapToItem={(index) => {
+              setActivateIndex(index)
+            }}
 
-            />
-          </View>
-        </ScrollView>
-      </View>
+          />
+        </View>
+      </ScrollView>
     )
 
 }
@@ -628,7 +628,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    fontSize: 12,
+    color: colors.main,
+    marginBottom: 10,
     fontWeight: 'bold'
   },
   descriptionContainer: {
