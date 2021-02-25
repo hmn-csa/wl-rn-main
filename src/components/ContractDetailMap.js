@@ -376,7 +376,6 @@ const showstyles = StyleSheet.create({
   box: {
     flex: 1,
     justifyContent: 'center',
-
   },
   btngroup: {
     flexDirection: 'row',

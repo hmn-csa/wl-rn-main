@@ -135,6 +135,17 @@ export function* workerUserUptrail(request) {
     alert(`Uptrail thành công: \nHợp đồng: ${dataContent.appl_id}\nKhách hàng: ${dataContent.cust_name}`)
     // dispatch CAL-DASH
 
+    // add calendar
+    if (dataContent.next_visit_time) {
+      let calendarCoxntent = {
+        runtime: dataContent.runtime,
+        appl_id: dataContent.appl_id,
+        remark: dataContent.remark,
+        scheduled_amt: dataContent.pay_amount,
+        scheduled_date: dataContent.next_visit_time,
+      }
+      yield put({ type: constAction.USER_CALENDAR_APPEND, content: calendarCoxntent });
+    }
 
   } catch (error) {
     console.log(error)

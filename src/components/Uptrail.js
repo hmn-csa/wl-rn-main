@@ -262,7 +262,7 @@ function Uptrail(props) {
   }
   return (
     <View
-      style={cardStyle}
+      style={{ ...cardStyle, ...props.style }}
       onPress={() => {
         openwide ? setOpenwide(false) : setOpenwide(true)
       }}>
@@ -277,7 +277,7 @@ function Uptrail(props) {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
         <Text style={[stylesTrail.indexTxt, { flexShrink: 1 }]}>{cust_name}</Text>
         <View>
-          <Text style={[stylesTrail.indexTxt, { textAlign: 'right' }]}>{appl_id}</Text>
+          <Text style={[stylesTrail.indexTxt, { textAlign: 'right', paddingRight: 5 }]}>{appl_id}</Text>
         </View>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
