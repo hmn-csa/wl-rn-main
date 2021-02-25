@@ -23,8 +23,8 @@ function StaffHeader(props) {
     else return { uri: avatar }
   }
   return (
-    <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 20, paddingBottom: 15, backgroundColor: 'white', paddingLeft: 20 }]}>
-      <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, marginTop: -5 }]}>
+    <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 10, paddingBottom: 5, backgroundColor: 'white', paddingLeft: 20 }]}>
+      <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, }]}>
         <ImageBackground
           style={[styles.pic]}
           imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
@@ -32,7 +32,7 @@ function StaffHeader(props) {
         </ImageBackground>
       </View>
       <View style={[styles.box, { flex: 1, marginLeft: 10, marginBottom: 5, marginTop: -5 },]}>
-        <Text style={[styles.nameTxt, { color: colors.grey }]}
+        <Text style={[styles.nameTxt, { color: colors.main }]}
           ellipsizeMode="tail">
           {props.token.active_staff}
         </Text>
@@ -41,8 +41,8 @@ function StaffHeader(props) {
           {props.token.active_infos.fc_name}
         </Text>
       </View>
-      <View style={[styles.box, { flex: 2, alignItems: 'center' }]}>
-        <CircleTA />
+      <View style={[styles.box, { flex: 1.618, alignItems: 'center' }]}>
+        {/* <CircleTA /> */}
       </View>
     </View>
   )
@@ -57,7 +57,7 @@ function StaffDash(props) {
 
   return (
     <View
-      style={[styles.block, { flex: 1, justifyContent: 'space-between' }]}
+      style={[styles.block, { flex: 1, justifyContent: 'space-between', height: height / 4 }]}
     >
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Tổng danh mục
@@ -73,7 +73,7 @@ function StaffDash(props) {
         </TouchableOpacity>
 
         <View style={[styles.box, { padding: 1, flex: 1.618 }]}>
-          <TouchableOpacity style={{ top: -10 }} onPress={() => handleShow(props.totalCal.followed.applIds, 'Viếng thăm hôm nay')}>
+          <TouchableOpacity onPress={() => handleShow(props.totalCal.followed.applIds, 'Viếng thăm hôm nay')}>
             <Text style={styles.indexSmall}>
               + {props.totalCal.followedToday.case}
             </Text>
@@ -86,14 +86,14 @@ function StaffDash(props) {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { flex: 1.2 }]}>
-          <Text style={{ fontSize: 12 }}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={styles.indexBar}>
             {(props.totalCal.followed.case * 100 / props.totalCal.totalCase.case).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
             progress={props.totalCal.followed.case / props.totalCal.totalCase.case}
-            color={colors.info} />
+            color={colors.main} />
           <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
         </View>
       </View>
@@ -101,8 +101,8 @@ function StaffDash(props) {
       {/* ======================*/}
 
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 3, flex: 0.8, paddingTop: 6 }]}>
-          <TouchableOpacity style={{ top: -10 }} onPress={() => handleShow(props.totalCal.paidToday.applIds, 'Có số thu hôm nay')}>
+        <View style={[styles.box, { flex: 0.8, paddingTop: 6 }]}>
+          <TouchableOpacity onPress={() => handleShow(props.totalCal.paidToday.applIds, 'Có số thu hôm nay')}>
             <Text style={styles.indexSmall}>
               + {props.totalCal.paidToday.case}
             </Text>
@@ -116,34 +116,34 @@ function StaffDash(props) {
         </View>
 
         <View style={[styles.box, { flex: 1.618, paddingTop: 6 }]}>
-          <TouchableOpacity style={{ top: -10 }} onPress={() => handleShow(props.totalCal.paidToday.applIds, 'Có số thu hôm nay')}>
-            <Text style={[styles.indexSmall, { left: 60 }]}>
+          <TouchableOpacity onPress={() => handleShow(props.totalCal.paidToday.applIds, 'Có số thu hôm nay')}>
+            <Text style={[styles.indexSmall,]}>
               + {moneyFormat(props.totalCal.paidToday.value)}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleShow(props.totalCal.paidMtd.applIds, 'HD có số thu')}>
-            <Text style={[styles.index, { color: colors.info, fontWeight: 'bold' }]}>
+            <Text style={[styles.index, { color: colors.main }]}>
               {moneyFormat(props.totalCal.paidMtd.value)}
             </Text>
             <Text style={[styles.label]}>Tổng số thu</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { flex: 1.2 }]}>
-          <Text style={{ fontSize: 12 }}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={styles.indexBar}>
             {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
             progress={props.totalCal.paidMtd.value / props.totalCal.totalCase.pos}
-            color={colors.info} />
+            color={colors.main} />
           <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
         </View>
       </View>
       {/* ======================*/}
 
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 3, flex: 0.8 }]}>
+        <View style={[styles.box, { flex: 0.8 }]}>
           <TouchableOpacity onPress={() => handleShow(props.totalCal.revisit.applIds, 'Hẹn viếng thăm lại')}>
             <Text style={styles.index}>
               {props.totalCal.revisit.case}
@@ -154,21 +154,21 @@ function StaffDash(props) {
 
         <View style={[styles.box, { flex: 1.618 }]}>
           <TouchableOpacity onPress={() => handleShow(props.totalCal.Bptp.applIds, 'Quá hạn lịch hẹn')}>
-            <Text style={[styles.index, { color: colors.danger }]}>
+            <Text style={[styles.index, { color: colors.secondary }]}>
               {props.totalCal.Bptp.case}
             </Text>
-            <Text style={[styles.label, { color: colors.danger }]}>Quá hạn lịch hẹn</Text>
+            <Text style={[styles.label, { color: colors.secondary }]}>Quá hạn lịch hẹn</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { flex: 1.2 }]}>
-          <Text style={{ fontSize: 14 }}>
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={styles.indexBar}>
             {(props.totalCal.paidMtd.value * 100 / props.totalCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
             progress={0.4}
-            color={colors.info} />
+            color={colors.main} />
           <Text style={styles.label}>Tỉ lệ viếng thăm có số thu</Text>
         </View>
       </View>
@@ -188,40 +188,41 @@ function StaffTodo(props) {
     <View
       style={[styles.block, { flex: 1, justifyContent: 'space-between' }]}
     >
-      {/* ======================*/}
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Danh mục tự chọn
       </Text>
       <View style={[styles.row]}>
-        <TouchableOpacity onPress={() => handleShow(props.todoCal.todoCase.applIds, 'Danh mục tự chọn')} style={[styles.box, { padding: 3, flex: 0.8 }]}>
+        <TouchableOpacity style={[styles.box, { padding: 3, flex: 0.8 }]}
+          onPress={() => handleShow(props.totalCal.totalCase.applIds, 'Danh mục tự chọn')}
+        >
           <Text style={styles.index}>
-            {props.todoCal.todoCase.case}
+            {props.todoCal.totalCase.case}
           </Text>
           <Text style={styles.label}>Tổng HĐ</Text>
         </TouchableOpacity>
 
         <View style={[styles.box, { padding: 1, flex: 1.618 }]}>
-          <TouchableOpacity onPress={() => handleShow(props.todoCal.todoFollowedToday.applIds, 'Đã viếng thăm hôm nay')}>
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.followed.applIds, 'Viếng thăm hôm nay')}>
             <Text style={styles.indexSmall}>
-              + {props.todoCal.todoFollowedToday.case}
+              + {props.todoCal.followedToday.case}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleShow(props.todoCal.todoFollowed.applIds, 'Đã viếng thăm')}>
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.followed.applIds, 'HD đã viếng thăm')}>
             <Text style={styles.index}>
-              {props.todoCal.todoFollowed.case}
+              {props.todoCal.followed.case}
             </Text>
             <Text style={styles.label}>Đã viếng thăm</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { flex: 1.2 }]}>
-          <Text style={{ fontSize: 12 }}>
-            {(props.todoCal.todoFollowed.case * 100 / props.todoCal.todoCase.case).toFixed(0)}%
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={styles.indexBar}>
+            {(props.todoCal.followed.case * 100 / props.todoCal.totalCase.case).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
-            progress={props.todoCal.todoFollowed.case / props.todoCal.todoCase.case}
-            color={colors.info} />
+            progress={props.todoCal.followed.case / props.todoCal.totalCase.case}
+            color={colors.main} />
           <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
         </View>
       </View>
@@ -229,76 +230,204 @@ function StaffTodo(props) {
       {/* ======================*/}
 
       <View style={[styles.row]}>
-        <View style={[styles.box, { padding: 3, flex: 0.8, paddingTop: 6 }]}>
-          <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaidToday.applIds, 'Có số thu hôm nay')}>
+        <View style={[styles.box, { flex: 0.8, paddingTop: 6 }]}>
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.paidToday.applIds, 'Có số thu hôm nay')}>
             <Text style={styles.indexSmall}>
-              + {props.todoCal.todoPaidToday.case}
+              + {props.todoCal.paidToday.case}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaid.applIds, 'HD có số thu')}>
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.paidMtd.applIds, 'HD có số thu')}>
             <Text style={styles.index}>
-              {props.todoCal.todoPaid.case}
+              {props.todoCal.paidMtd.case}
             </Text>
             <Text style={styles.label}>HĐ có số thu</Text>
           </TouchableOpacity>
         </View>
 
         <View style={[styles.box, { flex: 1.618, paddingTop: 6 }]}>
-          <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaidToday.applIds, 'Có số thu hôm nay')}>
-            <Text style={[styles.indexSmall, { left: 60 }]}>
-              + {moneyFormat(props.todoCal.todoPaidToday.value)}
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.paidToday.applIds, 'Có số thu hôm nay')}>
+            <Text style={[styles.indexSmall,]}>
+              + {moneyFormat(props.todoCal.paidToday.value)}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaid.applIds, 'HD có số thu')}>
-            <Text style={[styles.index, { color: colors.info, fontWeight: 'bold' }]}>
-              {moneyFormat(props.todoCal.todoPaid.value)}
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.paidMtd.applIds, 'HD có số thu')}>
+            <Text style={[styles.index, { color: colors.main }]}>
+              {moneyFormat(props.todoCal.paidMtd.value)}
             </Text>
             <Text style={[styles.label]}>Tổng số thu</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box, { flex: 1.2 }]}>
-          <Text style={{ fontSize: 12 }}>
-            {(props.todoCal.todoPaid.value * 100 / props.todoCal.todoCase.pos).toFixed(0)}%
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={styles.indexBar}>
+            {(props.todoCal.paidMtd.value * 100 / props.todoCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
-            progress={props.todoCal.todoPaid.value / props.todoCal.todoCase.pos}
-            color={colors.info} />
+            progress={props.todoCal.paidMtd.value / props.todoCal.totalCase.pos}
+            color={colors.main} />
           <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
         </View>
       </View>
       {/* ======================*/}
 
       <View style={[styles.row]}>
-        <TouchableOpacity onPress={() => handleShow(props.todoCal.todoRevisit.applIds, 'Hẹn viếng thăm lại')} style={[styles.box, { padding: 3, flex: 0.8 }]}>
-          <Text style={styles.index}>
-            {props.todoCal.todoRevisit.case}
-          </Text>
-          <Text style={styles.label}>Lịch hẹn lại</Text>
-        </TouchableOpacity>
+        <View style={[styles.box, { flex: 0.8 }]}>
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.revisit.applIds, 'Hẹn viếng thăm lại')}>
+            <Text style={styles.index}>
+              {props.todoCal.revisit.case}
+            </Text>
+            <Text style={styles.label}>Lịch hẹn lại</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity onPress={() => handleShow(props.todoCal.todoBptp.applIdss, 'Quá hạn lịch hẹn')} style={[styles.box, { flex: 1.618 }]}>
-          <Text style={[styles.index, { color: colors.danger }]}>
-            {props.todoCal.todoBptp.case}
-          </Text>
-          <Text style={[styles.label, { color: colors.danger }]}>Quá hạn lịch hẹn</Text>
-        </TouchableOpacity>
+        <View style={[styles.box, { flex: 1.618 }]}>
+          <TouchableOpacity onPress={() => handleShow(props.todoCal.Bptp.applIds, 'Quá hạn lịch hẹn')}>
+            <Text style={[styles.index, { color: colors.secondary }]}>
+              {props.todoCal.Bptp.case}
+            </Text>
+            <Text style={[styles.label, { color: colors.secondary }]}>Quá hạn lịch hẹn</Text>
+          </TouchableOpacity>
+        </View>
 
-        <View style={[styles.box, { flex: 1.2 }]}>
-          <Text style={{ fontSize: 14 }}>
-            {(props.todoCal.todoPaid.case * 100 / props.totalCal.totalCase.value).toFixed(0)}%
+        <View style={[styles.box, { flex: 1 }]}>
+          <Text style={styles.indexBar}>
+            {(props.todoCal.paidMtd.value * 100 / props.todoCal.totalCase.value).toFixed(0)}%
           </Text>
           <ProgressBar
             style={{ marginBottom: 0 }}
             progress={0.4}
-            color={colors.info} />
+            color={colors.main} />
           <Text style={styles.label}>Tỉ lệ viếng thăm có số thu</Text>
         </View>
       </View>
     </View >
   )
 }
+
+
+// function StaffTodo(props) {
+//   const navigation = useNavigation();
+//   const handleShow = (list, title) => {
+//     navigation.navigate('Portfolio', { name: title })
+//     props.updateShowlist(list)
+//   }
+
+//   return (
+//     <View
+//       style={[styles.block, { flex: 1, justifyContent: 'space-between' }]}
+//     >
+//       {/* ======================*/}
+//       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
+//         Danh mục tự chọn
+//       </Text>
+//       <View style={[styles.row]}>
+//         <TouchableOpacity onPress={() => handleShow(props.todoCal.todoCase.applIds, 'Danh mục tự chọn')} style={[styles.box, { padding: 3, flex: 0.8 }]}>
+//           <Text style={styles.index}>
+//             {props.todoCal.todoCase.case}
+//           </Text>
+//           <Text style={styles.label}>Tổng HĐ</Text>
+//         </TouchableOpacity>
+
+//         <View style={[styles.box, { flex: 1.618 }]}>
+//           <TouchableOpacity onPress={() => handleShow(props.todoCal.todoFollowedToday.applIds, 'Đã viếng thăm hôm nay')}>
+//             <Text style={styles.indexSmall}>
+//               + {props.todoCal.todoFollowedToday.case}
+//             </Text>
+//           </TouchableOpacity>
+//           <TouchableOpacity onPress={() => handleShow(props.todoCal.todoFollowed.applIds, 'Đã viếng thăm')}>
+//             <Text style={styles.index}>
+//               {props.todoCal.todoFollowed.case}
+//             </Text>
+//             <Text style={styles.label}>Đã viếng thăm</Text>
+//           </TouchableOpacity>
+//         </View>
+
+//         <View style={[styles.box, { flex: 1 }]}>
+//           <Text style={styles.indexBar}>
+//             {(props.todoCal.todoFollowed.case * 100 / props.todoCal.todoCase.case).toFixed(0)}%
+//           </Text>
+//           <ProgressBar
+//             style={{ marginBottom: 0 }}
+//             progress={props.todoCal.todoFollowed.case / props.todoCal.todoCase.case}
+//             color={colors.main} />
+//           <Text style={styles.label}>Tỉ lệ viếng thăm</Text>
+//         </View>
+//       </View>
+
+//       {/* ======================*/}
+
+//       <View style={[styles.row]}>
+//         <View style={[styles.box, { flex: 0.8, paddingTop: 6 }]}>
+//           <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaidToday.applIds, 'Có số thu hôm nay')}>
+//             <Text style={styles.indexSmall}>
+//               + {props.todoCal.todoPaidToday.case}
+//             </Text>
+//           </TouchableOpacity>
+//           <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaid.applIds, 'HD có số thu')}>
+//             <Text style={styles.index}>
+//               {props.todoCal.todoPaid.case}
+//             </Text>
+//             <Text style={styles.label}>HĐ có số thu</Text>
+//           </TouchableOpacity>
+//         </View>
+
+//         <View style={[styles.box, { flex: 1.618, paddingTop: 6 }]}>
+//           <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaidToday.applIds, 'Có số thu hôm nay')}>
+//             <Text style={[styles.indexSmall,]}>
+//               + {moneyFormat(props.todoCal.todoPaidToday.value)}
+//             </Text>
+//           </TouchableOpacity>
+//           <TouchableOpacity onPress={() => handleShow(props.todoCal.todoPaid.applIds, 'HD có số thu')}>
+//             <Text style={[styles.index, { color: colors.main, }]}>
+//               {moneyFormat(props.todoCal.todoPaid.value)}
+//             </Text>
+//             <Text style={[styles.label]}>Tổng số thu</Text>
+//           </TouchableOpacity>
+//         </View>
+
+//         <View style={[styles.box, { flex: 1, paddingTop: 20 }]}>
+//           <Text style={styles.indexBar}>
+//             {(props.todoCal.todoPaid.value * 100 / props.todoCal.todoCase.pos).toFixed(0)}%
+//           </Text>
+//           <ProgressBar
+//             style={{ marginBottom: 0 }}
+//             progress={props.todoCal.todoPaid.value / props.todoCal.todoCase.pos}
+//             color={colors.main} />
+//           <Text style={styles.label}>Tỉ lệ thu hồi nợ</Text>
+//         </View>
+//       </View>
+//       {/* ======================*/}
+
+//       <View style={[styles.row]}>
+//         <TouchableOpacity onPress={() => handleShow(props.todoCal.todoRevisit.applIds, 'Hẹn viếng thăm lại')} style={[styles.box, { padding: 3, flex: 0.8 }]}>
+//           <Text style={styles.index}>
+//             {props.todoCal.todoRevisit.case}
+//           </Text>
+//           <Text style={styles.label}>Lịch hẹn lại</Text>
+//         </TouchableOpacity>
+
+//         <TouchableOpacity onPress={() => handleShow(props.todoCal.todoBptp.applIdss, 'Quá hạn lịch hẹn')} style={[styles.box, { flex: 1.618 }]}>
+//           <Text style={[styles.index, { color: colors.secondary }]}>
+//             {props.todoCal.todoBptp.case}
+//           </Text>
+//           <Text style={[styles.label, { color: colors.secondary }]}>Quá hạn lịch hẹn</Text>
+//         </TouchableOpacity>
+
+//         <View style={[styles.box, { flex: 1 }]}>
+//           <Text style={styles.indexBar}>
+//             {(props.todoCal.todoPaid.case * 100 / props.totalCal.totalCase.value).toFixed(0)}%
+//           </Text>
+//           <ProgressBar
+//             style={{ marginBottom: 0 }}
+//             progress={0.4}
+//             color={colors.main} />
+//           <Text style={styles.label}>Tỉ lệ viếng thăm có số thu</Text>
+//         </View>
+//       </View>
+//     </View >
+//   )
+// }
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -364,16 +493,16 @@ const styles = StyleSheet.create({
     height: 50,
   },
   index: {
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 22,
   },
   indexSmall: {
     fontSize: 14,
     fontWeight: 'bold',
     position: 'absolute',
-    top: -10,
+    top: -15,
     left: 40,
-    color: colors.success
+    color: colors.main
   },
   indexLabel: {
     fontSize: 12
@@ -381,6 +510,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 9,
     color: colors.gray
+  },
+  indexBar: {
+    paddingTop: 12,
+    fontWeight: '600',
+    fontSize: 14,
+    color: colors.main,
   },
 
   cardHeader: {
@@ -418,6 +553,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 5
   },
+
   msgTxt: {
     fontWeight: '400',
     fontSize: 11,

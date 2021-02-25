@@ -105,8 +105,12 @@ export function* workerGetDataFC(token) {
         }
       }
     })
-    // type: constAction.SET_ACTIVE_STAFF,
-    // content
+
+    // get payment
+    yield put({
+      type: constAction.API_PAYMENT_REQUEST,
+      config: { token: token.token, staff_id: token.staff_id }
+    });
 
     // dispatch CAL-DASH
 
@@ -114,6 +118,7 @@ export function* workerGetDataFC(token) {
     yield put({ type: constAction.CAL_TOTAL_DASH });
     yield put({ type: constAction.CAL_TREE_DASH });
     yield put({ type: constAction.CAL_CATE_DASH });
+
 
 
     // dispatch UPDATE_SHOWLIST
@@ -177,8 +182,16 @@ export function* workerGetDataFCMode(request) {
       }
     })
 
-    // dispatch CAL-DASH
+    // get payment
+    yield put({
+      type: constAction.API_PAYMENT_REQUEST,
+      config: {
+        token: request.token.token,
+        staff_id: request.token.staff_id
+      }
+    });
 
+    // dispatch CAL-DASH
     yield put({ type: constAction.CAL_TODO_DASH });
     yield put({ type: constAction.CAL_TOTAL_DASH });
     yield put({ type: constAction.CAL_TREE_DASH });
@@ -318,3 +331,4 @@ export function* workerManagerClearState(request) {
     console.log(error)
   }
 }
+

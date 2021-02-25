@@ -62,4 +62,52 @@ sau khi load thêm tại tháng
 ```
 TypeError: Cannot read property 'label' of undefined
 
-```
+
+
+const handleSelectDate = async (date) => {
+    setRedate(date);
+    setShowDate(false)
+    if (date !== today)
+      await props.getDailyStaffCheckin({
+        query_date: date,
+        token: props.token
+      })
+
+    if (date !== today) {
+      const dailyCheckinItems = props.staff.dailyChekin.filter(item => item.date === date)
+      if (dailyCheckinItems.length > 0) {
+        let newlistApplDaily = filterListAppl(
+          filterStaffs,
+          filterType,
+          dailyCheckinItems[0].listCheckin,
+          dailyCheckinItems[0].lastCheckin,
+          dailyCheckinItems[0].firstCheckin,
+        )
+        setListappls(newlistApplDaily)
+        setListStaffChecked(dailyCheckinItems[0].firstCheckin)
+
+        let tmpDailyChecked = dailyCheckinItems[0].firstCheckin.map(item => item.staff_id)
+        setListStaffNotChecked(
+          props.staff.staffs.filter(staff => !tmpDailyChecked.includes(staff.staff_id))
+        )
+        setInitialRegion(calInitialRegion(newlistApplDaily))
+        console.log('date: ', dailyCheckinItems[0].date)
+      }
+    } else {
+      let newlistAppl = filterListAppl(
+        filterStaffs,
+        filterType,
+        props.staff.listCheckin,
+        props.staff.lastCheckin,
+        props.staff.firstCheckin,
+      )
+      setListappls(newlistAppl)
+      setListStaffChecked(props.staff.firstCheckin)
+      let tmpChecked = props.staff.firstCheckin.map(item => item.staff_id)
+      setListStaffNotChecked(
+        props.staff.staffs.filter(staff => !tmpChecked.includes(staff.staff_id))
+      )
+      console.log(listStaffNotChecked)
+      setInitialRegion(calInitialRegion(newlistAppl))
+    }
+  }

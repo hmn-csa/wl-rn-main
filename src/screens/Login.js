@@ -6,7 +6,7 @@ import {
   View,
   KeyboardAvoidingView,
   TextInput,
-  AsyncStorage,
+  Dimensions,
   ImageBackground,
   Image,
 } from "react-native";
@@ -22,6 +22,9 @@ import * as LocalAuthentication from "expo-local-authentication";
 import * as SecureStore from "expo-secure-store";
 
 import * as constAction from '../consts'
+
+
+const { width, height } = Dimensions.get("window");
 
 
 
@@ -158,104 +161,98 @@ function Login(props) {
   return (
     <ImageBackground
       source={require("../images/bg-login.jpg")}
-      style={styles.bglogin}
+      style={[styles.bglogin, { position: 'absolute', width: width, height: height }]}
     >
-      <KeyboardAvoidingView
-        behavior="height"
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={180}
-      >
-        <View style={styles.container}>
-          <View></View>
-          <View style={styles.boxlogin}>
-            <Image
-              source={require("../images/logo.jpg")}
-              style={styles.logologin}
+      <View style={[styles.container,]}>
+        <View></View>
+        <View style={styles.boxlogin}>
+          <Image
+            source={require("../images/logo.jpg")}
+            style={styles.logologin}
+          />
+
+          <View style={styles.inputView}>
+            <View style={styles.iconinput}>
+              <Ionicons
+                name="md-person"
+                size={20}
+                color={colors.main}
+                style={{ marginLeft: "auto", marginRight: "auto" }}
+              />
+            </View>
+
+            <TextInput
+              placeholder="Tài khoản"
+              style={styles.inputTextBlack}
+              onChangeText={(value) => setUsername(value)}
+              value={username}
             />
 
-            <View style={styles.inputView}>
-              <View style={styles.iconinput}>
-                <Ionicons
-                  name="md-person"
-                  size={20}
-                  color={colors.main}
-                  style={{ marginLeft: "auto", marginRight: "auto" }}
-                />
-              </View>
+          </View>
 
-              <TextInput
-                placeholder="Tài khoản"
-                style={styles.inputTextBlack}
-                onChangeText={(value) => setUsername(value)}
-                value={username}
-              />
+          {renWarning(username, "Tài khản không được để trống")}
 
-            </View>
-
-            {renWarning(username, "Tài khản không được để trống")}
-
-            <View style={styles.inputView}>
-              <View style={styles.iconinput}>
-                <Ionicons
-                  name="ios-key"
-                  size={20}
-                  color={colors.main}
-                  style={{ marginLeft: "auto", marginRight: "auto" }}
-                />
-              </View>
-
-              <TextInput
-                placeholder="Mật khẩu"
-                style={styles.inputTextBlack}
-                onChangeText={(value) => setPassword(value)}
-                value={password}
-                secureTextEntry={true}
+          <View style={styles.inputView}>
+            <View style={styles.iconinput}>
+              <Ionicons
+                name="ios-key"
+                size={20}
+                color={colors.main}
+                style={{ marginLeft: "auto", marginRight: "auto" }}
               />
             </View>
-            {renWarning(password, "Mật khẩu không được để trống")}
 
-            <View style={styles.loginBtn}>
-              <Button
-                style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}
-                labelStyle={{ color: colors.main, fontWeight: 'bold' }}
-                mode="text"
-                onPress={() => onSubmit()}
-              >
-                ĐĂNG NHẬP
+            <TextInput
+              placeholder="Mật khẩu"
+              style={styles.inputTextBlack}
+              onChangeText={(value) => setPassword(value)}
+              value={password}
+              secureTextEntry={true}
+            />
+          </View>
+          {renWarning(password, "Mật khẩu không được để trống")}
+
+          <View style={styles.loginBtn}>
+            <Button
+              style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}
+              labelStyle={{ color: colors.main, fontWeight: 'bold' }}
+              mode="text"
+              onPress={() => onSubmit()}
+            >
+              ĐĂNG NHẬP
+              </Button>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+
+            <View style={{ paddingRight: '10%' }}>
+              <Button onPress={() => handleAuthentication()}>
+                <MaterialCommunityIcons name="fingerprint" style={icon_style.logo} />
               </Button>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-
-              <View style={{ paddingRight: '10%' }}>
-                <Button onPress={() => handleAuthentication()}>
-                  <MaterialCommunityIcons name="fingerprint" style={icon_style.logo} />
-                </Button>
-              </View>
-              <Text
-                style={{ marginBottom: 8, fontSize: 12, marginRight: "5%" }}
-              >
-                Quên mật khẩu ?
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.boxinfodevice}>
             <Text
-              style={{
-                fontSize: 9,
-                color: colors.dark,
-                marginLeft: "5%",
-                opacity: 0.7,
-              }}
+              style={{ marginBottom: 8, fontSize: 12, marginRight: "5%" }}
             >
-              model: {Device.brand}
-              {"\n"}
-              position: {props.token.lat},{props.token.lon}
-
-            </Text>
+              Quên mật khẩu ?
+              </Text>
           </View>
         </View>
-      </KeyboardAvoidingView>
+
+        <View style={styles.boxinfodevice}>
+          <Text
+            style={{
+              fontSize: 9,
+              color: colors.dark,
+              marginLeft: "5%",
+              opacity: 0.7,
+            }}
+          >
+            model: {Device.brand}
+            {"\n"}
+              position: {props.token.lat},{props.token.lon}
+
+          </Text>
+        </View>
+      </View>
     </ImageBackground>
   );
 }
@@ -263,7 +260,6 @@ function Login(props) {
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token,
-    //data: state.data,
   };
 };
 

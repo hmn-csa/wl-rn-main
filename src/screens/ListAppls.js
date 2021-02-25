@@ -9,7 +9,7 @@ import { styles, colors } from '../styles'
 import { createFilter } from 'react-native-search-filter';
 import { Searchbar } from 'react-native-paper';
 
-const KEYS_TO_FILTERS = ['appl_id', 'cust_name'];
+const KEYS_TO_FILTERS = ['appl_id', 'cust_name', 'app_id'];
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
 const ScreenWidth = Dimensions.get('screen').width;
@@ -21,14 +21,15 @@ function ListAppls(props) {
   const [filtered, setFiltered] = useState(props.showlists.applIds)
   useEffect(() => {
     var value = props.search
+    console.log(props.showlists)
     try {
       setSearchTerm(value)
-      if (value != null && value != "" && value != undefined) {
-        setFiltered(
-          Object.values(props.data).filter(createFilter(value, KEYS_TO_FILTERS))
-        )
-      } else
+      if (!value)
         setFiltered(props.showlists.applIds)
+      else
+        setFiltered(
+          Object.values(props.showlists.applIds).filter(createFilter(value, KEYS_TO_FILTERS))
+        )
     } catch (err) {
       setFiltered(props.showlists.applIds)
     }

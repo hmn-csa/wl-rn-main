@@ -214,6 +214,7 @@ function ListUptrail(props) {
         }}
       />
   }
+
   const renderMapView = () => {
 
 

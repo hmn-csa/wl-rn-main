@@ -2,27 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, Easing } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { colors } from '../styles'
-import { exp } from 'react-native-reanimated';
 
 
 function CircleTA(props) {
 
-  var MAX_POINTS = 128;
+  var MAX_POINTS = 44.8;
   const [colorTA, setColorTA] = useState(colors.success)
   const [over, setOver] = useState(0)
-  useEffect(() => {
-    circularProgress.animate(MAX_POINTS, 1500, Easing.linear);
-    if (MAX_POINTS > 100) {
-      setTimeout(
-        () => {
-          circularProgress.reAnimate(0, MAX_POINTS - 100, 1500, Easing.linear),
-            setOver(100),
-            setColorTA('#FFA500')
-        },
-        1400
-      )
-    }
-  }, []);
+  // useEffect(() => {
+  //   circularProgress.animate(MAX_POINTS, 1500, Easing.linear);
+  //   if (MAX_POINTS > 100) {
+  //     setTimeout(
+  //       () => {
+  //         circularProgress.reAnimate(0, MAX_POINTS - 100, 1500, Easing.linear),
+  //           setOver(100),
+  //           setColorTA('#FFA500')
+  //       },
+  //       1400
+  //     )
+  //   }
+  // }, []);
 
   return (
     <AnimatedCircularProgress

@@ -20,7 +20,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "io.exp.exponent",
       "config": {
-        "googleMapsApiKey": "AIzaSyBSY0RMRAvp0K43FpHjecLmBvSC-op15d8",
+        "googleMapsApiKey": "AIzaSyBSY0RMRAvp0K43FpHjecLmBvSC-op15d8"
       }
     },
     "web": {

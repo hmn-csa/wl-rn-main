@@ -8,10 +8,6 @@ const initialTotal = {
     pos: 0,
     applIds: []
   },
-  paidAll: {
-    value: 0,
-    applIds: []
-  },
   paidMtd: {
     case: 0,
     value: 0,
@@ -44,46 +40,6 @@ const initialTotal = {
     applIds: []
   },
 }
-const initialTodo = {
-  todoCase: {
-    case: 0,
-    applIds: [],
-    value: 0,
-    pos: 1
-  },
-  todoFollowed: {
-    case: 0,
-    value: 0,
-    applIds: []
-  },
-  todoFollowedToday: {
-    case: 0,
-    applIds: []
-  },
-  todoPaid: {
-    case: 0,
-    value: 0,
-    applIds: []
-  },
-  todoPaidToday: {
-    case: 0,
-    value: 0,
-    applIds: []
-  },
-  todoPtp: {
-    case: 0,
-    applIds: []
-  },
-  todoBptp: {
-    case: 0,
-    applIds: []
-  },
-  todoRevisit: {
-    case: 0,
-    applIds: []
-  },
-}
-
 const initialTree = [
   {
     id: 'Total',
@@ -200,13 +156,108 @@ const initialState = {
   data: null,
   error: null,
   todoError: null,
+
   totalCal: initialTotal,
-  todoCal: initialTodo,
+  todoCal: initialTotal,
   treeCal: initialTree,
   categoryProduct: [],
   categoryBinscore: [],
   categoryClassify: [],
+
 };
+
+
+const calPortData = (appls) => {
+
+  let totalCase = appls.length
+  let posValue = appls.map(function (appl) {
+    return appl.principle_outstanding
+  }).reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0)
+
+  let initPaidMtd = appls.filter((appl) => {
+    return parseFloat(appl.total_pay_amount) > 0
+  })
+  let initFollowedAppls = appls.filter((appl) => {
+    return appl.followed == 1
+  })
+
+  let paidMtdValue = initPaidMtd.map(function (appl) {
+    return appl.total_pay_amount
+  }).reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0)
+
+  let followMtdValue = initFollowedAppls.map(function (appl) {
+    return appl.total_pay_amount
+  }).reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0)
+
+  let initPaidTodayAppls = appls.filter((appl) => {
+    return appl.paid_today_amt > 0
+  })
+  let paidTodayValue = initPaidTodayAppls.map((appl) => {
+    return appl.paid_today_amt
+  }).reduce(function (sum, pay) {
+    return sum = sum + pay;
+  }, 0);
+
+  // ptp_lag
+  let initPtp = appls.filter((appl) => {
+    return appl.last_action_code === 'PTP'
+  })
+
+  let totalReVisitAppls = appls.filter((appl) => {
+    return ['F_NAH', 'LEM'].includes(appl.last_action_code)
+  })
+
+
+  return {
+    totalCase: {
+      case: totalCase,
+      value: posValue,
+      applIds: appls//.map(appl => appl.appl_id)
+    },
+    paidAll: {
+      value: initPaidMtd.length,
+      applIds: initPaidMtd//.map(appl => appl.appl_id)
+    },
+    paidMtd: {
+      case: initPaidMtd.length,
+      value: paidMtdValue,
+      applIds: initPaidMtd//.map(appl => appl.appl_id)
+    },
+    ptpCase: {
+      case: initPtp.length,
+      applIds: initPtp//.map(appl => appl.appl_id)
+    },
+    paidToday: {
+      case: initPaidTodayAppls.length,
+      value: paidTodayValue,
+      applIds: initPaidTodayAppls//.map(appl => appl.appl_id)
+    },
+    followed: {
+      case: initFollowedAppls.length,
+      value: followMtdValue,
+      applIds: initFollowedAppls//.map(appl => appl.appl_id)
+    },
+    followedToday: {
+      case: 0,
+      applIds: []
+    },
+    revisit: {
+      case: totalReVisitAppls.length,
+      applIds: totalReVisitAppls//.map(appl => appl.appl_id)
+    },
+    Bptp: {
+      case: 0,
+      applIds: []
+    },
+  }
+
+}
 
 const dataReducers = (state = initialState, action) => {
 
@@ -231,126 +282,43 @@ const dataReducers = (state = initialState, action) => {
 
     // Change todo 
     case constAction.CHANGE_TODO:
-      state.data[action.content.appl_id] = { ...state.data[action.content.appl_id], todo_flag: action.content.todo_flag }
+      state.data[action.content.appl_id] = {
+        ...state.data[action.content.appl_id],
+        todo_flag: action.content.todo_flag
+      }
       return state
 
     case constAction.API_TODO_FAILURE:
       return { ...state, todoError: action.content }
 
     case constAction.CHANGE_FOLLOW:
-      if (action.content.code != 'PTP') {
-        state.data[action.content.appl_id] = {
-          ...state.data[action.content.appl_id],
-          followed: 1,
-          last_action_code: action.content.code,
-        }
-      } else {
-        state.data[action.content.appl_id] = {
-          ...state.data[action.content.appl_id],
-          followed: 1,
-          ptp_flag: 1,
-          last_action_code: action.content.code
-        }
+      state.data[action.content.appl_id] = {
+        ...state.data[action.content.appl_id],
+        followed: 1,
+        ptp_flag: action.content.code === 'PTP' ? 1 : 0,
+        last_action_code: action.content.code
       }
       return state
 
     // ================ Cal dash board =================//
     case constAction.CAL_TOTAL_DASH:
-      let appls = Object.values(state.data)
-
+      //let appls = Object.values(state.data)
       // ------- total -------//
-      let totalCase = appls.length
-      let posValue = appls.map(function (appl) {
-        return appl.principle_outstanding
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0)
-
-      let initPaidMtd = appls.filter((appl) => {
-        return parseFloat(appl.total_pay_amount) > 0
-      })
-      let initFollowedAppls = appls.filter((appl) => {
-        return appl.followed == 1
-      })
-
-
-      let paidMtdValue = initPaidMtd.map(function (appl) {
-        return appl.total_pay_amount
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0)
-
-      let followMtdValue = initFollowedAppls.map(function (appl) {
-        return appl.total_pay_amount
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0)
-
-
-      let initPaidTodayAppls = appls.filter((appl) => {
-        return appl.paid_today_amt > 0
-      })
-      let paidTodayValue = initPaidTodayAppls.map((appl) => {
-        return appl.paid_today_amt
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0);
-
-      // ptp_lag
-      let initPtp = appls.filter((appl) => {
-        return appl.last_action_code === 'PTP'
-      })
-
-      let totalReVisitAppls = appls.filter((appl) => {
-        return ['F_NAH', 'LEM'].includes(appl.last_action_code)
-      })
-
-      state = {
+      return {
         ...state,
-        totalCal: {
-          totalCase: {
-            case: totalCase,
-            value: posValue,
-            applIds: appls//.map(appl => appl.appl_id)
-          },
-          paidAll: {
-            value: initPaidMtd.length,
-            applIds: initPaidMtd//.map(appl => appl.appl_id)
-          },
-          paidMtd: {
-            case: initPaidMtd.length,
-            value: paidMtdValue,
-            applIds: initPaidMtd//.map(appl => appl.appl_id)
-          },
-          ptpCase: {
-            case: initPtp.length,
-            applIds: initPtp//.map(appl => appl.appl_id)
-          },
-          paidToday: {
-            case: initPaidTodayAppls.length,
-            value: paidTodayValue,
-            applIds: initPaidTodayAppls//.map(appl => appl.appl_id)
-          },
-          followed: {
-            case: initFollowedAppls.length,
-            value: followMtdValue,
-            applIds: initFollowedAppls//.map(appl => appl.appl_id)
-          },
-          followedToday: {
-            case: 0,
-            applIds: []
-          },
-          revisit: {
-            case: totalReVisitAppls.length,
-            applIds: totalReVisitAppls//.map(appl => appl.appl_id)
-          },
-          Bptp: {
-            case: 0,
-            applIds: []
-          },
-        },
+        totalCal: calPortData(Object.values(state.data))
       }
-      return state;
+
+    case constAction.CAL_TODO_DASH:
+      let todoAppls = Object.values(state.data).filter((appl) => {
+        return appl.todo_flag == 1
+      })
+      return {
+        ...state,
+        todoCal: calPortData(todoAppls)
+      }
+
+
 
     case constAction.CAL_TREE_DASH:
 
@@ -550,101 +518,102 @@ const dataReducers = (state = initialState, action) => {
         ]
       }
 
-    case constAction.CAL_TODO_DASH:
-      // ======== todos ==========
+    // case constAction.CAL_TODO_DASH:
+    //   // ======== todos ==========
 
-      let todoAppls = Object.values(state.data).filter((appl) => {
-        return appl.todo_flag == 1
-      })
-      let todoFollowedAppls = todoAppls.filter((appl) => {
-        return appl.followed == 1
-      })
+    //   let todoAppls = Object.values(state.data).filter((appl) => {
+    //     return appl.todo_flag == 1
+    //   })
+    //   let todoFollowedAppls = todoAppls.filter((appl) => {
+    //     return appl.followed == 1
+    //   })
 
-      let todoPaidAppls = todoAppls.filter((appl) => {
-        return appl.total_pay_amount > 0
-      })
-      let todoPaidValue = todoPaidAppls.map((appl) => {
-        return appl.paid_today_amt
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0);
-
-
-      let todoTodayPaidAppls = todoAppls.filter((appl) => {
-        return appl.paid_today_amt > 0
-      })
-      let todoTodayPaidValue = todoTodayPaidAppls.map((appl) => {
-        return appl.paid_today_amt
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0);
-
-      let todoFollowMtdValue = todoFollowedAppls.map(function (appl) {
-        return appl.total_pay_amount
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0)
+    //   let todoPaidAppls = todoAppls.filter((appl) => {
+    //     return appl.total_pay_amount > 0
+    //   })
+    //   let todoPaidValue = todoPaidAppls.map((appl) => {
+    //     return appl.paid_today_amt
+    //   }).reduce(function (sum, pay) {
+    //     return sum = sum + pay;
+    //   }, 0);
 
 
-      let todoPtpAppls = todoAppls.filter((appl) => {
-        return appl.last_action_code === 'PTP'
-      })
+    //   let todoTodayPaidAppls = todoAppls.filter((appl) => {
+    //     return appl.paid_today_amt > 0
+    //   })
+    //   let todoTodayPaidValue = todoTodayPaidAppls.map((appl) => {
+    //     return appl.paid_today_amt
+    //   }).reduce(function (sum, pay) {
+    //     return sum = sum + pay;
+    //   }, 0);
 
-      let reVisitAppls = todoAppls.filter((appl) => {
-        return ['F_NAH', 'LEM'].includes(appl.last_action_code)
-      })
+    //   let todoFollowMtdValue = todoFollowedAppls.map(function (appl) {
+    //     return appl.total_pay_amount
+    //   }).reduce(function (sum, pay) {
+    //     return sum = sum + pay;
+    //   }, 0)
 
-      let paidValue = todoPaidAppls.map((appl) => {
-        return appl.total_pay_amount
-      }).reduce(function (sum, pay) {
-        return sum = sum + pay;
-      }, 0);
 
-      state = {
-        ...state,
-        todoCal: {
-          'todoCase': {
-            case: todoAppls.length,
-            applIds: todoAppls,//.map(appl => appl.appl_id)
-            value: paidValue,
-            pos: 1
-          },
-          'todoFollowed': {
-            case: todoFollowedAppls.length,
-            value: todoFollowMtdValue,
-            applIds: todoFollowedAppls//.map(appl => appl.appl_id)
-          },
-          'todoPaid': {
-            'case': todoPaidAppls.length,
-            value: todoPaidValue,
-            'applIds': todoPaidAppls//.map(appl => appl.appl_id)
-          },
+    //   let todoPtpAppls = todoAppls.filter((appl) => {
+    //     return appl.last_action_code === 'PTP'
+    //   })
 
-          todoPaidToday: {
-            case: todoTodayPaidAppls.length,
-            value: todoTodayPaidValue,
-            applIds: todoTodayPaidAppls,
-          },
+    //   let reVisitAppls = todoAppls.filter((appl) => {
+    //     return ['F_NAH', 'LEM'].includes(appl.last_action_code)
+    //   })
 
-          'todoPtp': {
-            'case': todoPtpAppls.length,
-            'applIds': todoPtpAppls//.map(appl => appl.appl_id)
-          },
-          'todoBptp': {
-            'case': 0,
-            'applIds': []
-          },
-          'todoRevisit': {
-            'case': reVisitAppls.length,
-            'applIds': reVisitAppls//.map(appl => appl.appl_id)
-          },
-          todoFollowedToday: {
-            case: 0,
-            applIds: []
-          },
-        }
-      }
-      return state;
+    //   let paidValue = todoPaidAppls.map((appl) => {
+    //     return appl.total_pay_amount
+    //   }).reduce(function (sum, pay) {
+    //     return sum = sum + pay;
+    //   }, 0);
+
+    //   state = {
+    //     ...state,
+    //     todoCal: {
+    //       'todoCase': {
+    //         case: todoAppls.length,
+    //         applIds: todoAppls,//.map(appl => appl.appl_id)
+    //         value: paidValue,
+    //         pos: 1
+    //       },
+    //       'todoFollowed': {
+    //         case: todoFollowedAppls.length,
+    //         value: todoFollowMtdValue,
+    //         applIds: todoFollowedAppls//.map(appl => appl.appl_id)
+    //       },
+
+    //       'todoPaid': {
+    //         'case': todoPaidAppls.length,
+    //         value: todoPaidValue,
+    //         'applIds': todoPaidAppls//.map(appl => appl.appl_id)
+    //       },
+
+    //       todoPaidToday: {
+    //         case: todoTodayPaidAppls.length,
+    //         value: todoTodayPaidValue,
+    //         applIds: todoTodayPaidAppls,
+    //       },
+
+    //       'todoPtp': {
+    //         'case': todoPtpAppls.length,
+    //         'applIds': todoPtpAppls//.map(appl => appl.appl_id)
+    //       },
+    //       'todoBptp': {
+    //         'case': 0,
+    //         'applIds': []
+    //       },
+    //       'todoRevisit': {
+    //         'case': reVisitAppls.length,
+    //         'applIds': reVisitAppls//.map(appl => appl.appl_id)
+    //       },
+    //       todoFollowedToday: {
+    //         case: 0,
+    //         applIds: []
+    //       },
+    //     }
+    //   }
+    //   return state;
 
     case constAction.CAL_CATE_DASH:
 
