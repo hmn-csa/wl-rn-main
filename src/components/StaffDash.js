@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 15,
+    marginTop: 8,
     marginBottom: "auto",
     paddingVertical: 'auto',
   },
@@ -254,14 +254,14 @@ const styles = StyleSheet.create({
     height: 50,
   },
   index: {
-    fontWeight: '600',
+    fontWeight: 'bold',
     fontSize: 22,
   },
   indexSmall: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '700',
     position: 'absolute',
-    top: -22,
+    top: -20,
     left: 40,
     color: colors.main
   },

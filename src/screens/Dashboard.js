@@ -26,6 +26,7 @@ function Dashboard(props) {
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <StaffHeader_com />
         <Swiper
+          style={{}}
           showsButtons={false}
           autoplay={true}
           autoplayTimeout={6}
@@ -35,9 +36,7 @@ function Dashboard(props) {
         >
           <StaffDash_com />
           <StaffTodo_com />
-
         </Swiper>
-        <View style={{ marginBottom: 10 }}></View>
         <Swiper
           showsButtons={false}
           autoplay={true}
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 30
+    marginBottom: 20
   },
   toolBtn: {
     borderWidth: 1,
