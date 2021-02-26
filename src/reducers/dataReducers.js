@@ -213,6 +213,16 @@ const calPortData = (appls) => {
     return ['F_NAH', 'LEM'].includes(appl.last_action_code)
   })
 
+  const genApplIds = (list) => {
+    list.map(item => {
+      let appl = {
+        appl_id: item.appl_id,
+        id_no: item.id_no,
+        app_id: item.app_id,
+      }
+      return appl
+    })
+  }
 
   return {
     totalCase: {
@@ -222,26 +232,26 @@ const calPortData = (appls) => {
     },
     paidAll: {
       value: initPaidMtd.length,
-      applIds: initPaidMtd//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPaidMtd)//.map(appl => appl.appl_id)
     },
     paidMtd: {
       case: initPaidMtd.length,
       value: paidMtdValue,
-      applIds: initPaidMtd//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPaidMtd)//.map(appl => appl.appl_id)
     },
     ptpCase: {
       case: initPtp.length,
-      applIds: initPtp//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPtp)//.map(appl => appl.appl_id)
     },
     paidToday: {
       case: initPaidTodayAppls.length,
       value: paidTodayValue,
-      applIds: initPaidTodayAppls//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPaidTodayAppls)//.map(appl => appl.appl_id)
     },
     followed: {
       case: initFollowedAppls.length,
       value: followMtdValue,
-      applIds: initFollowedAppls//.map(appl => appl.appl_id)
+      applIds: genApplIds(initFollowedAppls)//.map(appl => appl.appl_id)
     },
     followedToday: {
       case: 0,
@@ -249,7 +259,7 @@ const calPortData = (appls) => {
     },
     revisit: {
       case: totalReVisitAppls.length,
-      applIds: totalReVisitAppls//.map(appl => appl.appl_id)
+      applIds: genApplIds(totalReVisitAppls)//.map(appl => appl.appl_id)
     },
     Bptp: {
       case: 0,

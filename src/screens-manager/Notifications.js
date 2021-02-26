@@ -17,8 +17,15 @@ Notifications.setNotificationHandler({
 function Notify(props) {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
+
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  const dateObj = new Date()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const year = dateObj.getFullYear();
+  const today = year + '-' + month + '-' + day;
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -40,7 +47,7 @@ function Notify(props) {
 
 
   useEffect(() => {
-    if (props.staff.notCheckin !== null && props.staff.notCheckin !== 0) {  // && props.staff.notCheckin !== 0
+    if (props.notCheckin !== null && props.notCheckin !== 0) {  // && props.staff.notCheckin !== 0
       Notifications.scheduleNotificationAsync({
         content: {
           title: `Có ${props.staff.notCheckin} nhân viên chưa thực hiện Checkin 📬`,
@@ -49,7 +56,21 @@ function Notify(props) {
         trigger: { seconds: 2 },
       });
     }
-  }, [props.staff.notCheckin])
+  }, [props.notCheckin])
+
+
+  useEffect(() => {
+    if (props.calendar[today].length > 0) {  // && props.staff.notCheckin !== 0
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: `Có ${props.calendar[today].length} hợp đồng trong hôm nay 📬`,
+          body: `hãy nhắc nhở nhân viên nào !!!`,
+        },
+        trigger: { seconds: 2 },
+      });
+    }
+  }, [props.calendar])
+
 
   return (
     <View>
@@ -102,7 +123,8 @@ async function registerForPushNotificationsAsync() {
 const mapStateToProps = (state, ownProps) => {
   return {
     token: state.token.token.access,
-    staff: state.staff,
+    notCheckin: state.staff.notCheckin,
+    calendar: state.calendar.calendar
   }
 }
 

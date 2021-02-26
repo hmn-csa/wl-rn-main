@@ -22,8 +22,6 @@ import * as LocalAuthentication from "expo-local-authentication";
 import * as SecureStore from "expo-secure-store";
 
 import * as constAction from '../consts'
-
-
 const { width, height } = Dimensions.get("window");
 
 

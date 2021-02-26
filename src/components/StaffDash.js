@@ -57,7 +57,7 @@ function StaffDash(props) {
 
   return (
     <View
-      style={[styles.block, { flex: 1, justifyContent: 'space-between', height: height / 4 }]}
+      style={[styles.block,]}
     >
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Tổng danh mục
@@ -186,7 +186,7 @@ function StaffTodo(props) {
 
   return (
     <View
-      style={[styles.block, { flex: 1, justifyContent: 'space-between' }]}
+      style={[styles.block,]}
     >
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
         Danh mục tự chọn
@@ -471,17 +471,17 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.grey,
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
+    paddingVertical: 10,
+    paddingHorizontal: 10
   },
   row: {
     marginLeft: 'auto',
     marginRight: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 5,
-    paddingLeft: 5,
+    marginBottom: 20,
   },
   box: {
     justifyContent: 'center',
@@ -497,10 +497,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   indexSmall: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     position: 'absolute',
-    top: -15,
+    top: -20,
     left: 40,
     color: colors.main
   },
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   label: {
-    fontSize: 9,
+    fontSize: 10,
     color: colors.gray
   },
   indexBar: {

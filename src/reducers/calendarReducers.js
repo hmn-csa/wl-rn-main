@@ -47,19 +47,38 @@ const calendarReducers = (state = initialState, action) => {
       const curIndex = updateCase.findIndex(item =>
         item.appl_id === action.content.appl_id
       )
-      if (curIndex !== -1)
-        updateCase[curIndex] = { ...updateCase[curIndex], task_done: action.content.task_done }
-      console.log(action.content)
-      console.log(updateCase, curIndex)
+      if (curIndex === -1)
+        return state
 
-      state.calendar[action.content.scheduled_date.substring(0, 10)] = updateCase
+      updateCase[curIndex] = {
+        ...updateCase[curIndex],
+        task_done: action.content.task_done,
+        scheduled_amt: action.content.scheduled_amt,
+        remark: action.content.remark,
+      }
+      // not change date
+      if (action.content.scheduled_date_change.substring(0, 10) === action.content.scheduled_date.substring(0, 10))
+        state.calendar[action.content.scheduled_date.substring(0, 10)] = updateCase
+      else {
+        const updateItem = updateCase[curIndex]
+        updateCase.splice(curIndex, 1)
+        state.calendar[action.content.scheduled_date_change.substring(0, 10)].push(
+          {
+            ...updateItem,
+            scheduled_date: action.content.scheduled_date_change
+          }
+        )
+      }
+
       return state
+
+
 
     case constAction.USER_CALENDAR_APPEND:
       state.calendar[action.content.scheduled_date.substring(0, 10)].push(
         action.content
       )
-      return state
+      return state;
 
     case constAction.API_CALENDAR_FAILURE:
       state = { ...state, fetching: false, error: action.error }

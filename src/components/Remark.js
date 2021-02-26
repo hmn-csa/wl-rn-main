@@ -319,12 +319,12 @@ function Remark(props) {
     if (code === "PTP")
       return (
         <View>
-          <Text style={styles.title}>Số tiền hứa thanh toán</Text>
+          <Text style={styles.title}>Số tiền dự thu</Text>
           <View style={styles.row}>
             <TextInput
               style={[styles.row, styles.selectInput]}
               keyboardType='numeric'
-              placeholder="Nhập ghi chú"
+              placeholder="Số tiền dự thu"
               value={payAmount}
               onChangeText={setPayAmount}
               clearButtonMode="always"

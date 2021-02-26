@@ -23,7 +23,7 @@ function Dashboard(props) {
 
   else
     return (
-      <View style={{ backgroundColor: 'white', flex: 1 }}>
+      <View style={{ backgroundColor: 'white', flex: 1, }}>
         <StaffHeader_com />
         <View style={[styles.row, { flex: 1 }]}>
           <Swiper
@@ -38,25 +38,26 @@ function Dashboard(props) {
             <StaffTodo_com />
           </Swiper>
         </View>
-        <View style={[styles.row, { flex: 1.382 }]}>
+
+        <View style={[styles.row, { flex: 1 }]}>
           <Swiper
             showsButtons={false}
             autoplay={true}
-            autoplayTimeout={3}
+            autoplayTimeout={4}
             showsPagination={false}
             autoplayDirection={true}
             navigation={props.navigation}
           >
             {BarChartPM(props.paymentCal, "Thanh toán 10 ngày:")}
-            {BarChartPM(props.paymentCal, "Viếng thăm 10 ngày:")}
-            {/* {LineChartFL(props.paymentCal)} */}
+
           </Swiper>
         </View>
-        <View style={[styles.row, styles.toolFrame, { flex: 0.382 }]}>
+
+        <View style={[styles.row, styles.toolFrame]}>
           <TouchableOpacity
             style={styles.toolBtn}
             onPress={() => props.navigation.navigate('ListPayment')}>
-            <FontAwesome5 name="dollar-sign" size={30} color={colors.gray} />
+            <FontAwesome5 name="funnel-dollar" size={30} color={colors.gray} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.toolBtn}
@@ -69,7 +70,8 @@ function Dashboard(props) {
             <FontAwesome5 name="list" size={30} color={colors.gray} />
           </TouchableOpacity>
         </View>
-      </View >
+
+      </View>
     )
 }
 
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 5,
+    marginBottom: 20,
     marginTop: 10,
   },
   toolBtn: {
@@ -102,9 +104,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 60,
     width: 60,
-    paddingTop: 14,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    paddingTop: 15,
+    paddingLeft: 13,
+
   }
 })
 

@@ -2,7 +2,8 @@ import {
   View, Text, ActivityIndicator, StyleSheet, Image
 } from 'react-native'
 import React, { useState, useEffect } from "react"
-import { colors } from '../../styles'
+import { colors } from "../../styles"
+import { Button } from "react-native-paper"
 
 function Loader(props) {
   return (

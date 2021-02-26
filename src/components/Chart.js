@@ -29,8 +29,7 @@ function BarChartPM(data, title) {
       style={{
         backgroundColor: colors.white,
         marginLeft: 5,
-        flex: 1,
-        justifyContent: 'space-around',
+        justifyContent: 'space-between'
       }}>
       <Text style={{
         color: colors.black,

@@ -5,12 +5,17 @@ import { colors } from '../styles'
 import Tree from './Tree'
 import UserSignout from './userSignout'
 import UserInfo from './userInfo'
-import ProductCategories from './ProductCategories'
-import ScoreCategories from './ScoreCategories'
-import ClassifyCategories from './ClassifyCategories'
+
+// import ProductCategories from './ProductCategories'
+// import ScoreCategories from './ScoreCategories'
+// import ClassifyCategories from './ClassifyCategories'
+
 import ListUptrail from './ListUptrail'
 import ListUptrailMonth from './ListUptrailMonth'
-import { Contract_com, Customer_com, Payment_com, Follow_com } from '../components/Vsf_detail'
+
+import { Contract_com, Customer_com, Follow_com } from '../components/Vsf_detail'
+import { ProductCategories, ScoreCategories, ClassifyCategories } from './Categories'
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,7 +24,7 @@ function Menutop_Categories() {
     <Tab.Navigator
       initialRouteName="Tree Follow"
       tabBarOptions={{
-        activeTintColor: colors.info,
+        activeTintColor: colors.main,
         inactiveTintColor: colors.black,
         labelStyle: { fontSize: 12, fontWeight: 'bold' },
         style: { backgroundColor: 'white' },
@@ -54,7 +59,7 @@ function Menutop_Uptrail() {
     <Tab.Navigator
       initialRouteName="Day"
       tabBarOptions={{
-        activeTintColor: colors.info,
+        activeTintColor: colors.main,
         inactiveTintColor: colors.black,
         labelStyle: { fontSize: 12, fontWeight: 'bold' },
         style: { backgroundColor: 'white' },
@@ -82,7 +87,7 @@ function Menutop_User() {
     <Tab.Navigator
       initialRouteName="Type"
       tabBarOptions={{
-        activeTintColor: colors.info,
+        activeTintColor: colors.main,
         inactiveTintColor: colors.black,
         labelStyle: { fontSize: 12, fontWeight: 'bold' },
         style: { backgroundColor: 'white' },
@@ -106,7 +111,7 @@ function Menutop_User() {
     <Tab.Navigator
       initialRouteName="Contracts"
       tabBarOptions={{
-        activeTintColor: colors.info,
+        activeTintColor: colors.main,
         inactiveTintColor: colors.black,
         labelStyle: { fontSize: 12, fontWeight: 'bold' },
         style: { backgroundColor: 'white' },

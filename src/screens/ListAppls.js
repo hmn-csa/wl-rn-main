@@ -64,7 +64,7 @@ function ListAppls(props) {
     );
   };
 
-  if (searchTerm !== null && searchTerm !== "")
+  if (!searchTerm)
     return (
       <View >
         <FlatList
@@ -76,7 +76,7 @@ function ListAppls(props) {
         />
       </View>
     )
-  if (props.data !== null)
+  if (props.data)
     return (
       <View>
         <FlatList

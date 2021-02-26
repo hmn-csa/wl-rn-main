@@ -72,9 +72,6 @@ function Uptrail(props) {
   }
 
 
-  const [applPm, setApplPm] = useState(props.payments.map(item => item.appl_id))
-
-
 
   const reVisit = (next_visit_time) => {
     if (next_visit_time != null)

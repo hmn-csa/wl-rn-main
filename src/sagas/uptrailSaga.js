@@ -133,19 +133,27 @@ export function* workerUserUptrail(request) {
     let dataContent = { ...request.config, runtime: response.data.message }
     yield put({ type: constAction.USER_UPTRAIL_SUCCESS, content: dataContent });
     alert(`Uptrail thành công: \nHợp đồng: ${dataContent.appl_id}\nKhách hàng: ${dataContent.cust_name}`)
-    // dispatch CAL-DASH
+
 
     // add calendar
     if (dataContent.next_visit_time) {
       let calendarCoxntent = {
         runtime: dataContent.runtime,
         appl_id: dataContent.appl_id,
+        cust_name: dataContent.cust_name,
         remark: dataContent.remark,
         scheduled_amt: dataContent.pay_amount,
         scheduled_date: dataContent.next_visit_time,
       }
       yield put({ type: constAction.USER_CALENDAR_APPEND, content: calendarCoxntent });
     }
+
+
+    // dispatch CAL-DASH
+    yield put({ type: constAction.CAL_TODO_DASH });
+    yield put({ type: constAction.CAL_TOTAL_DASH });
+    yield put({ type: constAction.CAL_TREE_DASH });
+    yield put({ type: constAction.CAL_CATE_DASH });
 
   } catch (error) {
     console.log(error)
