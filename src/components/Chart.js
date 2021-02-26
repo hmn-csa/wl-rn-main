@@ -14,14 +14,6 @@ import { Dimensions } from "react-native";
 import { colors } from '../styles';
 const screenWidth = Dimensions.get("window").width;
 
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43]
-    }
-  ]
-};
 
 function BarChartPM(data, title) {
   return (
@@ -29,16 +21,13 @@ function BarChartPM(data, title) {
       style={{
         backgroundColor: colors.white,
         marginLeft: 5,
-        justifyContent: 'space-between'
       }}>
       <Text style={{
         color: colors.black,
-        textAlign: 'left',
         marginLeft: 20,
         fontWeight: 'bold',
         fontSize: 14,
         backgroundColor: colors.white,
-        borderRadius: 5
       }}>
         {title}
       </Text>

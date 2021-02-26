@@ -166,6 +166,17 @@ const initialState = {
 
 };
 
+const genApplIds = (list) => {
+  const data = list.map(item => {
+    return {
+      appl_id: item.appl_id,
+      id_no: item.id_no,
+      app_id: item.app_id,
+      cust_name: item.cust_name,
+    }
+  })
+  return data
+}
 
 const calPortData = (appls) => {
 
@@ -213,22 +224,13 @@ const calPortData = (appls) => {
     return ['F_NAH', 'LEM'].includes(appl.last_action_code)
   })
 
-  const genApplIds = (list) => {
-    list.map(item => {
-      let appl = {
-        appl_id: item.appl_id,
-        id_no: item.id_no,
-        app_id: item.app_id,
-      }
-      return appl
-    })
-  }
+
 
   return {
     totalCase: {
       case: totalCase,
       value: posValue,
-      applIds: appls//.map(appl => appl.appl_id)
+      applIds: genApplIds(appls)//.map(appl => appl.appl_id)
     },
     paidAll: {
       value: initPaidMtd.length,
@@ -414,7 +416,7 @@ const dataReducers = (state = initialState, action) => {
                 name: 'Not Followed',
                 case: initNotfollow.length,
                 share: parseFloat(initNotfollow.length / totalTReeCase * 100).toFixed(1),
-                applIds: initNotfollow, //.map(appl => appl.appl_id),
+                applIds: genApplIds(initNotfollow), //.map(appl => appl.appl_id),
                 type: 'bad',
                 children: [
                   {
@@ -422,7 +424,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Paid',
                     case: initNotfollowPaid.length,
                     share: initNotfollow.length > 0 ? parseFloat(initNotfollowPaid.length / initNotfollow.length * 100).toFixed(1) : 0,
-                    applIds: initNotfollowPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initNotfollowPaid), //.map(appl => appl.appl_id),
                     type: 'good',
                   },
                   {
@@ -430,7 +432,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Not Paid',
                     case: initNotfollowNotPaid.length,
                     share: initNotfollow.length > 0 ? parseFloat(initNotfollowNotPaid.length / initNotfollow.length * 100).toFixed(1) : 0,
-                    applIds: initNotfollowNotPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initNotfollowNotPaid), //.map(appl => appl.appl_id),
                     type: 'bad',
                   },
                 ],
@@ -440,7 +442,7 @@ const dataReducers = (state = initialState, action) => {
                 name: 'Followed',
                 case: initFollow.length,
                 share: (initFollow.length / totalTReeCase * 100).toFixed(1),
-                applIds: initFollow, //.map(appl => appl.appl_id),
+                applIds: genApplIds(initFollow), //.map(appl => appl.appl_id),
                 type: 'good',
                 children: [
                   {
@@ -448,7 +450,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Paid',
                     case: initFollowPaid.length,
                     share: initFollow.length > 0 ? (initFollowPaid.length / initFollow.length * 100).toFixed(1) : 0,
-                    applIds: initFollowPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initFollowPaid), //.map(appl => appl.appl_id),
                     type: 'good',
                   },
                   {
@@ -456,7 +458,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Not Paid',
                     case: initFollowNotPaid.length,
                     share: initFollow.length > 0 ? (initFollowNotPaid.length / initFollow.length * 100).toFixed(1) : 0,
-                    applIds: initFollowNotPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initFollowNotPaid), //.map(appl => appl.appl_id),
                     type: 'bad',
                     children: [
                       {
@@ -464,7 +466,7 @@ const dataReducers = (state = initialState, action) => {
                         name: 'Meet',
                         case: initNotPaidMeet.length,
                         share: initFollowNotPaid.length > 0 ? (initNotPaidMeet.length / initFollowNotPaid.length * 100).toFixed(1) : 0,
-                        applIds: initNotPaidMeet, //.map(appl => appl.appl_id),
+                        applIds: genApplIds(initNotPaidMeet), //.map(appl => appl.appl_id),
                         type: 'good',
                         children: [
                           {
@@ -472,7 +474,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'PTP',
                             case: initMeetPTP.length,
                             share: initNotPaidMeet.length > 0 ? (initMeetPTP.length / initNotPaidMeet.length * 100).toFixed(1) : 0,
-                            applIds: initMeetPTP, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initMeetPTP), //.map(appl => appl.appl_id),
                             type: 'good',
                           },
                           {
@@ -480,7 +482,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'DIF Finance',
                             case: initMeetDif.length,
                             share: initNotPaidMeet.length > 0 ? (initMeetDif.length / initNotPaidMeet.length * 100).toFixed(1) : 0,
-                            applIds: initMeetDif, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initMeetDif), //.map(appl => appl.appl_id),
                             type: 'bad',
                           },
                           {
@@ -488,7 +490,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'RTP',
                             case: initMeetRTP.length,
                             share: initNotPaidMeet.length > 0 ? (initMeetRTP.length / initNotPaidMeet.length * 100).toFixed(1) : 0,
-                            applIds: initMeetRTP, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initMeetRTP), //.map(appl => appl.appl_id),
                             type: 'bad',
                           },
                         ]
@@ -498,7 +500,7 @@ const dataReducers = (state = initialState, action) => {
                         name: 'Not Meet',
                         case: initNotPaidNotMeet.length,
                         share: initFollowNotPaid.length > 0 ? (initNotPaidNotMeet.length / initFollowNotPaid.length * 100).toFixed(1) : 0,
-                        applIds: initNotPaidNotMeet, //.map(appl => appl.appl_id),
+                        applIds: genApplIds(initNotPaidNotMeet), //.map(appl => appl.appl_id),
                         type: 'bad',
                         children: [
                           {
@@ -506,7 +508,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'Found House',
                             case: initNotMeetFH.length,
                             share: initNotPaidNotMeet.length > 0 ? (initNotMeetFH.length / initNotPaidNotMeet.length * 100).toFixed(1) : 0,
-                            applIds: initNotMeetFH, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initNotMeetFH), //.map(appl => appl.appl_id),
                             type: 'good',
                           },
                           {
@@ -514,7 +516,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'Not Found House',
                             case: initNotMeetNFH.length,
                             share: initNotPaidNotMeet.length > 0 ? (initNotMeetNFH.length / initNotPaidNotMeet.length * 100).toFixed(1) : 0,
-                            applIds: initNotMeetNFH, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initNotMeetNFH), //.map(appl => appl.appl_id),
                             type: 'bad',
                           },
                         ]
@@ -638,7 +640,12 @@ const dataReducers = (state = initialState, action) => {
             paidcase: rv[x[key]].paidcase + x.full_paid,
             case: rv[x[key]].case + 1,
             visited: rv[x[key]].visited + x.followed,
-            applIds: rv[x[key]].applIds.concat([{ appl_id: x.appl_id, cust_name: x.cust_name }])
+            applIds: rv[x[key]].applIds.concat([{
+              appl_id: x.appl_id,
+              app_id: x.app_id,
+              cust_name: x.cust_name,
+              id_no: x.id_no
+            }])
           };
           return rv;
         }, {});

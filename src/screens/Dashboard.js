@@ -23,37 +23,36 @@ function Dashboard(props) {
 
   else
     return (
-      <View style={{ backgroundColor: 'white', flex: 1, }}>
+      <View style={{ backgroundColor: 'white', flex: 1 }}>
         <StaffHeader_com />
-        <View style={[styles.row, { flex: 1 }]}>
-          <Swiper
-            showsButtons={false}
-            autoplay={true}
-            autoplayTimeout={6}
-            showsPagination={false}
-            autoplayDirection={true}
-            navigation={props.navigation}
-          >
-            <StaffDash_com />
-            <StaffTodo_com />
-          </Swiper>
-        </View>
+        <Swiper
+          showsButtons={false}
+          autoplay={true}
+          autoplayTimeout={6}
+          showsPagination={false}
+          autoplayDirection={true}
+          navigation={props.navigation}
+        >
+          <StaffDash_com />
+          <StaffTodo_com />
 
-        <View style={[styles.row, { flex: 1 }]}>
-          <Swiper
-            showsButtons={false}
-            autoplay={true}
-            autoplayTimeout={4}
-            showsPagination={false}
-            autoplayDirection={true}
-            navigation={props.navigation}
-          >
-            {BarChartPM(props.paymentCal, "Thanh toán 10 ngày:")}
+        </Swiper>
+        <View style={{ marginBottom: 10 }}></View>
+        <Swiper
+          showsButtons={false}
+          autoplay={true}
+          autoplayTimeout={4}
+          showsPagination={false}
+          autoplayDirection={true}
+          navigation={props.navigation
+          }
+        >
+          {BarChartPM(props.paymentCal, "Thanh toán 10 ngày:")}
 
-          </Swiper>
-        </View>
+        </Swiper>
 
-        <View style={[styles.row, styles.toolFrame]}>
+
+        <View style={[styles.toolFrame]}>
           <TouchableOpacity
             style={styles.toolBtn}
             onPress={() => props.navigation.navigate('ListPayment')}>
@@ -71,7 +70,7 @@ function Dashboard(props) {
           </TouchableOpacity>
         </View>
 
-      </View>
+      </View >
     )
 }
 
@@ -94,9 +93,8 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-    marginTop: 10,
+    justifyContent: 'space-between',
+    marginBottom: 30
   },
   toolBtn: {
     borderWidth: 1,

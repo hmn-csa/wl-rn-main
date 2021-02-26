@@ -28,11 +28,12 @@ function ListAppls(props) {
         setFiltered(props.showlists.applIds)
       else
         setFiltered(
-          Object.values(props.showlists.applIds).filter(createFilter(value, KEYS_TO_FILTERS))
+          props.showlists.applIds.filter(createFilter(value, KEYS_TO_FILTERS))
         )
     } catch (err) {
       setFiltered(props.showlists.applIds)
     }
+    console.log('filtered', filtered, !searchTerm)
   }, [props.search]);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ function ListAppls(props) {
     );
   };
 
-  if (!searchTerm)
+  if (searchTerm !== "")
     return (
       <View >
         <FlatList
@@ -76,7 +77,7 @@ function ListAppls(props) {
         />
       </View>
     )
-  if (props.data)
+  else
     return (
       <View>
         <FlatList
@@ -88,12 +89,7 @@ function ListAppls(props) {
         />
       </View>
     )
-  else return (
-    <View style={[styles.container, { alignItems: 'center' }]}>
-      <Text>Loading ... </Text>
-      <ActivityIndicator size={100} color={colors.main} />
-    </View>
-  )
+
 }
 
 const mapStateToProps = (state, ownProps) => {

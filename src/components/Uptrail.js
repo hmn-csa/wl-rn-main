@@ -71,19 +71,27 @@ function Uptrail(props) {
       return t.substring(0, 10)
   }
 
-
-
   const reVisit = (next_visit_time) => {
     if (next_visit_time != null)
       return <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,216,89,0.3)', borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}>
         <View>
-          <Text style={{ fontSize: 12 }}>Ngày hẹn: </Text>
-        </View>
-        <View>
-          <Text style={{ fontSize: 12 }}>{nextTime(next_visit_time)}</Text>
+          <Text style={{ fontSize: 12 }}>Ngày hẹn: {nextTime(next_visit_time)}</Text>
         </View>
       </View>
   }
+
+  const renderScheduled = () => {
+    if (next_visit_time != null || next_visit_time !== "" || (n != null & parseFloat(n, 10) > 0))
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 0 }}>
+        <View>
+          <Text style={[stylesTrail.nameTxt]}>{payAmount(pay_amount)}</Text>
+        </View>
+        <View>
+          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{reVisit(next_visit_time)}</Text>
+        </View>
+      </View>
+  }
+
 
   const NotePM = (appl) => {
     const appls = props.payments.map(item => item.appl_id)
@@ -224,7 +232,7 @@ function Uptrail(props) {
           </View>
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            {haveimages() == true ?
+            {haveimages() == true ??
               <TouchableOpacity style={[stylesTrail.btn, { borderColor: colors.main, marginRight: 5, paddingLeft: 8, paddingRight: 8 }]} onPress={() => { setVisible(true) }}>
                 <FontAwesome5
                   name='images'
@@ -235,7 +243,6 @@ function Uptrail(props) {
                 />
                 {/* <Text style={{ padding: 5, fontSize: 12, color: colors.main, fontWeight: 'bold' }}> Hình ảnh</Text> */}
               </TouchableOpacity>
-              : null
             }
             {NoteAddress(type_address)}
           </View>
@@ -277,20 +284,15 @@ function Uptrail(props) {
           <Text style={[stylesTrail.indexTxt, { textAlign: 'right', paddingRight: 5 }]}>{appl_id}</Text>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <View>
-          <Text style={[stylesTrail.nameTxt]}>{payAmount(pay_amount)}</Text>
-        </View>
-        <View>
-          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{reVisit(next_visit_time)}</Text>
-        </View>
-      </View>
-      {remark != "" ?
+
+
+      {renderScheduled()}
+
+      {remark != "" ??
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
           <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>Ghi chú : {remark}</Text>
         </View>
-        : null}
-
+      }
 
 
 

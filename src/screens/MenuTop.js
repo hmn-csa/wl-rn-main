@@ -13,7 +13,7 @@ import UserInfo from './userInfo'
 import ListUptrail from './ListUptrail'
 import ListUptrailMonth from './ListUptrailMonth'
 
-import { Contract_com, Customer_com, Follow_com } from '../components/Vsf_detail'
+import { Contract_com, Customer_com, Payment_com, Follow_com } from '../components/Vsf_detail'
 import { ProductCategories, ScoreCategories, ClassifyCategories } from './Categories'
 
 
