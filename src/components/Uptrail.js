@@ -82,14 +82,7 @@ function Uptrail(props) {
 
   const renderScheduled = () => {
     if (next_visit_time != null || next_visit_time !== "" || (n != null & parseFloat(n, 10) > 0))
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 0 }}>
-        <View>
-          <Text style={[stylesTrail.nameTxt]}>{payAmount(pay_amount)}</Text>
-        </View>
-        <View>
-          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{reVisit(next_visit_time)}</Text>
-        </View>
-      </View>
+      
   }
 
 
@@ -285,8 +278,14 @@ function Uptrail(props) {
         </View>
       </View>
 
-
-      {renderScheduled()}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 0 }}>
+        <View>
+          <Text style={[stylesTrail.nameTxt]}>{payAmount(pay_amount)}</Text>
+        </View>
+        <View>
+          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{reVisit(next_visit_time)}</Text>
+        </View>
+      </View>
 
       {remark != "" ??
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
