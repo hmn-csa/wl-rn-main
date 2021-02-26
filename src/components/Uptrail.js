@@ -80,10 +80,6 @@ function Uptrail(props) {
       </View>
   }
 
-  const renderScheduled = () => {
-    if (next_visit_time != null || next_visit_time !== "" || (n != null & parseFloat(n, 10) > 0))
-      
-  }
 
 
   const NotePM = (appl) => {
