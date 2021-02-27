@@ -38,6 +38,28 @@ function Login(props) {
   // }
   //=============================
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        // setErrorMsg('Permission to access location was denied');
+        Alert.alert("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
+      setLocation(location);
+    })();
+  }, []);
+
+
+
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   //const [fetching, setFetching] = useState(false)

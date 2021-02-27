@@ -62,7 +62,7 @@ function StaffDash(props) {
       style={[styles.block,]}
     >
       <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
-        Tổng danh mục
+        {props.name}
       </Text>
       <View style={[styles.row]}>
         <TouchableOpacity style={[styles.box, { flex: 0.8 }]}

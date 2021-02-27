@@ -34,8 +34,8 @@ function Dashboard(props) {
           autoplayDirection={true}
           navigation={props.navigation}
         >
-          <StaffDash_com />
-          <StaffTodo_com />
+          <StaffDash_com name="Toàn danh mục" />
+          <StaffTodo_com name="Danh mục tự chọn" />
         </Swiper>
         <Swiper
           showsButtons={false}
@@ -114,9 +114,6 @@ const mapStateToProps = (state, ownProps) => {
     paymentCal: state.payments.paymentCal,
     paymentFetching: state.payments.fetching,
     showlists: state.showlists.applIds,
-    todoCal: state.data.todoCal,
-    totalCal: state.data.totalCal,
-    treeCal: state.treeCal,
     uptrails: state.uptrails,
     token: state.token,
   };

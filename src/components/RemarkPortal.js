@@ -45,6 +45,7 @@ function RemarkPortal(props) {
   const [newAddress, setNewAddress] = useState(
     props.vsf.activeApplId.new_address
   );
+
   const addressItems = [
     {
       label: `Thường trú : ${props.vsf.activeApplId.reg_address}`,
@@ -59,6 +60,7 @@ function RemarkPortal(props) {
       value: null,
     },
   ];
+
   if (
     props.vsf.activeApplId.new_address != null &&
     props.vsf.activeApplId.new_address != ""
@@ -89,26 +91,6 @@ function RemarkPortal(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [reDate, setRedate] = useState(null)
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        // setErrorMsg('Permission to access location was denied');
-        Alert.alert("Permission to access location was denied");
-      }
-
-      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
-      setLocation(location);
-    })();
-  }, []);
 
 
 

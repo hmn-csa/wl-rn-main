@@ -299,8 +299,8 @@ function ContractDetailMap(props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btn, { borderColor: followedColor }]}
-          //onPress={handleRemark}
-          onPress={() => setVisible(true)}
+          onPress={handleRemark}
+        //onPress={() => setVisible(true)}
         >
           <FontAwesome
             name="pencil"

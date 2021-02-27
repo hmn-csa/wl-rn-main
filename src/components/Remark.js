@@ -13,6 +13,7 @@ import {
   TextInput,
   KeyboardAvoidingView
 } from "react-native";
+
 import { connect } from "react-redux";
 import { styles as masterStyle, colors } from "../styles";
 import * as ImagePicker from "expo-image-picker";
