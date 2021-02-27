@@ -221,7 +221,7 @@ function Uptrail(props) {
           </View>
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            {haveimages() == true ??
+            {haveimages() == true ?
               <TouchableOpacity style={[stylesTrail.btn, { borderColor: colors.main, marginRight: 5, paddingLeft: 8, paddingRight: 8 }]} onPress={() => { setVisible(true) }}>
                 <FontAwesome5
                   name='images'
@@ -231,7 +231,7 @@ function Uptrail(props) {
                   }]}
                 />
                 {/* <Text style={{ padding: 5, fontSize: 12, color: colors.main, fontWeight: 'bold' }}> Hình ảnh</Text> */}
-              </TouchableOpacity>
+              </TouchableOpacity> : null
             }
             {NoteAddress(type_address)}
           </View>
@@ -283,10 +283,10 @@ function Uptrail(props) {
         </View>
       </View>
 
-      {remark != "" ??
+      {remark != "" ?
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
           <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>Ghi chú : {remark}</Text>
-        </View>
+        </View> : null
       }
 
 
