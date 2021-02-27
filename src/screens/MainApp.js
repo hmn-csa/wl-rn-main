@@ -16,7 +16,7 @@ import { actLocationSet, actGetUptrails, actSetActiveStaff } from "../actions"
 import * as constAction from '../consts'
 import { colors } from '../styles'
 import MenuBottom from './MenuBottom'
-
+import Notify from './Notifications'
 
 enableScreens()
 
@@ -76,6 +76,7 @@ function MainApp(props) {
   return (
     <NavigationContainer>
       <MenuBottom />
+      <Notify />
     </NavigationContainer>
   );
 }

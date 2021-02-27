@@ -4,6 +4,7 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../styles'
 import { Categorie_st, CalendarStack, Dashboard_st, UserStack } from './Stacks'
 
+
 const Tab = createMaterialBottomTabNavigator();
 
 function MenuBottom() {
@@ -39,6 +40,7 @@ function MenuBottom() {
       <Tab.Screen name="Categories" component={Categorie_st} />
       <Tab.Screen name="Calendar" component={CalendarStack} />
       <Tab.Screen name="User" component={UserStack} />
+
     </Tab.Navigator>
   );
 }
