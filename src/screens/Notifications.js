@@ -47,16 +47,18 @@ function Notify(props) {
 
 
   useEffect(() => {
-    if (props.calendar[today])
-      if (props.calendar[today].length > 0) {  // && props.staff.notCheckin !== 0
+    if (props.calendar[today]) {
+      let fillterList = props.calendar[today].filter(item => !item.task_done)
+      if (fillterList.length > 0) {  // && props.staff.notCheckin !== 0
         Notifications.scheduleNotificationAsync({
           content: {
-            title: `Có ${props.calendar[today].length} cuộc hẹn viếng thăm trong hôm nay 📬`,
-            body: `!!!`,
+            title: `Có ${fillterList.length} cuộc hẹn chưa hoàn thành hôm nay📬`,
+            body: `vì chỉ tiêu vượt Target, hãy xách balo lên và đi !!!`,
           },
           trigger: { seconds: 2 },
         });
       }
+    }
   }, [props.calendar[today]])
 
 

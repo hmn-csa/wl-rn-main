@@ -37,6 +37,7 @@ function Uptrail(props) {
   const [item, setItem] = useState(props.item)
   const [runtime, setRuntime] = useState(item.runtime)
   const [code, setCode] = useState(item.code)
+  const [person_contact, setPerson_contact] = useState(item.person_contact)
   const [appl_id, setAppl_id] = useState(item.appl_id)
   const [cust_name, setCust_name] = useState(item.cust_name)
   const [pay_amount, setPayamount] = useState(item.pay_amount)
@@ -260,7 +261,7 @@ function Uptrail(props) {
         openwide ? setOpenwide(false) : setOpenwide(true)
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{splitDate(runtime)} {splitTime(runtime)}</Text>
+        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{splitDate(runtime)} {splitTime(runtime)}  {person_contact}</Text>
         <View>
           {NotePM(appl_id)}
         </View>

@@ -34,6 +34,7 @@ import ImageView from "react-native-image-view";
 
 import { EMPTYIMAGE } from "../images";
 
+import * as constAction from '../consts'
 import Loader from "../components/elements/Loader";
 
 import * as consts from "../consts";
@@ -41,19 +42,20 @@ const { width, height } = Dimensions.get("window");
 
 function RemarkPortal(props) {
   //===============================================sd
+  const [commited, setCommited] = useState(false);
 
   const [newAddress, setNewAddress] = useState(
-    props.vsf.activeApplId.new_address
+    props.item.new_address
   );
 
   const addressItems = [
     {
-      label: `Thường trú : ${props.vsf.activeApplId.reg_address}`,
-      value: props.vsf.activeApplId.reg_address,
+      label: `Thường trú : ${props.item.reg_address}`,
+      value: props.item.reg_address,
     },
     {
-      label: `Tạm trú : ${props.vsf.activeApplId.act_address}`,
-      value: props.vsf.activeApplId.act_address,
+      label: `Tạm trú : ${props.item.act_address}`,
+      value: props.item.act_address,
     },
     {
       label: `Địa chỉ khác`,
@@ -62,14 +64,14 @@ function RemarkPortal(props) {
   ];
 
   if (
-    props.vsf.activeApplId.new_address != null &&
-    props.vsf.activeApplId.new_address != ""
+    props.item.new_address != null &&
+    props.item.new_address != ""
   )
     addressItems.push({ label: newAddress, value: newAddress });
 
   const [uptrailStatus, setUptrailStatus] = useState(false);
   const [showcalendar, setShowcalendar] = useState(false);
-  const [cust_name, setcust_name] = useState(props.vsf.activeApplId.cust_name);
+  const [cust_name, setcust_name] = useState(props.item.cust_name);
   // Location
   const [location, setLocation] = useState(null);
 
@@ -94,6 +96,7 @@ function RemarkPortal(props) {
 
 
 
+
   const getAddressType = (address) => {
     if (address === "")
       return null
@@ -114,12 +117,11 @@ function RemarkPortal(props) {
     if (!address) return Alert.alert("Vui lòng nhập địa chỉ viếng thăm !");
 
     setUptrailStatus(true);
+    setCommited(true)
     let locationCurrrent = await Location.getCurrentPositionAsync({});
-    setLocation(locationCurrrent);
-
     let config = {
-      token_value: props.token.token.access,
-      appl_id: props.vsf.activeApplId.appl_id,
+      token_value: props.token,
+      appl_id: props.item.appl_id,
       cust_name: cust_name,
       code: code,
       trust_address: address,
@@ -127,8 +129,8 @@ function RemarkPortal(props) {
       remark: remark,
       pay_amount: payAmount,
       next_visit_time: reDate,
-      lat: location.coords.latitude,
-      lon: location.coords.longitude,
+      lat: locationCurrrent.coords.latitude,
+      lon: locationCurrrent.coords.longitude,
       person_contact: personContact,
       image1: !image1 ? null : "data:image/png;base64," + image1.base64,
       image2: !image2 ? null : "data:image/png;base64," + image2.base64,
@@ -139,7 +141,7 @@ function RemarkPortal(props) {
       console.log(config)
       props.userUptrails(config);
       props.actChangeFollow({
-        appl_id: props.vsf.activeApplId.appl_id,
+        appl_id: props.item.appl_id,
         code: code,
       });
       // props.calAll();
@@ -147,134 +149,24 @@ function RemarkPortal(props) {
       // //props.updateShowlist([]);
       // props.updateShowlist(curList);
       setUptrailStatus(false);
-      props.navigation.navigate("Portfolio", { screen: "List" });
+      //props.navigation.navigate("Portfolio", { screen: "List" });
 
     } catch (error) {
       setUptrailStatus(false);
       console.error(error);
+      setCommited(false)
     }
   };
 
-
-
-  const moneyFormat = (n) => {
-    //return  n.toLocaleString().split(".")[0]
-    const money = parseFloat(n, 10)
-      .toFixed(1)
-      .replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
-      .toString();
-    return money.substring(0, money.length - 2);
-  };
 
   const renLoader = () => {
     if (props.uptrails.userFetching || uptrailStatus) return <Loader />;
   };
   const renderActionCode = () => {
-    let items = [
-      {
-        label: "GOOD",
-        value: "GOOD",
-        untouchable: true,
-        textStyle: styles.dropdownValue,
-      },
-      { label: "PTP - Hứa thanh toán", value: "PTP", parent: "GOOD" },
-      { label: "F_OBT - Đã thu được tiền", value: "F_OBT", parent: "GOOD" },
-      {
-        label: "WFP - Đã thanh toán chờ kiểm tra",
-        value: "WFP",
-        parent: "GOOD",
-      },
-      { label: "TER - Thanh lý", value: "TER", parent: "GOOD" },
 
-      {
-        label: "DIFFICULT FINANCE",
-        value: "DIF",
-        untouchable: true,
-        textStyle: styles.dropdownValue,
-      },
-      { label: "WAS - Chờ thu nhập, trợ cấp", value: "WAS", parent: "DIF" },
-      {
-        label: "LST - Thất nghiệp, làm ăn thua lỗ",
-        value: "LST",
-        parent: "DIF",
-      },
-      { label: "MCW - KH bị bệnh, tai nạn", value: "MCW", parent: "DIF" },
-      { label: "CTI - Thiên tai", value: "CTI", parent: "DIF" },
-
-      {
-        label: "LEM",
-        value: "LEMM",
-        untouchable: true,
-        textStyle: styles.dropdownValue,
-      },
-      { label: "F_NAH - Không có nhà", value: "F_NAH", parent: "LEMM" },
-      { label: "LEM - Để lại lời nhắn", value: "LEM", parent: "LEMM" },
-
-      {
-        label: "REFUSE TO PAY",
-        value: "RTPP",
-        untouchable: true,
-        textStyle: styles.dropdownValue,
-      },
-      { label: "RTP - Từ chôí thanh toán", value: "RTP", parent: "RTPP" },
-      { label: "GSF - Gian lận", value: "GSF", parent: "RTPP" },
-      { label: "IGN1 - Chưa nhận khoản vay", value: "IGN1", parent: "RTPP" },
-      { label: "IGN2 - Báo đã hủy hợp đồng", value: "IGN2", parent: "RTPP" },
-
-      {
-        label: "NOT_FOUND",
-        value: "NOT_FOUND",
-        untouchable: true,
-        textStyle: styles.dropdownValue,
-      },
-      {
-        label: "F_RENT - Nhà thuê và đã dọn đi",
-        value: "F_RENT",
-        parent: "NOT_FOUND",
-      },
-      { label: "F_HOS - Nhà đã bán", value: "F_HOS", parent: "NOT_FOUND" },
-      {
-        label: "F_WAU - KH bỏ trốn, gia đình còn ở tại địa phương",
-        value: "F_WAU",
-        parent: "NOT_FOUND",
-      },
-      {
-        label: "F_NFH - Không tìm thấy nhà",
-        value: "F_NFH",
-        parent: "NOT_FOUND",
-      },
-      {
-        label: "F_NIW - Không có thông tin tại nơi làm việc",
-        value: "F_NIW",
-        parent: "NOT_FOUND",
-      },
-      {
-        label: "F_NLA - Không sống tại địa chỉ",
-        value: "F_NLA",
-        parent: "NOT_FOUND",
-      },
-      {
-        label: "F_WET - KH bỏ trốn, không gặp gia đình",
-        value: "F_WET",
-        parent: "NOT_FOUND",
-      },
-
-      {
-        label: "DIE/JAIL",
-        value: "DIEE",
-        untouchable: true,
-        textStyle: styles.dropdownValue,
-      },
-      {
-        label: "F_CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần",
-        value: "F_CGI",
-        parent: "DIEE",
-      },
-      { label: "DIE - Đã qua đời", value: "DIE", parent: "DIEE" },
-    ];
     return (
       <DropDownPicker
-        items={items}
+        items={constAction.REMARK_CODE}
         placeholder="Nhập kết quả viếng thăm"
         containerStyle={{ height: 40 }}
         dropDownMaxHeight={300}
@@ -375,8 +267,8 @@ function RemarkPortal(props) {
         placeholderStyle={{ fontWeight: "normal", color: "grey" }}
         style={styles.selectInput}
         labelStyle={{
-          fontSize: 14,
-          textAlign: "center",
+          fontSize: 12,
+          textAlign: "left",
           color: "black",
         }}
         selectedLabelStyle={{
@@ -434,7 +326,7 @@ function RemarkPortal(props) {
             calendarColor={"white"}
             daySelectionAnimation={{
               type: "border",
-              duration: 200,
+              duration: 1,
               borderWidth: 1,
               borderHighlightColor: "black",
             }}
@@ -446,7 +338,8 @@ function RemarkPortal(props) {
             iconContainer={{ flex: 0.1 }}
             // selectedDate={reDate}
             onDateSelected={(date) => {
-              setRedate(date.format("YYYY-MM-DD"));
+              setRedate(date.format("YYYY-MM-DD"))
+              setShowcalendar(false)
             }}
           />
           <TouchableOpacity
@@ -461,7 +354,7 @@ function RemarkPortal(props) {
                 : setShowcalendar(false)
             }
           >
-            <Text>{dateformatted}</Text>
+            <Text style={{ color: colors.main }}>{dateformatted}</Text>
           </TouchableOpacity>
         </View>
       );
@@ -522,13 +415,18 @@ function RemarkPortal(props) {
       }
     }
 
-    const elementWidth = width * 0.8 / 3
+    const elementWidth = width * 0.618 / 3
 
     return (
       <View style={[styles.box, { width: elementWidth }]} >
-        <View style={[styles.row, { paddingLeft: 15, paddingRight: 15, marginBottom: 0 }]}>
+        <View style={[styles.row, {
+          marginVertical: 'auto',
+          marginBottom: 0,
+          paddingRight: 15,
+          paddingLeft: 15
+        }]}>
           <Entypo name="image"
-            size={25}
+            size={20}
             color="black"
             style={{
               maxWidth: elementWidth / 3,
@@ -538,7 +436,7 @@ function RemarkPortal(props) {
           />
 
           <Entypo name="camera"
-            size={25}
+            size={20}
             color="black"
             style={{
               maxWidth: elementWidth / 3,
@@ -548,7 +446,7 @@ function RemarkPortal(props) {
           />
 
           <FontAwesome name="remove"
-            size={25}
+            size={20}
             color="black"
             style={{
               maxWidth: elementWidth / 3,
@@ -578,7 +476,7 @@ function RemarkPortal(props) {
             onLoadStart={() => <ActivityIndicator size={10} color='black' />}
           />
         </TouchableOpacity>
-      </View >
+      </View>
     )
 
   }
@@ -599,10 +497,9 @@ function RemarkPortal(props) {
         }}
         contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 10 }}
       >
-        {renLoader()}
-        <Text style={[styles.header]}>{props.vsf.activeApplId.cust_name}</Text>
+        <Text style={[styles.header]}>{props.item.cust_name}</Text>
         <Text style={[styles.smallHeader]}>
-          Hợp đồng : {props.vsf.activeApplId.appl_id}
+          Hợp đồng : {props.item.appl_id}
         </Text>
         <Text style={styles.title}>*Người liên hệ</Text>
         {renPcontact(consts.PERSON_CONTACT)}
@@ -635,17 +532,23 @@ function RemarkPortal(props) {
             {renPicture(image3, setImage3)}
           </View>
         </View>
-        <Button
-          mode="contained"
-          style={[styles.button, {
-            width: "97%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }]}
-          labelStyle={styles.buttonLabel}
-          onPress={handleCommit}>
-          Xác nhận
-        </Button>
+        {!commited ?
+          <Button
+            mode="contained"
+            style={[styles.button, {
+              width: "97%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }]}
+            labelStyle={styles.buttonLabel}
+            //onPress={handleCommit}
+            onPress={() => {
+              handleCommit()
+              props.setCode(code)
+            }}
+          >
+            Xác nhận
+        </Button> : renLoader()}
 
         <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
@@ -670,10 +573,7 @@ function RemarkPortal(props) {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    token: state.token,
-    vsf: state.vsf,
-    data: state.data.data,
-    showlists: state.showlists.applIds,
+    token: state.token.token.access,
     uptrails: state.uptrails,
   };
 };
@@ -741,7 +641,7 @@ const styles = StyleSheet.create({
   },
   dropdownValue: {
     fontWeight: "bold",
-    paddingLeft: 10,
+    paddingLeft: 5,
     color: "red"
   },
 
@@ -816,3 +716,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RemarkPortal);
+
+// export default RemarkPortal;

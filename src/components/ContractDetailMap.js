@@ -7,31 +7,37 @@ import {
   TouchableOpacity
 } from 'react-native'
 
-import * as constAction from '../consts'
-import { colors } from '../styles'
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import {
   Dialog, Portal,
 } from 'react-native-paper';
 
 
+import { moneyFormat } from '../functions'
+import * as constAction from '../consts'
+import { colors } from '../styles'
+import RemarkPortal from './RemarkPortal'
+
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
-import { moneyFormat } from '../functions'
-
-import RemarkPortal from './RemarkPortal'
 
 
 function ContractDetailMap(props) {
   const [visible, setVisible] = useState(false);
 
+
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
+  const [code, setCode] = useState(content.last_action_code)
+
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.main : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
   console.log(props.contractId)
+
+
+
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {
@@ -78,34 +84,34 @@ function ContractDetailMap(props) {
 
   }
 
+
+
   const renderPortal = () => {
     console.log('ren portal')
     return (
       <Portal>
         <Dialog
+          style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto' }}
           visible={visible}
           onDismiss={() => setVisible(false)}
         >
-          <Dialog.Content style={{ width: width, height: height * 0.8, right: 20, top: 40 }}>
-            <RemarkPortal />
-          </Dialog.Content>
+          <RemarkPortal props={props} item={content} setCode={setCode} />
 
           <Dialog.Actions>
             <TouchableOpacity
-              style={styles.closeBtn, { marginRight: 20 }}
+              style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
               onPress={() => setVisible(false)}>
-              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Cancel</Text>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.closeBtn}
               onPress={() => {
                 setVisible(false)
               }}>
-              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Ok</Text>
             </TouchableOpacity>
           </Dialog.Actions>
         </Dialog>
-      </Portal>
+      </Portal >
     )
   }
 
@@ -146,10 +152,6 @@ function ContractDetailMap(props) {
     props.apiGetUptrail(config)
   }
 
-  const handleRemark = () => {
-    props.setActiveVsf(content)
-    props.navigation.navigate('Remark')
-  }
 
   const handleMap = () => {
     props.setActiveVsf(content)
@@ -192,6 +194,9 @@ function ContractDetailMap(props) {
       }}>{lastCode}</Text>
   }
 
+
+
+
   if (props.data[contractId] === undefined)
     return <View></View>
   return (
@@ -205,7 +210,7 @@ function ContractDetailMap(props) {
               <Text style={[styles.nameTxt]}>{content.cust_name}</Text>
             </View>
             <View style={[styles.box, { flex: 1 }]}>
-              {ptpIcon(content.last_action_code)}
+              {ptpIcon(code)}
             </View>
           </View>
         </View>
@@ -299,8 +304,8 @@ function ContractDetailMap(props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btn, { borderColor: followedColor }]}
-          onPress={handleRemark}
-        //onPress={() => setVisible(true)}
+          // onPress={handleRemark}
+          onPress={() => setVisible(true)}
         >
           <FontAwesome
             name="pencil"
@@ -374,6 +379,7 @@ const mapDispatchToProps = (dispatch) => {
         data
       })
     },
+
   }
 }
 
