@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import {
   View, Text, Image, Button, StyleSheet,
   Alert, Linking, Platform, Dimensions,
-  TouchableOpacity
+  TouchableOpacity, Modal, Pressable
 } from 'react-native'
 
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
@@ -86,7 +86,7 @@ function ContractDetailMap(props) {
 
 
 
-  const renderPortal = () => {
+  const renderPortal2 = () => {
     console.log('ren portal')
     return (
       <Portal>
@@ -111,7 +111,29 @@ function ContractDetailMap(props) {
             </TouchableOpacity>
           </Dialog.Actions>
         </Dialog>
-      </Portal >
+      </Portal>
+    )
+  }
+
+  const renderPortal = () => {
+    console.log('ren portal')
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto', }}
+      >
+        <View style={{ marginTop: 40 }}>
+          <RemarkPortal props={props} item={content} setCode={setCode} cancel={() => setVisible(false)} />
+          <TouchableOpacity
+            style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
+            onPress={() => setVisible(false)}>
+            <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     )
   }
 

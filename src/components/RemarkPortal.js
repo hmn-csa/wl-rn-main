@@ -118,6 +118,7 @@ function RemarkPortal(props) {
 
     setUptrailStatus(true);
     setCommited(true)
+    props.cancel()
     let locationCurrrent = await Location.getCurrentPositionAsync({});
     let config = {
       token_value: props.token,
@@ -328,10 +329,10 @@ function RemarkPortal(props) {
               type: "border",
               duration: 1,
               borderWidth: 1,
-              borderHighlightColor: "black",
+              borderHighlightColor: colors.secondary,
             }}
-            highlightDateNumberStyle={{ color: "red" }}
-            highlightDateNameStyle={{ color: 'red', fontWeight: 'bold' }}
+            highlightDateNumberStyle={{ color: colors.secondary }}
+            highlightDateNameStyle={{ color: colors.secondary, fontWeight: 'bold' }}
             calendarHeaderStyle={{ color: "#787571" }}
             dateNumberStyle={{ color: "#787571" }}
             dateNameStyle={{ color: "black" }}
@@ -339,7 +340,7 @@ function RemarkPortal(props) {
             // selectedDate={reDate}
             onDateSelected={(date) => {
               setRedate(date.format("YYYY-MM-DD"))
-              setShowcalendar(false)
+              //setShowcalendar(false)
             }}
           />
           <TouchableOpacity
@@ -415,14 +416,14 @@ function RemarkPortal(props) {
       }
     }
 
-    const elementWidth = width * 0.618 / 3
+    const elementWidth = width * 0.7 / 3
 
     return (
       <View style={[styles.box, { width: elementWidth }]} >
         <View style={[styles.row, {
           marginVertical: 'auto',
           marginBottom: 0,
-          paddingRight: 15,
+          paddingRight: 25,
           paddingLeft: 15
         }]}>
           <Entypo name="image"
@@ -484,7 +485,7 @@ function RemarkPortal(props) {
   return (
     <KeyboardAvoidingView
       behavior="height"
-      style={{ flex: 1 }}
+      style={{ height: height }}
       keyboardVerticalOffset={1}
     >
       <ScrollView
@@ -532,11 +533,27 @@ function RemarkPortal(props) {
             {renPicture(image3, setImage3)}
           </View>
         </View>
-        {!commited ?
+
+        <View style={styles.row}>
           <Button
             mode="contained"
             style={[styles.button, {
-              width: "97%",
+              width: "45%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }]}
+            labelStyle={[styles.buttonLabel, { color: colors.secondary }]}
+            //onPress={handleCommit}
+            onPress={() => {
+              props.cancel()
+            }}
+          >
+            cancel
+        </Button>
+          <Button
+            mode="contained"
+            style={[styles.button, {
+              width: "45%",
               marginLeft: "auto",
               marginRight: "auto",
             }]}
@@ -545,10 +562,12 @@ function RemarkPortal(props) {
             onPress={() => {
               handleCommit()
               props.setCode(code)
+
             }}
           >
             Xác nhận
-        </Button> : renLoader()}
+        </Button>
+        </View>
 
         <Portal style={[styles.row, { width: width, height: height }]}>
           <Dialog visible={visibleImage} onDismiss={() => setVisibleImage(false)}>
@@ -680,6 +699,7 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "row",
     padding: 1,
+    //backgroundColor: 'rgba(255,255,255,0.5)'
   },
   button: {
     borderRadius: 5,
