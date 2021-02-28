@@ -44,8 +44,10 @@ function Tree(props) {
 
   const navigation = useNavigation();
   const handleShow = (list, title) => {
-    navigation.navigate('Portfolio', { name: title })
-    props.updateShowlist(list)
+    if (title !== "Total") {
+      navigation.navigate('Portfolio', { name: title })
+      props.updateShowlist(list)
+    }
   }
   function getstyle_txttree(name) {
     if (name == 'Total') {
