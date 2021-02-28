@@ -41,8 +41,8 @@ function StaffHeader(props) {
           {props.token.active_infos.fc_name}
         </Text>
       </View>
-      <View style={[styles.box, { flex: 1.618, alignItems: 'center' }]}>
-        {/* <CircleTA /> */}
+      <View style={[styles.box, { flex: 1, alignItems: 'center' }]}>
+        <CircleTA />
       </View>
     </View>
   )
@@ -193,7 +193,7 @@ function StaffTodo(props) {
       </Text>
       <View style={[styles.row]}>
         <TouchableOpacity style={[styles.box, { padding: 3, flex: 0.8 }]}
-          onPress={() => handleShow(props.totalCal.totalCase.applIds, 'Danh mục tự chọn')}
+          onPress={() => handleShow(props.todoCal.totalCase.applIds, 'Danh mục tự chọn')}
         >
           <Text style={styles.index}>
             {props.todoCal.totalCase.case}

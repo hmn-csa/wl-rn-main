@@ -19,7 +19,6 @@ function ProductCategories(props) {
   const moneyFormat = (n) => {
     return n.toLocaleString().split(".")[0]
   }
-
   return (
     <View style={[styles.container,]}>
       <FlatList

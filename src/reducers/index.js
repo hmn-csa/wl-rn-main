@@ -10,6 +10,8 @@ import mapReducers from './mapReducers'
 import paymentReducers from './paymentReducers'
 import staffReducers from './staffreducers'
 import searchbarReducers from './searchbarReducers'
+import rerenderapplReducers from './rerenderapplReducers'
+
 
 
 
@@ -23,7 +25,8 @@ const rootReducer = combineReducers({
   manager: managerReducers,
   map: mapReducers,
   staff: staffReducers,
-  searchbar: searchbarReducers
+  searchbar: searchbarReducers,
+  rerender: rerenderapplReducers
 })
 
 

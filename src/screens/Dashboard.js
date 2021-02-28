@@ -15,7 +15,6 @@ import { BarChartPM, BarChartFL, LineChartFL } from '../components/Chart'
 const { width, height } = Dimensions.get("window");
 
 function Dashboard(props) {
-  console.log(props.paymentCal)
   if (props.fetching || !props.data || props.paymentFetching)
     return (
       <Loader />
@@ -32,7 +31,6 @@ function Dashboard(props) {
             autoplayTimeout={6}
             showsPagination={false}
             autoplayDirection={true}
-            navigation={props.navigation}
           >
             <StaffDash_com />
             <StaffTodo_com />
@@ -94,6 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 5,
     marginTop: 10,
+    flex: 0.4
   },
   btn_tool: {
     borderWidth: 1,

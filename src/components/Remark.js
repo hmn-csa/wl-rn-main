@@ -154,18 +154,21 @@ function Remark(props) {
     };
 
     try {
-      console.log(config)
       props.userUptrails(config);
       props.actChangeFollow({
+        appl_id: props.vsf.activeApplId.appl_id,
+        code: code,
+      });
+      props.actChangeFollow_showlist({
         appl_id: props.vsf.activeApplId.appl_id,
         code: code,
       });
       // props.calAll();
       // const curList = props.showlists;
       // //props.updateShowlist([]);
-      // props.updateShowlist(curList);
+      // props.updateShowlist(props.vsf.activeApplId.appl_id);
       setUptrailStatus(false);
-      props.navigation.navigate("Portfolio", { screen: "List" });
+      props.navigation.navigate("Portfolio", { action: "refresh" })
 
     } catch (error) {
       setUptrailStatus(false);
@@ -438,8 +441,7 @@ function Remark(props) {
     const dayName = days[d.getDay()];
     const monthName = months[d.getMonth()];
     const dateformatted = !reDate ? "" : `${dayName}, ${date} ${monthName} ${year}`;
-    console.log(dateformatted);
-    console.log(showcalendar);
+
 
     if (showcalendar) {
       return (
@@ -718,7 +720,13 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateShowlist: (content) => {
       dispatch({
-        type: consts.SET_TODO_SHOWLIST,
+        type: consts.UPDATE_SHOWLIST,
+        content,
+      });
+    },
+    actChangeFollow_showlist: (content) => {
+      dispatch({
+        type: consts.CHANGE_FOLLOW_SHOWLIST,
         content,
       });
     },

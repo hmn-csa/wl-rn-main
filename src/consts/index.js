@@ -196,3 +196,7 @@ export const SET_MAP_STAFF = "SET_MAP_STAFF"
 // Searchbar
 
 export const SEND_VALUE_SEARCH = "SEND_VALUE_SEARCH"
+
+//Rerender Show list after Uptrail]
+
+export const CHANGE_FOLLOW_SHOWLIST = "CHANGE_FOLLOW_SHOWLIST";

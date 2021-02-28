@@ -89,13 +89,12 @@ function Login(props) {
 
   const handleAuthentication = async (cor) => {
     let result = await LocalAuthentication.authenticateAsync();
-    console.log("kết quả auth", result);
+    ("kết quả auth", result);
     if (result.success) {
       // setSccaned(true);
 
       let username = await SecureStore.getItemAsync("username");
       let password = await SecureStore.getItemAsync("password");
-      console.log("datakeychain", username, password);
 
       let data_login = {
         username: username,

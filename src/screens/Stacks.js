@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SearchBar } from 'react-native-elements';
 import * as constAction from '../consts'
 import { connect } from "react-redux"
+import test from "./test"
 
 
 const Stack = createStackNavigator()
@@ -258,13 +259,13 @@ function DashboardStack(props) {
                   containerStyle={{ backgroundColor: 'white' }}
                   inputContainerStyle={{ backgroundColor: 'white', width: DEVICE_WIDTH - 50, height: 30, right: 0 }}
                   onCancel={() => { Sethidesearch(true), Setvalueee('') }}
+                  onBlur={() => { Sethidesearch(true), Setvalueee('') }}
                   onSubmitEditing={() => {
                     Sethidesearch(true),
                       props.sendSearch({ valueee }.valueee)
                   }}
                 />
                 <TouchableOpacity
-                  style={{}}
                   onPress={() => props.navigation.navigate('Maps')} >
                   <MaterialIcons name="map" size={25} color={colors.main}
                     style={{ borderRadius: 20 }} />
@@ -310,7 +311,13 @@ function DashboardStack(props) {
             fontSize: 18,
             alignSelf: 'center'
           },
-
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
         }}
       />
       <Stack.Screen
@@ -465,7 +472,7 @@ function CategorieStack(props) {
               <View style={{ paddingRight: 20, flexDirection: 'row', alignItems: 'center' }}>
                 <SearchBar
                   placeholder="Tìm kiếm..."
-                  style={{ height: 20, backgroundColor: 'white' }}
+                  style={{ height: 30, backgroundColor: 'white' }}
                   onChangeText={(search) => {
                     Setvalueee(search),
                       props.sendSearch(search)
@@ -474,12 +481,12 @@ function CategorieStack(props) {
                   value={valueee}
                   showCancel={true}
                   lightTheme={true}
-                  // platform='android'
                   leftIconContainerStyle={{ width: 50 }}
                   cancelIcon={<TouchableOpacity onPress={() => { Sethidesearch(true), Setvalueee('') }}><FontAwesome5 name="arrow-left" size={20} color="grey" /></TouchableOpacity>}
-                  containerStyle={{ backgroundColor: 'white', borderWidth: 0, }}
-                  inputContainerStyle={{ backgroundColor: 'white', borderWidth: 0, width: DEVICE_WIDTH - 50, height: 30, right: 0 }}
+                  containerStyle={{ backgroundColor: 'white' }}
+                  inputContainerStyle={{ backgroundColor: 'white', width: DEVICE_WIDTH - 50, height: 30, right: 0 }}
                   onCancel={() => { Sethidesearch(true), Setvalueee('') }}
+                  onBlur={() => { Sethidesearch(true), Setvalueee('') }}
                   onSubmitEditing={() => {
                     Sethidesearch(true),
                       props.sendSearch({ valueee }.valueee)
@@ -604,6 +611,168 @@ function CategorieStack(props) {
   )
 }
 
+function UserStack2(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="User"
+      screenOptions={{ headerShown: true, headerTransparent: false, headerTitleAlign: 'center', }}
+    >
+      <Stack.Screen
+        name='User'
+        component={Menutop_User}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTintColor: colors.main,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+        }}
+      >
+      </Stack.Screen>
+      <Stack.Screen
+        name="Portfolio"
+        component={ListAppls}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: colors.main,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20, flexDirection: 'row' }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={25} color={colors.main} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ marginRight: 10, marginLeft: 10 }}
+                onPress={() =>
+                  props.navigation.navigate('Maps')
+                } >
+                <MaterialIcons name="map" size={25} color={colors.main}
+                  style={{
+                    borderRadius: 20
+                  }} />
+              </TouchableOpacity>
+            </View>
+          )
+        })
+        }
+      />
+      <Stack.Screen
+        name="Uptrail"
+        component={Menutop_Uptrail}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTintColor: colors.main,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Remark"
+        component={Remark}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTintColor: colors.main,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Vsf"
+        component={Vsf}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTintColor: colors.main,
+          headerTitle: "Visit form",
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Skip"
+        component={Skip}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTintColor: colors.main,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+      <Stack.Screen
+        name="Maps"
+        component={applMap}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.white,
+          },
+          headerTintColor: colors.main,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 18,
+            alignSelf: 'center'
+          },
+          headerRight: () => (
+            <View style={{ paddingRight: 20 }}>
+              <TouchableOpacity>
+                <MaterialIcons name="search" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+      />
+    </Stack.Navigator >
+  )
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -613,6 +782,12 @@ const mapDispatchToProps = (dispatch) => {
         content
       })
     },
+    reRenderAppl: (content) => {
+      dispatch({
+        type: constAction.RE_RENDER_APPL,
+        content
+      })
+    }
   }
 }
 

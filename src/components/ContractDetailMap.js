@@ -16,14 +16,13 @@ const CARD_HEIGHT = height / 4.5;
 import { moneyFormat } from '../functions'
 
 function ContractDetailMap(props) {
-
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
   const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
-  console.log(props.contractId)
+
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {
@@ -166,7 +165,7 @@ function ContractDetailMap(props) {
               <Text style={[showstyles.nameTxt]}>{content.cust_name}</Text>
             </View>
             <View style={[showstyles.box, { flex: 1 }]}>
-              {ptpIcon(content.last_action_code)}
+              {ptpIcon(props.data[contractId].last_action_code)}
             </View>
           </View>
         </View>
@@ -199,7 +198,6 @@ function ContractDetailMap(props) {
           </View>
         </View>
       </View>
-
 
       <View style={[showstyles.row]}>
         <View style={showstyles.box}>
@@ -276,7 +274,6 @@ function ContractDetailMap(props) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-
           style={[showstyles.btn]}
           onPress={handleCall}>
           <FontAwesome

@@ -346,7 +346,6 @@ function ListUptrail(props) {
                 },
                 0
               );
-              console.log(index)
               if (makerRef[index] != undefined) makerRef[index].showCallout();
             }}
             activeSlideAlignment="center"

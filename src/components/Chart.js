@@ -45,27 +45,14 @@ function BarChartPM(data) {
         Daily Payment
       </Text>
       <BarChart
-<<<<<<< HEAD
         data={data}
         style={{ borderRadius: 0, marginLeft: -40 }}
-=======
-        data={{
-          labels: ["01/02", "02/02", "03/02", "04/02", "05/02", "06/02", "07/02"],
-          datasets: [
-            {
-              data: [20, 145, 228, 80, 99, 43, 144]
-            }
-          ],
-        }}
-        style={{ borderRadius: 10, marginLeft: -30 }}
->>>>>>> ad2bcef6dabefbeab90639d0d88e18658c1193ad
         width={Dimensions.get('window').width}
         height={180}
         showValuesOnTopOfBars={true}
         chartConfig={{
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
-<<<<<<< HEAD
           //fillShadowGradient: colors.info,
           //fillShadowGradientOpacity: 0.4,
           fillShadowGradientOpacity: 1,
@@ -75,14 +62,6 @@ function BarChartPM(data) {
           fillOpacity: 1,
           color: (opacity = 1) => colors.main,
           labelColor: (opacity = 1) => colors.main,
-=======
-          fillShadowGradient: colors.info,
-          fillShadowGradientOpacity: 1,
-          barPercentage: 0.8,
-          color: (opacity = 1) => colors.black,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          decimalPlaces: 0
->>>>>>> ad2bcef6dabefbeab90639d0d88e18658c1193ad
         }}
         withOuterLines={false}
         withInnerLines={false}
@@ -130,20 +109,11 @@ function BarChartFL() {
         chartConfig={{
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
-<<<<<<< HEAD
           //fillShadowGradient: colors.info,
           fillShadowGradientOpacity: 1,
           barPercentage: 1,
           color: (opacity = 1) => colors.main,
           labelColor: (opacity = 1) => colors.main,
-=======
-          fillShadowGradient: colors.main,
-          fillShadowGradientOpacity: 1,
-          barPercentage: 0.8,
-          color: (opacity = 1) => colors.black,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          decimalPlaces: 0
->>>>>>> ad2bcef6dabefbeab90639d0d88e18658c1193ad
         }}
         withOuterLines={false}
         withInnerLines={false}

@@ -156,7 +156,6 @@ const initialState = {
   data: null,
   error: null,
   todoError: null,
-
   totalCal: initialTotal,
   todoCal: initialTotal,
   treeCal: initialTree,
@@ -628,7 +627,7 @@ const dataReducers = (state = initialState, action) => {
             paidcase: rv[x[key]].paidcase + x.full_paid,
             case: rv[x[key]].case + 1,
             visited: rv[x[key]].visited + x.followed,
-            applIds: rv[x[key]].applIds.concat([{ appl_id: x.appl_id, cust_name: x.cust_name }])
+            applIds: rv[x[key]].applIds.concat([{ appl_id: x.appl_id, cust_name: x.cust_name, last_action_code: x.last_action_code }])
           };
           return rv;
         }, {});

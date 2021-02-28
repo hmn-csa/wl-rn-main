@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Text, View, StyleSheet, ScrollView,
-  Dimensions, Linking, Platform, TouchableOpacity
+  Dimensions, Linking, Platform, TouchableOpacity, ViewBase
 } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import TreeView from 'react-native-final-tree-view'
-import { Button } from 'react-native-paper';
 import { connect } from "react-redux"
 import Carousel from 'react-native-snap-carousel'
 import Timeline from 'react-native-timeline-flatlist'
 import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
-
 import { actUpdateShowlist } from "../actions"
 import { MAIN_COLOR2, colors } from '../styles'
 import Loader from '../components/elements/Loader'
@@ -113,6 +110,7 @@ function Skip(props) {
       id: '',
       name: <Text style={{ color: colors.main, fontSize: 18, fontWeight: 'bold' }}>Thông tin tham chiếu</Text >,
       children: mainRef,
+      phone: "",
       type: 'none'
     }])
   }
@@ -131,7 +129,7 @@ function Skip(props) {
       }}>
         <View style={[styles.row, { marginBottom: 10 }]}>
           <View style={[styles.box]}>
-            <Text style={[styles.textContent, { fontWeight: 'bold' }]}>Thông tin cơ bản: {maininfo.client_name}</Text>
+            <Text style={[styles.title]}>Thông tin cá nhân:</Text>
           </View>
         </View>
 
@@ -444,19 +442,25 @@ function Skip(props) {
                 fontSize: 15,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                alignItems: 'center'
               }}
             >
               <Text>
                 {getIndicator(isExpanded, hasChildrenNodes, node.type, node.id)} {node.name}
               </Text>
-              <Text style={{ fontWeight: 'bold' }}>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <Text style={{ color: colors.black }}>
-                  {node.case}
-                </Text>{"\t"}
-                <Text style={{ color: colors.info }}>
-                  {node.share} %
-                  </Text>
-              </Text>
+                  {node.phone}
+                </Text>
+                <View style={{ color: colors.info, flexDirection: 'row', marginLeft: 10 }}>
+                  {node.phone != "" ?
+                    <FontAwesome name="phone" size={15} color={colors.grey}
+                      onPress={() => { handleCall(node.phone) }}
+                      style={{ borderWidth: 0.5, padding: 4, borderRadius: 5, marginRight: 10 }} />
+                    :
+                    null}
+                </View>
+              </View>
             </View>
           )
         }}
@@ -564,15 +568,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-const buttonStyles = StyleSheet.create({
-  buttons: {
-    flexDirection: 'row',
-    padding: 2,
-  },
-  button: {
-    margin: 2,
-  },
-});
 
 const styles = StyleSheet.create({
   root: {
@@ -629,7 +624,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.main,
-    marginBottom: 10,
+    fontSize: 18,
     fontWeight: 'bold'
   },
   descriptionContainer: {

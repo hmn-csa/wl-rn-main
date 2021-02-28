@@ -14,15 +14,15 @@ export function* watcherGetVsf() {
 
 
 export function* workerGetVsf(request) {
-  
+
   try {
     let config = {
       method: 'post',
       url: `${constAction.WORKLIST_API}/visit-form/`,
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${request.config.token_value}`
       },
-      data : {
+      data: {
         'appl_id': request.config.appl_id,
       }
     }
@@ -30,7 +30,7 @@ export function* workerGetVsf(request) {
     // console.log(config)
     const response = yield call(axios, config);
     const data = response.data;
-    
+
     yield put({ type: constAction.API_VSF_SUCCESS, content: data });
 
 
@@ -41,7 +41,7 @@ export function* workerGetVsf(request) {
 }
 
 export function* workerGetSkip(request) {
-  
+
   try {
     let config = {
       method: 'get',
@@ -50,14 +50,13 @@ export function* workerGetSkip(request) {
 
     const response = yield call(axios, config);
     const data = response.data;
-    console.log(data)
-    
+
     yield put({ type: constAction.API_SKIP_SUCCESS, content: data });
 
     yield put({ type: constAction.IDNO_SKIP_ACTIVE, content: data });
 
   } catch (error) {
-    yield put({ type: constAction.API_SKIP_FAILURE, error:error });
+    yield put({ type: constAction.API_SKIP_FAILURE, error: error });
   }
 }
 
