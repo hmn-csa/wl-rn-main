@@ -549,7 +549,7 @@ function RemarkPortal(props) {
             }}
           >
             cancel
-        </Button>
+          </Button>
           <Button
             mode="contained"
             style={[styles.button, {
@@ -566,7 +566,7 @@ function RemarkPortal(props) {
             }}
           >
             Xác nhận
-        </Button>
+          </Button>
         </View>
 
         <Portal style={[styles.row, { width: width, height: height }]}>
@@ -585,6 +585,8 @@ function RemarkPortal(props) {
             />
           </Dialog>
         </Portal>
+
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

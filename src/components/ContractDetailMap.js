@@ -95,8 +95,9 @@ function ContractDetailMap(props) {
           visible={visible}
           onDismiss={() => setVisible(false)}
         >
-          <RemarkPortal props={props} item={content} setCode={setCode} />
-
+          <ScrollView>
+            <RemarkPortal props={props} item={content} setCode={setCode} />
+          </ScrollView>
           <Dialog.Actions>
             <TouchableOpacity
               style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
