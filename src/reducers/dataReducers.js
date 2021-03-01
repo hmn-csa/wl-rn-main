@@ -190,7 +190,7 @@ const calPortData = (appls) => {
     return parseFloat(appl.total_pay_amount) > 0
   })
   let initFollowedAppls = appls.filter((appl) => {
-    return appl.followed == 1
+    return !(!appl.last_action_code)
   })
 
   let paidMtdValue = initPaidMtd.map(function (appl) {
@@ -353,26 +353,26 @@ const dataReducers = (state = initialState, action) => {
         return parseFloat(appl.total_pay_amount) == 0
       })
       let initNotfollow = listAppls.filter((appl) => {
-        return appl.followed == 0
+        return !appl.last_action_code
       })
 
       let initNotfollowPaid = initPaidAppls.filter((appl) => {
-        return appl.followed == 0
+        return !appl.last_action_code
       })
 
       let initNotfollowNotPaid = initNotPaidAppls.filter((appl) => {
-        return appl.followed == 0
+        return !appl.last_action_code
       })
 
       // follow:
       let initFollow = listAppls.filter((appl) => {
-        return appl.followed == 1
+        return !(!appl.last_action_code)
       })
       let initFollowPaid = initFollow.filter((appl) => {
-        return appl.full_paid == 1
+        return !(!appl.last_action_code)
       })
       let initFollowNotPaid = initFollow.filter((appl) => {
-        return appl.full_paid == 0
+        return !appl.last_action_code
       })
       let initNotPaidMeet = initFollowNotPaid.filter((appl) => {
         return meetCode.includes(appl.last_action_code)//appl.lv4 == 'Meet'
@@ -540,9 +540,9 @@ const dataReducers = (state = initialState, action) => {
           rv[x[key]] = {
             ...rv[x[key]],
             paidamt: rv[x[key]].paidamt + x.total_pay_amount,
-            paidcase: rv[x[key]].paidcase + x.full_paid,
+            paidcase: rv[x[key]].paidcase + (x.total_pay_amount > 0),
             case: rv[x[key]].case + 1,
-            visited: rv[x[key]].visited + x.followed,
+            visited: rv[x[key]].visited + !(!x.last_action_code),
             applIds: rv[x[key]].applIds.concat([{
               appl_id: x.appl_id,
               app_id: x.app_id,

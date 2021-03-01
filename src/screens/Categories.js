@@ -8,7 +8,7 @@ import { ProgressBar } from 'react-native-paper'
 
 import { colors } from '../styles'
 import * as constAction from '../consts'
-import { moneyFormat } from '../functions';
+import { moneyFormat } from '../functions'
 
 
 const CategoryItem = (props) => {

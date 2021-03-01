@@ -52,7 +52,8 @@ const paymentReducers = (state = initialState, action) => {
       var labels = []
       var datasets = []
       var filter
-      for (let i = today.getDate() > 10 ? today.getDate() - 10 : 0; i < today.getDate(); i++) {
+      var start = today.getDate() > 10 ? today.getDate() - 10 : 0;
+      for (let i = start; i < (start + 10); i++) {
 
         filter = pmGr.filter(item => item.key === String(i).padStart(2, '0'))
         labels.push(String(i + 1).padStart(2, '0'))

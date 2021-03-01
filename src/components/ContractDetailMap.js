@@ -19,7 +19,7 @@ import { colors } from '../styles'
 import RemarkPortal from './RemarkPortal'
 
 const { width, height } = Dimensions.get("window");
-const CARD_HEIGHT = height / 4.5;
+const CARD_HEIGHT = height / 4.2;
 
 
 function ContractDetailMap(props) {
@@ -81,36 +81,6 @@ function ContractDetailMap(props) {
   }
 
 
-
-  const renderPortal2 = () => {
-    console.log('ren portal')
-    return (
-      <Portal>
-        <Dialog
-          style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto' }}
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-        >
-          <RemarkPortal props={props} item={content} setCode={setCode} />
-
-          <Dialog.Actions>
-            <TouchableOpacity
-              style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
-              onPress={() => setVisible(false)}>
-              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.closeBtn}
-              onPress={() => {
-                setVisible(false)
-              }}>
-            </TouchableOpacity>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    )
-  }
-
   const renderPortal = () => {
     console.log('ren portal')
     return (
@@ -121,7 +91,7 @@ function ContractDetailMap(props) {
         onDismiss={() => setVisible(false)}
         style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto', }}
       >
-        <View style={{ marginTop: 40 }}>
+        <View>
           <RemarkPortal props={props} item={content} setCode={setCode} cancel={() => setVisible(false)} />
           <TouchableOpacity
             style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
@@ -235,7 +205,7 @@ function ContractDetailMap(props) {
       </View>
       <View style={[styles.row]}>
         <View style={styles.box}>
-          <Text style={[styles.msgTxt]}>App_id:</Text>
+          <Text style={[styles.msgTxt]}>APP_ID:</Text>
         </View>
         <View style={[styles.box, { flex: 3.5 }]}>
           <View style={[styles.row]}>
@@ -283,12 +253,12 @@ function ContractDetailMap(props) {
           <Text style={[styles.msgTxt, { fontWeight: 'bold', color: colors.main }]} >{moneyFormat(content.principle_outstanding)}</Text>
         </View>
       </View>
-      <View style={[styles.row]} >
+      <View style={[styles.row,]} >
         <View style={styles.box}>
           <Text style={styles.msgTxt}>Địa chỉ:</Text>
         </View>
         <View style={[styles.box, { flex: 3.5, flexShrink: 1 }]}>
-          <Text style={styles.msgTxt} >{content.reg_address}</Text>
+          <Text numberOfLines={2} lineBreakMode={'tail'} style={[styles.msgTxt, { fontSize: 10 }]} >{content.reg_address}</Text>
         </View>
       </View>
 
@@ -438,6 +408,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 2
   },
   box: {
     flex: 1,
@@ -447,9 +418,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignSelf: 'center',
-    width: '80%',
-    marginTop: 15,
-    marginBottom: 5
+    width: '85%',
+    marginTop: 5,
+    marginBottom: 2
   },
   btn: {
     borderWidth: 1,
