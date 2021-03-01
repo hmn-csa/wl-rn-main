@@ -85,37 +85,6 @@ function ContractDetailMap(props) {
   }
 
 
-
-  const renderPortal2 = () => {
-    console.log('ren portal')
-    return (
-      <Portal>
-        <Dialog
-          style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto' }}
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-        >
-          <ScrollView>
-            <RemarkPortal props={props} item={content} setCode={setCode} />
-          </ScrollView>
-          <Dialog.Actions>
-            <TouchableOpacity
-              style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
-              onPress={() => setVisible(false)}>
-              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.closeBtn}
-              onPress={() => {
-                setVisible(false)
-              }}>
-            </TouchableOpacity>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    )
-  }
-
   const renderPortal = () => {
     console.log('ren portal')
     return (
@@ -126,7 +95,7 @@ function ContractDetailMap(props) {
         onDismiss={() => setVisible(false)}
         style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto', }}
       >
-        <View style={{ marginTop: 40 }}>
+        <View>
           <RemarkPortal props={props} item={content} setCode={setCode} cancel={() => setVisible(false)} />
           <TouchableOpacity
             style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}

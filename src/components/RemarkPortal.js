@@ -191,22 +191,16 @@ function RemarkPortal(props) {
 
   const renderPromisePTP = () => {
 
-    if (code === "PTP")
-      return (
-        <View>
-          <Text style={styles.title}>Số tiền dự thu</Text>
-          <View style={styles.row}>
-            <TextInput
-              style={[styles.row, styles.selectInput]}
-              keyboardType='numeric'
-              placeholder="Số tiền dự thu"
-              value={payAmount}
-              onChangeText={setPayAmount}
-              clearButtonMode="always"
-            />
-          </View>
-        </View>
-      )
+    return (
+      <TextInput
+        style={[styles.row, styles.selectInput]}
+        keyboardType='numeric'
+        placeholder="Số tiền dự thu"
+        value={payAmount}
+        onChangeText={setPayAmount}
+        clearButtonMode="always"
+      />
+    )
 
   }
 
@@ -416,15 +410,15 @@ function RemarkPortal(props) {
       }
     }
 
-    const elementWidth = width * 0.7 / 3
+    const elementWidth = width * 0.8 / 3
 
     return (
       <View style={[styles.box, { width: elementWidth }]} >
         <View style={[styles.row, {
           marginVertical: 'auto',
           marginBottom: 0,
-          paddingRight: 25,
-          paddingLeft: 15
+          paddingRight: elementWidth * 0.1,
+          paddingLeft: elementWidth * 0.12
         }]}>
           <Entypo name="image"
             size={20}
@@ -491,6 +485,7 @@ function RemarkPortal(props) {
       <ScrollView
         style={{
           backgroundColor: "white",
+          height: height - 50,
           flex: 1,
           ...(Platform.OS !== "android" && {
             zIndex: 10,
@@ -498,7 +493,7 @@ function RemarkPortal(props) {
         }}
         contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 10 }}
       >
-        <Text style={[styles.header]}>{props.item.cust_name}</Text>
+        <Text style={[styles.header, { paddingTop: Platform.OS !== "android" ? 10 : 0 }]}>{props.item.cust_name}</Text>
         <Text style={[styles.smallHeader]}>
           Hợp đồng : {props.item.appl_id}
         </Text>
@@ -509,32 +504,29 @@ function RemarkPortal(props) {
         {renderOtherAddress()}
         <Text style={styles.title}>*Kết quả viếng thăm</Text>
         {renderActionCode()}
+        <Text style={styles.title}>Số dự thu</Text>
         {renderPromisePTP()}
-        <View style={styles.blockInput}>
-          <Text style={styles.title}>Ngày tác động lại</Text>
-          {renSelectDate(reDate)}
-        </View>
-        <View style={styles.blockInput}>
-          <Text style={styles.title}>Ghi chú</Text>
-          <View style={styles.row}>
-            <TextInput
-              style={[styles.box, styles.selectInput, { color: colors.main, paddingLeft: 3 }]}
-              placeholder="Nhập ghi chú"
-              value={remark}
-              onChangeText={setRemark}
-              clearButtonMode="always"
-            />
-          </View>
-        </View>
-        <View style={styles.blockInput}>
-          <View style={styles.row}>
-            {renPicture(image1, setImage1)}
-            {renPicture(image2, setImage2)}
-            {renPicture(image3, setImage3)}
-          </View>
+
+        <Text style={styles.title}>Ngày tác động lại</Text>
+        {renSelectDate(reDate)}
+        <Text style={styles.title}>Ghi chú</Text>
+        <View style={styles.row}>
+          <TextInput
+            style={[styles.box, styles.selectInput, { color: colors.main, paddingLeft: 3 }]}
+            placeholder="Nhập ghi chú"
+            value={remark}
+            onChangeText={setRemark}
+            clearButtonMode="always"
+          />
         </View>
 
         <View style={styles.row}>
+          {renPicture(image1, setImage1)}
+          {renPicture(image2, setImage2)}
+          {renPicture(image3, setImage3)}
+        </View>
+
+        <View style={[styles.row, { paddingBottom: 40 }]}>
           <Button
             mode="contained"
             style={[styles.button, {
@@ -636,7 +628,7 @@ const styles = StyleSheet.create({
   },
 
   blockInput: {
-    paddingBottom: 5,
+    paddingBottom: 2,
     // zIndex: 10,
     // borderBottomWidth: 0.2,
     // borderBottomColor: colors.grey,
