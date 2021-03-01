@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   indexBar: {
     paddingTop: 12,
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 12,
     color: colors.main,
   },
 
