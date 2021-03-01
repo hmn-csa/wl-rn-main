@@ -23,10 +23,8 @@ import * as constAction from '../consts'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 import {
-  Button, Paragraph, Provider, FAB,
-  Dialog, Portal, RadioButton,
+  Button, Dialog, Portal, xw
 } from 'react-native-paper';
-import DeprecatedViewPropTypes from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes';
 
 
 
@@ -67,15 +65,6 @@ function ManagerMap(props) {
   });
 
   const [cordata, setCordata] = useState([])
-
-  const [listStaff, setListStaff] = useState(
-    [{ label: "tất cả nv", value: "all" }, ...props.staff.staffs.map(staff => {
-      return { label: 'nv: ' + staff.staff_id, value: staff.staff_id }
-    })]
-  )
-
-
-
   const [listType, setListType] = useState(
     [
       { label: "XEM TẤT CẢ CÁC ĐIỂM CHECKIN", value: "all" },
@@ -86,13 +75,11 @@ function ManagerMap(props) {
   const [filterStaffs, setFilterStaffs] = useState([])
   const [filterType, setFilterType] = useState("last")
 
-
   const dateObj = new Date()
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
   const year = dateObj.getFullYear();
   const today = year + '-' + month + '-' + day;
-  const [open, setOpen] = useState(false)
 
   const [reDate, setRedate] = useState(today)
   const [isShowDate, setShowDate] = useState(false)

@@ -37,36 +37,31 @@ function Uptrail(props) {
   const [item, setItem] = useState(props.item)
   const [runtime, setRuntime] = useState(item.runtime)
   const [code, setCode] = useState(item.code)
+  const [person_contact, setPerson_contact] = useState(item.person_contact)
   const [appl_id, setAppl_id] = useState(item.appl_id)
   const [cust_name, setCust_name] = useState(item.cust_name)
   const [pay_amount, setPayamount] = useState(item.pay_amount)
   const [remark, setRemark] = useState(item.remark)
   const [trust_address, setTrust_address] = useState(item.trust_address)
+  const [type_address, setType_address] = useState(item.type_address)
   const [next_visit_time, setnext_visit_time] = useState(item.next_visit_time)
-  const [image1, setimage1] = useState((item.image1 === null || item.image1 === "") ? null : item.image1)
-  const [image2, setimage2] = useState((item.image2 === null || item.image2 === "") ? null : item.image2)
-  const [image3, setimage3] = useState((item.image3 === null || item.image3 === "") ? null : item.image3)
+  const [image1, setimage1] = useState(!item.image1 ? null : item.image1)
+  const [image2, setimage2] = useState(!item.image2 ? null : item.image2)
+  const [image3, setimage3] = useState(!item.image3 ? null : item.image3)
   const [openwide, setOpenwide] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isVisibleImage, setIsVisibleImage] = useState(false);
-  const showDialog = () => setVisible(true);
-  const hideDialog = () => setVisible(false);
   const [visibleAddress, setVisibleAddress] = useState(false);
-  // const showDialogImage = () => setVisibleImage(true);
-  // const hideDialogImage = () => setVisibleImage(false);
   const [activateImage, setActivateImage] = useState({ uri: null });
-  //const splitTime = (t) => t.substring(0, 10) + " " + t.substring(11, 19)
+
   const splitDate = (t) => t.substring(0, 10)
-  const splitTime = (t) => t.substring(11, 19)
+  const splitTime = (t) => t.substring(11, 16)
   const payAmount = (n) => {
     if (n != null & parseFloat(n, 10) > 0) {
       const money = parseFloat(n, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
       return <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,216,89,0.3)', borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}>
         <View>
-          <Text style={{ fontSize: 12 }}>Hứa trả:</Text>
-        </View>
-        <View>
-          <Text style={{ fontSize: 12 }}> {money.substring(0, money.length - 2)}</Text>
+          <Text style={{ fontSize: 12 }}>Dự thu : {money.substring(0, money.length - 2)}</Text>
         </View>
       </View>
     }
@@ -77,26 +72,16 @@ function Uptrail(props) {
       return t.substring(0, 10)
   }
 
-  const handleShow = (list) => {
-    props.updateShowlist(list)
-    props.navigation.navigate('Portfolio', { screen: 'List' })
-  }
-
-  const [applPm, setApplPm] = useState(props.payments.map(item => item.appl_id))
-
-
-
   const reVisit = (next_visit_time) => {
     if (next_visit_time != null)
       return <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,216,89,0.3)', borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}>
         <View>
-          <Text style={{ fontSize: 12 }}>Ngày hẹn: </Text>
-        </View>
-        <View>
-          <Text style={{ fontSize: 12 }}>{nextTime(next_visit_time)}</Text>
+          <Text style={{ fontSize: 12 }}>Ngày hẹn: {nextTime(next_visit_time)}</Text>
         </View>
       </View>
   }
+
+
 
   const NotePM = (appl) => {
     const appls = props.payments.map(item => item.appl_id)
@@ -115,20 +100,29 @@ function Uptrail(props) {
   }
 
   const NoteAddress = (result) => {
-    if (result == 'Per')
+    if (!result) return null
+    if (["reg_address", "same_address"].includes(result))
       return (
         <TouchableOpacity
-          style={{ flexDirection: 'row', borderColor: 'rgba(9,135,101,0.8)', borderWidth: 1, borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}
+          style={[stylesTrail.btn, { borderColor: colors.main, }]}
           onPress={() => setVisibleAddress(true)}>
-          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.success} /><Text style={{ fontSize: 12, color: colors.success, fontWeight: 'bold' }}> Hộ khẩu</Text>
+          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.main} /><Text style={{ fontSize: 12, color: colors.main, fontWeight: 'bold' }}> Thường trú</Text>
         </TouchableOpacity>
       )
-    else
+    if (result == "act_address")
       return (
         <TouchableOpacity
-          style={{ flexDirection: 'row', borderColor: 'rgba(249,60,26,0.8)', borderWidth: 1, borderRadius: 30, padding: 8, paddingTop: 2, paddingBottom: 2 }}
+          style={[stylesTrail.btn, { borderColor: colors.main }]}
           onPress={() => setVisibleAddress(true)}>
-          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.danger} /><Text style={{ fontSize: 12, color: colors.danger, fontWeight: 'bold' }}> Khác</Text>
+          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.main} /><Text style={{ fontSize: 12, color: colors.main, fontWeight: 'bold' }}> Hộ khẩu</Text>
+        </TouchableOpacity>
+      )
+    if (result == "other_address")
+      return (
+        <TouchableOpacity
+          style={[stylesTrail.btn, { borderColor: colors.secondary, }]}
+          onPress={() => setVisibleAddress(true)}>
+          <FontAwesome5 name="home" style={{ paddingTop: 3 }} size={10} color={colors.secondary} /><Text style={{ fontSize: 12, color: colors.secondary, fontWeight: 'bold' }}> Khác</Text>
         </TouchableOpacity>
       )
   }
@@ -140,18 +134,17 @@ function Uptrail(props) {
     else return <Text
       style={[stylesTrail.remarkCode, { color: colors.secondary, }]}>{code}</Text>
   }
+
   const getCodeLabel = (code) => {
-    var result = consts.REMARK_CODE.filter(obj => {
+    const result = consts.REMARK_CODE.filter(obj => {
       return obj.value === code
     })
-    return (result[0].label)
+    return result.length > 0 ? result[0].label.split(" - ")[1] : ""
   }
 
-  const haveimages = (image1, image2, image3) => {
-    if (image1 !== null || image2 !== null || image3 !== null)
-      return true
-    else
-      return false
+
+  const haveimages = () => {
+    return (image1 !== null || image2 !== null || image3 !== null) ? true : false
   }
   const images = (image1, image2, image3) => {
     if (image1 !== null || image2 !== null || image3 !== null)
@@ -219,6 +212,34 @@ function Uptrail(props) {
     },
   ];
 
+  const renderMedia = () => {
+    if (haveimages() || type_address || code)
+      return (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+          <View>
+            <Text style={[stylesTrail.indexTxt, { fontWeight: 'bold', color: colors.main, flexShrink: 1 }]}>{code}</Text>
+            <Text style={[stylesTrail.nameTxt, { flexShrink: 1, paddingBottom: 2, color: colors.main, fontSize: 11 }]}>{getCodeLabel(code)}</Text>
+          </View>
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+            {haveimages() == true ?
+              <TouchableOpacity style={[stylesTrail.btn, { borderColor: colors.main, marginRight: 5, paddingLeft: 8, paddingRight: 8 }]} onPress={() => { setVisible(true) }}>
+                <FontAwesome5
+                  name='images'
+                  style={[{
+                    color: colors.main,
+                    fontSize: 15,
+                  }]}
+                />
+                {/* <Text style={{ padding: 5, fontSize: 12, color: colors.main, fontWeight: 'bold' }}> Hình ảnh</Text> */}
+              </TouchableOpacity> : null
+            }
+            {NoteAddress(type_address)}
+          </View>
+        </View >
+      )
+  }
+
 
   const cardStyle = props.type === "marker" ? {
     backgroundColor: 'rgba(255,255,255,0.7)',
@@ -226,40 +247,35 @@ function Uptrail(props) {
     borderColor: colors.lightGray,
     padding: 10,
   } : {
-      backgroundColor: 'white',
-      borderWidth: 1,
-      borderRadius: 15,
-      borderColor: colors.lightGray,
-      margin: 5,
-      padding: 10
-    }
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: colors.lightGray,
+    margin: 5,
+    padding: 10
+  }
   return (
     <View
-      style={cardStyle}
+      style={{ ...cardStyle, ...props.style }}
       onPress={() => {
         openwide ? setOpenwide(false) : setOpenwide(true)
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{splitDate(runtime)}</Text>
-        <View>
-          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{splitTime(runtime)}</Text>
-        </View>
-      </View>
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <Text style={[stylesTrail.nameTxt, { fontWeight: 'bold', color: colors.info, flexShrink: 1 }]}>{getCodeLabel(code)}</Text>
+        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{splitDate(runtime)} {splitTime(runtime)}  {person_contact}</Text>
         <View>
           {NotePM(appl_id)}
         </View>
       </View>
 
+
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-        <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>{cust_name}</Text>
+        <Text style={[stylesTrail.indexTxt, { flexShrink: 1 }]}>{cust_name}</Text>
         <View>
-          <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{appl_id}</Text>
+          <Text style={[stylesTrail.indexTxt, { textAlign: 'right', paddingRight: 5 }]}>{appl_id}</Text>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 0 }}>
         <View>
           <Text style={[stylesTrail.nameTxt]}>{payAmount(pay_amount)}</Text>
         </View>
@@ -267,45 +283,26 @@ function Uptrail(props) {
           <Text style={[stylesTrail.nameTxt, { textAlign: 'right' }]}>{reVisit(next_visit_time)}</Text>
         </View>
       </View>
+
       {remark != "" ?
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
           <Text style={[stylesTrail.nameTxt, { flexShrink: 1 }]}>Ghi chú : {remark}</Text>
-        </View>
-        : null}
-
-      <View style={[stylesTrail.btngroup]}>
-        {haveimages(image1, image2, image3) == true ?
-          <TouchableOpacity style={[stylesTrail.btn, { borderColor: colors.info }]} onPress={() => { setVisible(true) }}>
-            <FontAwesome5
-              name='images'
-              style={[stylesTrail.logo, { color: colors.info }]}
-            />
-            {/* <Text style={{ padding: 5, fontSize: 12, color: colors.info, fontWeight: 'bold' }}> Hình ảnh</Text> */}
-          </TouchableOpacity>
-          :
-          <View style={[stylesTrail.btn]}>
-            <FontAwesome5
-              name='images'
-              style={[stylesTrail.logo]}
-            />
-            {/* <Text style={{ padding: 5, fontSize: 12, color: colors.grey, fontWeight: 'bold' }}> Hình ảnh</Text> */}
-          </View>
-        }
+        </View> : null
+      }
 
 
-        <View>
-          {['PTP', 'OBT', 'WFP', 'TER'].includes(code) ? NoteAddress('Per') : NoteAddress('Other')}
-        </View>
-      </View>
+
+      {renderMedia()}
+
       <Portal style={[styles.container, { height: 500 }]}>
-        <Dialog visible={visible} onDismiss={hideDialog} style={{ borderRadius: 10 }}>
+        <Dialog visible={visible} onDismiss={() => setVisible(false)} style={{ borderRadius: 10 }}>
           <Dialog.Content style={{ padding: 0 }}>
             {images(image1, image2, image3)}
           </Dialog.Content>
           <Dialog.Actions style={{ padding: 0 }}>
             <TouchableOpacity
               style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, padding: 5 }}
-              onPress={hideDialog}>
+              onPress={() => setVisible(false)}>
               <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
             </TouchableOpacity>
           </Dialog.Actions>
@@ -322,7 +319,7 @@ function Uptrail(props) {
       />
 
       <Portal style={{ height: 500 }}>
-        <Dialog visible={visibleAddress} onDismiss={visibleAddress} style={{ borderRadius: 10 }}>
+        <Dialog visible={visibleAddress} onDismiss={() => setVisibleAddress(false)} style={{ borderRadius: 10 }}>
           <Dialog.Content>
             <Text>
               {trust_address}
@@ -374,9 +371,16 @@ const stylesTrail = StyleSheet.create({
   eventList: {
     marginTop: 20,
   },
+  indexTxt: {
+    marginLeft: 5,
+    fontSize: 12,
+    fontWeight: '600',
+  },
   nameTxt: {
     marginLeft: 5,
     fontSize: 12,
+    fontWeight: '400',
+    color: "gray"
   },
   msgTxt: {
     fontWeight: '400',
@@ -434,15 +438,14 @@ const stylesTrail = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   btn: {
-    borderWidth: 1,
+    borderWidth: 0.3,
     borderColor: colors.grey,
-    borderRadius: 10,
-    marginRight: 20,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    padding: 8,
+    borderRadius: 12,
   },
   logo: {
-    fontSize: 16,
-    padding: 5,
+    fontSize: 13,
     color: colors.grey
   },
 });

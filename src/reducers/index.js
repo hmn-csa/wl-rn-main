@@ -8,7 +8,8 @@ import uptrailReducers from './uptrailReducers'
 import managerReducers from './managerReducers'
 import mapReducers from './mapReducers'
 import paymentReducers from './paymentReducers'
-import staffReducers from './staffreducers'
+import staffReducers from './staffReducers'
+import calendarReducers from './calendarReducers'
 import searchbarReducers from './searchbarReducers'
 import rerenderapplReducers from './rerenderapplReducers'
 
@@ -26,7 +27,7 @@ const rootReducer = combineReducers({
   map: mapReducers,
   staff: staffReducers,
   searchbar: searchbarReducers,
-  rerender: rerenderapplReducers
+  calendar: calendarReducers,
 })
 
 

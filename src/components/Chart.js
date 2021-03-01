@@ -14,59 +14,51 @@ import { Dimensions } from "react-native";
 import { colors } from '../styles';
 const screenWidth = Dimensions.get("window").width;
 
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43]
-    }
-  ]
-};
 
-function BarChartPM(data) {
+function BarChartPM(data, title) {
   return (
     <View
       style={{
         backgroundColor: colors.white,
-        borderRadius: 10,
         marginLeft: 5,
-        flex: 1,
-        justifyContent: 'space-around'
       }}>
       <Text style={{
         color: colors.black,
-        textAlign: 'left',
         marginLeft: 20,
         fontWeight: 'bold',
         fontSize: 14,
         backgroundColor: colors.white,
-        borderRadius: 5
       }}>
-        Daily Payment
+        {title}
       </Text>
       <BarChart
         data={data}
-        style={{ borderRadius: 0, marginLeft: -40 }}
+        style={{ borderRadius: 0, marginLeft: -40, }}
         width={Dimensions.get('window').width}
-        height={180}
+        height={200}
         showValuesOnTopOfBars={true}
+        showBarTops={true}
+
+        //yAxisLabel={'y'}
+        //horizontalLabelRotation={45}
+        //verticalLabelRotation={30}
+        withOuterLines={false}
+        withInnerLines={false}
+        withHorizontalLabels={false}
+        fromZero={true}
+        bezier
         chartConfig={{
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
-          //fillShadowGradient: colors.info,
-          //fillShadowGradientOpacity: 0.4,
+          useShadowColorFromDataset: false,
           fillShadowGradientOpacity: 1,
           strokeWidth: 0.2,
-          //barPercentage: 1 / 31,
+          barPercentage: 0.4,
           fill: colors.main,
           fillOpacity: 1,
           color: (opacity = 1) => colors.main,
           labelColor: (opacity = 1) => colors.main,
         }}
-        withOuterLines={false}
-        withInnerLines={false}
-        withHorizontalLabels={false}
-        fromZero={true}
       />
     </View>
   )
@@ -102,10 +94,11 @@ function BarChartFL() {
             }
           ],
         }}
-        style={{ borderRadius: 10, marginLeft: -30 }}
+        style={{ borderRadius: 10, marginLeft: -40 }}
         width={Dimensions.get('window').width}
         height={180}
         showValuesOnTopOfBars={true}
+        showBarTops={true}
         chartConfig={{
           backgroundGradientFrom: colors.white,
           backgroundGradientTo: colors.white,
@@ -117,7 +110,7 @@ function BarChartFL() {
         }}
         withOuterLines={false}
         withInnerLines={false}
-        withHorizontalLabels={false}
+        //withHorizontalLabels={false}
         fromZero={true}
       />
     </View>

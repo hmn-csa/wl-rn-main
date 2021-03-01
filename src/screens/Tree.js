@@ -15,14 +15,14 @@ function getIndicator(isExpanded, hasChildrenNodes, type, level) {
       return <AntDesign name="like2" size={15} color={colors.success} />
     }
     if (type == 'bad') {
-      return <MaterialCommunityIcons name="cancel" size={15} color={colors.danger} />
+      return <MaterialCommunityIcons name="cancel" size={15} color={colors.secondary} />
     }
   } else if (isExpanded) {
     if (type == 'good') {
       return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} /> <AntDesign name="like2" size={15} color={colors.success} /></Text>
     }
     else if (type == 'bad') {
-      return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /> <MaterialCommunityIcons name="cancel" size={15} color={colors.danger} /></Text>
+      return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /> <MaterialCommunityIcons name="cancel" size={15} color={colors.secondary} /></Text>
     }
     else {
       return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} /></Text>
@@ -32,7 +32,7 @@ function getIndicator(isExpanded, hasChildrenNodes, type, level) {
       return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <AntDesign name="like2" size={15} color={colors.success} /></Text>
     }
     else if (type == 'bad') {
-      return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <MaterialCommunityIcons name="cancel" size={15} color={colors.danger} /></Text>
+      return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /> <MaterialCommunityIcons name="cancel" size={15} color={colors.secondary} /></Text>
     }
     else {
       return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} /></Text>
@@ -44,8 +44,10 @@ function Tree(props) {
 
   const navigation = useNavigation();
   const handleShow = (list, title) => {
-    navigation.navigate('Portfolio', { name: title })
-    props.updateShowlist(list)
+    if (title !== "Total") {
+      navigation.navigate('Portfolio', { name: title })
+      props.updateShowlist(list)
+    }
   }
   function getstyle_txttree(name) {
     if (name == 'Total') {
@@ -78,7 +80,7 @@ function Tree(props) {
                   <Text style={{ color: colors.black }}>
                     {node.case}
                   </Text>{"\t"}
-                  <Text style={{ color: colors.info }}>
+                  <Text style={{ color: colors.main }}>
                     {node.share} %
                   </Text>
                 </Text>

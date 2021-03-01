@@ -136,12 +136,12 @@ function UserSignout(props) {
   }
 
   return (
-    <ScrollView >
+    <ScrollView style={{ backgroundColor: 'white' }} >
 
       <View style={{
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20
+        marginBottom: 20,
       }}>
 
         <ImageBackground
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
     color: "white",
-    backgroundColor: colors.light,
+    backgroundColor: 'white',
     borderColor: colors.grey,
     borderWidth: 0.3,
   },

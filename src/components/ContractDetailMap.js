@@ -4,25 +4,36 @@ import { connect } from "react-redux"
 import {
   View, Text, Image, Button, StyleSheet,
   Alert, Linking, Platform, Dimensions,
-  TouchableOpacity
+  TouchableOpacity, Modal, Pressable
 } from 'react-native'
 
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import {
+  Dialog, Portal,
+} from 'react-native-paper';
+
+
+import { moneyFormat } from '../functions'
 import * as constAction from '../consts'
 import { colors } from '../styles'
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import RemarkPortal from './RemarkPortal'
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4.5;
-import { moneyFormat } from '../functions'
+
 
 function ContractDetailMap(props) {
+  const [visible, setVisible] = useState(false);
+
+
   const [contractId, setcontractId] = useState(props.contractId)
   const [content, setContent] = useState(props.data[contractId])
+  const [code, setCode] = useState(content.last_action_code)
+
   const [isTodo, setTodoContent] = useState(props.data[contractId].todo_flag)
   const [todoColor, setTodoColor] = useState(props.data[contractId].todo_flag === 1 ? colors.danger : colors.grey)
-  const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.info : colors.grey)
+  const [followedColor, setFollowedColor] = useState(props.data[contractId].followed === 1 ? colors.main : colors.grey)
   const [todoIcon, setTodoIcon] = useState(props.data[contractId].todo_flag === 1 ? 'heart' : 'heart-o')
-
   const handleAsyncChangeTodo = () => {
     let todo_value = isTodo === 1 ? 0 : 1
     let config = {
@@ -69,6 +80,59 @@ function ContractDetailMap(props) {
 
   }
 
+
+
+  const renderPortal2 = () => {
+    console.log('ren portal')
+    return (
+      <Portal>
+        <Dialog
+          style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto' }}
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+        >
+          <RemarkPortal props={props} item={content} setCode={setCode} />
+
+          <Dialog.Actions>
+            <TouchableOpacity
+              style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
+              onPress={() => setVisible(false)}>
+              <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => {
+                setVisible(false)
+              }}>
+            </TouchableOpacity>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    )
+  }
+
+  const renderPortal = () => {
+    console.log('ren portal')
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        style={{ width: null, height: height * 0.8, paddingLeft: 'auto', paddingRight: 'auto', }}
+      >
+        <View style={{ marginTop: 40 }}>
+          <RemarkPortal props={props} item={content} setCode={setCode} cancel={() => setVisible(false)} />
+          <TouchableOpacity
+            style={{ borderTopWidth: 1, borderColor: colors.grey, width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, }}
+            onPress={() => setVisible(false)}>
+            <Text style={{ color: 'black', fontSize: 16, textAlign: 'center' }}>Đóng</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    )
+  }
+
   const cardstyle =
     props.type != 'map' ? {
       backgroundColor: 'white',
@@ -106,10 +170,6 @@ function ContractDetailMap(props) {
     props.apiGetUptrail(config)
   }
 
-  const handleRemark = () => {
-    props.setActiveVsf(content)
-    props.navigation.navigate('Remark')
-  }
 
   const handleMap = () => {
     props.setActiveVsf(content)
@@ -130,9 +190,9 @@ function ContractDetailMap(props) {
     if (paid > 0) {
       const valuex = parseFloat(paid, 10).toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString()
       const value = valuex.substring(0, valuex.length - 2)
-      return <Text style={[showstyles.nameTxt, { color: colors.success, fontWeight: 'bold' }]}>{value}</Text>
+      return <Text style={[styles.nameTxt, { color: colors.success, fontWeight: 'bold' }]}>{value}</Text>
     }
-    else return <Text style={[showstyles.nameTxt, { color: colors.danger, fontWeight: 'bold' }]}>{paid}</Text>
+    else return <Text style={[styles.nameTxt, { color: colors.danger, fontWeight: 'bold' }]}>{paid}</Text>
   }
   const ptpIcon = (lastCode) => {
     if (['PTP', 'OBT', 'WFP', 'TER'].includes(lastCode))
@@ -152,136 +212,144 @@ function ContractDetailMap(props) {
       }}>{lastCode}</Text>
   }
 
+
+
+
   if (props.data[contractId] === undefined)
     return <View></View>
   return (
     <View
       style={cardstyle}
     >
-      <View style={[showstyles.row, { borderBottomWidth: 1, borderColor: '#CCC' }]}>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
-          <View style={[showstyles.row]}>
-            <View style={[showstyles.box, { flex: 3 }]}>
-              <Text style={[showstyles.nameTxt]}>{content.cust_name}</Text>
+      <View style={[styles.row, { borderBottomWidth: 1, borderColor: '#CCC' }]}>
+        <View style={[styles.box, { flex: 3.5 }]}>
+          <View style={[styles.row]}>
+            <View style={[styles.box, { flex: 3 }]}>
+              <Text style={[styles.nameTxt]}>{content.cust_name}</Text>
             </View>
-            <View style={[showstyles.box, { flex: 1 }]}>
-              {ptpIcon(props.data[contractId].last_action_code)}
+            <View style={[styles.box, { flex: 1 }]}>
+              {ptpIcon(code)}
             </View>
           </View>
         </View>
       </View>
-      <View style={[showstyles.row]}>
-        <View style={showstyles.box}>
-          <Text style={[showstyles.msgTxt]}>App_id:</Text>
+      <View style={[styles.row]}>
+        <View style={styles.box}>
+          <Text style={[styles.msgTxt]}>App_id:</Text>
         </View>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
-          <View style={[showstyles.row]}>
-            <View style={[showstyles.box, { flex: 3 }]}>
-              <Text style={[showstyles.nameTxt, { fontWeight: 'normal' }]}>{content.app_id}</Text>
+        <View style={[styles.box, { flex: 3.5 }]}>
+          <View style={[styles.row]}>
+            <View style={[styles.box, { flex: 3 }]}>
+              <Text style={[styles.nameTxt, { fontWeight: 'normal' }]}>{content.app_id}</Text>
             </View>
-            <View style={[showstyles.box, { flex: 1 }]}></View>
-          </View>
-        </View>
-      </View>
-
-      <View style={[showstyles.row]}>
-        <View style={showstyles.box}>
-          <Text style={[showstyles.msgTxt]}>Hợp đồng:</Text>
-        </View>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
-          <View style={[showstyles.row]}>
-            <View style={[showstyles.box, { flex: 3 }]}>
-              <Text style={[showstyles.nameTxt, { fontWeight: 'normal' }]}>{content.appl_id}</Text>
-            </View>
-            <View style={[showstyles.box, { flex: 1 }]}>
-            </View>
+            <View style={[styles.box, { flex: 1 }]}></View>
           </View>
         </View>
       </View>
 
-      <View style={[showstyles.row]}>
-        <View style={showstyles.box}>
-          <Text style={showstyles.msgTxt}>Thanh toán:</Text>
+      <View style={[styles.row]}>
+        <View style={styles.box}>
+          <Text style={[styles.msgTxt]}>Hợp đồng:</Text>
         </View>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
-          <View style={[showstyles.row]}>
-            <View style={[showstyles.box, { flex: 3 }]}>
+        <View style={[styles.box, { flex: 3.5 }]}>
+          <View style={[styles.row]}>
+            <View style={[styles.box, { flex: 3 }]}>
+              <Text style={[styles.nameTxt, { fontWeight: 'normal' }]}>{content.appl_id}</Text>
+            </View>
+            <View style={[styles.box, { flex: 1 }]}>
+            </View>
+          </View>
+        </View>
+      </View>
+
+
+      <View style={[styles.row]}>
+        <View style={styles.box}>
+          <Text style={styles.msgTxt}>Thanh toán:</Text>
+        </View>
+        <View style={[styles.box, { flex: 3.5 }]}>
+          <View style={[styles.row]}>
+            <View style={[styles.box, { flex: 3 }]}>
               {paidIcon(content.total_pay_amount)}
             </View>
           </View>
         </View>
       </View>
-      <View style={[showstyles.row]}>
-        <View style={showstyles.box}>
-          <Text style={showstyles.msgTxt}>Dư nợ gốc:</Text>
+      <View style={[styles.row]}>
+        <View style={styles.box}>
+          <Text style={styles.msgTxt}>Dư nợ gốc:</Text>
         </View>
-        <View style={[showstyles.box, { flex: 3.5 }]}>
-          <Text style={[showstyles.msgTxt, { fontWeight: 'bold', color: colors.info }]} >{moneyFormat(content.principle_outstanding)}</Text>
+        <View style={[styles.box, { flex: 3.5 }]}>
+          <Text style={[styles.msgTxt, { fontWeight: 'bold', color: colors.main }]} >{moneyFormat(content.principle_outstanding)}</Text>
         </View>
       </View>
-      <View style={[showstyles.row]} >
-        <View style={showstyles.box}>
-          <Text style={showstyles.msgTxt}>Địa chỉ:</Text>
+      <View style={[styles.row]} >
+        <View style={styles.box}>
+          <Text style={styles.msgTxt}>Địa chỉ:</Text>
         </View>
-        <View style={[showstyles.box, { flex: 3.5, flexShrink: 1 }]}>
-          <Text style={showstyles.msgTxt} >{content.reg_address}</Text>
+        <View style={[styles.box, { flex: 3.5, flexShrink: 1 }]}>
+          <Text style={styles.msgTxt} >{content.reg_address}</Text>
         </View>
       </View>
 
       {/* BEGIN BUTTONS */}
-      <View style={[showstyles.btngroup]}>
+      <View style={[styles.btngroup]}>
         <TouchableOpacity
-          style={[showstyles.btn]}
+          style={[styles.btn]}
           onPress={handleGetVsf}
         >
           <FontAwesome
             name='file-text-o'
-            style={showstyles.logo}
+            style={styles.logo}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn]}
+          style={[styles.btn]}
           onPress={handleGetSkip}
         >
           <FontAwesome
             name='search'
-            style={showstyles.logo}
+            style={styles.logo}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn, { borderColor: todoColor }]}
+          style={[styles.btn, { borderColor: todoColor }]}
           onPress={handleAsyncChangeTodo}>
           <FontAwesome
             name={todoIcon}
-            style={[showstyles.logo, { color: todoColor }]}
+            style={[styles.logo, { color: todoColor }]}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn, { borderColor: followedColor }]}
-          onPress={handleRemark}
+          style={[styles.btn, { borderColor: followedColor }]}
+          // onPress={handleRemark}
+          onPress={() => setVisible(true)}
         >
           <FontAwesome
             name="pencil"
-            style={[showstyles.logo, { color: followedColor }]}
+            style={[styles.logo, { color: followedColor }]}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn]}
+          style={[styles.btn]}
           onPress={handleMap}>
           <FontAwesome5
             name="directions"
-            style={showstyles.logo}
+            style={styles.logo}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[showstyles.btn]}
+
+          style={[styles.btn]}
           onPress={handleCall}>
           <FontAwesome
             name="phone"
-            style={showstyles.logo}
+            style={styles.logo}
           />
         </TouchableOpacity>
       </View>
+
+      {renderPortal()}
     </View >
   )
 }
@@ -329,6 +397,7 @@ const mapDispatchToProps = (dispatch) => {
         data
       })
     },
+
   }
 }
 
@@ -342,7 +411,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 
-const showstyles = StyleSheet.create({
+const styles = StyleSheet.create({
   logo: {
     fontSize: 15,
     padding: 8,
@@ -373,7 +442,6 @@ const showstyles = StyleSheet.create({
   box: {
     flex: 1,
     justifyContent: 'center',
-
   },
   btngroup: {
     flexDirection: 'row',

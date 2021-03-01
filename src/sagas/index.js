@@ -13,6 +13,8 @@ import { watcherSagaUptrail } from './uptrailSaga'
 import { watcherSagaCheckin } from './checkinSaga'
 import { watcherSagaPayment } from './paymentSaga'
 import { watcherChangeInfo } from './changeInfoSaga'
+import { watcherSagaCalendar } from './calendarSaga'
+
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
@@ -24,6 +26,7 @@ export function* rootSaga() {
     fork(watcherSagaCheckin),
     fork(watcherSagaPayment),
     fork(watcherChangeInfo),
+    fork(watcherSagaCalendar),
   ]);
 };
 

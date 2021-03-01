@@ -24,48 +24,48 @@ function Dashboard(props) {
     return (
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <StaffHeader_com />
-        <View style={[styles.row, { flex: 1 }]}>
-          <Swiper
-            showsButtons={false}
-            autoplay={true}
-            autoplayTimeout={6}
-            showsPagination={false}
-            autoplayDirection={true}
-          >
-            <StaffDash_com />
-            <StaffTodo_com />
-          </Swiper>
-        </View>
-        <View style={[styles.row, { flex: 1 }]}>
-          {/* <Swiper
-            showsButtons={false}
-            autoplay={true}
-            autoplayTimeout={3}
-            showsPagination={false}
-            autoplayDirection={true}
-            navigation={props.navigation}
-          > */}
-          {BarChartPM(props.paymentCal)}
-          {/* {LineChartFL(props.paymentCal)} */}
-          {/* </Swiper> */}
-        </View>
-        <View style={[styles.row, styles.tool_frame]}>
+        <Swiper
+          style={{}}
+          showsButtons={false}
+          autoplay={true}
+          autoplayTimeout={6}
+          showsPagination={false}
+          autoplayDirection={true}
+          navigation={props.navigation}
+        >
+          <StaffDash_com name="Toàn danh mục" />
+          <StaffTodo_com name="Danh mục tự chọn" />
+        </Swiper>
+        <Swiper
+          showsButtons={false}
+          autoplay={true}
+          autoplayTimeout={4}
+          showsPagination={false}
+          autoplayDirection={true}
+          navigation={props.navigation
+          }
+        >
+          {BarChartPM(props.paymentCal, "Thanh toán 10 ngày:")}
+        </Swiper>
+
+        <View style={[styles.toolFrame]}>
           <TouchableOpacity
-            style={styles.btn_tool}
+            style={styles.toolBtn}
             onPress={() => props.navigation.navigate('ListPayment')}>
-            <FontAwesome5 name="dollar-sign" size={20} color={colors.gray} style={{ padding: 10, paddingLeft: 15, paddingRight: 15 }} />
+            <FontAwesome5 name="funnel-dollar" size={30} color={colors.gray} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btn_tool}
+            style={styles.toolBtn}
             onPress={() => props.navigation.navigate('Uptrail')}>
-            <FontAwesome5 name="route" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="route" size={30} color={colors.gray} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.btn_tool}
+            style={styles.toolBtn}
             onPress={() => props.navigation.navigate('Portfolio', { name: 'Total case' })}>
-            <FontAwesome name="list-alt" size={20} color={colors.gray} style={{ padding: 10 }} />
+            <FontAwesome5 name="list" size={30} color={colors.gray} />
           </TouchableOpacity>
         </View>
+
       </View >
     )
 }
@@ -83,22 +83,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  tool_frame: {
+  toolFrame: {
     width: '80%',
     marginVertical: 2,
     marginLeft: 'auto',
     marginRight: 'auto',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 5,
-    marginTop: 10,
-    flex: 0.4
+    justifyContent: 'space-between',
+    marginBottom: 20
   },
-  btn_tool: {
+  toolBtn: {
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 15,
-    height: 45
+    height: 60,
+    width: 60,
+    paddingTop: 15,
+    paddingLeft: 13,
+
   }
 })
 
@@ -109,9 +111,6 @@ const mapStateToProps = (state, ownProps) => {
     paymentCal: state.payments.paymentCal,
     paymentFetching: state.payments.fetching,
     showlists: state.showlists.applIds,
-    todoCal: state.data.todoCal,
-    totalCal: state.data.totalCal,
-    treeCal: state.treeCal,
     uptrails: state.uptrails,
     token: state.token,
   };

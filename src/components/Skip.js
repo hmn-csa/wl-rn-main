@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Text, View, StyleSheet, ScrollView,
-  Dimensions, Linking, Platform, TouchableOpacity, ViewBase
+  Dimensions, Linking, Platform, TouchableOpacity, ViewBase, ImageBackground
 } from 'react-native'
 import TreeView from 'react-native-final-tree-view'
 import { connect } from "react-redux"
@@ -18,7 +18,8 @@ import { moneyFormat } from '../functions';
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 5;
 const SliderWidth = Dimensions.get('screen').width;
-
+const AVATAR_WIDTH = width / 8
+import { EMPTYAVATAR } from '../images'
 
 
 const BOOK = [
@@ -115,11 +116,40 @@ function Skip(props) {
     }])
   }
 
+  const SkipHeader = (props) => {
+    const renAvatar = (avatar) => {
+      if (!avatar)
+        return EMPTYAVATAR
+      else return { uri: avatar }
+    }
+    return (
+      <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 10, paddingBottom: 5, backgroundColor: 'white', paddingLeft: 20 }]}>
+        <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, }]}>
+          <ImageBackground
+            style={{
+              borderRadius: 30,
+              width: 50,
+              height: 50,
+            }}
+            imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
+            source={{}}>
+          </ImageBackground>
+        </View>
+        <View style={[styles.box, { flex: 1, marginLeft: 10, marginBottom: 5, marginTop: -5 },]}>
+          <Text style={[styles.nameTxt, { color: colors.main }]}
+            ellipsizeMode="tail">
+          </Text>
+          <Text style={[styles.nameTxt, { fontSize: 12 }]}
+            ellipsizeMode="tail">
+          </Text>
+        </View>
 
+      </View>
+    )
+  }
 
   const renMainInfo = (maininfo) => {
     return (
-
       <View style={{
         flex: 1,
         flexDirection: 'column',
@@ -132,8 +162,9 @@ function Skip(props) {
             <Text style={[styles.title]}>Thông tin cá nhân:</Text>
           </View>
         </View>
+        <SkipHeader />
 
-        <View style={[styles.row]}>
+        {/* <View style={[styles.row]}>
           <View style={[styles.box]}>
             <Text style={styles.textContent}>CMND: {maininfo.id_no}</Text>
           </View>
@@ -190,7 +221,7 @@ function Skip(props) {
           <View style={[styles.box]}>
             <Text style={{ fontSize: 10 }}>Địa chỉ cty: {maininfo.address_off}</Text>
           </View>
-        </View>
+        </View> */}
 
       </View>
     )

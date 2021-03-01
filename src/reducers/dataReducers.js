@@ -165,6 +165,17 @@ const initialState = {
 
 };
 
+const genApplIds = (list) => {
+  const data = list.map(item => {
+    return {
+      appl_id: item.appl_id,
+      id_no: item.id_no,
+      app_id: item.app_id,
+      cust_name: item.cust_name,
+    }
+  })
+  return data
+}
 
 const calPortData = (appls) => {
 
@@ -213,34 +224,35 @@ const calPortData = (appls) => {
   })
 
 
+
   return {
     totalCase: {
       case: totalCase,
       value: posValue,
-      applIds: appls//.map(appl => appl.appl_id)
+      applIds: genApplIds(appls)//.map(appl => appl.appl_id)
     },
     paidAll: {
       value: initPaidMtd.length,
-      applIds: initPaidMtd//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPaidMtd)//.map(appl => appl.appl_id)
     },
     paidMtd: {
       case: initPaidMtd.length,
       value: paidMtdValue,
-      applIds: initPaidMtd//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPaidMtd)//.map(appl => appl.appl_id)
     },
     ptpCase: {
       case: initPtp.length,
-      applIds: initPtp//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPtp)//.map(appl => appl.appl_id)
     },
     paidToday: {
       case: initPaidTodayAppls.length,
       value: paidTodayValue,
-      applIds: initPaidTodayAppls//.map(appl => appl.appl_id)
+      applIds: genApplIds(initPaidTodayAppls)//.map(appl => appl.appl_id)
     },
     followed: {
       case: initFollowedAppls.length,
       value: followMtdValue,
-      applIds: initFollowedAppls//.map(appl => appl.appl_id)
+      applIds: genApplIds(initFollowedAppls)//.map(appl => appl.appl_id)
     },
     followedToday: {
       case: 0,
@@ -248,7 +260,7 @@ const calPortData = (appls) => {
     },
     revisit: {
       case: totalReVisitAppls.length,
-      applIds: totalReVisitAppls//.map(appl => appl.appl_id)
+      applIds: genApplIds(totalReVisitAppls)//.map(appl => appl.appl_id)
     },
     Bptp: {
       case: 0,
@@ -403,7 +415,7 @@ const dataReducers = (state = initialState, action) => {
                 name: 'Not Followed',
                 case: initNotfollow.length,
                 share: parseFloat(initNotfollow.length / totalTReeCase * 100).toFixed(1),
-                applIds: initNotfollow, //.map(appl => appl.appl_id),
+                applIds: genApplIds(initNotfollow), //.map(appl => appl.appl_id),
                 type: 'bad',
                 children: [
                   {
@@ -411,7 +423,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Paid',
                     case: initNotfollowPaid.length,
                     share: initNotfollow.length > 0 ? parseFloat(initNotfollowPaid.length / initNotfollow.length * 100).toFixed(1) : 0,
-                    applIds: initNotfollowPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initNotfollowPaid), //.map(appl => appl.appl_id),
                     type: 'good',
                   },
                   {
@@ -419,7 +431,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Not Paid',
                     case: initNotfollowNotPaid.length,
                     share: initNotfollow.length > 0 ? parseFloat(initNotfollowNotPaid.length / initNotfollow.length * 100).toFixed(1) : 0,
-                    applIds: initNotfollowNotPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initNotfollowNotPaid), //.map(appl => appl.appl_id),
                     type: 'bad',
                   },
                 ],
@@ -429,7 +441,7 @@ const dataReducers = (state = initialState, action) => {
                 name: 'Followed',
                 case: initFollow.length,
                 share: (initFollow.length / totalTReeCase * 100).toFixed(1),
-                applIds: initFollow, //.map(appl => appl.appl_id),
+                applIds: genApplIds(initFollow), //.map(appl => appl.appl_id),
                 type: 'good',
                 children: [
                   {
@@ -437,7 +449,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Paid',
                     case: initFollowPaid.length,
                     share: initFollow.length > 0 ? (initFollowPaid.length / initFollow.length * 100).toFixed(1) : 0,
-                    applIds: initFollowPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initFollowPaid), //.map(appl => appl.appl_id),
                     type: 'good',
                   },
                   {
@@ -445,7 +457,7 @@ const dataReducers = (state = initialState, action) => {
                     name: 'Not Paid',
                     case: initFollowNotPaid.length,
                     share: initFollow.length > 0 ? (initFollowNotPaid.length / initFollow.length * 100).toFixed(1) : 0,
-                    applIds: initFollowNotPaid, //.map(appl => appl.appl_id),
+                    applIds: genApplIds(initFollowNotPaid), //.map(appl => appl.appl_id),
                     type: 'bad',
                     children: [
                       {
@@ -453,7 +465,7 @@ const dataReducers = (state = initialState, action) => {
                         name: 'Meet',
                         case: initNotPaidMeet.length,
                         share: initFollowNotPaid.length > 0 ? (initNotPaidMeet.length / initFollowNotPaid.length * 100).toFixed(1) : 0,
-                        applIds: initNotPaidMeet, //.map(appl => appl.appl_id),
+                        applIds: genApplIds(initNotPaidMeet), //.map(appl => appl.appl_id),
                         type: 'good',
                         children: [
                           {
@@ -461,7 +473,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'PTP',
                             case: initMeetPTP.length,
                             share: initNotPaidMeet.length > 0 ? (initMeetPTP.length / initNotPaidMeet.length * 100).toFixed(1) : 0,
-                            applIds: initMeetPTP, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initMeetPTP), //.map(appl => appl.appl_id),
                             type: 'good',
                           },
                           {
@@ -469,7 +481,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'DIF Finance',
                             case: initMeetDif.length,
                             share: initNotPaidMeet.length > 0 ? (initMeetDif.length / initNotPaidMeet.length * 100).toFixed(1) : 0,
-                            applIds: initMeetDif, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initMeetDif), //.map(appl => appl.appl_id),
                             type: 'bad',
                           },
                           {
@@ -477,7 +489,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'RTP',
                             case: initMeetRTP.length,
                             share: initNotPaidMeet.length > 0 ? (initMeetRTP.length / initNotPaidMeet.length * 100).toFixed(1) : 0,
-                            applIds: initMeetRTP, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initMeetRTP), //.map(appl => appl.appl_id),
                             type: 'bad',
                           },
                         ]
@@ -487,7 +499,7 @@ const dataReducers = (state = initialState, action) => {
                         name: 'Not Meet',
                         case: initNotPaidNotMeet.length,
                         share: initFollowNotPaid.length > 0 ? (initNotPaidNotMeet.length / initFollowNotPaid.length * 100).toFixed(1) : 0,
-                        applIds: initNotPaidNotMeet, //.map(appl => appl.appl_id),
+                        applIds: genApplIds(initNotPaidNotMeet), //.map(appl => appl.appl_id),
                         type: 'bad',
                         children: [
                           {
@@ -495,7 +507,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'Found House',
                             case: initNotMeetFH.length,
                             share: initNotPaidNotMeet.length > 0 ? (initNotMeetFH.length / initNotPaidNotMeet.length * 100).toFixed(1) : 0,
-                            applIds: initNotMeetFH, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initNotMeetFH), //.map(appl => appl.appl_id),
                             type: 'good',
                           },
                           {
@@ -503,7 +515,7 @@ const dataReducers = (state = initialState, action) => {
                             name: 'Not Found House',
                             case: initNotMeetNFH.length,
                             share: initNotPaidNotMeet.length > 0 ? (initNotMeetNFH.length / initNotPaidNotMeet.length * 100).toFixed(1) : 0,
-                            applIds: initNotMeetNFH, //.map(appl => appl.appl_id),
+                            applIds: genApplIds(initNotMeetNFH), //.map(appl => appl.appl_id),
                             type: 'bad',
                           },
                         ]
@@ -517,102 +529,6 @@ const dataReducers = (state = initialState, action) => {
         ]
       }
 
-    // case constAction.CAL_TODO_DASH:
-    //   // ======== todos ==========
-
-    //   let todoAppls = Object.values(state.data).filter((appl) => {
-    //     return appl.todo_flag == 1
-    //   })
-    //   let todoFollowedAppls = todoAppls.filter((appl) => {
-    //     return appl.followed == 1
-    //   })
-
-    //   let todoPaidAppls = todoAppls.filter((appl) => {
-    //     return appl.total_pay_amount > 0
-    //   })
-    //   let todoPaidValue = todoPaidAppls.map((appl) => {
-    //     return appl.paid_today_amt
-    //   }).reduce(function (sum, pay) {
-    //     return sum = sum + pay;
-    //   }, 0);
-
-
-    //   let todoTodayPaidAppls = todoAppls.filter((appl) => {
-    //     return appl.paid_today_amt > 0
-    //   })
-    //   let todoTodayPaidValue = todoTodayPaidAppls.map((appl) => {
-    //     return appl.paid_today_amt
-    //   }).reduce(function (sum, pay) {
-    //     return sum = sum + pay;
-    //   }, 0);
-
-    //   let todoFollowMtdValue = todoFollowedAppls.map(function (appl) {
-    //     return appl.total_pay_amount
-    //   }).reduce(function (sum, pay) {
-    //     return sum = sum + pay;
-    //   }, 0)
-
-
-    //   let todoPtpAppls = todoAppls.filter((appl) => {
-    //     return appl.last_action_code === 'PTP'
-    //   })
-
-    //   let reVisitAppls = todoAppls.filter((appl) => {
-    //     return ['F_NAH', 'LEM'].includes(appl.last_action_code)
-    //   })
-
-    //   let paidValue = todoPaidAppls.map((appl) => {
-    //     return appl.total_pay_amount
-    //   }).reduce(function (sum, pay) {
-    //     return sum = sum + pay;
-    //   }, 0);
-
-    //   state = {
-    //     ...state,
-    //     todoCal: {
-    //       'todoCase': {
-    //         case: todoAppls.length,
-    //         applIds: todoAppls,//.map(appl => appl.appl_id)
-    //         value: paidValue,
-    //         pos: 1
-    //       },
-    //       'todoFollowed': {
-    //         case: todoFollowedAppls.length,
-    //         value: todoFollowMtdValue,
-    //         applIds: todoFollowedAppls//.map(appl => appl.appl_id)
-    //       },
-
-    //       'todoPaid': {
-    //         'case': todoPaidAppls.length,
-    //         value: todoPaidValue,
-    //         'applIds': todoPaidAppls//.map(appl => appl.appl_id)
-    //       },
-
-    //       todoPaidToday: {
-    //         case: todoTodayPaidAppls.length,
-    //         value: todoTodayPaidValue,
-    //         applIds: todoTodayPaidAppls,
-    //       },
-
-    //       'todoPtp': {
-    //         'case': todoPtpAppls.length,
-    //         'applIds': todoPtpAppls//.map(appl => appl.appl_id)
-    //       },
-    //       'todoBptp': {
-    //         'case': 0,
-    //         'applIds': []
-    //       },
-    //       'todoRevisit': {
-    //         'case': reVisitAppls.length,
-    //         'applIds': reVisitAppls//.map(appl => appl.appl_id)
-    //       },
-    //       todoFollowedToday: {
-    //         case: 0,
-    //         applIds: []
-    //       },
-    //     }
-    //   }
-    //   return state;
 
     case constAction.CAL_CATE_DASH:
 
@@ -627,7 +543,12 @@ const dataReducers = (state = initialState, action) => {
             paidcase: rv[x[key]].paidcase + x.full_paid,
             case: rv[x[key]].case + 1,
             visited: rv[x[key]].visited + x.followed,
-            applIds: rv[x[key]].applIds.concat([{ appl_id: x.appl_id, cust_name: x.cust_name, last_action_code: x.last_action_code }])
+            applIds: rv[x[key]].applIds.concat([{
+              appl_id: x.appl_id,
+              app_id: x.app_id,
+              cust_name: x.cust_name,
+              id_no: x.id_no
+            }])
           };
           return rv;
         }, {});

@@ -4,7 +4,7 @@ export const WORKLIST_API = "https://beta-fc.lgm.com.vn/rn-ver/api"
 
 export const GOOGLEMAPKEY = "AIzaSyBvUjhsDOyro_uWooTdarRRRUywqWzD6pE"
 
-export const REMARK_CODE = [
+export const REMARK_CODE2 = [
   { label: 'PTP - Hứa thanh toán', value: 'PTP' },
   { label: 'F_OBT - Đã thu được tiền', value: 'F_OBT' },
   { label: 'WFP - Đã thanh toán chờ kiểm tra', value: 'WFP' },
@@ -34,6 +34,117 @@ export const REMARK_CODE = [
   { label: 'F_CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần', value: 'F_CGI' },
   { label: 'DIE - Đã qua đời', value: 'DIE' },
 
+];
+
+const fatherStyle = {
+  fontWeight: "bold",
+  paddingLeft: 5,
+  color: "red"
+}
+const childStyle = {
+  paddingLeft: 5,
+}
+export const REMARK_CODE = [
+  {
+    label: "GOOD",
+    value: "GOOD",
+    untouchable: true,
+    textStyle: fatherStyle,
+  },
+  { label: "PTP - Hứa thanh toán", value: "PTP", parent: "GOOD" },
+  { label: "F_OBT - Đã thu được tiền", value: "F_OBT", parent: "GOOD" },
+  {
+    label: "WFP - Đã thanh toán chờ kiểm tra",
+    value: "WFP",
+    parent: "GOOD",
+  },
+  { label: "TER - Thanh lý", value: "TER", parent: "GOOD" },
+
+  {
+    label: "DIFFICULT FINANCE",
+    value: "DIF",
+    untouchable: true,
+    textStyle: fatherStyle,
+  },
+  { label: "WAS - Chờ thu nhập, trợ cấp", value: "WAS", parent: "DIF" },
+  {
+    label: "LST - Thất nghiệp, làm ăn thua lỗ",
+    value: "LST",
+    parent: "DIF",
+  },
+  { label: "MCW - KH bị bệnh, tai nạn", value: "MCW", parent: "DIF" },
+  { label: "CTI - Thiên tai", value: "CTI", parent: "DIF" },
+
+  {
+    label: "LEM",
+    value: "LEMM",
+    untouchable: true,
+    textStyle: fatherStyle,
+  },
+  { label: "F_NAH - Không có nhà", value: "F_NAH", parent: "LEMM" },
+  { label: "LEM - Để lại lời nhắn", value: "LEM", parent: "LEMM" },
+
+  {
+    label: "REFUSE TO PAY",
+    value: "RTPP",
+    untouchable: true,
+    textStyle: fatherStyle,
+  },
+  { label: "RTP - Từ chôí thanh toán", value: "RTP", parent: "RTPP" },
+  { label: "GSF - Gian lận", value: "GSF", parent: "RTPP" },
+  { label: "IGN1 - Chưa nhận khoản vay", value: "IGN1", parent: "RTPP" },
+  { label: "IGN2 - Báo đã hủy hợp đồng", value: "IGN2", parent: "RTPP" },
+
+  {
+    label: "NOT_FOUND",
+    value: "NOT_FOUND",
+    untouchable: true,
+    textStyle: fatherStyle,
+  },
+  {
+    label: "F_RENT - Nhà thuê và đã dọn đi",
+    value: "F_RENT",
+    parent: "NOT_FOUND",
+  },
+  { label: "F_HOS - Nhà đã bán", value: "F_HOS", parent: "NOT_FOUND" },
+  {
+    label: "F_WAU - KH bỏ trốn, gia đình còn ở tại địa phương",
+    value: "F_WAU",
+    parent: "NOT_FOUND",
+  },
+  {
+    label: "F_NFH - Không tìm thấy nhà",
+    value: "F_NFH",
+    parent: "NOT_FOUND",
+  },
+  {
+    label: "F_NIW - Không có thông tin tại nơi làm việc",
+    value: "F_NIW",
+    parent: "NOT_FOUND",
+  },
+  {
+    label: "F_NLA - Không sống tại địa chỉ",
+    value: "F_NLA",
+    parent: "NOT_FOUND",
+  },
+  {
+    label: "F_WET - KH bỏ trốn, không gặp gia đình",
+    value: "F_WET",
+    parent: "NOT_FOUND",
+  },
+
+  {
+    label: "DIE/JAIL",
+    value: "DIEE",
+    untouchable: true,
+    textStyle: fatherStyle,
+  },
+  {
+    label: "F_CGI - Đi tù/nghĩa vụ/cai nghiện/tâm thần",
+    value: "F_CGI",
+    parent: "DIEE",
+  },
+  { label: "DIE - Đã qua đời", value: "DIE", parent: "DIEE" },
 ];
 
 
@@ -143,6 +254,21 @@ export const USER_UPTRAIL_FAILURE = "USER_UPTRAIL_FAILURE"
 
 export const UPTRAIL_CLEAR = "UPTRAIL_CLEAR"
 
+
+
+// ----------- CALENDAR ---------------//
+export const API_CALENDAR_REQUEST = "API_CALENDAR_REQUEST"
+export const API_CALENDAR_SUCCESS = "API_CALENDAR_SUCCESS"
+export const API_CALENDAR_FAILURE = "API_CALENDAR_FAILURE"
+
+export const USER_CALENDAR_UPDATE = "USER_CALENDAR_UPDATE"
+export const USER_CALENDAR_UPDATE_SUCCESS = "USER_CALENDAR_UPDATE_SUCCESS"
+
+export const USER_CALENDAR_REMOVE = "USER_CALENDAR_REMOVE"
+export const USER_CALENDAR_REMOVE_SUCCESS = "USER_CALENDAR_REMOVE_SUCCESS"
+
+export const USER_CALENDAR_APPEND = "USER_CALENDAR_APPEND"
+export const USER_CALENDAR_APPEND_SUCCESS = "USER_CALENDAR_APPEND_SUCCESS"
 // ------------ Checkin -----------------//
 export const API_GETCHECKIN_REQUEST = "API_GETCHECKIN_REQUEST"
 export const API_GETCHECKIN_SUCCESS = "API_GETCHECKIN_SUCCESS"

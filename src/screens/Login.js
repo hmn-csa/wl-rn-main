@@ -22,8 +22,6 @@ import * as LocalAuthentication from "expo-local-authentication";
 import * as SecureStore from "expo-secure-store";
 
 import * as constAction from '../consts'
-
-
 const { width, height } = Dimensions.get("window");
 
 
@@ -39,6 +37,28 @@ function Login(props) {
   //     .catch(error => console.log(error));
   // }
   //=============================
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        // setErrorMsg('Permission to access location was denied');
+        Alert.alert("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
+      setLocation(location);
+    })();
+  }, []);
+
+
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
