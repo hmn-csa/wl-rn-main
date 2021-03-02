@@ -1,20 +1,17 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from "redux";
 
-import tokenReducers from './tokenReducers'
-import vsfReducers from './vsfReducers'
-import showListReducers from './showListReducers'
-import dataReducers from './dataReducers'
-import uptrailReducers from './uptrailReducers'
-import managerReducers from './managerReducers'
-import mapReducers from './mapReducers'
-import paymentReducers from './paymentReducers'
-import staffReducers from './staffReducers'
-import calendarReducers from './calendarReducers'
-import searchbarReducers from './searchbarReducers'
-import rerenderapplReducers from './rerenderapplReducers'
-
-
-
+import tokenReducers from "./tokenReducers";
+import vsfReducers from "./vsfReducers";
+import showListReducers from "./showListReducers";
+import dataReducers from "./dataReducers";
+import uptrailReducers from "./uptrailReducers";
+import managerReducers from "./managerReducers";
+import mapReducers from "./mapReducers";
+import paymentReducers from "./paymentReducers";
+import staffReducers from "./staffreducers";
+import calendarReducers from "./calendarReducers";
+import searchbarReducers from "./searchbarReducers";
+import rerenderapplReducers from "./rerenderapplReducers";
 
 const rootReducer = combineReducers({
   token: tokenReducers,
@@ -28,9 +25,8 @@ const rootReducer = combineReducers({
   staff: staffReducers,
   searchbar: searchbarReducers,
   calendar: calendarReducers,
-})
-
+});
 
 export default (state, action) =>
-  rootReducer(action.type === 'TOKEN_REMOVE' ? undefined : state, action);
+  rootReducer(action.type === "TOKEN_REMOVE" ? undefined : state, action);
 // export default rootReducer
