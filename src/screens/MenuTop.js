@@ -15,6 +15,7 @@ import ListUptrailMonth from './ListUptrailMonth'
 
 import { Contract_com, Customer_com, Payment_com, Follow_com } from '../components/Vsf_detail'
 import { ProductCategories, ScoreCategories, ClassifyCategories } from './Categories'
+import Skip from '../components/Skip'
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -49,6 +50,40 @@ function Menutop_Categories() {
         name="Segment"
         component={ScoreCategories}
         options={{ tabBarLabel: 'Segment' }}
+      />
+    </Tab.Navigator>
+  );
+}
+function Menutop_Skip() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Main"
+      tabBarOptions={{
+        activeTintColor: colors.main,
+        inactiveTintColor: colors.black,
+        labelStyle: { fontSize: 12, fontWeight: 'bold' },
+        style: { backgroundColor: 'white' },
+      }}
+    >
+      <Tab.Screen
+        name="Main"
+        component={Skip}
+        options={{ tabBarLabel: 'Thông tin chính' }}
+      />
+      <Tab.Screen
+        name="Contracts"
+        component={ClassifyCategories}
+        options={{ tabBarLabel: 'Khoản vay' }}
+      />
+      <Tab.Screen
+        name="Insurance"
+        component={ProductCategories}
+        options={{ tabBarLabel: 'Bảo hiểm' }}
+      />
+      <Tab.Screen
+        name="Other"
+        component={ScoreCategories}
+        options={{ tabBarLabel: 'Nguồn khác' }}
       />
     </Tab.Navigator>
   );
@@ -148,5 +183,6 @@ export {
   Menutop_Categories,
   Menutop_Uptrail,
   Menutop_User,
-  Menutop_Vsf
+  Menutop_Vsf,
+  Menutop_Skip
 };

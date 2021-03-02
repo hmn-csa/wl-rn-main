@@ -14,7 +14,7 @@ import { colors } from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Menutop_Categories, Menutop_Dashboard } from './MenuTop'
 import Calendar_ from './Calendar'
-import { Menutop_Uptrail, Menutop_User, Menutop_Vsf } from './MenuTop'
+import { Menutop_Uptrail, Menutop_User, Menutop_Vsf, Menutop_Skip } from './MenuTop'
 import { useNavigation } from '@react-navigation/native';
 import { SearchBar } from 'react-native-elements';
 import * as constAction from '../consts'
@@ -322,7 +322,7 @@ function DashboardStack(props) {
       />
       <Stack.Screen
         name="Skip"
-        component={Skip}
+        component={Menutop_Skip}
         options={{
           headerStyle: {
             backgroundColor: colors.white,
@@ -565,7 +565,7 @@ function CategorieStack(props) {
       />
       <Stack.Screen
         name="Skip"
-        component={Skip}
+        component={Menutop_Skip}
         options={{
           headerStyle: {
             backgroundColor: colors.white,
@@ -728,7 +728,7 @@ function UserStack2(props) {
       />
       <Stack.Screen
         name="Skip"
-        component={Skip}
+        component={Menutop_Skip}
         options={{
           headerStyle: {
             backgroundColor: colors.white,

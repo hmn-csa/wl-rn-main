@@ -7,10 +7,12 @@ import TreeView from 'react-native-final-tree-view'
 import { connect } from "react-redux"
 import Carousel from 'react-native-snap-carousel'
 import Timeline from 'react-native-timeline-flatlist'
-import { FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { actUpdateShowlist } from "../actions"
 import { MAIN_COLOR2, colors } from '../styles'
 import Loader from '../components/elements/Loader'
+import Label, { Orientation } from "react-native-label";
+
 
 
 
@@ -109,41 +111,94 @@ function Skip(props) {
 
     return ([{
       id: '',
-      name: <Text style={{ color: colors.main, fontSize: 18, fontWeight: 'bold' }}>Thông tin tham chiếu</Text >,
+      name: <Text style={{ color: colors.main, fontSize: 16, fontWeight: 'bold' }}>Thông tin tham chiếu</Text >,
       children: mainRef,
       phone: "",
       type: 'none'
     }])
   }
 
-  const SkipHeader = (props) => {
+  const SkipHeader = (maininfo) => {
     const renAvatar = (avatar) => {
       if (!avatar)
         return EMPTYAVATAR
       else return { uri: avatar }
     }
     return (
-      <View style={[styles.row, { borderBottomWidth: 0.2, borderBottomColor: '#CCC', paddingTop: 10, paddingBottom: 5, backgroundColor: 'white', paddingLeft: 20 }]}>
-        <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, }]}>
-          <ImageBackground
-            style={{
-              borderRadius: 30,
-              width: 50,
-              height: 50,
-            }}
-            imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
-            source={{}}>
-          </ImageBackground>
+      <View>
+        <View style={{ padding: 10, paddingRight: 0 }}>
+          <View style={[styles.row, { borderBottomWidth: 0, borderBottomColor: '#CCC', paddingTop: 5, backgroundColor: 'white' }]}>
+            <View style={[styles.box, { minWidth: AVATAR_WIDTH, flex: 0.05, marginBottom: 5, }]}>
+              <ImageBackground
+                style={{
+                  borderRadius: 30,
+                  width: 50,
+                  height: 50,
+                }}
+                imageStyle={{ borderRadius: 90, resizeMode: "cover" }}
+                source={renAvatar("")}>
+              </ImageBackground>
+            </View>
+            <View style={[styles.box, { flex: 1, marginLeft: 10, marginBottom: 5, marginTop: -5 },]}>
+              <Text style={{ color: colors.main, fontWeight: 'bold', fontSize: 20 }}
+                ellipsizeMode="tail">
+                {maininfo.client_name}
+              </Text>
+              <Text style={{ fontSize: 12, paddingTop: 10 }}
+                ellipsizeMode="tail">
+                CMND: {maininfo.id_no}
+              </Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Ngày sinh: </Text>
+              <Text style={styles.smalltext}>{maininfo.birthday}</Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Giới tính:</Text>
+              <Text style={styles.smalltext}>{maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Học vấn:</Text>
+              <Text style={styles.smalltext}> {maininfo.education}</Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Hôn nhân:</Text>
+              <Text style={styles.smalltext}>{maininfo.marital_status}</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Nghề nghiệp:</Text>
+              <Text style={styles.smalltext}> {maininfo.job_description}</Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Thu nhập:</Text>
+              <Text style={styles.smalltext}>{moneyFormat(maininfo.personal_income)}</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.smalltitle}>Hộ khẩu:</Text>
+              <Text style={styles.smalltext}> {maininfo.fb_no}</Text>
+            </View>
+            <View style={{ flex: 1 }}></View>
+          </View>
+        </View >
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingBottom: 10, paddingTop: 5 }}>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <FontAwesome5 name="facebook-messenger" size={20} color="grey" style={{ padding: 10, borderRadius: 15, borderWidth: 1, borderColor: colors.lightGray }} />
+          </View>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <FontAwesome5 name="map-marked-alt" size={20} color="grey" style={{ padding: 10, borderRadius: 15, borderWidth: 1, borderColor: colors.lightGray }} />
+          </View>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <FontAwesome name="phone" size={20} color="grey" style={{ padding: 10, borderRadius: 15, borderWidth: 1, borderColor: colors.lightGray }} />
+          </View>
         </View>
-        <View style={[styles.box, { flex: 1, marginLeft: 10, marginBottom: 5, marginTop: -5 },]}>
-          <Text style={[styles.nameTxt, { color: colors.main }]}
-            ellipsizeMode="tail">
-          </Text>
-          <Text style={[styles.nameTxt, { fontSize: 12 }]}
-            ellipsizeMode="tail">
-          </Text>
-        </View>
-
       </View>
     )
   }
@@ -152,55 +207,11 @@ function Skip(props) {
     return (
       <View style={{
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: 10,
         backgroundColor: "white",
       }}>
-        <View style={[styles.row, { marginBottom: 10 }]}>
-          <View style={[styles.box]}>
-            <Text style={[styles.title]}>Thông tin cá nhân:</Text>
-          </View>
-        </View>
-        <SkipHeader />
+        {SkipHeader(maininfo)}
 
-        {/* <View style={[styles.row]}>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>CMND: {maininfo.id_no}</Text>
-          </View>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Chủ hộ khẩu: {maininfo.fb_no}</Text>
-          </View>
-        </View>
-
-        <View style={[styles.row]}>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Giới tính: {maininfo.gender === "Male" ? "Nam" : "Nữ"}</Text>
-          </View>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Ngày sinh: {maininfo.birthday}</Text>
-          </View>
-        </View>
-
-        <View style={[styles.row]}>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Học vấn: {maininfo.education}</Text>
-          </View>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Hôn nhân: {maininfo.marital_status}</Text>
-          </View>
-        </View>
-
-        <View style={[styles.row]}>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Nghề nghiệp: {maininfo.job_description}</Text>
-          </View>
-          <View style={[styles.box]}>
-            <Text style={styles.textContent}>Thu nhập: {moneyFormat(maininfo.personal_income)}</Text>
-          </View>
-        </View>
-
-        <View style={[styles.row, { marginTop: 8 }]}>
+        {/* <View style={[styles.row, { marginTop: 8 }]}>
           <View style={[styles.box]}>
             <Text style={{ fontSize: 10 }}>Tạm trú : {maininfo.address}</Text>
           </View>
@@ -228,10 +239,9 @@ function Skip(props) {
   }
 
   const renApplInfo = ({ item, index }) => {
-
     const statusColor = (status, appl_id) => {
       if (status === 'Active')
-        return colors.success
+        return colors.main
       if (appl_id !== "")
         return colors.yellow
       return colors.secondary
@@ -260,97 +270,109 @@ function Skip(props) {
       return `${moneyFormat(item.installment)}`
     }
 
-
     return (
-      <View style={{
-        backgroundColor: 'white',
-        padding: 0,
-        borderLeftWidth: 3,
-        borderRadius: 10,
-        borderColor: statusColor(item.status, item.appl_id),
-        padding: 10
-      }}
+      <Label
+        orientation={Orientation.TOP_RIGHT}
+        style={{ fontSize: 14, fontWeight: 'bold', color: 'white' }}
+        title={statusText(item.status, item.appl_id)}
+        color={statusColor(item.status, item.appl_id)}
+        distance={60}
+        extent={0}
       >
-        <View style={[styles.row]}>
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent, { fontWeight: 'bold', backgroundColor: statusColor(item.status, item.appl_id) }]}>
-              {item.appl_id}
-            </Text>
+        <View style={{
+          backgroundColor: 'white',
+          borderRadius: 10,
+          padding: 10,
+          borderBottomWidth: 5,
+          borderWidth: 0.5,
+          borderBottomColor: statusColor(item.status, item.appl_id),
+          borderColor: colors.lightGray
+
+        }}
+        >
+
+          <View style={[styles.row, { borderBottomWidth: 0.5, borderColor: colors.lightGray }]}>
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent, { fontWeight: 'bold', color: statusColor(item.status, item.appl_id), paddingBottom: 5, fontSize: 14 }]}>
+                {item.appl_id}20190506xxxxx
+              </Text>
+            </View>
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent, { fontWeight: 'bold', color: colors.success, fontSize: 14 }]}>
+                {item.product_group}
+              </Text>
+            </View>
           </View>
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent,]}>
-              <Text style={{ fontWeight: 'bold' }}>Trạng thái: </Text>
-              <Text >{statusText(item.status, item.appl_id)}</Text>
-            </Text>
+          <View style={[styles.row, { marginTop: 5 }]}>
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent]}>
+                <Text style={{ fontWeight: 'bold' }}>Ngày mở: </Text>
+                <Text>{item.operate_date ? item.operate_date.substring(0, 10) : ""}</Text>
+              </Text>
+            </View>
+
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent]}>
+                <Text style={{ fontWeight: 'bold' }}>Ngày due: </Text>
+                <Text>{item.first_duedate ? item.first_duedate.substring(0, 10) : ""}</Text>
+              </Text>
+            </View>
           </View>
 
+          <View style={[styles.row, { marginTop: 5 }]}>
+
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent]}>
+                <Text style={{ fontWeight: 'bold' }}>Loan: </Text>
+                <Text>{loan(item.status, item.appl_id)}</Text>
+              </Text>
+            </View>
+
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent]}>
+                <Text style={{ fontWeight: 'bold' }}>Lãi Suất: </Text>
+                <Text>{item.eff_rate}%</Text>
+              </Text>
+            </View>
+          </View>
+
+          <View style={[styles.row, { marginTop: 5 }]}>
+
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent]}>
+                <Text style={{ fontWeight: 'bold' }}>Số kỳ: </Text>
+                <Text>{item.tenor}</Text>
+              </Text>
+            </View>
+
+            <View style={[styles.box]}>
+              <Text style={[styles.textContent]}>
+                <Text style={{ fontWeight: 'bold' }}>Tiền/kỳ: </Text>
+                <Text>{emi(item.status, item.appl_id)}</Text>
+              </Text>
+            </View>
+          </View>
+          {dataAppl != "" ? <View>
+            <View style={[styles.row, { paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.lightGray }]}>
+              <Text style={[styles.textContent, { fontWeight: 'bold' }]}>Chit tiết: </Text>
+            </View>
+            <Timeline
+              data={dataAppl}
+              separator={false}
+              circleSize={0.1}
+              innerCircle={'none'}
+              columnFormat={'single-column-right'}
+              dotSize={0}
+              innerCircle={'dot'}
+              renderDetail={renderDetail}
+              showTime={false}
+              lineWidth={0}
+            />
+          </View>
+            : null}
         </View>
-        <View style={[styles.row, { marginTop: 5 }]}>
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent]}>
-              <Text style={{ fontWeight: 'bold' }}>Ngày mở: </Text>
-              <Text>{item.operate_date ? item.operate_date.substring(0, 10) : ""}</Text>
-            </Text>
-          </View>
+      </Label >
 
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent]}>
-              <Text style={{ fontWeight: 'bold' }}>Ngày due: </Text>
-              <Text>{item.first_duedate ? item.first_duedate.substring(0, 10) : ""}</Text>
-            </Text>
-          </View>
-        </View>
-
-        <View style={[styles.row, { marginTop: 5 }]}>
-
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent]}>
-              <Text style={{ fontWeight: 'bold' }}>Sản phẩm: </Text>
-              <Text>{item.product_group}</Text>
-            </Text>
-          </View>
-
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent]}>
-              <Text style={{ fontWeight: 'bold' }}>Lãi Suất: </Text>
-              <Text>{item.eff_rate}%</Text>
-            </Text>
-          </View>
-        </View>
-
-        <View style={[styles.row, { marginTop: 5 }]}>
-
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent]}>
-              <Text style={{ fontWeight: 'bold' }}>Loan: </Text>
-              <Text>{loan(item.status, item.appl_id)}</Text>
-            </Text>
-          </View>
-
-          <View style={[styles.box]}>
-            <Text style={[styles.textContent]}>
-              <Text style={{ fontWeight: 'bold' }}>Tiền/kỳ: </Text>
-              <Text>{emi(item.status, item.appl_id)}</Text>
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.row, { paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.lightGray }]}>
-          <Text style={[styles.textContent, { fontWeight: 'bold' }]}>Chit tiết: </Text>
-        </View>
-        <Timeline
-          data={dataAppl}
-          separator={false}
-          circleSize={0.1}
-          innerCircle={'none'}
-          columnFormat={'single-column-right'}
-          dotSize={0}
-          innerCircle={'dot'}
-          renderDetail={renderDetail}
-          showTime={false}
-          lineWidth={0}
-        />
-
-      </View>
 
     )
   }
@@ -373,7 +395,7 @@ function Skip(props) {
             rowData.payment.map((pay, index) => {
               return (
                 <View style={[styles.descriptionContainer]} key={index}>
-                  <Text style={[styles.textDescription, { backgroundColor: colors.success, fontWeight: "bold" }]}>
+                  <Text style={[styles.textDescription, { backgroundColor: colors.main, fontWeight: "bold" }]}>
                     Ngày {pay.pay_date.substring(8, 10)} | Thanh Toán: {moneyFormat(pay.receipt_amt)}
                   </Text>
                 </View>
@@ -406,7 +428,6 @@ function Skip(props) {
         {content}
         {payment}
         {followContent}
-
       </View>
     )
   }
@@ -415,7 +436,7 @@ function Skip(props) {
     function getIndicator(isExpanded, hasChildrenNodes, type, idno) {
       if (!hasChildrenNodes) {
         if (idno !== '') {
-          return <FontAwesome name="user" size={15} color={colors.success} />
+          return <FontAwesome name="user" size={15} color={colors.main} />
         }
         // else if (idno === '') {
         //   return <FontAwesome name="user" size={15} color={colors.danger} />
@@ -427,7 +448,7 @@ function Skip(props) {
       }
       else if (isExpanded) {
         if (idno !== '') {
-          return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.success} /></Text>
+          return <Text> <FontAwesome name="caret-down" size={16} color='black' style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.main} /></Text>
         }
         // else if (type == 'bad') {
         //   return <Text> <FontAwesome name="caret-down" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.danger} /></Text>
@@ -440,7 +461,7 @@ function Skip(props) {
         }
       } else {
         if (idno !== '') {
-          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.success} /></Text>
+          return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.main} /></Text>
         }
         // else if (type == 'bad') {
         //   return <Text> <FontAwesome name="caret-right" size={16} color="black" style={{ marginRight: 10 }} />  <FontAwesome name="user" size={15} color={colors.danger} /></Text>
@@ -555,14 +576,13 @@ function Skip(props) {
       <ScrollView style={{ backgroundColor: 'white' }}>
         <View style={{
           backgroundColor: 'white',
-          margin: 10,
-          borderRadius: 10,
-          padding: 5,
+          paddingLeft: 10
         }}>
-          {renTree()}
           {renMainInfo(props.vsf.activeIdno.main_infos)}
+          {renTree()}
         </View>
-        <View style={{ flexDirection: 'row', }}>
+        <View style={{ flexDirection: 'column', marginTop: 10 }}>
+          <Text style={{ color: colors.main, fontSize: 16, fontWeight: 'bold', paddingLeft: 10, marginBottom: 10 }}>Thông tin các khoản vay</Text>
           <Carousel
             layout={'default'}
             data={props.vsf.activeIdno.appl_infos}
@@ -666,6 +686,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: 'gray',
     fontSize: 10,
+  },
+  smalltitle: {
+    fontSize: 12,
+    flex: 1.2
+  },
+  smalltext: {
+    fontSize: 12,
+    flex: 1
   }
 });
 
